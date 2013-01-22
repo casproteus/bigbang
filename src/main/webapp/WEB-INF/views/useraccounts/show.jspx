@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_aeiou_bigbang_domain_UserAccount" object="${useraccount}" path="/useraccounts" z="NXhK+GXUKZoC47sR4lK3m4WTv+E=">
+        <field:display field="name" id="s_com_aeiou_bigbang_domain_UserAccount_name" object="${useraccount}" z="sZ0pvaHkqnS6MIAO9NjfBa1NU7E="/>
+        <field:display field="email" id="s_com_aeiou_bigbang_domain_UserAccount_email" object="${useraccount}" z="Wphd9e9VW7ZCR3I3GnXrHNjuxfY="/>
+        <field:display field="password" id="s_com_aeiou_bigbang_domain_UserAccount_password" object="${useraccount}" z="jITHy8I1B6Lt6Fd7ojGJuh8j+Vg="/>
+        <field:display field="description" id="s_com_aeiou_bigbang_domain_UserAccount_description" object="${useraccount}" z="qZ+xtOETo7VCKIMcUAViaqOIdic="/>
+        <field:display field="listento" id="s_com_aeiou_bigbang_domain_UserAccount_listento" object="${useraccount}" z="JtzFe8TvnepQ8GMjO9D4Y/o29uw="/>
+    </page:show>
+</div>

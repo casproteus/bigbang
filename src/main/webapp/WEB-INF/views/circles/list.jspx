@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_aeiou_bigbang_domain_Circle" items="${circles}" z="oLR1YLfq97XJCOX3/wgx0mcWbtM=">
+        <table:table data="${circles}" id="l_com_aeiou_bigbang_domain_Circle" path="/circles" z="QHKrI96vEX5G8QRmVj+Ysj+Yw4U=">
+            <table:column id="c_com_aeiou_bigbang_domain_Circle_circleName" property="circleName" z="SrAQivyz3fEB0ws+9/5tAM+cUag="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Circle_description" property="description" z="iVHYyHI3goUFHBkR4+OHfCv1LIU="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Circle_owner" property="owner" z="yHuH6cdKIFwt8rN+GX2hLSqcXIA="/>
+            <table:column date="true" dateTimePattern="${circle_createddate_date_format}" id="c_com_aeiou_bigbang_domain_Circle_createdDate" property="createdDate" z="4ZGJrcD4zhw+y/2bslnIWxqjnsY="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Circle_members" property="members" z="rbwXtHcrWPY4RJ2Kb0yRKSJBugU="/>
+        </table:table>
+    </page:list>
+</div>

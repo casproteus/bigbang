@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:create id="fc_com_aeiou_bigbang_domain_Content" modelAttribute="content" path="/contents" render="${empty dependencies}" z="mZcFXRVgd+YQsRIO+7SoQkhNsmo=">
+        <field:input field="title" id="c_com_aeiou_bigbang_domain_Content_title" required="true" z="KykRIB9kokqjzUlWGTykm0UCgVk="/>
+        <field:input field="sourceURL" id="c_com_aeiou_bigbang_domain_Content_sourceURL" required="true" z="Hk2QDdFCnal0PPA/nrv6B/Kw28U="/>
+        <field:input field="conentCache" id="c_com_aeiou_bigbang_domain_Content_conentCache" z="ciDeWotB2rtkeuHe5Esur9HePRc="/>
+        <field:select field="tags" id="c_com_aeiou_bigbang_domain_Content_tags" itemValue="id" items="${bigtags}" multiple="true" path="/bigtags" z="vhnvJ8gYKgpFbCdt4OPaots33K4="/>
+        <field:select field="publisher" id="c_com_aeiou_bigbang_domain_Content_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="K9RgD0iIpWMOvR2WiE3Lm7LaX5I="/>
+    </form:create>
+    <form:dependency dependencies="${dependencies}" id="d_com_aeiou_bigbang_domain_Content" render="${not empty dependencies}" z="OIaGm9/s9pNT5CEMnSapCWMx+DY="/>
+</div>

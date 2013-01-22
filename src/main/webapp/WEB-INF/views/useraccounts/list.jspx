@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_aeiou_bigbang_domain_UserAccount" items="${useraccounts}" z="GJvuZ0yxOcvh6FFkhy5zdXpTpqY=">
+        <table:table data="${useraccounts}" id="l_com_aeiou_bigbang_domain_UserAccount" path="/useraccounts" z="teRX+LtcYQWliJGRxQz++hZdUc0=">
+            <table:column id="c_com_aeiou_bigbang_domain_UserAccount_name" property="name" z="kPMoQDIDzWJl6xWgRufm8SuIBnU="/>
+            <table:column id="c_com_aeiou_bigbang_domain_UserAccount_email" property="email" z="MbW1BbdyefM+TsEcTAue73MF9Jg="/>
+            <table:column id="c_com_aeiou_bigbang_domain_UserAccount_password" property="password" z="FgbmAnZuFFgQ8D4uyaEB1cAK0LQ="/>
+            <table:column id="c_com_aeiou_bigbang_domain_UserAccount_description" property="description" z="dQO1Tf4jmA8VJ8R9ouMY27ubENs="/>
+            <table:column id="c_com_aeiou_bigbang_domain_UserAccount_listento" property="listento" z="wMSIun/19yw14uGXfJp/mBIyrxc="/>
+        </table:table>
+    </page:list>
+</div>

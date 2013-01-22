@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_aeiou_bigbang_domain_Remark" object="${remark}" path="/remarks" z="Sh9c1iZNpsmXM1/Z3kVu9y0xoJc=">
+        <field:display field="content" id="s_com_aeiou_bigbang_domain_Remark_content" object="${remark}" z="QJIdoG8cGYR0n86nfffMPaw0YtA="/>
+        <field:display date="true" dateTimePattern="${remark_remarttime_date_format}" field="remartTime" id="s_com_aeiou_bigbang_domain_Remark_remartTime" object="${remark}" z="+IwrOFKhbqYeNwY4+1mTyjE3Tz0="/>
+        <field:display field="privilege" id="s_com_aeiou_bigbang_domain_Remark_privilege" object="${remark}" z="NWfTB5iEF3r2/nh/jRX/MiWY0tM="/>
+        <field:display field="publisher" id="s_com_aeiou_bigbang_domain_Remark_publisher" object="${remark}" z="bo9I2vwdHjepuwzbccdIv2GxhNo="/>
+        <field:display field="replyTo" id="s_com_aeiou_bigbang_domain_Remark_replyTo" object="${remark}" z="uYIL3as4DnZpBHTbLM2IbgVoAKE="/>
+    </page:show>
+</div>

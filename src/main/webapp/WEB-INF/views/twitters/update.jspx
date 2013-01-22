@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_aeiou_bigbang_domain_Twitter" modelAttribute="twitter" path="/twitters" versionField="Version" z="+C8sDG9WJArHmp31s3+sy6qEalw=">
+        <field:input field="twitent" id="c_com_aeiou_bigbang_domain_Twitter_twitent" required="true" z="WiZ/XyYqHpfraTJ4ChYDwMdMhVo="/>
+        <field:datetime dateTimePattern="${twitter_twitdate_date_format}" field="twitDate" id="c_com_aeiou_bigbang_domain_Twitter_twitDate" required="true" z="RtLPo9UnRiHc0ybqItC4AqnRkw4="/>
+        <field:select field="publisher" id="c_com_aeiou_bigbang_domain_Twitter_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="X87ZwFVlxa5uM0I8SRgxWxXqjLI="/>
+    </form:update>
+</div>

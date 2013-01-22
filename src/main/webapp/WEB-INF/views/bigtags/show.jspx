@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_aeiou_bigbang_domain_BigTag" object="${bigtag}" path="/bigtags" z="n7VvUUwkJ603hE7KvqnVoQ0Le+c=">
+        <field:display field="tagName" id="s_com_aeiou_bigbang_domain_BigTag_tagName" object="${bigtag}" z="ybjIky0KXWVMiqMekZdGrM+gKTQ="/>
+        <field:display field="type" id="s_com_aeiou_bigbang_domain_BigTag_type" object="${bigtag}" z="FQCG3Rady09D69df58Va3SlQZzM="/>
+    </page:show>
+</div>

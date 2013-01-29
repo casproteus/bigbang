@@ -12,7 +12,7 @@
         <intercept-url pattern="/choices/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/bigtags/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/circles/**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/contents/**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/contents/**" access="hasRole('ROLE_USER')" />
         <intercept-url pattern="/customizes/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/remarks/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/twitters/**" access="hasRole('ROLE_ADMIN')" />

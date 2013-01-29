@@ -8,8 +8,10 @@
   </util:panel>
   
   <page:list id="pl_com_aeiou_bigbang_domain_Content" items="${contents}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
-        <table:contentbox data="${contents}" id="l_com_aeiou_bigbang_domain_Content" path="/public/tag/local" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
+        <table:contentbox data="${contents}" id="l_com_aeiou_bigbang_domain_Content" path="/public/tag/local" tagName="local" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
             <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="sourceURL" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
         </table:contentbox>
     </page:list>
 </div>

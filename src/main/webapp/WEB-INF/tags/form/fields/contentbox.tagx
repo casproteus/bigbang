@@ -1,0 +1,74 @@
+<jsp:root xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:spring="http://www.springframework.org/tags" xmlns:form="http://www.springframework.org/tags/form" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:directive.tag import="java.util.ArrayList" />
+  <jsp:output omit-xml-declaration="yes" />
+
+  <jsp:directive.attribute name="id" type="java.lang.String" required="true" rtexprvalue="true" description="The identifier for this tag (do not change!)" />
+  <jsp:directive.attribute name="data" type="java.util.Collection" required="true" rtexprvalue="true" description="The collection to be displayed in the table" />
+  <jsp:directive.attribute name="path" type="java.lang.String" required="true" rtexprvalue="true" description="Specify the URL path" />
+  <jsp:directive.attribute name="tagName" type="java.lang.String" required="true" rtexprvalue="true" description="The common tag(top level tags--exclusive with each other) of the contents in this box" />
+  <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
+  <jsp:directive.attribute name="z" type="java.lang.String" required="false" description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
+
+  <c:if test="${empty render or render}">
+
+    <c:set var="columnProperties" scope="request" />
+    <c:set var="columnLabels" scope="request" />
+    <c:set var="columnMaxLengths" scope="request" />
+    <c:set var="columnTypes" scope="request" />
+    <c:set var="columnDatePatterns" scope="request" />
+
+    <jsp:doBody />
+
+    <spring:message var="typeName" code="menu_item_${fn:toLowerCase(fn:split(id,'_')[fn:length(fn:split(id,'_')) - 1])}_new_label" htmlEscape="false" />
+    <c:set var="properties" value="${fn:split(columnProperties, '&#9999;')}" scope="request" />
+    <c:set var="lengths" value="${fn:split(columnMaxLengths, '&#9999;')}" scope="request" />
+    <c:set var="types" value="${fn:split(columnTypes, '&#9999;')}" scope="request" />
+    <c:set var="patterns" value="${fn:split(columnDatePatterns, '&#9999;')}" scope="request" />
+
+    <spring:eval var="colCounter" expression="1" />
+
+    <table class="tWireless">
+      <c:forEach items="${data}" var="item">
+      	<tr>
+      		<td class="tWireless">
+      			<a href="${item['sourceURL']}">
+      				<c:out value="${item['title']}" />
+      			</a>
+      		</td>
+      		<td class="tWireless namebox">
+	            <c:set var="columnType" value="${types[num.count-1]}" />
+	            <c:set var="columnMaxLength" value="${lengths[num.count-1]}" />
+	            <c:set var="columnDatePattern" value="${patterns[num.count-1]}" />
+      			<c:choose>
+                	<c:when test="${columnType eq 'date'}">
+	                  <spring:escapeBody>
+	                    <fmt:formatDate value="${item[column]}" pattern="${fn:escapeXml(columnDatePattern)}" var="colTxt" />
+	                  </spring:escapeBody>
+	                </c:when>
+	            </c:choose>
+      			<a href="${colTxt}">
+      				<c:out value="${item['publisher']}" />
+      			</a>
+      		</td>
+      	</tr>
+      </c:forEach>
+      <tr>
+        <td class="tWireless" colspan="${colCounter}">
+          <spring:url value="${path}" var="readMore_url">
+            <spring:param name="form" />
+          </spring:url>
+          <a href="${readMore_url}">
+            <spring:message arguments="${typeName}" code="global_menu_readmore" var="readmore_message" htmlEscape="false" />
+            ${readmore_message}
+          </a>
+          <c:out value=" " />
+          <c:if test="${not empty maxPages}">
+            <util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}" />
+          </c:if>
+        </td>
+      </tr>
+    </table>
+
+  </c:if>
+
+</jsp:root>

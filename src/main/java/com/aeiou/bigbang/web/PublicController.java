@@ -1,7 +1,11 @@
 package com.aeiou.bigbang.web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 
 @RequestMapping("/public/**")
@@ -30,7 +35,15 @@ public class PublicController {
             float nrOfPages = (float) Content.countContents() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-            uiModel.addAttribute("contents", Content.findAllContents());
+        	List<BigTag> tBigTags = BigTag.findAllBigTags();
+            uiModel.addAttribute("bigTags", tBigTags);
+
+            List<List> tContentLists = new ArrayList<List>();
+        	for(int i = 0; i < tBigTags.size(); i++){
+        		tContentLists.add(Content.findAllContentsByTag(tBigTags.get(i)));
+        	}
+            
+            uiModel.addAttribute("contents", tContentLists);
         }
         return "public/index";
     }

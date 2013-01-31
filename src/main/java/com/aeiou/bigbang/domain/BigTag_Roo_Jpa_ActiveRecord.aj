@@ -28,6 +28,10 @@ privileged aspect BigTag_Roo_Jpa_ActiveRecord {
         return entityManager().createQuery("SELECT o FROM BigTag o", BigTag.class).getResultList();
     }
     
+    public static List<BigTag> BigTag.findAllCommonBigTags(){
+	    return entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", "common_tag").getResultList();
+    }
+    
     public static BigTag BigTag.findBigTag(Long id) {
         if (id == null) return null;
         return entityManager().find(BigTag.class, id);

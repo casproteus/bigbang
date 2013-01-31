@@ -8,5 +8,6 @@
         <field:display field="conentCache" id="s_com_aeiou_bigbang_domain_Content_conentCache" object="${content}" z="9IBFHV9Z4gUjQm25cCPf1NibIbw="/>
         <field:display field="tags" id="s_com_aeiou_bigbang_domain_Content_tags" object="${content}" z="o5JE6zJTXJ2EvSTuqPNOXgK04Jo="/>
         <field:display field="publisher" id="s_com_aeiou_bigbang_domain_Content_publisher" object="${content}" z="GqZT7N9caoZw6Qvwjyzf5pKtliY="/>
+        <field:display field="commonBigTag" id="s_com_aeiou_bigbang_domain_Content_commonBigTag" object="${content}" z="qU+FbwSjk6E/bfnZ+UzXw78bUdo="/>
     </page:show>
 </div>

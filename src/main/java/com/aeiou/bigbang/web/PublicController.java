@@ -3,6 +3,7 @@ package com.aeiou.bigbang.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,14 +36,13 @@ public class PublicController {
             float nrOfPages = (float) Content.countContents() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-        	List<BigTag> tBigTags = BigTag.findAllBigTags();
+        	List<BigTag> tBigTags = BigTag.findAllCommonBigTags();
             uiModel.addAttribute("bigTags", tBigTags);
 
             List<List> tContentLists = new ArrayList<List>();
         	for(int i = 0; i < tBigTags.size(); i++){
         		tContentLists.add(Content.findAllContentsByTag(tBigTags.get(i)));
         	}
-            
             uiModel.addAttribute("contents", tContentLists);
         }
         return "public/index";

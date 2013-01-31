@@ -7,7 +7,7 @@
   <jsp:output omit-xml-declaration="yes"/>
   <spring:message code="label_public_index" htmlEscape="false" var="title"/>
   <util:panel id="title" title="${title}">
-  	去他大爷的( |:x)
+  	哥们，如果在别的网站上看到有趣的东西，别忘点左边按钮，给加个链接这里！ ( |:------------------------------>)
     <span class="new">
       <spring:url value="/contents" var="create_url">
         <spring:param name="form" />
@@ -21,12 +21,13 @@
       </a>
     </span>
   </util:panel>
-  
-  <page:contentlist id="pl_com_aeiou_bigbang_domain_Content" items="${contents}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
-    <table:contentbox data="${contents}" id="l_com_aeiou_bigbang_domain_Content" path="/public/tag/local" tagName="local" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
-        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
-        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="sourceURL" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
-        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
-    </table:contentbox>
-  </page:contentlist>
+  <c:forEach items="${contents}" var="content" varStatus="num">
+	  <page:contentlist id="${bigTags[num.count - 1]}" items="${content}" label="${bigTags[num.count - 1]}"  z="hnfyfk7YNdTBdBza4/mViLT4aos=">
+	    <table:contentbox data="${content}" id="l_com_aeiou_bigbang_domain_Content" path="/public/tag/local" tagName="local" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
+	        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
+	        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="sourceURL" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
+	        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
+	    </table:contentbox>
+	  </page:contentlist>
+  </c:forEach>
 </div>

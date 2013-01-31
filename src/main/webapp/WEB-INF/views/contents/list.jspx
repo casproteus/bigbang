@@ -9,6 +9,7 @@
             <table:column id="c_com_aeiou_bigbang_domain_Content_conentCache" property="conentCache" z="sAVFtEgMHZWvr7+XXfV96xRXMC0="/>
             <table:column id="c_com_aeiou_bigbang_domain_Content_tags" property="tags" z="kDjPyZY8s59nSnA4ASrIOJGmeps="/>
             <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Content_commonBigTag" property="commonBigTag" z="054H0l7u1U7D14UvHgTdwqh3sy4="/>
         </table:table>
     </page:list>
 </div>

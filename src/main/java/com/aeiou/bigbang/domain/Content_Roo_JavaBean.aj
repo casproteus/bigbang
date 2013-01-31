@@ -50,4 +50,12 @@ privileged aspect Content_Roo_JavaBean {
         this.publisher = publisher;
     }
     
+    public BigTag Content.getCommonBigTag() {
+        return this.commonBigTag;
+    }
+    
+    public void Content.setCommonBigTag(BigTag commonBigTag) {
+        this.commonBigTag = commonBigTag;
+    }
+    
 }

@@ -3,6 +3,7 @@
 
 package com.aeiou.bigbang.domain;
 
+import com.aeiou.bigbang.domain.BigTagDataOnDemand;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.ContentDataOnDemand;
 import com.aeiou.bigbang.domain.UserAccount;
@@ -24,6 +25,9 @@ privileged aspect ContentDataOnDemand_Roo_DataOnDemand {
     private Random ContentDataOnDemand.rnd = new SecureRandom();
     
     private List<Content> ContentDataOnDemand.data;
+    
+    @Autowired
+    private BigTagDataOnDemand ContentDataOnDemand.bigTagDataOnDemand;
     
     @Autowired
     private UserAccountDataOnDemand ContentDataOnDemand.userAccountDataOnDemand;

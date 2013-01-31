@@ -1,8 +1,12 @@
 package com.aeiou.bigbang.domain;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -20,4 +24,8 @@ public class BigTag {
     @NotNull
     @Size(min = 2)
     private String type;
+
+	public String toString() {
+        return tagName;
+    }
 }

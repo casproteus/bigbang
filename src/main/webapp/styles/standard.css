@@ -379,3 +379,9 @@ fieldset th {
 .tWireless{
 	border: 0px;
 }
+.nopaddingleft{
+	padding-left: 0px;
+}
+.nopaddingright{
+	padding-right: 0px;
+}

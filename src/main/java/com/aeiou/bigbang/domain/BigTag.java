@@ -24,7 +24,11 @@ public class BigTag {
     @NotNull
     @Size(min = 2)
     private String type;
-
+    
+    public static List<BigTag> findAllCommonBigTags(){
+	    return entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", "common_tag").getResultList();
+    }
+    
 	public String toString() {
         return tagName;
     }

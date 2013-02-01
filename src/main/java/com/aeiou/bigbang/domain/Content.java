@@ -40,7 +40,7 @@ public class Content {
         if (pBigTag == null) 
         	return entityManager().createQuery("SELECT o FROM Content o", Content.class).getResultList(); 
         else {
-            return entityManager().createQuery("SELECT o FROM Content o", Content.class).getResultList();
+            return entityManager().createQuery("SELECT o FROM Content AS o WHERE o.commonBigTag = :commonBigTag", Content.class).setParameter("commonBigTag", pBigTag).getResultList();
         }
     }
 }

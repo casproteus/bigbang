@@ -18,12 +18,12 @@ field string --fieldName password --sizeMin 4
 field string --fieldName description
 field set --type ~.domain.UserAccount --fieldName listento
 
-
 entity jpa --class ~.domain.Content --testAutomatically
 field string --fieldName title --notNull true
 field string --fieldName sourceURL --notNull
 field string --fieldName conentCache
 field set --type ~.domain.BigTag --fieldName tags
+field reference --type ~.domain.BigTag --fieldName commonBigTag
 field reference --type ~.domain.UserAccount --fieldName publisher --notNull
 
 entity jpa --class ~.domain.Remark --testAutomatically
@@ -51,144 +51,3 @@ web mvc all --package com.aeiou.bigbang.web
 security setup
 email sender setup --hostServer smtp.gmail.com --username casproteus@gmail.com --password Ollwin_02 --port 587 --protocol SMTP
 perform eclipse
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-01-14 10:36:24
-perform eclipse
-project --topLevelPackage com.aeiou.bigbang
-jpa setup --provider OPENJPA --database HYPERSONIC_PERSISTENT
-entity jpa --class ~.domain.Customize --testAutomatically
-field string --fieldName cusKey --notNull --unique
-field string --fieldName cusValue --notNull --unique
-entity jpa --class ~.domain.BigTag --testAutomatically
-field string --fieldName tagName --notNull --sizeMin 2 --unique
-field string --fieldName type --notNull --sizeMin 2
-entity jpa --class ~.domain.UserAccount --testAutomatically
-field string --fieldName name --notNull --sizeMin 2 --unique
-field string --fieldName email
-field string --fieldName password --sizeMin 4
-field string --fieldName description
-field set --type ~.domain.UserAccount --fieldName listento
-entity jpa --class ~.domain.Content --testAutomatically
-field string --fieldName title --notNull true
-field string --fieldName sourceURL --notNull
-field string --fieldName conentCache
-field set --type ~.domain.BigTag --fieldName tags
-field reference --type ~.domain.UserAccount --fieldName publisher --notNull
-entity jpa --class ~.domain.Remark --testAutomatically
-field string --fieldName content --notNull
-field date --type java.util.Date --fieldName remartTime --notNull
-field number --fieldName privilege --type int --notNull
-field reference --type ~.domain.UserAccount --fieldName publisher --notNull
-field reference --type ~.domain.Content --fieldName replyTo --notNull true
-entity jpa --class ~.domain.Twitter --testAutomatically
-field string --fieldName twitent --notNull
-field date --type java.util.Date --fieldName twitDate --notNull
-field reference --fieldName publisher --type ~.domain.UserAccount --notNull
-entity jpa --class ~.domain.Circle --testAutomatically
-field string --fieldName circleName --notNull
-field string --fieldName description
-field reference --type ~.domain.UserAccount --fieldName owner --notNull
-field date --type java.util.Date --fieldName createdDate --notNull
-field set --type ~.domain.UserAccount --fieldName members
-perform tests
-web mvc setup
-web mvc all --package com.aeiou.bigbang.web
-security setup
-email sender setup --hostServer smtp.gmail.com --username casproteus@gmail.com --password Ollwin_02 --port 587 --protocol SMTP
-perform eclipse
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-01-18 16:44:33
-project --topLevelPackage com.aeiou.bigbang
-jpa setup --provider OPENJPA --database HYPERSONIC_PERSISTENT
-entity jpa --class ~.domain.Customize --testAutomatically
-field string --fieldName cusKey --notNull --unique
-field string --fieldName cusValue --notNull --unique
-entity jpa --class ~.domain.BigTag --testAutomatically
-field string --fieldName tagName --notNull --sizeMin 2 --unique
-field string --fieldName type --notNull --sizeMin 2
-entity jpa --class ~.domain.UserAccount --testAutomatically
-field string --fieldName name --notNull --sizeMin 2 --unique
-field string --fieldName email
-field string --fieldName password --sizeMin 4
-field string --fieldName description
-field set --type ~.domain.UserAccount --fieldName listento
-entity jpa --class ~.domain.Content --testAutomatically
-field string --fieldName title --notNull true
-field string --fieldName sourceURL --notNull
-field string --fieldName conentCache
-field set --type ~.domain.BigTag --fieldName tags
-field reference --type ~.domain.UserAccount --fieldName publisher --notNull
-entity jpa --class ~.domain.Remark --testAutomatically
-field string --fieldName content --notNull
-field date --type java.util.Date --fieldName remartTime --notNull
-field number --fieldName privilege --type int --notNull
-field reference --type ~.domain.UserAccount --fieldName publisher --notNull
-field reference --type ~.domain.Content --fieldName replyTo --notNull true
-entity jpa --class ~.domain.Twitter --testAutomatically
-field string --fieldName twitent --notNull
-field date --type java.util.Date --fieldName twitDate --notNull
-field reference --fieldName publisher --type ~.domain.UserAccount --notNull
-entity jpa --class ~.domain.Circle --testAutomatically
-field string --fieldName circleName --notNull
-field string --fieldName description
-field reference --type ~.domain.UserAccount --fieldName owner --notNull
-field date --type java.util.Date --fieldName createdDate --notNull
-field set --type ~.domain.UserAccount --fieldName members
-perform tests
-web mvc setup
-web mvc all --package com.aeiou.bigbang.web
-security setup
-email sender setup --hostServer smtp.gmail.com --username casproteus@gmail.com --password Ollwin_02 --port 587 --protocol SMTP
-perform eclipse
-perform eclipse
-// [failed] script --file log.roo
-perform  test
-// [failed] script --file log.roo
-// [failed] script --file log.roo
-quit
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-01-18 16:49:32
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-01-18 16:49:37
-project --topLevelPackage com.aeiou.bigbang
-jpa setup --provider OPENJPA --database HYPERSONIC_PERSISTENT
-entity jpa --class ~.domain.Customize --testAutomatically
-field string --fieldName cusKey --notNull --unique
-field string --fieldName cusValue --notNull --unique
-entity jpa --class ~.domain.BigTag --testAutomatically
-field string --fieldName tagName --notNull --sizeMin 2 --unique
-field string --fieldName type --notNull --sizeMin 2
-entity jpa --class ~.domain.UserAccount --testAutomatically
-field string --fieldName name --notNull --sizeMin 2 --unique
-field string --fieldName email
-field string --fieldName password --sizeMin 4
-field string --fieldName description
-field set --type ~.domain.UserAccount --fieldName listento
-entity jpa --class ~.domain.Content --testAutomatically
-field string --fieldName title --notNull true
-field string --fieldName sourceURL --notNull
-field string --fieldName conentCache
-field set --type ~.domain.BigTag --fieldName tags
-field reference --type ~.domain.UserAccount --fieldName publisher --notNull
-entity jpa --class ~.domain.Remark --testAutomatically
-field string --fieldName content --notNull
-field date --type java.util.Date --fieldName remartTime --notNull
-field number --fieldName privilege --type int --notNull
-field reference --type ~.domain.UserAccount --fieldName publisher --notNull
-field reference --type ~.domain.Content --fieldName replyTo --notNull true
-entity jpa --class ~.domain.Twitter --testAutomatically
-field string --fieldName twitent --notNull
-field date --type java.util.Date --fieldName twitDate --notNull
-field reference --fieldName publisher --type ~.domain.UserAccount --notNull
-entity jpa --class ~.domain.Circle --testAutomatically
-field string --fieldName circleName --notNull
-field string --fieldName description
-field reference --type ~.domain.UserAccount --fieldName owner --notNull
-field date --type java.util.Date --fieldName createdDate --notNull
-field set --type ~.domain.UserAccount --fieldName members
-perform tests
-web mvc setup
-web mvc all --package com.aeiou.bigbang.web
-security setup
-email sender setup --hostServer smtp.gmail.com --username casproteus@gmail.com --password Ollwin_02 --port 587 --protocol SMTP
-perform eclipse
-perform eclipse
-// [failed] script --file log.roo
-quit
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-01-18 16:50:42

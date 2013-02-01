@@ -13,7 +13,7 @@
       <spring:message code="label_${fn:toLowerCase(fn:substringAfter(id,'_'))}" var="label" htmlEscape="false" />
     </c:if>
     <spring:message code="${label}" var="title_msg" htmlEscape="false" />
-    <util:panel id="${id}" title="${title_msg}" openPane="${openPane}">
+    <util:contentpanel id="${id}" title="${title_msg}" openPane="${openPane}">
       <c:choose>
         <c:when test="${not empty items}">
           <jsp:doBody />
@@ -22,6 +22,6 @@
           <spring:message arguments="${label}" code="entity_not_found" />
         </c:otherwise>
       </c:choose>
-    </util:panel>
+    </util:contentpanel>
   </c:if>
 </jsp:root>

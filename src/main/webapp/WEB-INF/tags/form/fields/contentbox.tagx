@@ -66,6 +66,7 @@
             <util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}" />
           </c:if>
         </td>
+        <td class="tWireless"></td>
       </tr>
     </table>
 

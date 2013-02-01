@@ -36,11 +36,13 @@ public class Content {
     @ManyToOne
     private BigTag commonBigTag;
 
-    public static List<Content> findAllContentsByTag(BigTag pBigTag) {
+    public static List<Content> findContentsByTag(BigTag pBigTag, int maxResults) {
         if (pBigTag == null) 
         	return entityManager().createQuery("SELECT o FROM Content o", Content.class).getResultList(); 
-        else {
+        else if(maxResults < 0){
             return entityManager().createQuery("SELECT o FROM Content AS o WHERE o.commonBigTag = :commonBigTag", Content.class).setParameter("commonBigTag", pBigTag).getResultList();
+        }else{
+            return entityManager().createQuery("SELECT o FROM Content AS o WHERE o.commonBigTag = :commonBigTag", Content.class).setParameter("commonBigTag", pBigTag).setFirstResult(0).setMaxResults(maxResults).getResultList();
         }
     }
 }

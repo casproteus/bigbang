@@ -41,7 +41,7 @@ public class PublicController {
 
             List<List> tContentLists = new ArrayList<List>();
         	for(int i = 0; i < tBigTags.size(); i++){
-        		tContentLists.add(Content.findAllContentsByTag(tBigTags.get(i)));
+        		tContentLists.add(Content.findContentsByTag(tBigTags.get(i), 8));
         	}
             uiModel.addAttribute("contents", tContentLists);
         }

@@ -16,7 +16,7 @@
         <intercept-url pattern="/customizes/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/remarks/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/twitters/**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/useraccounts/**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/useraccounts/**" access="permitAll" />
         <intercept-url pattern="/member/**" access="isAuthenticated()" />
         <intercept-url pattern="/resources/**" access="permitAll" />
         <intercept-url pattern="/public/**" access="permitAll" />

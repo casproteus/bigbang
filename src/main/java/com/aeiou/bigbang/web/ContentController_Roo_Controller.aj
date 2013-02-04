@@ -93,12 +93,7 @@ privileged aspect ContentController_Roo_Controller {
         return "redirect:/contents";
     }
     
-    void ContentController.populateEditForm(Model uiModel, Content content) {
-        uiModel.addAttribute("content", content);
-        uiModel.addAttribute("bigtags", BigTag.findAllBigTags());
-        uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
-    }
-    
+        
     String ContentController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
         String enc = httpServletRequest.getCharacterEncoding();
         if (enc == null) {

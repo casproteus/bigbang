@@ -1,6 +1,7 @@
 package com.aeiou.bigbang.domain;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -34,6 +35,15 @@ public class UserAccount {
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<com.aeiou.bigbang.domain.UserAccount> listento = new HashSet<com.aeiou.bigbang.domain.UserAccount>();
 
+    public static UserAccount findUserAccountByName(String pUserName){//BigTag pBigTag, int maxResults) {
+    	List tList = entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE o.name = :tname", UserAccount.class)
+    			.setParameter("tname", pUserName).getResultList();
+    	if(tList != null && tList.size() == 1)
+    		return (UserAccount)tList.get(0);
+    	else
+    		return null;
+    }
+    
 	public String toString() {
         return this.getName();
     }

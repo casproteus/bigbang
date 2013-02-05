@@ -36,7 +36,7 @@ public class PublicController {
             float nrOfPages = (float) Content.countContents() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-        	List<BigTag> tBigTags = BigTag.findAllCommonBigTags();
+        	List<BigTag> tBigTags = BigTag.findTagsByType("admin"); 
             uiModel.addAttribute("bigTags", tBigTags);
 
             List<List> tContentLists = new ArrayList<List>();

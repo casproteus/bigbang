@@ -66,21 +66,22 @@
 		<util:panel id="title2" title="${title2}">
 		   <p>
 		        <!--  spring:message code="security_signup_message" />-->
-		        This is for new user, the following is our aggreement : /n ,   
+		        This is for new user, the following is our aggreement :   
 		   </p>
 		   <p>1. you password and infomation is not safe here, and not safe anywhere in the internet.</p>
 		   <p>2. we might have to give up protecting your right when we are muscled by the government</p>
 		   <p>3.You have to protect youself if you edited anything which will cause anyone unhappy. </p>
-		   <p>if you agree all of them, please click the agree buton at the end.</p>
+		   <p>if you agree all of them, please click the agree link at the end.</p>
 		   <p>in the coming page, select an unused username, set up your password and contact email,</p>
 		   <p>then go :-)</p>
 		   <spring:url value="/useraccounts" var="create_url">
 	        	<spring:param name="form" />
 	       </spring:url>
-		   <a href="${create_url}" style="text-align: center; width: 100%">
+	       <p align="center"><a href="${create_url}" style="text-align: center; width: 100%">
 	        	<spring:message code="agree" htmlEscape="false" var="add_message"/>
 	        	${add_message}
-	       </a>
+	       </a></p>
+		   
 		</util:panel>
 	 </td>
 	</tr></table>

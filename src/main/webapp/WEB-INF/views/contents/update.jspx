@@ -8,6 +8,6 @@
         <field:select field="commonBigTag" id="c_com_aeiou_bigbang_domain_Content_commonBigTag" itemValue="id" items="${bigtags}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/>
         <field:select field="tags" id="c_com_aeiou_bigbang_domain_Content_tags" itemValue="id" items="${bigtags}" multiple="true" path="/bigtags" z="vhnvJ8gYKgpFbCdt4OPaots33K4="/>
         <field:input field="conentCache" id="c_com_aeiou_bigbang_domain_Content_conentCache" z="ciDeWotB2rtkeuHe5Esur9HePRc="/>
-        <field:input field="publisher" id="c_com_aeiou_bigbang_domain_Content_publisher" required="true" z="K9RgD0iIpWMOvR2WiE3Lm7LaX5I="/>
+        <field:input field="publisher" id="c_com_aeiou_bigbang_domain_Content_publisher" required="true" z="user-managed"/>
     </form:update>
 </div>

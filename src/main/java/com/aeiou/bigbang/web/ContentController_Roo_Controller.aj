@@ -3,9 +3,7 @@
 
 package com.aeiou.bigbang.web;
 
-import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
-import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.web.ContentController;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -93,7 +91,6 @@ privileged aspect ContentController_Roo_Controller {
         return "redirect:/contents";
     }
     
-        
     String ContentController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
         String enc = httpServletRequest.getCharacterEncoding();
         if (enc == null) {

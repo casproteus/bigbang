@@ -24,7 +24,7 @@ public class ContentController {
 	
 	void populateEditForm(Model uiModel, Content content) {
         uiModel.addAttribute("content", content);		
-        uiModel.addAttribute("bigtags", BigTag.findAllBigTags());
+        uiModel.addAttribute("bigtags", BigTag.findAllCommonBigTags());
         List<UserAccount> tList = new ArrayList();
         tList.add(UserAccount.findUserAccountByName(userContextService.getCurrentUserName())); //Can not use CurrentUser directly, because it's not of UserAccount type.
         uiModel.addAttribute("useraccounts", tList);

@@ -4,6 +4,7 @@
 package com.aeiou.bigbang.web;
 
 import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.web.ContentController;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;

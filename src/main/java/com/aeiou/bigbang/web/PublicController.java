@@ -37,6 +37,10 @@ public class PublicController {
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
         	List<BigTag> tBigTags = BigTag.findTagsByType("admin"); 
+        	for(int i = 0; i < tBigTags.size(); i++){
+        		BigTag a = tBigTags.get(i);
+        		a.setTagName("Tag_Admin_" + a.getTagName());
+        	}
             uiModel.addAttribute("bigTags", tBigTags);
 
             List<List> tContentLists = new ArrayList<List>();

@@ -19,17 +19,6 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect BigTagController_Roo_Controller {
     
-    @RequestMapping(method = RequestMethod.POST, produces = "text/html")
-    public String BigTagController.create(@Valid BigTag bigTag, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, bigTag);
-            return "bigtags/create";
-        }
-        uiModel.asMap().clear();
-        bigTag.persist();
-        return "redirect:/bigtags/" + encodeUrlPathSegment(bigTag.getId().toString(), httpServletRequest);
-    }
-    
     @RequestMapping(params = "form", produces = "text/html")
     public String BigTagController.createForm(Model uiModel) {
         populateEditForm(uiModel, new BigTag());

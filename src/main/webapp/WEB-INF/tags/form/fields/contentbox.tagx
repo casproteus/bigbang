@@ -5,7 +5,6 @@
   <jsp:directive.attribute name="id" type="java.lang.String" required="true" rtexprvalue="true" description="The identifier for this tag (do not change!)" />
   <jsp:directive.attribute name="data" type="java.util.Collection" required="true" rtexprvalue="true" description="The collection to be displayed in the table" />
   <jsp:directive.attribute name="path" type="java.lang.String" required="true" rtexprvalue="true" description="Specify the URL path" />
-  <jsp:directive.attribute name="tagName" type="java.lang.String" required="true" rtexprvalue="true" description="The common tag(top level tags--exclusive with each other) of the contents in this box" />
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
   <jsp:directive.attribute name="z" type="java.lang.String" required="false" description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
 
@@ -46,27 +45,28 @@
 	                  </spring:escapeBody>
 	                </c:when>
 	            </c:choose>
-      			<a href="${colTxt}">
-      				<c:out value="${item['publisher']}" />
-      			</a>
+        		<spring:url value="/public/${item['publisher']}" var="readMore_url" />
+	        	<a href="${readMore_url}?page=1&amp;size=${empty param.size ? 10 : param.size}">
+		            <c:out value="${item['publisher']}" />
+		        </a>
       		</td>
       	</tr>
       </c:forEach>
       <tr>
-        <td class="tWireless" colspan="${colCounter}">
-          <spring:url value="${path}" var="readMore_url">
-            <spring:param name="form" />
-          </spring:url>
-          <a href="${readMore_url}">
-            <spring:message arguments="${typeName}" code="global_menu_readmore" var="readmore_message" htmlEscape="false" />
-            ${readmore_message}
-          </a>
-          <c:out value=" " />
+        <td class="tWireless" colspan="${colCounter}">          
           <c:if test="${not empty maxPages}">
             <util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}" />
           </c:if>
         </td>
-        <td class="tWireless"></td>
+        <td class="tWireless namebox">
+        	<c:if test="${empty maxPages}">
+        	<spring:url value="${path}" var="readMore_url" />
+        	<a href="${readMore_url}?page=1&amp;size=${empty param.size ? 10 : param.size}">
+	            <spring:message arguments="${typeName}" code="global_menu_readmore" var="readmore_message" htmlEscape="false" />
+	            ${readmore_message}
+	        </a>
+	        </c:if>
+        </td>
       </tr>
     </table>
 

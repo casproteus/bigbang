@@ -24,9 +24,13 @@ public class BigTag {
     @NotNull
     @Size(min = 2)
     private String type;
-    
+
     public static List<BigTag> findTagsByType(String pType){
 	    return entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", pType).getResultList();
+    }
+    
+    public static List<BigTag> findTagsByTypeName(String pTagName){
+	    return entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName", BigTag.class).setParameter("pTagName", pTagName).getResultList();
     }
     
 	public String toString() {

@@ -4,4 +4,7 @@
     <definition extends="default" name="public/index">
         <put-attribute name="body" value="/WEB-INF/views/public/index.jspx"/>
     </definition>
+    <definition extends="default" name="public/list">
+        <put-attribute name="body" value="/WEB-INF/views/public/list.jspx"/>
+    </definition>
 </tiles-definitions>

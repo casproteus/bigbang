@@ -45,4 +45,14 @@ public class Content {
             return entityManager().createQuery("SELECT o FROM Content AS o WHERE o.commonBigTag = :commonBigTag ORDER BY o.id DESC", Content.class).setParameter("commonBigTag", pBigTag).setFirstResult(0).setMaxResults(maxResults).getResultList();
         }
     }
+    
+    public static List<Content> findContentsByPublisher(UserAccount pPublisher, int maxResults) {
+        if (pPublisher == null) 
+        	return entityManager().createQuery("SELECT o FROM Content o", Content.class).getResultList(); 
+        else if(maxResults < 0){
+            return entityManager().createQuery("SELECT o FROM Content AS o WHERE o.publisher = :publisher", Content.class).setParameter("publisher", pPublisher).getResultList();
+        }else{
+            return entityManager().createQuery("SELECT o FROM Content AS o WHERE o.publisher = :publisher ORDER BY o.id DESC", Content.class).setParameter("publisher", pPublisher).setFirstResult(0).setMaxResults(maxResults).getResultList();
+        }
+    }
 }

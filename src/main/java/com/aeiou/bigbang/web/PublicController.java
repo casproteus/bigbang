@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.UserAccount;
 
-@RequestMapping("/public/**")
+@RequestMapping("/public")
 @Controller
 public class PublicController {
 
@@ -27,6 +28,42 @@ public class PublicController {
     	System.out.println("go to his big uncle's!");
     }
 
+    
+    @RequestMapping(value = "/{tag}", produces = "text/html")
+    public String show(@PathVariable("tag") String tag, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
+    	List<BigTag> tBigTags = BigTag.findTagsByTypeName(tag);//tag can not be useraccount name, so if user are clicking a user name, the tBigtags must be null here.
+    	if(tBigTags.isEmpty()){
+    		UserAccount tUser = UserAccount.findUserAccountByName(tag);
+	    	if (page != null || size != null) {
+	            int sizeNo = size == null ? 10 : size.intValue();
+	            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
+	            uiModel.addAttribute("contents", Content.findContentsByPublisher(tUser, -1));
+	            float nrOfPages = (float) Content.countContents() / sizeNo;
+	            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+	        } else {
+	            uiModel.addAttribute("contents", Content.findContentsByPublisher(tUser, -1));
+	        }
+    	}else{
+	    	BigTag tBigTag = null;
+	    	for(int i = 0; i < tBigTags.size(); i++){
+	    		if("admin".equals(tBigTags.get(i).getType())){
+	    			tBigTag = tBigTags.get(i);
+	    			break;
+	    		}
+	    	}
+	    	if (page != null || size != null) {
+	            int sizeNo = size == null ? 10 : size.intValue();
+	            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
+	            uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, -1));
+	            float nrOfPages = (float) Content.countContents() / sizeNo;
+	            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+	        } else {
+	            uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, -1));
+	        }
+    	}
+        return "public/list";
+    }
+    
     @RequestMapping(produces = "text/html")
     public String index(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel){
     	if (page != null || size != null) {

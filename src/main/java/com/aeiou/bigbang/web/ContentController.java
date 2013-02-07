@@ -26,7 +26,7 @@ public class ContentController {
         uiModel.addAttribute("content", content);		
         uiModel.addAttribute("bigtags", BigTag.findTagsByType("admin"));
         uiModel.addAttribute("mytags", BigTag.findTagsByType(userContextService.getCurrentUserName()));
-        List<UserAccount> tList = new ArrayList();
+        List<UserAccount> tList = new ArrayList<UserAccount>();
         tList.add(UserAccount.findUserAccountByName(userContextService.getCurrentUserName())); //Can not use CurrentUser directly, because it's not of UserAccount type.
         uiModel.addAttribute("useraccounts", tList);
     }

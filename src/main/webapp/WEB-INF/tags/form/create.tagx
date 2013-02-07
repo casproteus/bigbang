@@ -19,7 +19,8 @@
     <c:if test="${multipart}">
       <c:set var="enctype" value="multipart/form-data"/>
     </c:if>
-    <spring:message arguments="${label}" code="entity_create" var="title_msg" htmlEscape="false" />
+    <spring:message code="${label}" var="tArgument" htmlEscape="false" />
+    <spring:message arguments="${tArgument}" code="entity_create" var="title_msg" htmlEscape="false" />
     <util:panel id="${id}" title="${title_msg}" openPane="${openPane}">
       <spring:url value="${path}" var="form_url"/>
       <c:set var="jsCall" value=""/>

@@ -332,6 +332,9 @@ fieldset th {
 	border:none;
 }
 
+.submit {
+	text-align: center;
+}
 .submit input {
 	border: 1px solid #BBBBBB;
 	color:#777777;

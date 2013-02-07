@@ -5,7 +5,7 @@
 	 xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
   <jsp:directive.page contentType="text/html;charset=UTF-8"/>
   <jsp:output omit-xml-declaration="yes"/>
-  <spring:message code="label_public_index" htmlEscape="false" var="title"/>
+  <spring:message code="label_public_index" arguments="${'Admin'},${'abc'}" htmlEscape="false" var="title"/>
   <util:panel id="title" title="${title}">
   	哥们，如果在别的网站上看到有趣的东西，别忘点左边按钮，给加个链接这里！ ( |:------------------------------>)
     <span class="new">

@@ -55,4 +55,20 @@ public class Content {
             return entityManager().createQuery("SELECT o FROM Content AS o WHERE o.publisher = :publisher ORDER BY o.id DESC", Content.class).setParameter("publisher", pPublisher).setFirstResult(0).setMaxResults(maxResults).getResultList();
         }
     }
+    
+    public static long countContentsByTag(BigTag pBigTag) {
+        if (pBigTag == null) 
+        	return entityManager().createQuery("SELECT COUNT(o) FROM Content o", Long.class).getSingleResult(); 
+        else{
+            return entityManager().createQuery("SELECT COUNT(o) FROM Content AS o WHERE o.commonBigTag = :commonBigTag", Long.class).setParameter("commonBigTag", pBigTag).getSingleResult();
+        }
+    }    
+    
+    public static long countContentsByPublisher(UserAccount publisher) {
+        if (publisher == null) 
+        	return entityManager().createQuery("SELECT COUNT(o) FROM Content o", Long.class).getSingleResult(); 
+        else{
+            return entityManager().createQuery("SELECT COUNT(o) FROM Content AS o WHERE o.publisher = :publisher", Long.class).setParameter("publisher", publisher).getSingleResult();
+        }
+    }
 }

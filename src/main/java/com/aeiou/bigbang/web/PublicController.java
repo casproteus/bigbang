@@ -35,10 +35,10 @@ public class PublicController {
     	if(tBigTags.isEmpty()){
     		UserAccount tUser = UserAccount.findUserAccountByName(tag);
 	    	if (page != null || size != null) {
-	            int sizeNo = size == null ? 10 : size.intValue();
+	            int sizeNo = size == null ? 20 : size.intValue();
 	            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-	            uiModel.addAttribute("contents", Content.findContentsByPublisher(tUser, -1));
-	            float nrOfPages = (float) Content.countContents() / sizeNo;
+	            uiModel.addAttribute("contents", Content.findContentsByPublisher(tUser, sizeNo));
+	            float nrOfPages = (float) Content.countContentsByPublisher(tUser) / sizeNo;
 	            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
 	        } else {
 	            uiModel.addAttribute("contents", Content.findContentsByPublisher(tUser, -1));
@@ -52,10 +52,10 @@ public class PublicController {
 	    		}
 	    	}
 	    	if (page != null || size != null) {
-	            int sizeNo = size == null ? 10 : size.intValue();
+	            int sizeNo = size == null ? 20 : size.intValue();
 	            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-	            uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, -1));
-	            float nrOfPages = (float) Content.countContents() / sizeNo;
+	            uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, sizeNo));
+	            float nrOfPages = (float) Content.countContentsByTag(tBigTag) / sizeNo;
 	            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
 	        } else {
 	            uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, -1));

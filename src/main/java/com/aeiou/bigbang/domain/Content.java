@@ -75,6 +75,20 @@ public class Content {
         }
     }
     
+    public static List<Content> findContentsByTagAndPublisher(BigTag pBigTag, UserAccount pPublisher, int maxResults) {
+    	List<Content> tListFR = new ArrayList<Content>();
+    	tListFR.addAll(entityManager().createQuery("SELECT o FROM Content AS o WHERE o.commonBigTag = :commonBigTag ORDER BY o.id DESC", Content.class).setParameter("commonBigTag", pBigTag).setFirstResult(0).setMaxResults(maxResults).getResultList());
+    	//1.when users are adding a content, he has to tell in which tag it will display in public space and in which space it will be in personal space.
+    	//2.in private space, user can include all public tags, so when telling in which tag on main page, will also displayed in private space with same tag.
+    	//3.with a given tag, it can appear both on commonBigTag and tags field, so we should check both field to make sure the content will be fetchout so it can be displayed on the webpage.
+    	//4.but, if someone give his content a public tag, but want it displayed only in his private space, it's not allowed for now. if we support, we'll probably use two method, one match only the commontag field.
+    	if(tListFR.isEmpty()){	
+    		//TODO:how to write the contains relationship? why seems that "=" can do the work???
+        	tListFR.addAll(entityManager().createQuery("SELECT o FROM Content AS o WHERE o.tags = :commonBigTag ORDER BY o.id DESC", Content.class).setParameter("commonBigTag", pBigTag).setFirstResult(0).setMaxResults(maxResults).getResultList());
+        }
+    	return tListFR;
+    }
+
     public static long countContentsByTag(BigTag pBigTag) {
         if (pBigTag == null) {
         	System.out.println("Content l79 is called!");

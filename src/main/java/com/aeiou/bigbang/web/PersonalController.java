@@ -20,7 +20,7 @@ import com.aeiou.bigbang.domain.UserAccount;
 
 @RequestMapping("/")
 @Controller
-public class PersonalController {
+public class PersonalController{
 
     @RequestMapping(method = RequestMethod.POST, value = "{id}")
     public void post(@PathVariable Long id, ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
@@ -41,7 +41,9 @@ public class PersonalController {
     			a.setTagName("Tag_Admin_" + a.getTagName()); 	//if it's public one, then will go to resource file look for String to disp.
     	}
         uiModel.addAttribute("bigTags", tBigTags);
-
+        uiModel.addAttribute("spaceOwner", accountName);
+        uiModel.addAttribute("description", tUser.getDescription());
+        
         List<List> tContentLists = new ArrayList<List>();
     	for(int i = 0; i < tBigTags.size(); i++){
     		tContentLists.add(Content.findContentsByTag(tBigTags.get(i), 8));

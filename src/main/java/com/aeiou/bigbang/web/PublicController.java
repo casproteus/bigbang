@@ -20,7 +20,7 @@ import com.aeiou.bigbang.domain.UserAccount;
 
 @RequestMapping("/public")
 @Controller
-public class PublicController {
+public class PublicController{
 
     @RequestMapping(method = RequestMethod.POST, value = "{id}")
     public void post(@PathVariable Long id, ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {

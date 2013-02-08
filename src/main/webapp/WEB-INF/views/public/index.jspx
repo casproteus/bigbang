@@ -9,7 +9,7 @@
   <spring:message code="publicDescription" htmlEscape="false" var="publicDescription"/>
   <spring:message code="label_public_index" arguments="${empty spaceOwner ? publicspace : spaceOwner},${empty description ? publicDescription : description}" htmlEscape="false" var="title"/>
   <util:panel id="title" title="${title}">
-  	哥们，如果在别的网站上看到有趣的东西，别忘点左边按钮，给加个链接这里！ ( |:------------------------------>)
+  	<spring:message code="pleaseAddSomeContentHere" htmlEscape="false"/>
     <span class="new">
       <spring:url value="/contents" var="create_url">
         <spring:param name="form" />

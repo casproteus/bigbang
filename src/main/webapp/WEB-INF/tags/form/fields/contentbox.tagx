@@ -5,6 +5,8 @@
   <jsp:directive.attribute name="id" type="java.lang.String" required="true" rtexprvalue="true" description="The identifier for this tag (do not change!)" />
   <jsp:directive.attribute name="data" type="java.util.Collection" required="true" rtexprvalue="true" description="The collection to be displayed in the table" />
   <jsp:directive.attribute name="path" type="java.lang.String" required="true" rtexprvalue="true" description="Specify the URL path" />
+  <jsp:directive.attribute name="hidePublisher" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the publisher should be hide, and the tags should be shown" />
+  <jsp:directive.attribute name="sortable" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if table header should be hide, true means not hide" />
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
   <jsp:directive.attribute name="z" type="java.lang.String" required="false" description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
 
@@ -27,6 +29,27 @@
     <spring:eval var="colCounter" expression="1" />
 
     <table class="tWireless">
+      <c:if test="${sortable}">
+        <thead>
+        <tr>
+          <c:forTokens items="${columnLabels}" delims="${'&#9999;'}" var="columnHeading">
+            <th>
+              <c:out value="${columnHeading}" />
+              <spring:eval var="colCounter" expression="colCounter  + 1" />
+            </th>
+          </c:forTokens>
+          <th></th>
+          <c:if test="${update}">
+            <th></th>
+            <spring:eval var="colCounter" expression="colCounter  + 1" />
+          </c:if>
+          <c:if test="${delete}">
+            <th></th>
+            <spring:eval var="colCounter" expression="colCounter  + 1" />
+          </c:if>
+        </tr>
+      	</thead>
+      </c:if>
       <c:forEach items="${data}" var="item">
       	<tr>
       		<td class="tWireless">
@@ -34,22 +57,32 @@
       				<c:out value="${item['title']}" />
       			</a>
       		</td>
-      		<td class="tWireless namebox">
-	            <c:set var="columnType" value="${types[num.count-1]}" />
-	            <c:set var="columnMaxLength" value="${lengths[num.count-1]}" />
-	            <c:set var="columnDatePattern" value="${patterns[num.count-1]}" />
-      			<c:choose>
-                	<c:when test="${columnType eq 'date'}">
-	                  <spring:escapeBody>
-	                    <fmt:formatDate value="${item[column]}" pattern="${fn:escapeXml(columnDatePattern)}" var="colTxt" />
-	                  </spring:escapeBody>
-	                </c:when>
-	            </c:choose>
-        		<spring:url value="/public/${item['publisher']}" var="readMore_url" />
-	        	<a href="${readMore_url}?page=1&amp;size=${empty param.size ? 30 : param.size}">
-		            <c:out value="${item['publisher']}" />
-		        </a>
-      		</td>
+      		<c:choose>
+		        <c:when test="${hidePublisher}">
+	      			<td class="tWireless">
+	      				<spring:message var="tagString" code="Tag_Admin_${item['commonBigTag']}" htmlEscape="true" />
+				        <c:out value="${tagString}" />
+		      		</td>
+		      		<td class="tWireless">
+				        <c:out value="${item['tags']}" />
+		      		</td>
+		      	</c:when>
+		        <c:otherwise>
+		      		<td class="tWireless namebox">
+			            <c:set var="columnType" value="${types[num.count-1]}" />
+			            <c:set var="columnMaxLength" value="${lengths[num.count-1]}" />
+			            <c:set var="columnDatePattern" value="${patterns[num.count-1]}" />
+		        		<spring:url value="/public" var="listAllContentOfPublisher">
+		        			<spring:param name="publisher" value="${item['publisher']}"/>
+		        			<spring:param name="page" value="1"/>
+		        			<spring:param name="size" value="${empty param.size ? 30 : param.size}"/>
+		      			</spring:url>
+			        	<a href="${listAllContentOfPublisher}">
+				            <c:out value="${item['publisher']}" />
+				        </a>
+		      		</td>
+		        </c:otherwise>
+		    </c:choose>
       	</tr>
       </c:forEach>
       <tr>
@@ -60,13 +93,16 @@
         </td>
         <td class="tWireless namebox">
         	<c:if test="${empty maxPages}">
-        	<spring:url value="${path}" var="readMore_url" />
-        	<a href="${readMore_url}?page=1&amp;size=${empty param.size ? 40 : param.size}">
-	            <spring:message arguments="${typeName}" code="global_menu_readmore" var="readmore_message" htmlEscape="false" />
-	            ${readmore_message}
-	        </a>
+	        	<spring:url value="${path}" var="readMore_url" />
+	        	<a href="${readMore_url}?page=1&amp;size=${empty param.size ? 40 : param.size}">
+		            <spring:message arguments="${typeName}" code="global_menu_readmore" var="readmore_message" htmlEscape="false" />
+		            ${readmore_message}
+		        </a>
 	        </c:if>
         </td>
+        <c:if test="${hidePublisher}">
+        	<td class="tWireless namebox"/>
+        </c:if>
       </tr>
     </table>
 

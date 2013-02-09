@@ -28,8 +28,8 @@ public class PublicController{
     }
     
     /**
-     * We have to use tag's ID, because different user can create tags with same name. 
-     * if we match content with tag name, will cause mistake when clicking the "more" button from personal space. 
+     * We have to use both tag's tagname and type to match out a single tag, because different user can create tags with same name. 
+     * if we match content with only tag name, will cause mistake when clicking the "more" button from personal space. 
      * so we have to use tag's ID to match content.
      * @param tag
      * @param page
@@ -39,12 +39,12 @@ public class PublicController{
      */
     @RequestMapping(value = "/{tag}", params = "spaceOwner", produces = "text/html")
     public String showMore(@PathVariable("tag") String tag, @RequestParam(value = "spaceOwner", required = false) String spaceOwner, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
-    	BigTag tBigTag = BigTag.findTagsByTypeNameAndOwner(tag, spaceOwner);	//different tags can exist with same name but different owner.
+    	BigTag tBigTag = BigTag.findTagByTypeNameAndOwner(tag, spaceOwner);	//different tags can exist with same name but different owner.
     	UserAccount tUser = UserAccount.findUserAccountByName(spaceOwner);
     	if (page != null || size != null) {
             int sizeNo = size == null ? 20 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tUser, sizeNo));
+            uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, sizeNo));
             float nrOfPages = (float) Content.countContentsByTag(tBigTag) / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
@@ -76,7 +76,7 @@ public class PublicController{
             float nrOfPages = (float) Content.countContents() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-        	List<BigTag> tBigTags = BigTag.findTagsByType(null); 
+        	List<BigTag> tBigTags = BigTag.findTagsByOwner("admin"); 
         	for(int i = 0; i < tBigTags.size(); i++){
         		BigTag a = tBigTags.get(i);
         		a.setTagName("Tag_Admin_" + a.getTagName());

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -45,8 +45,10 @@ public class BigTag {
     	}
     }
     
-    public static List<BigTag> findTagsByTypeName(String pTagName){
-	    return entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName", BigTag.class).setParameter("pTagName", pTagName).getResultList();
+    public static BigTag findTagsByTypeNameAndOwner(String pTagName, String pOwnerName){
+    	TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName And o.type = :pOwnerName", BigTag.class);
+    	tQuery  = tQuery.setParameter("pTagName", pTagName).setParameter("pOwnerName", pOwnerName);
+    	return tQuery.getResultList().get(0);
     }
     
 	public String toString() {

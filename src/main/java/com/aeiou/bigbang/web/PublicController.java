@@ -37,21 +37,14 @@ public class PublicController{
      * @param uiModel
      * @return
      */
-    @RequestMapping(value = "/{tag}", produces = "text/html")
-    public String showMore(@PathVariable("tag") String tag, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
-    	List<BigTag> tBigTags = BigTag.findTagsByTypeName(tag);	//different tags can exist with same name but different owner.
-    	
-    	BigTag tBigTag = null;									//if tBigTag is set, that means we are listing all
-    	for(int i = 0; i < tBigTags.size(); i++){
-    		if("admin".equals(tBigTags.get(i).getType())){
-    			tBigTag = tBigTags.get(i);
-    			break;
-    		}
-    	}
+    @RequestMapping(value = "/{tag}", params = "spaceOwner", produces = "text/html")
+    public String showMore(@PathVariable("tag") String tag, @RequestParam(value = "spaceOwner", required = false) String spaceOwner, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
+    	BigTag tBigTag = BigTag.findTagsByTypeNameAndOwner(tag, spaceOwner);	//different tags can exist with same name but different owner.
+    	UserAccount tUser = UserAccount.findUserAccountByName(spaceOwner);
     	if (page != null || size != null) {
             int sizeNo = size == null ? 20 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, sizeNo));
+            uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tUser, sizeNo));
             float nrOfPages = (float) Content.countContentsByTag(tBigTag) / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
@@ -67,6 +60,7 @@ public class PublicController{
             int sizeNo = size == null ? 20 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
             uiModel.addAttribute("contents", Content.findContentsByPublisher(tUser, sizeNo));
+            uiModel.addAttribute("publisher", publisher);
             float nrOfPages = (float) Content.countContentsByPublisher(tUser) / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         }
@@ -88,6 +82,7 @@ public class PublicController{
         		a.setTagName("Tag_Admin_" + a.getTagName());
         	}
             uiModel.addAttribute("bigTags", tBigTags);
+            uiModel.addAttribute("spaceOwner", "admin");
 
             List<List> tContentLists = new ArrayList<List>();
         	for(int i = 0; i < tBigTags.size(); i++){

@@ -75,7 +75,7 @@ public class Content {
         }
     }
     
-    public static List<Content> findContentsByTagAndPublisher(BigTag pBigTag, UserAccount pPublisher, int maxResults) {
+    public static List<Content> findContentsByTagAndSpaceOwner(BigTag pBigTag, UserAccount pPublisher, int maxResults) {
     	List<Content> tListFR = new ArrayList<Content>();
     	tListFR.addAll(entityManager().createQuery("SELECT o FROM Content AS o WHERE o.commonBigTag = :commonBigTag ORDER BY o.id DESC", Content.class).setParameter("commonBigTag", pBigTag).setFirstResult(0).setMaxResults(maxResults).getResultList());
     	//1.when users are adding a content, he has to tell in which tag it will display in public space and in which space it will be in personal space.

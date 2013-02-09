@@ -6,7 +6,8 @@
   <jsp:directive.attribute name="data" type="java.util.Collection" required="true" rtexprvalue="true" description="The collection to be displayed in the table" />
   <jsp:directive.attribute name="path" type="java.lang.String" required="true" rtexprvalue="true" description="Specify the URL path" />
   <jsp:directive.attribute name="hidePublisher" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the publisher should be hide, and the tags should be shown" />
-  <jsp:directive.attribute name="sortable" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if table header should be hide, true means not hide" />
+  <jsp:directive.attribute name="tag" type="java.lang.String" required="false" rtexprvalue="true" description="Indicate the URL of the 'read more' button." />
+  <jsp:directive.attribute name="spaceOwner" type="java.lang.String" required="false" rtexprvalue="true" description="used for contributing the URL of the 'read more' button." />
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
   <jsp:directive.attribute name="z" type="java.lang.String" required="false" description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
 
@@ -29,27 +30,6 @@
     <spring:eval var="colCounter" expression="1" />
 
     <table class="tWireless">
-      <c:if test="${sortable}">
-        <thead>
-        <tr>
-          <c:forTokens items="${columnLabels}" delims="${'&#9999;'}" var="columnHeading">
-            <th>
-              <c:out value="${columnHeading}" />
-              <spring:eval var="colCounter" expression="colCounter  + 1" />
-            </th>
-          </c:forTokens>
-          <th></th>
-          <c:if test="${update}">
-            <th></th>
-            <spring:eval var="colCounter" expression="colCounter  + 1" />
-          </c:if>
-          <c:if test="${delete}">
-            <th></th>
-            <spring:eval var="colCounter" expression="colCounter  + 1" />
-          </c:if>
-        </tr>
-      	</thead>
-      </c:if>
       <c:forEach items="${data}" var="item">
       	<tr>
       		<td class="tWireless">
@@ -93,8 +73,17 @@
         </td>
         <td class="tWireless namebox">
         	<c:if test="${empty maxPages}">
-	        	<spring:url value="${path}" var="readMore_url" />
-	        	<a href="${readMore_url}?page=1&amp;size=${empty param.size ? 40 : param.size}">
+        		<c:set var="tagStr" value="${tag}" />
+        		<c:if test="${not empty fn:substringAfter(tag,'Tag_Admin_')}">
+        			<c:set var="tagStr" value="${fn:substringAfter(tag,'Tag_Admin_')}" />
+        		</c:if>
+        		
+	        	<spring:url value="${path}${tagStr}" var="readMore_url">
+        			<spring:param name="spaceOwner" value="${spaceOwner}"/>
+        			<spring:param name="page" value="1"/>
+        			<spring:param name="size" value="${empty param.size ? 40 : param.size}"/>
+	        	</spring:url>
+	        	<a href="${readMore_url}">
 		            <spring:message arguments="${typeName}" code="global_menu_readmore" var="readmore_message" htmlEscape="false" />
 		            ${readmore_message}
 		        </a>

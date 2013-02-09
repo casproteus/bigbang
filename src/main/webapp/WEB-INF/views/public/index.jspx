@@ -28,7 +28,7 @@
   	<td class="tWireless nopaddingleft" valign="top">
 	  	<c:forEach items="${contents}" var="content" begin="0" end="${tagsize/2 - 1}" varStatus="num">
 		  <page:contentlist id="contentlist${(num.count - 1)}" items="${content}" label="${bigTags[num.count - 1]}"  z="hnfyfk7YNdTBdBza4/mViLT4aos=">
-		    <table:contentbox data="${content}" id="l_com_aeiou_bigbang_domain_Content" path="/public/${fn:substringAfter(bigTags[num.count - 1], 'Tag_Admin_')}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
+		    <table:contentbox data="${content}" id="l_com_aeiou_bigbang_domain_Content" path="/public/" tag="${bigTags[num.count - 1]}" spaceOwner="${spaceOwner}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
 		        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
 		        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="sourceURL" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
 		        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
@@ -40,7 +40,7 @@
   	<td class="tWireless nopaddingright" valign="top" >
   		<c:forEach items="${contents}" var="content" begin="${tagsize/2}" varStatus="num">
 		  <page:contentlist id="contentlist${(num.count - 1 + tagsize/2)}" items="${content}" label="${bigTags[num.count - 1 + tagsize/2]}"  z="hnfyfk7YNdTBdBza4/mViLT4aos=">
-		    <table:contentbox data="${content}" id="l_com_aeiou_bigbang_domain_Content" path="/public/${fn:substringAfter(bigTags[num.count - 1 + tagsize/2],'Tag_Admin_')}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
+		    <table:contentbox data="${content}" id="l_com_aeiou_bigbang_domain_Content" path="/public/" tag="${bigTags[num.count - 1 + tagsize/2]}" spaceOwner="${spaceOwner}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
 		        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
 		        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="sourceURL" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
 		        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>

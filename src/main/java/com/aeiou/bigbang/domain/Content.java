@@ -124,4 +124,8 @@ public class Content {
             return entityManager().createQuery("SELECT COUNT(o) FROM Content AS o WHERE o.publisher = :publisher", Long.class).setParameter("publisher", publisher).getSingleResult();
         }
     }
+
+	public static List<Content> findContentEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Content o ORDER BY o.id DESC", Content.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
 }

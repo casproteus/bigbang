@@ -4,7 +4,7 @@
 package com.aeiou.bigbang.web;
 
 import com.aeiou.bigbang.domain.UserAccount;
-
+import com.aeiou.bigbang.web.UserAccountController;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;

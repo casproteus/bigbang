@@ -33,10 +33,7 @@ privileged aspect BigTag_Roo_Jpa_ActiveRecord {
         return entityManager().find(BigTag.class, id);
     }
     
-    public static List<BigTag> BigTag.findBigTagEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM BigTag o", BigTag.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-    }
-    
+        
     @Transactional
     public void BigTag.persist() {
         if (this.entityManager == null) this.entityManager = entityManager();

@@ -54,4 +54,8 @@ public class BigTag {
 	public String toString() {
         return tagName;
     }
+
+	public static List<BigTag> findBigTagEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM BigTag o ORDER BY o.id DESC", BigTag.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
 }

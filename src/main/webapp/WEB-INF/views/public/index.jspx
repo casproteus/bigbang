@@ -7,7 +7,7 @@
   <jsp:output omit-xml-declaration="yes"/>
   <spring:message code="public" htmlEscape="false" var="publicspace"/>
   <spring:message code="publicDescription" htmlEscape="false" var="publicDescription"/>
-  <spring:message code="label_public_index" arguments="${empty spaceOwner ? publicspace : spaceOwner},${empty description ? publicDescription : description}" htmlEscape="false" var="title"/>
+  <spring:message code="label_public_index" arguments="${empty spaceOwner or spaceOwner eq 'admin' ? publicspace : spaceOwner},${empty description ? publicDescription : description}" htmlEscape="false" var="title"/>
   <util:panel id="title" title="${title}">
   	<spring:message code="pleaseAddSomeContentHere" htmlEscape="false"/>
     <span class="new">

@@ -42,6 +42,36 @@
 	<td></td>
 </tr>
 <tr>
+	<td>clickAndWait</td>
+	<td>css=img[alt=&quot;Create new 个人空间的标签&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_tagName_id</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=_tagName_id</td>
+	<td>test_tag_123455</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=proceed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=大主编</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=我来加一个！</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>id=_title_id</td>
 	<td></td>
@@ -59,7 +89,7 @@
 <tr>
 	<td>addSelection</td>
 	<td>id=_tags_id</td>
-	<td>label=spring</td>
+	<td>label=test_tag_123455</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -68,7 +98,7 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>spring tao</td>
+	<td>test_tag_123455 tao</td>
 	<td></td>
 </tr>
 <tr>
@@ -99,6 +129,101 @@
 <tr>
 	<td>verifyTextPresent</td>
 	<td>test1234567888</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/bigbang/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>注销当前用户</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=注销当前用户</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>test123455</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=我来加一个！</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=j_username</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=j_username</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=j_password</td>
+	<td>2ert</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=proceed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>发布新的内容</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>List all Contents</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Create new Content</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Content</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=List all Contents</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>test123455</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=//input[@value=&quot;Delete Content&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Are you sure want to delete this item?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>test123455</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=注销当前用户</td>
 	<td></td>
 </tr>
 </tbody></table>

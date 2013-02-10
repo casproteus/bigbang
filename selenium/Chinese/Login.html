@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost/" />
+<title>Login</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Login</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/bigbang/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=我来加一个！</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=div.dijitTitlePaneTitleFocus</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=span.dijitTitlePaneTextNode</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>已注册用户请在此登录</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=j_username</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=j_username</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>新用户请看过来</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=j_password</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=j_password</td>
+	<td>2ert</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=proceed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>发布新的内容</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>内容标题 :</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>新加一个标签！</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Twitter</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Customize</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Circle</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Remark</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Controller</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>User Account</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Big Tag</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=_publisher_id</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>注销当前用户</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=注销当前用户</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>欢迎来大主编admin的空间----精选优质新闻平台、管理常用网页连接、朋友团队共享信息、等等，请你帮我想想这个平台还能够做什么用？</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>注销当前用户</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=我来加一个！</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=j_username</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=j_username</td>
+	<td>tao</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=j_password</td>
+	<td>1234</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=proceed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>发布新的内容</td>
+	<td></td>
+</tr>
+<tr>
+	<td>addSelection</td>
+	<td>id=_tags_id</td>
+	<td>label=spring</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>spring</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>注销当前用户</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=大主编</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>欢迎来大主编admin的空间----精选优质新闻平台、管理常用网页连接、朋友团队共享信息、等等，请你帮我想想这个平台还能够做什么用？</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=注销当前用户</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

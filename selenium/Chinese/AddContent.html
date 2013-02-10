@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost/" />
+<title>AddContent</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">AddContent</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/bigbang/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=我来加一个！</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=j_username</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=j_username</td>
+	<td>tao</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=j_password</td>
+	<td>1234</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=proceed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_title_id</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=_title_id</td>
+	<td>test123455</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=_sourceURL_id</td>
+	<td>http://localhost/test</td>
+</tr>
+<tr>
+	<td>addSelection</td>
+	<td>id=_tags_id</td>
+	<td>label=日记</td>
+</tr>
+<tr>
+	<td>addSelection</td>
+	<td>id=_tags_id</td>
+	<td>label=spring</td>
+</tr>
+<tr>
+	<td>removeSelection</td>
+	<td>id=_tags_id</td>
+	<td>label=日记</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=proceed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>spring tao</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>http://localhost/test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>test123455</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=大主编</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>test123455</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=test123455</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>test1234567888</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

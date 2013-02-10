@@ -9,7 +9,7 @@
 <table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
 <tr><td><b>Test Suite</b></td></tr>
 <tr><td><a href="StartUp.html">StartUp</a></td></tr>
-<tr><td><a href="Login.html">Login</a></td></tr>
+<tr><td><a href="Login.html">LoginAndAddNewTag</a></td></tr>
 <tr><td><a href="AddContent.html">AddContent</a></td></tr>
 <tr><td><a href="RemoveTestContent.html">RemoveTestContent</a></td></tr>
 </tbody></table>

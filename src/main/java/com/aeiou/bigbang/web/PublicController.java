@@ -27,6 +27,32 @@ public class PublicController{
     	System.out.println("go to his big uncle's!");
     }
     
+    @RequestMapping(produces = "text/html")
+    public String index(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel){
+    	if (page != null || size != null) {
+            int sizeNo = size == null ? 10 : size.intValue();
+            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
+            uiModel.addAttribute("contents", Content.findContentEntries(firstResult, sizeNo));
+            float nrOfPages = (float) Content.countContents() / sizeNo;
+            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+        } else {
+        	List<BigTag> tBigTags = BigTag.findTagsByOwner("admin"); 
+        	for(int i = 0; i < tBigTags.size(); i++){
+        		BigTag a = tBigTags.get(i);
+        		a.setTagName("Tag_Admin_" + a.getTagName());
+        	}
+            uiModel.addAttribute("bigTags", tBigTags);
+            uiModel.addAttribute("spaceOwner", "admin");
+
+            List<List> tContentLists = new ArrayList<List>();
+        	for(int i = 0; i < tBigTags.size(); i++){
+        		tContentLists.add(Content.findContentsByTag(tBigTags.get(i), 8));
+        	}
+            uiModel.addAttribute("contents", tContentLists);
+        }
+        return "public/index";
+    }
+
     /**
      * We have to use both tag's tagname and type to match out a single tag, because different user can create tags with same name. 
      * if we match content with only tag name, will cause mistake when clicking the "more" button from personal space. 
@@ -54,7 +80,7 @@ public class PublicController{
     }
 
     @RequestMapping(params = "publisher", produces = "text/html")
-    public String listPublishedContentByPublisher(@RequestParam(value = "publisher", required = false) String publisher, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
+    public String listContentByPublisher(@RequestParam(value = "publisher", required = false) String publisher, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
 		UserAccount tUser = UserAccount.findUserAccountByName(publisher);
     	if (page != null || size != null) {
             int sizeNo = size == null ? 20 : size.intValue();
@@ -67,29 +93,4 @@ public class PublicController{
         return "public/list";
     }
     
-    @RequestMapping(produces = "text/html")
-    public String index(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel){
-    	if (page != null || size != null) {
-            int sizeNo = size == null ? 10 : size.intValue();
-            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("contents", Content.findContentEntries(firstResult, sizeNo));
-            float nrOfPages = (float) Content.countContents() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        } else {
-        	List<BigTag> tBigTags = BigTag.findTagsByOwner("admin"); 
-        	for(int i = 0; i < tBigTags.size(); i++){
-        		BigTag a = tBigTags.get(i);
-        		a.setTagName("Tag_Admin_" + a.getTagName());
-        	}
-            uiModel.addAttribute("bigTags", tBigTags);
-            uiModel.addAttribute("spaceOwner", "admin");
-
-            List<List> tContentLists = new ArrayList<List>();
-        	for(int i = 0; i < tBigTags.size(); i++){
-        		tContentLists.add(Content.findContentsByTag(tBigTags.get(i), 8));
-        	}
-            uiModel.addAttribute("contents", tContentLists);
-        }
-        return "public/index";
-    }
 }

@@ -28,15 +28,17 @@ public class PersonalController{
     	if(tUser == null)
     		return null;//TODO: add a page showing something like this account does not exist!
     	
+        uiModel.addAttribute("spaceOwner", spaceOwner);
+        uiModel.addAttribute("description", tUser.getDescription());
+
     	List<BigTag> tBigTags = BigTag.findTagsByOwner(spaceOwner); //will fetch not also the public tags.
+    	//TODO give them ids.
     	for(int i = 0; i < tBigTags.size(); i++){
     		BigTag tTag = tBigTags.get(i);
     		if("admin".equals(tTag.getType()))						//because view will distinguish if a tag is public one or private one.
     			tTag.setTagName("Tag_Admin_" + tTag.getTagName()); 	//if it's public one, then will go to resource file look for String to disp.
     	}
         uiModel.addAttribute("bigTags", tBigTags);
-        uiModel.addAttribute("spaceOwner", spaceOwner);
-        uiModel.addAttribute("description", tUser.getDescription());
         
         List<List> tContentLists = new ArrayList<List>();
     	for(int i = 0; i < tBigTags.size(); i++){

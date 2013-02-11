@@ -79,17 +79,13 @@ public class Content {
      */
     public static List<Content> findContentsByTagAndSpaceOwner(BigTag pTag, UserAccount pOwner, int maxResults) {
     	List<Content> tListFR = new ArrayList<Content>();
+		//TODO:how to write the contains relationship? why seems that "=" can do the work???
     	TypedQuery<Content> tQuery = entityManager().createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag or o.tags = :pTag) and (o.publisher = :pOwner or o.publisher.listento = :pOwner) ORDER BY o.id DESC", Content.class);
     	tQuery = tQuery.setParameter("pTag", pTag).setParameter("pOwner", pOwner).setFirstResult(0).setMaxResults(maxResults);
     	tListFR.addAll(tQuery.getResultList());
 //    	//1.when users are adding a content, he has to tell in which tag it will display in public space and in which space it will be in personal space.
-//    	//2.in private space, user can include all public tags, so when telling in which tag on main page, will also displayed in private space with same tag.
-//    	//3.with a given tag, it can appear both on commonBigTag and tags field, so we should check both field to make sure the content will be fetchout so it can be displayed on the webpage.
-//    	//4.but, if someone give his content a public tag, but want it displayed only in his private space, he can create a tag with name of "local, but the type is his account.
-//    	if(tListFR.isEmpty()){	
-//    		//TODO:how to write the contains relationship? why seems that "=" can do the work???
-//        	tListFR.addAll(entityManager().createQuery("SELECT o FROM Content AS o WHERE o.tags = :commonBigTag ORDER BY o.id DESC", Content.class).setParameter("commonBigTag", pBigTag).setFirstResult(0).setMaxResults(maxResults).getResultList());
-//        }
+//    	//2.in private space,  all public tags will also displayed in private space. unless owner select to hide them.
+//    	//3.but, if someone give his content a public tag, but want it displayed only in his private space, he can create a tag with same name (like "local")
     	return tListFR;
     }
 
@@ -115,7 +111,18 @@ public class Content {
         }else{
             return entityManager().createQuery("SELECT COUNT(o) FROM Content AS o WHERE o.commonBigTag = :commonBigTag", Long.class).setParameter("commonBigTag", pBigTag).getSingleResult();
         }
+    }
+    
+    public static long countContentsByTagAndSpaceOwner(BigTag pBigTag, UserAccount pOwner) {
+        if (pBigTag == null) {
+        	System.out.println("Content l79 is called!");
+        	Thread.dumpStack();
+        	return entityManager().createQuery("SELECT COUNT(o) FROM Content o", Long.class).getSingleResult(); 
+        }else{
+            return entityManager().createQuery("SELECT COUNT(o) FROM Content AS o WHERE o.commonBigTag = :commonBigTag", Long.class).setParameter("commonBigTag", pBigTag).getSingleResult();
+        }
     }    
+    
     
     public static long countContentsByPublisher(UserAccount publisher) {
         if (publisher == null) {

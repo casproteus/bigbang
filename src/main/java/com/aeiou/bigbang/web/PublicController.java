@@ -37,11 +37,14 @@ public class PublicController{
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
         	List<BigTag> tBigTags = BigTag.findTagsByOwner("admin"); 
+        	List<Long> tTagIds = new ArrayList<Long>();
         	for(int i = 0; i < tBigTags.size(); i++){
-        		BigTag a = tBigTags.get(i);
-        		a.setTagName("Tag_Admin_" + a.getTagName());
+        		BigTag tTag = tBigTags.get(i);
+        		tTag.setTagName("Tag_Admin_" + tTag.getTagName());
+        		tTagIds.add(tTag.getId());
         	}
             uiModel.addAttribute("bigTags", tBigTags);
+            uiModel.addAttribute("tagIds", tTagIds);
             uiModel.addAttribute("spaceOwner", "admin");
 
             List<List> tContentLists = new ArrayList<List>();
@@ -63,17 +66,27 @@ public class PublicController{
      * @param uiModel
      * @return
      */
-    @RequestMapping(value = "/{tag}", params = "spaceOwner", produces = "text/html")
-    public String showMore(@PathVariable("tag") String tag, @RequestParam(value = "spaceOwner", required = false) String spaceOwner, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
-    	BigTag tBigTag = BigTag.findTagByTypeNameAndOwner(tag, spaceOwner);	//different tags can exist with same name but different owner.
+    @RequestMapping(params = "spaceOwner", produces = "text/html")
+    public String showMore( 						@RequestParam(value = "tagId", required = false) Long tagId,
+    		@RequestParam(value = "spaceOwner", required = false) String spaceOwner, @RequestParam(value = "page", required = false) Integer page,
+    		@RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
+    	BigTag tBigTag = BigTag.findBigTag(tagId);
     	UserAccount tUser = UserAccount.findUserAccountByName(spaceOwner);
     	if (page != null || size != null) {
             int sizeNo = size == null ? 20 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, sizeNo));
-            float nrOfPages = (float) Content.countContentsByTag(tBigTag) / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+            if("admin".equals(spaceOwner)){
+            	uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, sizeNo));
+            	float nrOfPages = (float) Content.countContentsByTag(tBigTag) / sizeNo;
+            	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+            }else{
+            	uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tUser, sizeNo));
+            	float nrOfPages = (float) Content.countContentsByTagAndSpaceOwner(tBigTag, tUser) / sizeNo;
+            	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+            }
         } else {
+        	System.out.println("201302102321");
+        	Thread.dumpStack();
             uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, -1));
         }
         return "public/list";

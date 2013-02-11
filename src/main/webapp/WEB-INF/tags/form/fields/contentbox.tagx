@@ -5,7 +5,7 @@
   <jsp:directive.attribute name="id" type="java.lang.String" required="true" rtexprvalue="true" description="The identifier for this tag (do not change!)" />
   <jsp:directive.attribute name="data" type="java.util.Collection" required="true" rtexprvalue="true" description="The collection to be displayed in the table" />
   <jsp:directive.attribute name="path" type="java.lang.String" required="true" rtexprvalue="true" description="Specify the URL path" />
-  <jsp:directive.attribute name="hidePublisher" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the publisher should be hide, and the tags should be shown" />
+  <jsp:directive.attribute name="publisher" type="java.lang.String" required="false" rtexprvalue="true" description="Indicate if the publisher should be hide, and the tags should be shown" />
   <jsp:directive.attribute name="tag" type="java.lang.String" required="false" rtexprvalue="true" description="for Indicating the URL of the 'read more' button." />
   <jsp:directive.attribute name="tagId" type="java.lang.Long" required="false" rtexprvalue="true" description="for Indicating the URL of the 'read more' button." />
   <jsp:directive.attribute name="spaceOwner" type="java.lang.String" required="false" rtexprvalue="true" description="used for contributing the URL of the 'read more' button." />
@@ -39,7 +39,7 @@
       			</a>
       		</td>
       		<c:choose>
-		        <c:when test="${hidePublisher}">
+		        <c:when test="${not empty publisher}">
 	      			<td class="tWireless">
 	      				<spring:message var="tagString" code="Tag_Admin_${item['commonBigTag']}" htmlEscape="true" />
 				        <c:out value="${tagString}" />
@@ -56,7 +56,7 @@
 		        		<spring:url value="/public" var="listAllContentOfPublisher">
 		        			<spring:param name="publisher" value="${item['publisher']}"/>
 		        			<spring:param name="page" value="1"/>
-		        			<spring:param name="size" value="${empty param.size ? 30 : param.size}"/>
+		        			<spring:param name="size" value="${empty param.size ? 20 : param.size}"/>
 		      			</spring:url>
 			        	<a href="${listAllContentOfPublisher}">
 				            <c:out value="${item['publisher']}" />
@@ -69,7 +69,14 @@
       <tr>
         <td class="tWireless" colspan="${colCounter}">          
           <c:if test="${not empty maxPages}">
-            <util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}" />
+          	<c:choose>
+		        <c:when test="${not empty publisher}">
+		        	<util:contentPagination maxPages="${maxPages}" publisher="${publisher}" page="${param.page}" size="${param.size}" />
+		        </c:when>
+		        <c:otherwise>
+            		<util:contentPagination maxPages="${maxPages}" tagId="${tagId}" spaceOwner="${spaceOwner}" page="${param.page}" size="${param.size}" />
+            	</c:otherwise>
+            </c:choose>
           </c:if>
         </td>
         <td class="tWireless namebox">
@@ -83,7 +90,7 @@
         			<spring:param name="spaceOwner" value="${spaceOwner}"/>
         			<spring:param name="tagId" value="${tagId}"/>
         			<spring:param name="page" value="1"/>
-        			<spring:param name="size" value="${empty param.size ? 40 : param.size}"/>
+        			<spring:param name="size" value="${empty param.size ? 25 : param.size}"/>
 	        	</spring:url>
 	        	<a href="${readMore_url}">
 		            <spring:message arguments="${typeName}" code="global_menu_readmore" var="readmore_message" htmlEscape="false" />
@@ -91,7 +98,7 @@
 		        </a>
 	        </c:if>
         </td>
-        <c:if test="${hidePublisher}">
+        <c:if test="${not empty publisher}">
         	<td class="tWireless namebox"/>
         </c:if>
       </tr>

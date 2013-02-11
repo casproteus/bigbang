@@ -44,7 +44,7 @@ public class PersonalController{
         
         List<List> tContentLists = new ArrayList<List>();
     	for(int i = 0; i < tBigTags.size(); i++){
-    		tContentLists.add(Content.findContentsByTagAndSpaceOwner(tBigTags.get(i), tUser, 8));
+    		tContentLists.add(Content.findContentsByTagAndSpaceOwner(tBigTags.get(i), tUser, 0, 8));
     	}
         uiModel.addAttribute("contents", tContentLists);
         

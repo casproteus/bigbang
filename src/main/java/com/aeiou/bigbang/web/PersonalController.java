@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.util.BigUtil;
 
 @RequestMapping("/")
 @Controller
@@ -25,9 +26,12 @@ public class PersonalController{
     @RequestMapping(value = "/{spaceOwner}", produces = "text/html")
     public String index(@PathVariable("spaceOwner") String spaceOwner, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
     	UserAccount tUser = UserAccount.findUserAccountByName(spaceOwner);
-    	if(tUser == null)
-    		return null;//TODO: add a page showing something like this account does not exist!
-    	
+    	if(tUser == null){
+    		spaceOwner = BigUtil.getUTFString(spaceOwner);
+    		tUser = UserAccount.findUserAccountByName(spaceOwner); //bet it might still not UTF8 encoded.
+    		if(tUser == null)
+    			return null;//TODO: add a page showing something like this account does not exist!
+    	}
         uiModel.addAttribute("spaceOwner", spaceOwner);
         uiModel.addAttribute("description", tUser.getDescription());
 

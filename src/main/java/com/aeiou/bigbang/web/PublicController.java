@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.util.BigUtil;
 
 @RequestMapping("/public")
 @Controller
@@ -63,17 +64,24 @@ public class PublicController{
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
     	BigTag tBigTag = BigTag.findBigTag(tagId);
     	UserAccount tUser = UserAccount.findUserAccountByName(spaceOwner);
+    	if(tUser == null){
+    		spaceOwner = BigUtil.getUTFString(spaceOwner);
+    		tUser = UserAccount.findUserAccountByName(spaceOwner);
+    		if(tUser == null){
+    			return "";
+    		}
+    	}
     	if (page != null || size != null) {
             int sizeNo = size == null ? 25 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
             if("admin".equals(spaceOwner) || "".equals(spaceOwner)){
                 uiModel.addAttribute("spaceOwner", "admin");
-            	uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, page, sizeNo));
+            	uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, firstResult, sizeNo));
             	float nrOfPages = (float) Content.countContentsByTag(tBigTag) / sizeNo;
             	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
             }else{
                 uiModel.addAttribute("spaceOwner", spaceOwner);
-            	uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tUser, page, sizeNo));
+            	uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tUser, firstResult, sizeNo));
             	float nrOfPages = (float) Content.countContentsByTagAndSpaceOwner(tBigTag, tUser) / sizeNo;
             	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
             }
@@ -88,10 +96,16 @@ public class PublicController{
     public String listContentByPublisher(@RequestParam(value = "publisher", required = false) String publisher,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
 		UserAccount tUser = UserAccount.findUserAccountByName(publisher);
+		if(tUser == null){
+			publisher = BigUtil.getUTFString(publisher);
+			tUser = UserAccount.findUserAccountByName(publisher);
+			if(tUser == null)
+				return "";
+		}
     	if (page != null || size != null) {
             int sizeNo = size == null ? 20 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("contents", Content.findContentsByPublisher(tUser, page, sizeNo));
+            uiModel.addAttribute("contents", Content.findContentsByPublisher(tUser, firstResult, sizeNo));
             uiModel.addAttribute("publisher", publisher);
             float nrOfPages = (float) Content.countContentsByPublisher(tUser) / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));

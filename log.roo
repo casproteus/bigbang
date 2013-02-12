@@ -51,3 +51,6 @@ web mvc all --package com.aeiou.bigbang.web
 security setup
 email sender setup --hostServer smtp.gmail.com --username casproteus@gmail.com --password Ollwin_02 --port 587 --protocol SMTP
 perform eclipse
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-10 12:30:01
+quit
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-10 12:42:36

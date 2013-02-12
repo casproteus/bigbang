@@ -12,6 +12,7 @@
                     <field:selectPriTag field="tags" id="c_com_aeiou_bigbang_domain_Content_tags" itemValue="id" items="${mytags}" multiple="true" path="/bigtags" z="user-managed"/>
                     <field:textarea field="conentCache" id="c_com_aeiou_bigbang_domain_Content_conentCache" z="user-managed"/>
                     <field:select field="publisher" id="c_com_aeiou_bigbang_domain_Content_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="K9RgD0iIpWMOvR2WiE3Lm7LaX5I="/>
+                    <field:input field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" validationMessageCode="field_invalid_integer" z="13lgct4/IuNNNQhfERdHcr1QQ4A="/>
                 </form:create>
                 <form:dependency dependencies="${dependencies}" id="d_com_aeiou_bigbang_domain_Content" render="${not empty dependencies}" z="OIaGm9/s9pNT5CEMnSapCWMx+DY="/>
             </td>

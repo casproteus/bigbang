@@ -70,7 +70,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Content, String> ApplicationConversionServiceFactoryBean.getContentToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.Content, java.lang.String>() {
             public String convert(Content content) {
-                return new StringBuilder().append(content.getTitle()).append(' ').append(content.getSourceURL()).append(' ').append(content.getConentCache()).toString();
+                return new StringBuilder().append(content.getTitle()).append(' ').append(content.getSourceURL()).append(' ').append(content.getConentCache()).append(' ').append(content.getAuthority()).toString();
             }
         };
     }

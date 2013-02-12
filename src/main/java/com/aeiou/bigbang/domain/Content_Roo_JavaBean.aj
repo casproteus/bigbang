@@ -58,4 +58,12 @@ privileged aspect Content_Roo_JavaBean {
         this.commonBigTag = commonBigTag;
     }
     
+    public Short Content.getAuthority() {
+        return this.authority;
+    }
+    
+    public void Content.setAuthority(Short authority) {
+        this.authority = authority;
+    }
+    
 }

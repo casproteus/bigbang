@@ -34,11 +34,17 @@ privileged aspect ContentDataOnDemand_Roo_DataOnDemand {
     
     public Content ContentDataOnDemand.getNewTransientContent(int index) {
         Content obj = new Content();
+        setAuthority(obj, index);
         setConentCache(obj, index);
         setPublisher(obj, index);
         setSourceURL(obj, index);
         setTitle(obj, index);
         return obj;
+    }
+    
+    public void ContentDataOnDemand.setAuthority(Content obj, int index) {
+        Short authority = new Integer(index).shortValue();
+        obj.setAuthority(authority);
     }
     
     public void ContentDataOnDemand.setConentCache(Content obj, int index) {

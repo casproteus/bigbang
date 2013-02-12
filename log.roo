@@ -57,3 +57,4 @@ quit
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-12 11:08:28
 field number --class ~.domain.BigTag --fieldName authority --type java.lang.Short
 // [failed] field boolean --fieldName Authority --class ~.domain.BigTag
+field number --class ~.domain.Content --fieldName authority --type java.lang.Short

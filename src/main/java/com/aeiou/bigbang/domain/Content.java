@@ -51,6 +51,16 @@ public class Content {
     	return tQuery.setParameter("pBigTag", pBigTag).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
+    public static long countContentsByTag(BigTag pBigTag) {
+        if (pBigTag == null) {
+        	System.out.println("Content l79 is called!");
+        	Thread.dumpStack();
+        	return entityManager().createQuery("SELECT COUNT(o) FROM Content o", Long.class).getSingleResult(); 
+        }else{
+            return entityManager().createQuery("SELECT COUNT(o) FROM Content AS o WHERE o.commonBigTag = :commonBigTag", Long.class).setParameter("commonBigTag", pBigTag).getSingleResult();
+        }
+    }
+
     /**
      * Called from PersonalController, fetch the contents only published by the owner and his editors.
      * 1.when users are adding a content, he has to tell in which tag it will display in public space and in which space it will be in personal space.
@@ -63,32 +73,23 @@ public class Content {
      * @return
      */
     public static List<Content> findContentsByTagAndSpaceOwner(BigTag pTag, UserAccount pOwner, int firstResult, int maxResults) {
-		//note:how to write the contains relationship? seems that "=" can do the work when there's only one element in set, normally we use "in".
     	EntityManager tEntityManager = entityManager();
     	Set<UserAccount> tSet = pOwner.getListento();
-    	TypedQuery<Content> tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag or o.tags = :pTag) and (o.publisher = :pOwner or o.publisher in :tSet) ORDER BY o.id DESC", Content.class);
+    	
+    	TypedQuery<Content> tQuery = null;
+    	if("admin".equals(pTag.getType())){
+    		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner or o.publisher in :tSet) ORDER BY o.id DESC", Content.class);
+    	}else{
+    		String tTagName = pTag.getTagName();
+    		//TODO make the private tag not multi selectable.
+    		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.tags = :pTag) and (o.publisher = :pOwner or o.publisher in :tSet) ORDER BY o.id DESC", Content.class);
+    	}
     	tQuery = tQuery.setParameter("pTag", pTag).setParameter("pOwner", pOwner);
     	tQuery = tQuery.setParameter("tSet", tSet);
     	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
     	return tQuery.getResultList();
     }
 
-    public static List<Content> findContentsByPublisher(UserAccount pPublisher, int firstResult, int maxResults) {
-    	EntityManager tEntityManager = entityManager();
-    	TypedQuery<Content> tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE o.publisher = :publisher ORDER BY o.id DESC", Content.class);
-    	return tQuery.setParameter("publisher", pPublisher).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-    }
-    
-    public static long countContentsByTag(BigTag pBigTag) {
-        if (pBigTag == null) {
-        	System.out.println("Content l79 is called!");
-        	Thread.dumpStack();
-        	return entityManager().createQuery("SELECT COUNT(o) FROM Content o", Long.class).getSingleResult(); 
-        }else{
-            return entityManager().createQuery("SELECT COUNT(o) FROM Content AS o WHERE o.commonBigTag = :commonBigTag", Long.class).setParameter("commonBigTag", pBigTag).getSingleResult();
-        }
-    }
-    
     public static long countContentsByTagAndSpaceOwner(BigTag pBigTag, UserAccount pOwner) {
         if (pBigTag == null) {
         	System.out.println("Content l79 is called!");
@@ -98,6 +99,13 @@ public class Content {
             return entityManager().createQuery("SELECT COUNT(o) FROM Content AS o WHERE o.commonBigTag = :commonBigTag", Long.class).setParameter("commonBigTag", pBigTag).getSingleResult();
         }
     }    
+    
+    
+    public static List<Content> findContentsByPublisher(UserAccount pPublisher, int firstResult, int maxResults) {
+    	EntityManager tEntityManager = entityManager();
+    	TypedQuery<Content> tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE o.publisher = :publisher ORDER BY o.id DESC", Content.class);
+    	return tQuery.setParameter("publisher", pPublisher).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
     
     public static long countContentsByPublisher(UserAccount publisher) {
         if (publisher == null) {

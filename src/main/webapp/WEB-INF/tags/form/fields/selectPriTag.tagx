@@ -176,7 +176,7 @@
                       </c:choose>
                     </c:otherwise>
                   </c:choose>
-                 
+                  
                   <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
                 </c:otherwise>
               </c:choose>
@@ -188,7 +188,6 @@
             </c:when>
             <!-- disabled due to http://jira.springframework.org/browse/ROO-909 <c:otherwise> <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${field}_id', widgetType: 'dijit.form.MultiSelect', widgetAttrs : {}})); </script> </c:otherwise> -->
           </c:choose>
-          
           <field:referencePriTage field="${label}" id="${id}" path="${path}" />
         </c:when>
         <c:otherwise>

@@ -2,10 +2,13 @@ package com.aeiou.bigbang.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -26,18 +29,42 @@ public class BigTag {
 
     private Short authority;
 
-    public static List<com.aeiou.bigbang.domain.BigTag> findTagsByUser(String pUserAccount) {
-        return entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", pUserAccount).getResultList();
+    public static List<com.aeiou.bigbang.domain.BigTag> findTagsByPublisher(String pUserAccount) {
+        return entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type ORDER BY o.id DESC", BigTag.class).setParameter("type", pUserAccount).getResultList();
     }
 
     public static List<com.aeiou.bigbang.domain.BigTag> findTagsByOwner(String pUserAccount) {
-        List<BigTag> tList = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", "admin").getResultList();
+    	List<BigTag> tListFR = new ArrayList<BigTag>();
+    	tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", "admin").getResultList());
         if (pUserAccount == null || "admin".equals(pUserAccount)) {
-            return tList;
+            return tListFR;
         } else {
-            List<BigTag> tListFR = new ArrayList<BigTag>();
-            tListFR.addAll(tList);
-            tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", pUserAccount).getResultList());
+            //add tags of himself.
+            List<BigTag> tTagListOfPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", pUserAccount).getResultList();
+            
+            List<String> tListOfTagNames = new ArrayList<String>();
+            for(int i = 0; i < tTagListOfPublisher.size(); i++){
+            	tListFR.add(tTagListOfPublisher.get(i));
+            	tListOfTagNames.add(tTagListOfPublisher.get(i).getTagName());
+            }
+            //add tags from the publishers he listens to
+            UserAccount tPublisher = UserAccount.findUserAccountByName(pUserAccount);
+            Object[] tPublishers = tPublisher.getListento().toArray();
+            for(int i = 0; i < tPublishers.length; i++){
+            	tPublisher = (UserAccount)tPublishers[i];
+            	if("admin".equals(tPublisher.getName())){
+            		continue;
+            	}
+            	List<BigTag> tTagListOfListenedPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", tPublisher.getName()).getResultList();
+            	//remove the duplicated ones.
+            	for(int i2 = 0; i2 < tTagListOfListenedPublisher.size(); i2++){
+            		String tTagName = tTagListOfListenedPublisher.get(i2).getTagName();
+            		if(!tListOfTagNames.contains(tTagName)){
+            			tListFR.add(tTagListOfListenedPublisher.get(i2));
+            			tListOfTagNames.add(tTagName);
+            		}
+            	}
+            }
             return tListFR;
         }
     }

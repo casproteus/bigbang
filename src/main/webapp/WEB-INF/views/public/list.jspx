@@ -6,7 +6,7 @@
         <table:contentbox data="${contents}" id="l_com_aeiou_bigbang_domain_Content" tagId="${tagId}" path="/contents" spaceOwner="${spaceOwner}" publisher="${publisher}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
             <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
             <table:column id="c_com_aeiou_bigbang_domain_Content_commonBigTag" property="commonBigTag" z="054H0l7u1U7D14UvHgTdwqh3sy4="/>
-            <table:column id="c_com_aeiou_bigbang_domain_Content_tags" property="tags" z="kDjPyZY8s59nSnA4ASrIOJGmeps="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" property="uncommonBigTag" z="kDjPyZY8s59nSnA4ASrIOJGmeps="/>
         </table:contentbox>
     </page:contentlist>
 </div>

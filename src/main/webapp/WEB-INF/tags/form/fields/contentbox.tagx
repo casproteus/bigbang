@@ -45,7 +45,7 @@
 				        <c:out value="${tagString}" />
 		      		</td>
 		      		<td class="tWireless">
-				        <c:out value="${item['tags']}" />
+				        <c:out value="${item['uncommonBigTag']}" />
 		      		</td>
 		      	</c:when>
 		        <c:otherwise>

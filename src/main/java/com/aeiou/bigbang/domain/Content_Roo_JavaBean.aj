@@ -6,7 +6,6 @@ package com.aeiou.bigbang.domain;
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.UserAccount;
-import java.util.Set;
 
 privileged aspect Content_Roo_JavaBean {
     
@@ -34,14 +33,6 @@ privileged aspect Content_Roo_JavaBean {
         this.conentCache = conentCache;
     }
     
-    public Set<BigTag> Content.getTags() {
-        return this.tags;
-    }
-    
-    public void Content.setTags(Set<BigTag> tags) {
-        this.tags = tags;
-    }
-    
     public UserAccount Content.getPublisher() {
         return this.publisher;
     }
@@ -64,6 +55,14 @@ privileged aspect Content_Roo_JavaBean {
     
     public void Content.setAuthority(Short authority) {
         this.authority = authority;
+    }
+    
+    public BigTag Content.getUncommonBigTag() {
+        return this.uncommonBigTag;
+    }
+    
+    public void Content.setUncommonBigTag(BigTag uncommonBigTag) {
+        this.uncommonBigTag = uncommonBigTag;
     }
     
 }

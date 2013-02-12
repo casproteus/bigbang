@@ -18,7 +18,6 @@
         <spring:message arguments="${field}" code="global_menu_new" var="add_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
       </a>
-      <spring:message code="entity_tag_create" />
     <br />
     <br />
   </c:if>

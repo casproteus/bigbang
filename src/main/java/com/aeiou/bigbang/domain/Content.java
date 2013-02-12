@@ -29,9 +29,6 @@ public class Content {
 
     private String conentCache;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<BigTag> tags = new HashSet<BigTag>();
-
     @NotNull
     @ManyToOne
     private UserAccount publisher;
@@ -40,6 +37,9 @@ public class Content {
     private BigTag commonBigTag;
 
     private Short authority;
+
+    @ManyToOne
+    private BigTag uncommonBigTag;
 
     public static List<com.aeiou.bigbang.domain.Content> findContentsByTag(BigTag pBigTag, int firstResult, int maxResults) {
         EntityManager tEntityManager = entityManager();
@@ -75,12 +75,13 @@ public class Content {
         TypedQuery<Content> tQuery = null;
         if ("admin".equals(pTag.getType())) {
             tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner or o.publisher in :tSet) ORDER BY o.id DESC", Content.class);
+            tQuery = tQuery.setParameter("pTag", pTag);
         } else {
             String tTagName = pTag.getTagName();
-            tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.tags = :pTag) and (o.publisher = :pOwner or o.publisher in :tSet) ORDER BY o.id DESC", Content.class);
+            tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner or o.publisher in :tSet) ORDER BY o.id DESC", Content.class);
+            tQuery = tQuery.setParameter("tTagName", tTagName);
         }
-        tQuery = tQuery.setParameter("pTag", pTag).setParameter("pOwner", pOwner);
-        tQuery = tQuery.setParameter("tSet", tSet);
+        tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tSet", tSet);
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }

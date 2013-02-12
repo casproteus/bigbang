@@ -33,7 +33,6 @@ privileged aspect BigTag_Roo_Jpa_ActiveRecord {
         return entityManager().find(BigTag.class, id);
     }
     
-        
     @Transactional
     public void BigTag.persist() {
         if (this.entityManager == null) this.entityManager = entityManager();

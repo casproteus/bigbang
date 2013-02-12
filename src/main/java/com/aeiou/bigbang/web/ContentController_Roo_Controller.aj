@@ -3,13 +3,13 @@
 
 package com.aeiou.bigbang.web;
 
-import com.aeiou.bigbang.domain.Content;
-import com.aeiou.bigbang.web.ContentController;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
+
+import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.UserAccount;
 
 privileged aspect ContentController_Roo_Controller {
     

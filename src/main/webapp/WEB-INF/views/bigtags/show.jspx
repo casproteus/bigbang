@@ -5,5 +5,6 @@
     <page:show id="ps_com_aeiou_bigbang_domain_BigTag" object="${bigtag}" path="/bigtags" z="n7VvUUwkJ603hE7KvqnVoQ0Le+c=">
         <field:display field="tagName" id="s_com_aeiou_bigbang_domain_BigTag_tagName" object="${bigtag}" z="ybjIky0KXWVMiqMekZdGrM+gKTQ="/>
         <field:display field="type" id="s_com_aeiou_bigbang_domain_BigTag_type" object="${bigtag}" z="FQCG3Rady09D69df58Va3SlQZzM="/>
+        <field:display field="authority" id="s_com_aeiou_bigbang_domain_BigTag_authority" object="${bigtag}" z="1YOlmE4KYuY7jx5J3ylZK57C2+0="/>
     </page:show>
 </div>

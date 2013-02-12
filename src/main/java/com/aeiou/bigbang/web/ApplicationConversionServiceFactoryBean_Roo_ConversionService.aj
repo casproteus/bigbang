@@ -22,7 +22,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<BigTag, String> ApplicationConversionServiceFactoryBean.getBigTagToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.BigTag, java.lang.String>() {
             public String convert(BigTag bigTag) {
-                return new StringBuilder().append(bigTag.getTagName()).append(' ').append(bigTag.getType()).toString();
+                return new StringBuilder().append(bigTag.getTagName()).append(' ').append(bigTag.getType()).append(' ').append(bigTag.getAuthority()).toString();
             }
         };
     }

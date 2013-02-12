@@ -6,6 +6,7 @@
         <table:table data="${bigtags}" id="l_com_aeiou_bigbang_domain_BigTag" path="/bigtags" z="5dlE+eB1WJnfzeOqGO3+hn3sAaQ=">
             <table:column id="c_com_aeiou_bigbang_domain_BigTag_tagName" property="tagName" z="iLkNv0/Tdje+o8+rpcjaHx3Nxrk="/>
             <table:column id="c_com_aeiou_bigbang_domain_BigTag_type" property="type" z="tkz0+0kRCnDpFXhaqmTk8CLMEoM="/>
+            <table:column id="c_com_aeiou_bigbang_domain_BigTag_authority" property="authority" z="+4tNws2DjP9P30Td3qwX0/4zFDE="/>
         </table:table>
     </page:list>
 </div>

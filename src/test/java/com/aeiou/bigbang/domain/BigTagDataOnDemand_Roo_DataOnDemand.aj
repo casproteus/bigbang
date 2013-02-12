@@ -24,9 +24,15 @@ privileged aspect BigTagDataOnDemand_Roo_DataOnDemand {
     
     public BigTag BigTagDataOnDemand.getNewTransientBigTag(int index) {
         BigTag obj = new BigTag();
+        setAuthority(obj, index);
         setTagName(obj, index);
         setType(obj, index);
         return obj;
+    }
+    
+    public void BigTagDataOnDemand.setAuthority(BigTag obj, int index) {
+        Short authority = new Integer(index).shortValue();
+        obj.setAuthority(authority);
     }
     
     public void BigTagDataOnDemand.setTagName(BigTag obj, int index) {

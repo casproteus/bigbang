@@ -23,4 +23,12 @@ privileged aspect BigTag_Roo_JavaBean {
         this.type = type;
     }
     
+    public Short BigTag.getAuthority() {
+        return this.authority;
+    }
+    
+    public void BigTag.setAuthority(Short authority) {
+        this.authority = authority;
+    }
+    
 }

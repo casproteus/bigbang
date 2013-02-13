@@ -24,9 +24,17 @@ public class ContentController {
 	private UserContextService userContextService;
 	
 	void populateEditForm(Model uiModel, Content content) {
-        uiModel.addAttribute("content", content);		
+        uiModel.addAttribute("content", content);
         uiModel.addAttribute("bigtags", BigTag.findTagsByPublisher("admin"));
-        uiModel.addAttribute("mytags", BigTag.findTagsByPublisher(userContextService.getCurrentUserName()));
+        
+        //tag in private space can be leave as null;
+        List<BigTag> tList_Tag = new ArrayList<BigTag>();
+        BigTag tTag = new BigTag(){public String toString(){return "";}};
+        tTag.setId(Long.valueOf(-1));
+        tList_Tag.add(tTag);        
+        tList_Tag.addAll(BigTag.findTagsByPublisher(userContextService.getCurrentUserName()));
+        uiModel.addAttribute("mytags", tList_Tag);
+        
         List<UserAccount> tList = new ArrayList<UserAccount>();
         tList.add(UserAccount.findUserAccountByName(userContextService.getCurrentUserName())); //Can not use CurrentUser directly, because it's not of UserAccount type.
         uiModel.addAttribute("useraccounts", tList);		//why must return a list?

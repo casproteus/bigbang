@@ -47,13 +47,13 @@ public class Content {
         return tQuery.setParameter("pBigTag", pBigTag).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 
-    public static long countContentsByTag(BigTag pBigTag) {
-        if (pBigTag == null) {
+    public static long countContentsByTag(BigTag pTag) {
+        if (pTag == null) {
             System.out.println("Content l79 is called!");
             Thread.dumpStack();
-            return entityManager().createQuery("SELECT COUNT(o) FROM Content o", Long.class).getSingleResult();
+            return 0;
         } else {
-            return entityManager().createQuery("SELECT COUNT(o) FROM Content AS o WHERE o.commonBigTag = :commonBigTag", Long.class).setParameter("commonBigTag", pBigTag).getSingleResult();
+            return entityManager().createQuery("SELECT COUNT(o) FROM Content AS o WHERE o.commonBigTag = :pTag", Long.class).setParameter("pTag", pTag).getSingleResult();
         }
     }
     
@@ -71,29 +71,69 @@ public class Content {
      */
     public static List<com.aeiou.bigbang.domain.Content> findContentsByTagAndSpaceOwner(BigTag pTag, UserAccount pOwner, int firstResult, int maxResults) {
         EntityManager tEntityManager = entityManager();
-        Set<UserAccount> tSet = pOwner.getListento();
+        Set<UserAccount> tSet = pOwner.getListento();	//if tSet is empty, then can not use it in parameter. will cause jpql exception.
         TypedQuery<Content> tQuery = null;
-        if ("admin".equals(pTag.getType())) {
-            tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner or o.publisher in :tSet) ORDER BY o.id DESC", Content.class);
-            tQuery = tQuery.setParameter("pTag", pTag);
-        } else {
-            String tTagName = pTag.getTagName();
-            tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner or o.publisher in :tSet) ORDER BY o.id DESC", Content.class);
-            tQuery = tQuery.setParameter("tTagName", tTagName);
+        if ("admin".equals(pTag.getType())) {	//for common tags.
+        	if(tSet.isEmpty()){
+        		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner) ORDER BY o.id DESC", Content.class);
+        		tQuery = tQuery.setParameter("pTag", pTag);
+        		tQuery = tQuery.setParameter("pOwner", pOwner);
+        	}else{
+        		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner or o.publisher in :tSet) ORDER BY o.id DESC", Content.class);
+        		tQuery = tQuery.setParameter("pTag", pTag);
+                tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tSet", tSet);
+        	}
+        } else {								//for uncommon tags.
+        	if(tSet.isEmpty()){
+        		String tTagName = pTag.getTagName();
+        		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner) ORDER BY o.id DESC", Content.class);
+        		tQuery = tQuery.setParameter("tTagName", tTagName);
+        		tQuery = tQuery.setParameter("pOwner", pOwner);
+        	}else{
+        		String tTagName = pTag.getTagName();
+        		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner or o.publisher in :tSet) ORDER BY o.id DESC", Content.class);
+        		tQuery = tQuery.setParameter("tTagName", tTagName);
+        		tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tSet", tSet);
+        	}
         }
-        tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tSet", tSet);
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
 
-    public static long countContentsByTagAndSpaceOwner(BigTag pBigTag, UserAccount pOwner) {
-        if (pBigTag == null) {
-            System.out.println("Content l79 is called!");
+    public static long countContentsByTagAndSpaceOwner(BigTag pTag, UserAccount pOwner) {
+        if (pTag == null) {
+            System.out.println("201302122306");
             Thread.dumpStack();
-            return entityManager().createQuery("SELECT COUNT(o) FROM Content o", Long.class).getSingleResult();
-        } else {
-            return entityManager().createQuery("SELECT COUNT(o) FROM Content AS o WHERE o.commonBigTag = :commonBigTag", Long.class).setParameter("commonBigTag", pBigTag).getSingleResult();
+            return 0;
         }
+        
+        EntityManager tEntityManager = entityManager();
+        Set<UserAccount> tSet = pOwner.getListento();	//if tSet is empty, then can not use it in parameter. will cause jpql exception.
+        TypedQuery<Long> tQuery = null;
+        if ("admin".equals(pTag.getType())) {	//for common tags.
+        	if(tSet.isEmpty()){
+        		tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner)", Long.class);
+        		tQuery = tQuery.setParameter("pTag", pTag);
+        		tQuery = tQuery.setParameter("pOwner", pOwner);
+        	}else{
+        		tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner or o.publisher in :tSet)", Long.class);
+        		tQuery = tQuery.setParameter("pTag", pTag);
+                tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tSet", tSet);
+        	}
+        } else {								//for uncommon tags.
+        	if(tSet.isEmpty()){
+        		String tTagName = pTag.getTagName();
+        		tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner)", Long.class);
+        		tQuery = tQuery.setParameter("tTagName", tTagName);
+        		tQuery = tQuery.setParameter("pOwner", pOwner);
+        	}else{
+        		String tTagName = pTag.getTagName();
+        		tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner or o.publisher in :tSet)", Long.class);
+        		tQuery = tQuery.setParameter("tTagName", tTagName);
+        		tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tSet", tSet);
+        	}
+        }
+        return tQuery.getSingleResult();
     }
 
     public static List<com.aeiou.bigbang.domain.Content> findContentsByPublisher(UserAccount pPublisher, int firstResult, int maxResults) {

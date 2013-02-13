@@ -14,6 +14,7 @@ import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigAuthority;
 
 @RequestMapping("/contents")
 @Controller
@@ -28,6 +29,7 @@ public class ContentController {
         uiModel.addAttribute("mytags", BigTag.findTagsByPublisher(userContextService.getCurrentUserName()));
         List<UserAccount> tList = new ArrayList<UserAccount>();
         tList.add(UserAccount.findUserAccountByName(userContextService.getCurrentUserName())); //Can not use CurrentUser directly, because it's not of UserAccount type.
-        uiModel.addAttribute("useraccounts", tList);
+        uiModel.addAttribute("useraccounts", tList);		//why must return a list?
+        uiModel.addAttribute("authoritys",BigAuthority.getAllOptions());
     }
 }

@@ -36,6 +36,7 @@ public class UserAccount {
     private Set<com.aeiou.bigbang.domain.UserAccount> listento = new HashSet<com.aeiou.bigbang.domain.UserAccount>();
 
     public static UserAccount findUserAccountByName(String pUserName){//BigTag pBigTag, int maxResults) {
+    	// can not use "getSingleResult()" here, or it will throw exception;
     	List tList = entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE o.name = :tname", UserAccount.class)
     			.setParameter("tname", pUserName).getResultList();
     	if(tList != null && tList.size() == 1)

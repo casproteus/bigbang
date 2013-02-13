@@ -61,3 +61,7 @@ field number --class ~.domain.Content --fieldName authority --type java.lang.Sho
 field reference --fieldName uncommonBigTag --type ~.domain.BigTag --class ~.domain.Content
 quit
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-12 15:55:09
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-12 20:14:55
+quit
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-12 21:40:16
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-12 22:37:48

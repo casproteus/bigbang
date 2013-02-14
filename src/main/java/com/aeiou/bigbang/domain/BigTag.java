@@ -39,6 +39,13 @@ public class BigTag {
         if (pUserAccount == null || "admin".equals(pUserAccount)) {
             return tListFR;
         } else {
+        	//remove the other from the commontags. or some content will appear under both other and private tags.
+        	for(int i = tListFR.size() - 1; i >= 0; i--){
+        		if("other".equals(tListFR.get(i).getTagName())){
+        			tListFR.remove(i);
+        			break;
+        		}
+        	}
             //add tags of himself.
             List<BigTag> tTagListOfPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", pUserAccount).getResultList();
             

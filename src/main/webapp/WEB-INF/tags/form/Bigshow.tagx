@@ -70,7 +70,7 @@
                 </a>
               </c:if>
             </span>
-            <span>
+            <!-- <span>
               <c:if test="${create}">
                 <spring:url value="${path}" var="create_form_url">
                   <spring:param name="form" />
@@ -91,7 +91,7 @@
                   <img alt="${fn:escapeXml(list_label)}" class="image" src="${list_image_url}" title="${fn:escapeXml(list_label)}" />
                 </a>
               </c:if>
-            </span>
+            </span> -->
           </div>
         </c:when>
         <c:otherwise>

@@ -29,8 +29,10 @@ public class BigTag {
 
     private Short authority;
 
-    public static List<com.aeiou.bigbang.domain.BigTag> findTagsByPublisher(String pUserAccount) {
-        return entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type ORDER BY o.id DESC", BigTag.class).setParameter("type", pUserAccount).getResultList();
+    public static List<com.aeiou.bigbang.domain.BigTag> findTagsByPublisher(String pUserAccount, int firstResult, int maxResults) {
+    	TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type ORDER BY o.id DESC", BigTag.class);
+    	tQuery = tQuery.setParameter("type", pUserAccount).setFirstResult(firstResult).setMaxResults(maxResults);
+        return tQuery.getResultList();
     }
 
     public static List<com.aeiou.bigbang.domain.BigTag> findTagsByOwner(String pUserAccount) {
@@ -76,11 +78,13 @@ public class BigTag {
         }
     }
 
-    public static com.aeiou.bigbang.domain.BigTag findTagByTypeNameAndOwner(String pTagName, String pOwnerName) {
-        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName And o.type = :pOwnerName", BigTag.class);
-        tQuery = tQuery.setParameter("pTagName", pTagName).setParameter("pOwnerName", pOwnerName);
+    public static long countTagsByPublisher(String pPublisher) {
+    	TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM BigTag o WHERE o.type = :pPublisher", Long.class);
+        //TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName And o.type = :pOwnerName", BigTag.class);
+        tQuery = tQuery.setParameter("pPublisher", pPublisher);
         return tQuery.getSingleResult();
     }
+
 
     public String toString() {
         return tagName;

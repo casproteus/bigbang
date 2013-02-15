@@ -56,7 +56,11 @@ public class Content {
             return entityManager().createQuery("SELECT COUNT(o) FROM Content AS o WHERE o.commonBigTag = :pTag", Long.class).setParameter("pTag", pTag).getSingleResult();
         }
     }
-    
+
+    public static List<com.aeiou.bigbang.domain.Content> findContentEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Content o ORDER BY o.id DESC", Content.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
     /**
      * Called from PersonalController, fetch the contents only published by the owner and his editors.
      * 1.when users are adding a content, he has to tell in which tag it will display in public space and in which space it will be in personal space.
@@ -152,7 +156,4 @@ public class Content {
         }
     }
 
-    public static List<com.aeiou.bigbang.domain.Content> findContentEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM Content o ORDER BY o.id DESC", Content.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-    }
 }

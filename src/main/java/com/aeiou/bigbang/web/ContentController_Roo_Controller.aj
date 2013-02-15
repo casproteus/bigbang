@@ -3,13 +3,14 @@
 
 package com.aeiou.bigbang.web;
 
+import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.web.ContentController;
+import com.aeiou.bigbang.domain.UserAccount;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
-
-import com.aeiou.bigbang.domain.Content;
-import com.aeiou.bigbang.domain.UserAccount;
 
 privileged aspect ContentController_Roo_Controller {
     
@@ -51,20 +49,6 @@ privileged aspect ContentController_Roo_Controller {
         uiModel.addAttribute("content", Content.findContent(id));
         uiModel.addAttribute("itemId", id);
         return "contents/show";
-    }
-    
-    @RequestMapping(produces = "text/html")
-    public String ContentController.list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        if (page != null || size != null) {
-            int sizeNo = size == null ? 10 : size.intValue();
-            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("contents", Content.findContentEntries(firstResult, sizeNo));
-            float nrOfPages = (float) Content.countContents() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        } else {
-            uiModel.addAttribute("contents", Content.findAllContents());
-        }
-        return "contents/list";
     }
     
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")

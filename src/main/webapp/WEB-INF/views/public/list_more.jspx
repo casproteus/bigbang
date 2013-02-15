@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" 		xmlns:spring="http://www.springframework.org/tags"
+	 xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"  xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" 
+	 xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:c="http://java.sun.com/jsp/jstl/core"
+	 xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <jsp:output omit-xml-declaration="yes"/>
+  <spring:message code="public" htmlEscape="false" var="publicspace"/>
+  <spring:message code="publicDescription" htmlEscape="false" var="publicDescription"/>
+  <spring:message code="label_public_index" arguments="${empty spaceOwner or spaceOwner eq 'admin' ? publicspace : spaceOwner},${empty description ? publicDescription : description}" htmlEscape="false" var="title"/>
+  <util:panel id="title" title="${title}">
+  	<spring:message code="pleaseAddSomeContentHere" htmlEscape="false"/>
+    <span class="new">
+      <spring:url value="/contents" var="create_url">
+        <spring:param name="form" />
+      </spring:url>
+      <a href="${create_url}">
+        <spring:message code="contributeContent" htmlEscape="false" var="add_message"/>
+        ${add_message}
+        <spring:url value="/resources/images/add.png" var="create_img_url" />
+        <spring:message arguments="${typeName}" code="global_menu_new" var="add_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
+      </a>
+    </span>
+  </util:panel>
+  <br/>
+  <c:set var="tagsize" value="${bigTags.size()}" scope="request" />
+    <page:contentPane id="pl_com_aeiou_bigbang_domain_Content" items="${contents}" label="${label}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
+        <table:contentlist data="${contents}" id="l_com_aeiou_bigbang_domain_Content" tagId="${tagId}" path="/contents" spaceOwner="${spaceOwner}" publisher="${publisher}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
+            <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Content_commonBigTag" property="commonBigTag" z="054H0l7u1U7D14UvHgTdwqh3sy4="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" property="uncommonBigTag" z="kDjPyZY8s59nSnA4ASrIOJGmeps="/>
+        </table:contentlist>
+    </page:contentPane>
+</div>

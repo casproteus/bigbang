@@ -12,9 +12,6 @@
     <c:if test="${empty label}">
       <spring:message code="label_${fn:toLowerCase(fn:substringAfter(id,'_'))}" var="label" htmlEscape="false" />
     </c:if>
-    <c:if test="${fn:startsWith(label, 'Tag_Admin_')}">
-    	<spring:message code="${label}" var="label" htmlEscape="false" />
-    </c:if>
     <c:set value="${label}" var="title_msg" />
     <util:panel id="${id}" title="${title_msg}" openPane="${openPane}">
       <c:choose>

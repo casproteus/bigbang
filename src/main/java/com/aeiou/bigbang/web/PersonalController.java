@@ -39,8 +39,6 @@ public class PersonalController{
     	List<Long> tTagIds = new ArrayList<Long>();
     	for(int i = 0; i < tBigTags.size(); i++){
     		BigTag tTag = tBigTags.get(i);
-    		if("admin".equals(tTag.getType()))						//because view will distinguish if a tag is public one or private one.
-    			tTag.setTagName("Tag_Admin_" + tTag.getTagName()); 	//if it's public one, then will go to resource file look for String to disp.
     		tTagIds.add(tTag.getId());
     	}
         uiModel.addAttribute("bigTags", tBigTags);

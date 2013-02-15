@@ -38,19 +38,31 @@
       				<c:out value="${item['title']}" />
       			</a>
       		</td>
-      		<td class="tWireless namebox">
-	            <c:set var="columnType" value="${types[num.count-1]}" />
-	            <c:set var="columnMaxLength" value="${lengths[num.count-1]}" />
-	            <c:set var="columnDatePattern" value="${patterns[num.count-1]}" />
-        		<spring:url value="/public" var="listAllContentOfPublisher">
-        			<spring:param name="publisher" value="${item['publisher']}"/>
-        			<spring:param name="page" value="1"/>
-        			<spring:param name="size" value="${empty param.size ? 20 : param.size}"/>
-      			</spring:url>
-	        	<a href="${listAllContentOfPublisher}">
-		            <c:out value="${item['publisher']}" />
-		        </a>
-      		</td>
+      		<c:choose>
+		        <c:when test="${not empty publisher}">
+	      			<td class="tWireless">
+				        <c:out value="${item['commonBigTag']}" />
+		      		</td>
+		      		<td class="tWireless">
+				        <c:out value="${item['uncommonBigTag']}" />
+		      		</td>
+		      	</c:when>
+		        <c:otherwise>
+		      		<td class="tWireless namebox">
+			            <c:set var="columnType" value="${types[num.count-1]}" />
+			            <c:set var="columnMaxLength" value="${lengths[num.count-1]}" />
+			            <c:set var="columnDatePattern" value="${patterns[num.count-1]}" />
+		        		<spring:url value="/public" var="listAllContentOfPublisher">
+		        			<spring:param name="publisher" value="${item['publisher']}"/>
+		        			<spring:param name="page" value="1"/>
+		        			<spring:param name="size" value="${empty param.size ? 20 : param.size}"/>
+		      			</spring:url>
+			        	<a href="${listAllContentOfPublisher}">
+				            <c:out value="${item['publisher']}" />
+				        </a>
+		      		</td>
+		        </c:otherwise>
+		    </c:choose>
       	</tr>
       </c:forEach>
       <tr>

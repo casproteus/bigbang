@@ -11,9 +11,9 @@ C:\Users\tjiang\.m2\repository\aopalliance\aopalliance\1.0\aopalliance-1.0.jar;C
 C:\Users\tjiang\.m2\repository\org\springframework\spring-aspects\3.1.1.RELEASE\spring-aspects-3.1.1.RELEASE.jar
 -d
 D:\Workspace\bigbang\target\classes
+D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\web\ApplicationConversionServiceFactoryBean_Roo_ConversionService.aj
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\config\spring\SecurityConfig.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\UserAccount_Roo_Jpa_Entity.aj
-D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\web\ApplicationConversionServiceFactoryBean_Roo_ConversionService.aj
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\backend\security\UserDetailsAuthenticationProvider.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\web\ApplicationConversionServiceFactoryBean.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Twitter_Roo_Jpa_Entity.aj
@@ -30,6 +30,7 @@ D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\BigTag_Roo_JavaBean.
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Customize_Roo_Jpa_Entity.aj
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\backend\security\UserContextServiceImpl.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\BigTag_Roo_Configurable.aj
+D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\web\BaseController.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Twitter_Roo_JavaBean.aj
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\BigTag.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Twitter.java
@@ -39,6 +40,7 @@ D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\web\BigTagController.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Customize_Roo_Jpa_ActiveRecord.aj
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\web\UserAccountController.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\backend\security\BigEditor.java
+D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\web\PersonalController.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Remark_Roo_ToString.aj
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Customize_Roo_ToString.aj
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Circle_Roo_Configurable.aj
@@ -50,11 +52,13 @@ D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Circle_Roo_ToString.
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\UserAccount_Roo_Jpa_ActiveRecord.aj
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\web\TwitterController.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Circle_Roo_Jpa_Entity.aj
+D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\util\BigUtil.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Content.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Remark_Roo_Jpa_Entity.aj
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Content_Roo_ToString.aj
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\web\CustomizeController.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\web\CircleController.java
+D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\util\BigAuthority.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\Remark_Roo_JavaBean.aj
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\web\PublicController.java
 D:\Workspace\bigbang\src\main\java\com\aeiou\bigbang\domain\BigTag_Roo_Jpa_Entity.aj

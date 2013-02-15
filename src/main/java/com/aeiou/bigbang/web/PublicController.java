@@ -34,7 +34,6 @@ public class PublicController{
     	List<Long> tTagIds = new ArrayList<Long>();
     	for(int i = 0; i < tBigTags.size(); i++){
     		BigTag tTag = tBigTags.get(i);
-    		tTag.setTagName("Tag_Admin_" + tTag.getTagName());
     		tTagIds.add(tTag.getId());
     	}
         uiModel.addAttribute("bigTags", tBigTags);
@@ -87,7 +86,7 @@ public class PublicController{
             }
         }
 
-        uiModel.addAttribute("tag", "admin".equals(tBigTag.getType()) ? "Tag_Admin_" + tBigTag.getTagName() : tBigTag.getTagName());
+        uiModel.addAttribute("tag", tBigTag.getTagName());
         uiModel.addAttribute("tagId", tagId);
         return "public/list";
     }
@@ -109,7 +108,6 @@ public class PublicController{
             uiModel.addAttribute("publisher", publisher);
             float nrOfPages = (float) Content.countContentsByPublisher(tUser) / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-            uiModel.addAttribute("tag", "Tag_Admin_allcontents");
         }
         return "public/list";
     }

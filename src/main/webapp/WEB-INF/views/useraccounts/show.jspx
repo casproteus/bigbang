@@ -8,5 +8,6 @@
         <field:display field="password" id="s_com_aeiou_bigbang_domain_UserAccount_password" object="${useraccount}" z="jITHy8I1B6Lt6Fd7ojGJuh8j+Vg="/>
         <field:display field="description" id="s_com_aeiou_bigbang_domain_UserAccount_description" object="${useraccount}" z="qZ+xtOETo7VCKIMcUAViaqOIdic="/>
         <field:display field="listento" id="s_com_aeiou_bigbang_domain_UserAccount_listento" object="${useraccount}" z="JtzFe8TvnepQ8GMjO9D4Y/o29uw="/>
+        <field:display field="price" id="s_com_aeiou_bigbang_domain_UserAccount_price" object="${useraccount}" z="V9iLJpoHt4wG14hkxUksOkB+2/8="/>
     </page:show>
 </div>

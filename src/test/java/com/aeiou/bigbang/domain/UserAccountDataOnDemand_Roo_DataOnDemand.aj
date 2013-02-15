@@ -28,6 +28,7 @@ privileged aspect UserAccountDataOnDemand_Roo_DataOnDemand {
         setEmail(obj, index);
         setName(obj, index);
         setPassword(obj, index);
+        setPrice(obj, index);
         return obj;
     }
     
@@ -49,6 +50,14 @@ privileged aspect UserAccountDataOnDemand_Roo_DataOnDemand {
     public void UserAccountDataOnDemand.setPassword(UserAccount obj, int index) {
         String password = "password_" + index;
         obj.setPassword(password);
+    }
+    
+    public void UserAccountDataOnDemand.setPrice(UserAccount obj, int index) {
+        int price = index;
+        if (price < 0 || price > 9) {
+            price = 9;
+        }
+        obj.setPrice(price);
     }
     
     public UserAccount UserAccountDataOnDemand.getSpecificUserAccount(int index) {

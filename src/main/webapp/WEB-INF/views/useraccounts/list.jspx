@@ -9,6 +9,7 @@
             <table:column id="c_com_aeiou_bigbang_domain_UserAccount_password" property="password" z="FgbmAnZuFFgQ8D4uyaEB1cAK0LQ="/>
             <table:column id="c_com_aeiou_bigbang_domain_UserAccount_description" property="description" z="dQO1Tf4jmA8VJ8R9ouMY27ubENs="/>
             <table:column id="c_com_aeiou_bigbang_domain_UserAccount_listento" property="listento" z="wMSIun/19yw14uGXfJp/mBIyrxc="/>
+            <table:column id="c_com_aeiou_bigbang_domain_UserAccount_price" property="price" z="mB44SKubJcVYUFggywNGAdSjQkQ="/>
         </table:table>
     </page:list>
 </div>

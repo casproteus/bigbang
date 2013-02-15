@@ -48,4 +48,12 @@ privileged aspect UserAccount_Roo_JavaBean {
         this.listento = listento;
     }
     
+    public int UserAccount.getPrice() {
+        return this.price;
+    }
+    
+    public void UserAccount.setPrice(int price) {
+        this.price = price;
+    }
+    
 }

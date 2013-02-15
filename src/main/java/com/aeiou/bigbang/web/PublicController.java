@@ -88,7 +88,7 @@ public class PublicController{
 
         uiModel.addAttribute("tag", tBigTag.getTagName());
         uiModel.addAttribute("tagId", tagId);
-        return "public/list";
+        return "public/list_more";
     }
 
     @RequestMapping(params = "publisher", produces = "text/html")
@@ -106,10 +106,11 @@ public class PublicController{
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
             uiModel.addAttribute("contents", Content.findContentsByPublisher(tUser, firstResult, sizeNo));
             uiModel.addAttribute("publisher", publisher);
+            uiModel.addAttribute("price", String.valueOf(tUser.getPrice()));
             float nrOfPages = (float) Content.countContentsByPublisher(tUser) / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         }
-        return "public/list";
+        return "public/list_publisher";
     }
     
 }

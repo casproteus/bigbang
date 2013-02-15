@@ -67,3 +67,5 @@ quit
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-12 22:37:48
 quit
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-13 00:15:50
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-15 10:35:54
+field number --fieldName price --type int --class ~.domain.UserAccount --min 0 --max 9

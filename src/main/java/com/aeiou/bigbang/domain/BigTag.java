@@ -27,7 +27,7 @@ public class BigTag {
     @Size(min = 2)
     private String type;
 
-    private Short authority;
+    private int authority;
 
     public static List<com.aeiou.bigbang.domain.BigTag> findTagsByPublisher(String pUserAccount, int firstResult, int maxResults) {
     	TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type ORDER BY o.id DESC", BigTag.class);

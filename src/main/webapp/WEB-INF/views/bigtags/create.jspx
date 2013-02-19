@@ -9,7 +9,7 @@
         </c:if>
         <!-- <field:input field="authority" id="c_com_aeiou_bigbang_domain_BigTag_authority" validationMessageCode="field_invalid_integer" z="Rn/Hq/wpLmkl7RpvXtybZFQoBvE="/> -->
         <field:select field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" itemValue="id" items="${authorities}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/>
-        <field:input field="authority" id="c_com_aeiou_bigbang_domain_BigTag_authority" validationMessageCode="field_invalid_integer" z="Rn/Hq/wpLmkl7RpvXtybZFQoBvE="/>
+        <field:input field="authority" id="c_com_aeiou_bigbang_domain_BigTag_authority" z="06K6o4ImZuLN+SZCIXCQ7bqJm7k="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_aeiou_bigbang_domain_BigTag" render="${not empty dependencies}" z="wISMMVuzBPo3gS3UVlYC60m4tfU="/>
 </div>

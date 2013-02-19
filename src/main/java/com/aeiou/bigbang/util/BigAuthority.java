@@ -3,6 +3,7 @@ package com.aeiou.bigbang.util;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class BigAuthority {
 	private Short id;
 	
@@ -12,22 +13,24 @@ public class BigAuthority {
 	public void setId(Short id) {
 		this.id = id;
 	}
+	
 	public String toString(){
 		if(id == 0){
-			return "SHOW_TO_EVERY_ONE";
+			return "visible_to_everyone";
 		}else if(id == 1){
-			return "ONLY_MYSELF_CAN_SEE";
+			return "visible_to_only_myself";
 		}else if(id == 2){
-			return "ALL_MY_TEAM_CAN_SEE";
+			return "visible_to_team_members";
 		}else if(id == 3){
-			return "ONLY_FOR_SELECTED_PERSON";
+			return "visible_to_specific_person";
 		}else{
 			return null;
 		}
 	}
+	
 	public static List<BigAuthority> getAllOptions(){
 		List<BigAuthority> tArrayFR = new ArrayList<BigAuthority>();
-		for(Short i = 0; i < 4; i++){
+		for(Short i = 0; i < 3; i++){
 			BigAuthority tBigAuthority = new BigAuthority();
 			tBigAuthority.setId(i);
 			tArrayFR.add(tBigAuthority);

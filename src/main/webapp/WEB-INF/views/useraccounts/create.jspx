@@ -5,7 +5,7 @@
     <form:create id="fc_com_aeiou_bigbang_domain_UserAccount" modelAttribute="userAccount" path="/useraccounts" render="${empty dependencies}" z="tmtENoRkRhGzN/x9fx+ElhU2zbE=">
         <field:input field="name" id="c_com_aeiou_bigbang_domain_UserAccount_name" min="2" required="true" z="ivL1uj01/Ogki4rPE5I3PdFQud0="/>
         <field:input field="email" id="c_com_aeiou_bigbang_domain_UserAccount_email" validationMessageCode="field_invalid_email" z="ceq1TElqZB2WL71Mrwy7m1UNg0o="/>
-        <field:input field="password" id="c_com_aeiou_bigbang_domain_UserAccount_password" min="4" required="true" z="YHbNvuLsTds1kSQGXBMkBmk/LIo="/>
+        <field:input field="password" id="c_com_aeiou_bigbang_domain_UserAccount_password" min="4" required="true" type="password" z="user-managed"/>
         <field:input field="description" id="c_com_aeiou_bigbang_domain_UserAccount_description" z="IHXfmTHIFzCFUY3TARmFZXUT838="/>
         <field:select field="listento" id="c_com_aeiou_bigbang_domain_UserAccount_listento" itemValue="id" items="${useraccounts}" multiple="true" path="/useraccounts" z="IQaeFE4bTXuS6y9TJhi8R2WV+84="/>
         <field:input field="price" id="c_com_aeiou_bigbang_domain_UserAccount_price" max="9" min="0" required="true" z="NNXWMQKTCd/lmw4Q/AvzmkSI5cs="/>

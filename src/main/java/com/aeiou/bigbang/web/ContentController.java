@@ -40,7 +40,7 @@ public class ContentController {
         List<UserAccount> tList = new ArrayList<UserAccount>();
         tList.add(UserAccount.findUserAccountByName(userContextService.getCurrentUserName())); //Can not use CurrentUser directly, because it's not of UserAccount type.
         uiModel.addAttribute("useraccounts", tList);		//why must return a list?
-        uiModel.addAttribute("authoritys",BigAuthority.getAllOptions());
+        uiModel.addAttribute("authorities",BigAuthority.getAllOptions());
     }
 
 	@RequestMapping(produces = "text/html")

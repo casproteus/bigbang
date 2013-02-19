@@ -20,6 +20,7 @@ import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigAuthority;
 
 @RequestMapping("/bigtags")
 @Controller
@@ -30,6 +31,7 @@ public class BigTagController {
 
 	void populateEditForm(Model uiModel, BigTag bigTag) {
 		uiModel.addAttribute("bigTag", bigTag);
+        uiModel.addAttribute("authorities",BigAuthority.getAllOptions());
     }
 	
 	@RequestMapping(method = RequestMethod.POST, produces = "text/html")

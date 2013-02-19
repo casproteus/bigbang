@@ -32,7 +32,6 @@ privileged aspect BigTagController_Roo_Controller {
         return "bigtags/show";
     }
     
-        
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String BigTagController.update(@Valid BigTag bigTag, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {

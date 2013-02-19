@@ -43,7 +43,7 @@ privileged aspect ContentDataOnDemand_Roo_DataOnDemand {
     }
     
     public void ContentDataOnDemand.setAuthority(Content obj, int index) {
-        Short authority = new Integer(index).shortValue();
+        int authority = index;
         obj.setAuthority(authority);
     }
     

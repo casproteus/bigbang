@@ -36,14 +36,14 @@ public class Content {
     @ManyToOne
     private BigTag commonBigTag;
 
-    private Short authority;
+    private int authority;
 
     @ManyToOne
     private BigTag uncommonBigTag;
 
     public static List<com.aeiou.bigbang.domain.Content> findContentsByTag(BigTag pBigTag, int firstResult, int maxResults) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Content> tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE o.commonBigTag = :pBigTag ORDER BY o.id DESC", Content.class);
+        TypedQuery<Content> tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE o.commonBigTag = :pBigTag and o.ORDER BY o.id DESC", Content.class);
         return tQuery.setParameter("pBigTag", pBigTag).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 

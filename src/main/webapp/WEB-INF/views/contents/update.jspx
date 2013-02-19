@@ -8,7 +8,7 @@
         <field:select field="commonBigTag" id="c_com_aeiou_bigbang_domain_Content_commonBigTag" itemValue="id" items="${bigtags}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/>
         <field:input field="conentCache" id="c_com_aeiou_bigbang_domain_Content_conentCache" z="ciDeWotB2rtkeuHe5Esur9HePRc="/>
         <field:input field="publisher" id="c_com_aeiou_bigbang_domain_Content_publisher" required="true" z="user-managed"/>
-        <field:input field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" validationMessageCode="field_invalid_integer" z="13lgct4/IuNNNQhfERdHcr1QQ4A="/>
+        <field:input field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" z="iEUGdJ4HsVs43PNIoVoudKwThcU="/>
         <field:select field="uncommonBigTag" id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" itemValue="id" items="${bigtags}" path="/bigtags" z="+1fym4sLPc5Rv+WdzBUh77Nrliw="/>
     </form:update>
 </div>

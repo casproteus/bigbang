@@ -112,13 +112,15 @@ public class Content {
     }
 
     /**
-     * @called times from PersonalController, and once from PublicController ->show more(if in public space, show more will call "findContentsByTag")
+     * @called times from PersonalController ->index,
+	 * @called once from PublicController ->show more(if in public space, show more will call "findContentsByTag")
      * Fetch the contents only published by the owner and his editors.
      * 1.when users are adding a content, he has to tell in which tag it will display in public space and in which space it will be in personal space.
-     * 2.in private space,  all public tags will also displayed in private space. unless owner select to hide them.
-     * 3.but, if someone give his content a public tag, but want it displayed only in his private space, he can create a tag with same name (like "local")
-     * 4.the owner of the BigTag is not necessary to be the space owner.
-     * 5.every space display admin's tags by default. 
+     * 2.in private space,  there should be no tags with same name with pulic tags.
+     * 3.all contents will have a public tag(not_classified if not select), want it displayed only in his private space is not allowed for now, he can set it as private or show only to team to hide it from main page.
+     * 4.the owner of the BigTag is not necessary to be the space owner. all team's 0 and 2 tag will also be showed.
+     * 5.every space display admin's tags by default. but use can hide it. 
+     * @note: after get the result, should work on it to do more filter, e.g. content from other publihser, should remove the private ones.(auth == 1 <@TODO and auth=2 if cur user is not in the list>)
      * @param pTag
      * @param pOwner
      * @param maxResults
@@ -126,29 +128,31 @@ public class Content {
      */
     public static List<com.aeiou.bigbang.domain.Content> findContentsByTagAndSpaceOwner(BigTag pTag, UserAccount pOwner, Set<Integer> pAuthSet, int firstResult, int maxResults) {
         EntityManager tEntityManager = entityManager();
-        Set<UserAccount> tSet = pOwner.getListento();	//if tSet is empty, then can not use it in parameter. will cause jpql exception.
+        Set<UserAccount> tTeamSet = pOwner.getListento();	//if tTeamSet is empty, then can not use it in parameter. will cause jpql exception.
         TypedQuery<Content> tQuery = null;
         if ("admin".equals(pTag.getType())) {	//for common tags.
-        	if(tSet.isEmpty()){
+        	if(tTeamSet.isEmpty()){					//has no team 
         		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner) and (o.authority in :pAuthSet) ORDER BY o.id DESC", Content.class);
         		tQuery = tQuery.setParameter("pTag", pTag);
         		tQuery = tQuery.setParameter("pOwner", pOwner);
-        	}else{
-        		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner or o.publisher in :tSet) and (o.authority in :pAuthSet) ORDER BY o.id DESC", Content.class);
+        	}else{									//has team
+        		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag and o.publisher = :pOwner and o.authority in :pAuthSet) or " +
+        				"(o.commonBigTag = :pTag and o.publisher in :tTeamSet and o.authority = 0) ORDER BY o.id DESC", Content.class);
         		tQuery = tQuery.setParameter("pTag", pTag);
-                tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tSet", tSet);
+                tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tTeamSet", tTeamSet);
         	}
         } else {								//for uncommon tags.
-        	if(tSet.isEmpty()){
+        	if(tTeamSet.isEmpty()){
         		String tTagName = pTag.getTagName();
         		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner) and (o.authority in :pAuthSet) ORDER BY o.id DESC", Content.class);
         		tQuery = tQuery.setParameter("tTagName", tTagName);
         		tQuery = tQuery.setParameter("pOwner", pOwner);
         	}else{
         		String tTagName = pTag.getTagName();
-        		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner or o.publisher in :tSet) and (o.authority in :pAuthSet) ORDER BY o.id DESC", Content.class);
+        		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName and o.publisher = :pOwner and o.authority in :pAuthSet) or " +
+        				"(o.uncommonBigTag.tagName = :tTagName and o.publisher in :tTeamSet and o.authority = 0) ORDER BY o.id DESC", Content.class);
         		tQuery = tQuery.setParameter("tTagName", tTagName);
-        		tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tSet", tSet);
+        		tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tTeamSet", tTeamSet);
         	}
         }
 		tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
@@ -170,29 +174,29 @@ public class Content {
         }
         
         EntityManager tEntityManager = entityManager();
-        Set<UserAccount> tSet = pOwner.getListento();	//if tSet is empty, then can not use it in parameter. will cause jpql exception.
+        Set<UserAccount> tTeamSet = pOwner.getListento();	//if tTeamSet is empty, then can not use it in parameter. will cause jpql exception.
         TypedQuery<Long> tQuery = null;
         if ("admin".equals(pTag.getType())) {	//for common tags.
-        	if(tSet.isEmpty()){
+        	if(tTeamSet.isEmpty()){
         		tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner) and (o.authority in :pAuthSet)", Long.class);
         		tQuery = tQuery.setParameter("pTag", pTag);
         		tQuery = tQuery.setParameter("pOwner", pOwner);
         	}else{
-        		tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner or o.publisher in :tSet) and (o.authority in :pAuthSet)", Long.class);
+        		tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner or o.publisher in :tTeamSet) and (o.authority in :pAuthSet)", Long.class);
         		tQuery = tQuery.setParameter("pTag", pTag);
-                tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tSet", tSet);
+                tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tTeamSet", tTeamSet);
         	}
         } else {								//for uncommon tags.
-        	if(tSet.isEmpty()){
+        	if(tTeamSet.isEmpty()){
         		String tTagName = pTag.getTagName();
         		tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner) and (o.authority in :pAuthSet)", Long.class);
         		tQuery = tQuery.setParameter("tTagName", tTagName);
         		tQuery = tQuery.setParameter("pOwner", pOwner);
         	}else{
         		String tTagName = pTag.getTagName();
-        		tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner or o.publisher in :tSet) and (o.authority in :pAuthSet)", Long.class);
+        		tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner or o.publisher in :tTeamSet) and (o.authority in :pAuthSet)", Long.class);
         		tQuery = tQuery.setParameter("tTagName", tTagName);
-        		tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tSet", tSet);
+        		tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tTeamSet", tTeamSet);
         	}
         }
 		tQuery = tQuery.setParameter("pAuthSet", pAuthSet);

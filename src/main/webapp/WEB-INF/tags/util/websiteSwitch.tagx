@@ -1,0 +1,24 @@
+<jsp:root xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:spring="http://www.springframework.org/tags" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+  <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
+
+  <c:if test="${empty render or render}">
+    <span>
+      <c:out value=" | " />
+      <spring:message code="global_language" />
+      <c:out value=": " />
+      <spring:url var="url_language1" value="http://share-bookmark.rhcloud.com"/>
+      <spring:message code="global_language_french" var="language_french" htmlEscape="false" />
+      <a href="${url_language1}" title="${fn:escapeXml(language_french)}">${fn:escapeXml(language_french)}</a>
+      <c:out value=" - " />
+      <spring:url var="url_language2" value="http://my-bookmark.rhcloud.com"/>
+      <spring:message code="global_language_english" var="language_english" htmlEscape="false" />
+      <a href="${url_language2}" title="${fn:escapeXml(language_english)}">${fn:escapeXml(language_english)}</a>
+       <c:out value=" - " />
+      <spring:url var="url_language3" value="http://you-bookmark.rhcloud.com"/>
+      <spring:message code="global_language_chinese" var="language_chinese" htmlEscape="false" />
+      <a href="${url_language3}" title="${fn:escapeXml(language_chinese)}">${fn:escapeXml(language_chinese)}</a>
+    </span>
+  </c:if>
+</jsp:root>

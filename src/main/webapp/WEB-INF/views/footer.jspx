@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" id="footer" version="2.0">
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
+	 xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" 
+	 xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" id="footer" version="2.0">
   <jsp:directive.page contentType="text/html;charset=UTF-8"/>
   <jsp:output omit-xml-declaration="yes"/>
 
-  <spring:url value="/" var="home"/>
+<c:choose>
+     <c:when test="${pageContext['request'].userPrincipal != null}">
+  		<spring:url value="/${pageContext['request'].userPrincipal.name}" var="home"/>
+  	 </c:when>
+  	 <c:otherwise>
+  		<spring:url value="/" var="home"/>
+  	 </c:otherwise>
+  </c:choose>
   <span>
     <a href="${home}">
-      <spring:message code="button_home"/>
+	  <c:choose>
+	     <c:when test="${pageContext['request'].userPrincipal != null}">
+      		<spring:message code="button_myhome"/>
+	  	 </c:when>
+	  	 <c:otherwise>
+      		<spring:message code="button_home"/>
+	  	 </c:otherwise>
+	  </c:choose>
     </a>
   </span>
   <c:choose>
@@ -29,6 +45,7 @@
 	    </span>
      </c:otherwise>
   </c:choose>
+  <util:websiteSwitch/>
   <util:theme/>
 
   <spring:url value="/resources/images/springsource-logo.png" var="logo"/>

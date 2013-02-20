@@ -49,11 +49,11 @@ privileged aspect Content_Roo_JavaBean {
         this.commonBigTag = commonBigTag;
     }
     
-    public int Content.getAuthority() {
+    public Integer Content.getAuthority() {
         return this.authority;
     }
     
-    public void Content.setAuthority(int authority) {
+    public void Content.setAuthority(Integer authority) {
         this.authority = authority;
     }
     

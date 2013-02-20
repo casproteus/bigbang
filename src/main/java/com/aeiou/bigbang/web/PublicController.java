@@ -1,13 +1,14 @@
 package com.aeiou.bigbang.web;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -20,7 +21,9 @@ import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigAuthority;
 import com.aeiou.bigbang.util.BigUtil;
+import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/public")
 @Controller
@@ -68,11 +71,11 @@ public class PublicController{
     public String showMore(@RequestParam(value = "tagId", required = false) Long tagId, @RequestParam(value = "spaceOwner", required = false) String spaceOwner,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
     	BigTag tBigTag = BigTag.findBigTag(tagId);
-    	UserAccount tUser = UserAccount.findUserAccountByName(spaceOwner);
-    	if(tUser == null){
+    	UserAccount tOwner = UserAccount.findUserAccountByName(spaceOwner);
+    	if(tOwner == null){
     		spaceOwner = BigUtil.getUTFString(spaceOwner);
-    		tUser = UserAccount.findUserAccountByName(spaceOwner);
-    		if(tUser == null){
+    		tOwner = UserAccount.findUserAccountByName(spaceOwner);
+    		if(tOwner == null){
     			return "";
     		}
     	}
@@ -85,9 +88,10 @@ public class PublicController{
             	float nrOfPages = (float) Content.countContentsByTag(tBigTag) / sizeNo;
             	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
             }else{
+            	Set<Integer> tAuthSet = BigAuthority.getAuthSet(userContextService.getCurrentUserName(), tOwner);
                 uiModel.addAttribute("spaceOwner", spaceOwner);
-            	uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tUser, firstResult, sizeNo));
-            	float nrOfPages = (float) Content.countContentsByTagAndSpaceOwner(tBigTag, tUser) / sizeNo;
+            	uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet, firstResult, sizeNo));
+            	float nrOfPages = (float) Content.countContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet) / sizeNo;
             	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
             }
         }
@@ -98,20 +102,21 @@ public class PublicController{
     }
 
     @RequestMapping(params = "publisher", produces = "text/html")
-    public String listContentByPublisher(@RequestParam(value = "publisher", required = false) String publisher,
+    public String listContentByPublisher(@RequestParam(value = "publisher", required = false) String pPublisher,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
-		UserAccount tPublisher = UserAccount.findUserAccountByName(publisher);
+		UserAccount tPublisher = UserAccount.findUserAccountByName(pPublisher);
 		if(tPublisher == null){
-			publisher = BigUtil.getUTFString(publisher);
-			tPublisher = UserAccount.findUserAccountByName(publisher);
+			pPublisher = BigUtil.getUTFString(pPublisher);
+			tPublisher = UserAccount.findUserAccountByName(pPublisher);
 			if(tPublisher == null)
 				return "";
 		}
     	if (page != null || size != null) {
             int sizeNo = size == null ? 20 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, firstResult, sizeNo));
-            uiModel.addAttribute("publisher", publisher);
+            Set<Integer> tAuthSet = BigAuthority.getAuthSet(userContextService.getCurrentUserName(), tPublisher);
+            uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo));
+            uiModel.addAttribute("publisher", pPublisher);
             uiModel.addAttribute("price", String.valueOf(tPublisher.getPrice()));
             String tOwnerName = userContextService.getCurrentUserName();
             if(tOwnerName != null){
@@ -122,7 +127,7 @@ public class PublicController{
         			uiModel.addAttribute("notfireable", "true");
         		}
             }
-            float nrOfPages = (float) Content.countContentsByPublisher(tPublisher) / sizeNo;
+            float nrOfPages = (float) Content.countContentsByPublisher(tPublisher, tAuthSet) / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         }
         return "public/list_publisher";
@@ -132,11 +137,11 @@ public class PublicController{
     public String hirePublisher(@RequestParam(value = "hire", required = false) String publisher,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
     	
-    	String tOwnerName = userContextService.getCurrentUserName();
+    	String tOwnerName = userContextService.getCurrentUserName();				// not logged in? to login page.
 		if(tOwnerName == null)
 	        return "login";
 			
-		UserAccount tPublisher = UserAccount.findUserAccountByName(publisher);
+		UserAccount tPublisher = UserAccount.findUserAccountByName(publisher);		//make sure the publisher still exist.
 		if(tPublisher == null){
 			publisher = BigUtil.getUTFString(publisher);
 			tPublisher = UserAccount.findUserAccountByName(publisher);
@@ -144,29 +149,11 @@ public class PublicController{
 				return "";
 		}
 		
-		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);
+		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);			//in who's space right now?
 		tOwner.getListento().add(tPublisher);
 		tOwner.persist();
-		
-        uiModel.addAttribute("spaceOwner", tOwnerName);
-        uiModel.addAttribute("description", tOwner.getDescription());
-
-    	List<BigTag> tBigTags = BigTag.findTagsByOwner(tOwnerName); //will fetch not also the public tags.
-    	List<Long> tTagIds = new ArrayList<Long>();
-    	for(int i = 0; i < tBigTags.size(); i++){
-    		BigTag tTag = tBigTags.get(i);
-    		tTagIds.add(tTag.getId());
-    	}
-        uiModel.addAttribute("bigTags", tBigTags);
-        uiModel.addAttribute("tagIds", tTagIds);
-        
-        List<List> tContentLists = new ArrayList<List>();
-    	for(int i = 0; i < tBigTags.size(); i++){
-    		tContentLists.add(Content.findContentsByTagAndSpaceOwner(tBigTags.get(i), tOwner, 0, 8));
-    	}
-        uiModel.addAttribute("contents", tContentLists);
-        
-        return "public/index";
+		PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
+		return(tController.index(tOwnerName, page, size, uiModel));
     }    
     
     @RequestMapping(params = "fire", produces = "text/html")
@@ -188,25 +175,7 @@ public class PublicController{
 		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);
 		tOwner.getListento().remove(tPublisher);
 		tOwner.persist();
-		
-        uiModel.addAttribute("spaceOwner", tOwnerName);
-        uiModel.addAttribute("description", tOwner.getDescription());
 
-    	List<BigTag> tBigTags = BigTag.findTagsByOwner(tOwnerName); //will fetch not also the public tags.
-    	List<Long> tTagIds = new ArrayList<Long>();
-    	for(int i = 0; i < tBigTags.size(); i++){
-    		BigTag tTag = tBigTags.get(i);
-    		tTagIds.add(tTag.getId());
-    	}
-        uiModel.addAttribute("bigTags", tBigTags);
-        uiModel.addAttribute("tagIds", tTagIds);
-        
-        List<List> tContentLists = new ArrayList<List>();
-    	for(int i = 0; i < tBigTags.size(); i++){
-    		tContentLists.add(Content.findContentsByTagAndSpaceOwner(tBigTags.get(i), tOwner, 0, 8));
-    	}
-        uiModel.addAttribute("contents", tContentLists);
-        
-        return "public/index";
+		return(SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tOwnerName, page, size, uiModel));
     }
 }

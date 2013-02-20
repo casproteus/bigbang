@@ -1,7 +1,11 @@
 package com.aeiou.bigbang.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import com.aeiou.bigbang.domain.UserAccount;
 
 
 public class BigAuthority {
@@ -36,5 +40,21 @@ public class BigAuthority {
 			tArrayFR.add(tBigAuthority);
 		}
 		return tArrayFR;
+	}
+	
+	public static Set<Integer> getAuthSet(String pCurUserName, UserAccount pOwner){
+		UserAccount tCurUser = UserAccount.findUserAccountByName(pCurUserName);
+		Set<Integer> tAuthSetFR = new HashSet<Integer>();
+    	tAuthSetFR.add(Integer.valueOf(0));
+    	if(pOwner.getName().equals(pCurUserName)){
+    		tAuthSetFR.add(Integer.valueOf(1));
+    		tAuthSetFR.add(Integer.valueOf(2));
+    		tAuthSetFR.add(Integer.valueOf(3));
+    	}else if(pOwner.getListento().contains(tCurUser)){
+    		tAuthSetFR.add(Integer.valueOf(2));
+    	}else{//TODO: consider the case that visible to specific person.
+    		
+    	}
+    	return tAuthSetFR;
 	}
 }

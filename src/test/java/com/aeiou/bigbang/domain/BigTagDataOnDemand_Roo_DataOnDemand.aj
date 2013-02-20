@@ -31,7 +31,7 @@ privileged aspect BigTagDataOnDemand_Roo_DataOnDemand {
     }
     
     public void BigTagDataOnDemand.setAuthority(BigTag obj, int index) {
-        int authority = index;
+        Integer authority = new Integer(index);
         obj.setAuthority(authority);
     }
     

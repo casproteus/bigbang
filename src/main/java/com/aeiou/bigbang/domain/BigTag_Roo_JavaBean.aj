@@ -23,11 +23,11 @@ privileged aspect BigTag_Roo_JavaBean {
         this.type = type;
     }
     
-    public int BigTag.getAuthority() {
+    public Integer BigTag.getAuthority() {
         return this.authority;
     }
     
-    public void BigTag.setAuthority(int authority) {
+    public void BigTag.setAuthority(Integer authority) {
         this.authority = authority;
     }
     

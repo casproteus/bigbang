@@ -2,11 +2,11 @@ package com.aeiou.bigbang.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,8 +59,9 @@ public class ContentController {
 	        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
     	}else{
 	    	UserAccount tPublisher = UserAccount.findUserAccountByName(tUserName);
-	        uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, firstResult, sizeNo));
-	        nrOfPages = (float) Content.countContentsByPublisher(tPublisher) / sizeNo;
+	    	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tUserName, tPublisher);
+	        uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo));
+	        nrOfPages = (float) Content.countContentsByPublisher(tPublisher, tAuthSet) / sizeNo;
     	}
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         return "contents/list";

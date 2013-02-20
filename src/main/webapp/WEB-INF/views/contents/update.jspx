@@ -3,12 +3,12 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:update id="fu_com_aeiou_bigbang_domain_Content" modelAttribute="content" path="/contents" versionField="Version" z="s0Mk50Kp+IvasmpOil0a/jD47iE=">
-        <field:input field="sourceURL" id="c_com_aeiou_bigbang_domain_Content_sourceURL" required="true" z="Hk2QDdFCnal0PPA/nrv6B/Kw28U="/>
         <field:input field="title" id="c_com_aeiou_bigbang_domain_Content_title" required="true" z="KykRIB9kokqjzUlWGTykm0UCgVk="/>
+        <field:input field="sourceURL" id="c_com_aeiou_bigbang_domain_Content_sourceURL" required="true" z="Hk2QDdFCnal0PPA/nrv6B/Kw28U="/>
         <field:select field="commonBigTag" id="c_com_aeiou_bigbang_domain_Content_commonBigTag" itemValue="id" items="${bigtags}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/>
+        <field:selectPriTag field="uncommonBigTag" id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" itemValue="id" items="${mytags}" path="/bigtags" z="user-managed"/>
+        <field:select field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" itemValue="id" items="${authorities}" path="/bigtags" z="user-managed"/>
         <field:input field="conentCache" id="c_com_aeiou_bigbang_domain_Content_conentCache" z="ciDeWotB2rtkeuHe5Esur9HePRc="/>
-        <field:input field="publisher" id="c_com_aeiou_bigbang_domain_Content_publisher" required="true" z="user-managed"/>
-        <field:input field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" z="iEUGdJ4HsVs43PNIoVoudKwThcU="/>
-        <field:select field="uncommonBigTag" id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" itemValue="id" items="${bigtags}" path="/bigtags" z="+1fym4sLPc5Rv+WdzBUh77Nrliw="/>
+        <field:select field="publisher" id="c_com_aeiou_bigbang_domain_Content_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="K9RgD0iIpWMOvR2WiE3Lm7LaX5I="/>
     </form:update>
 </div>

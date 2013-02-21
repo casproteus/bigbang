@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aeiou.bigbang.domain.UserAccount;
@@ -20,6 +24,27 @@ import com.aeiou.bigbang.services.secutiry.UserContextService;
 public class UserAccountController {
 	@Inject
 	private UserContextService userContextService;
+
+	@RequestMapping(params = "form", produces = "text/html")
+    public String createForm(Model uiModel) {
+		UserAccount tUserAccount = new UserAccount();
+		tUserAccount.setPrice(1);
+		tUserAccount.setBalance(1000);
+        populateEditForm(uiModel, tUserAccount);
+        return "useraccounts/create";
+    }
+	
+	@RequestMapping(method = RequestMethod.POST, produces = "text/html")
+    public String create(@Valid UserAccount userAccount, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+        if (bindingResult.hasErrors()) {
+            populateEditForm(uiModel, userAccount);
+            return "useraccounts/create";
+        }
+        uiModel.asMap().clear();
+        userAccount.setBalance(1000);
+        userAccount.persist();
+        return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
+    }
 
 	@RequestMapping(produces = "text/html")
     public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
@@ -41,4 +66,5 @@ public class UserAccountController {
     	}
         return "useraccounts/list";
     }
+
 }

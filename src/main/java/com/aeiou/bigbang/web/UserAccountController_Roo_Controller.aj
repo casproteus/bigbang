@@ -19,23 +19,6 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect UserAccountController_Roo_Controller {
     
-    @RequestMapping(method = RequestMethod.POST, produces = "text/html")
-    public String UserAccountController.create(@Valid UserAccount userAccount, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, userAccount);
-            return "useraccounts/create";
-        }
-        uiModel.asMap().clear();
-        userAccount.persist();
-        return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
-    }
-    
-    @RequestMapping(params = "form", produces = "text/html")
-    public String UserAccountController.createForm(Model uiModel) {
-        populateEditForm(uiModel, new UserAccount());
-        return "useraccounts/create";
-    }
-    
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String UserAccountController.show(@PathVariable("id") Long id, Model uiModel) {
         uiModel.addAttribute("useraccount", UserAccount.findUserAccount(id));

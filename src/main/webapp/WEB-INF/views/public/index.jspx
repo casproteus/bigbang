@@ -31,7 +31,7 @@
     </span>
   </util:panel>
   <c:set var="tagsize" value="${bigTags.size()}" scope="request" />
-  <table class="tWireless"><tr>
+  <table class="tWireless" style="margin-top: 13px;"><tr>
   	<td class="tWireless nopaddingleft" valign="top">
 	  	<c:forEach items="${contents}" var="content" begin="0" end="${tagsize/2 - 1}" varStatus="num">
 		  <page:contentPane id="contentlist${(num.count - 1)}" items="${content}" label="${bigTags[num.count - 1]}"  z="hnfyfk7YNdTBdBza4/mViLT4aos=">

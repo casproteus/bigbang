@@ -11,6 +11,7 @@
             <table:column id="c_com_aeiou_bigbang_domain_UserAccount_listento" property="listento" z="wMSIun/19yw14uGXfJp/mBIyrxc="/>
             <table:column id="c_com_aeiou_bigbang_domain_UserAccount_price" property="price" z="mB44SKubJcVYUFggywNGAdSjQkQ="/>
             <table:column id="c_com_aeiou_bigbang_domain_UserAccount_balance" property="balance" z="?"/>
+            <table:column id="c_com_aeiou_bigbang_domain_UserAccount_layout" property="layout" z="?"/>
         </table:table>
     </page:list>
 </div>

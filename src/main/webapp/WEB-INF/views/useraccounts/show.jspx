@@ -9,5 +9,7 @@
         <field:display field="description" id="s_com_aeiou_bigbang_domain_UserAccount_description" object="${useraccount}" z="qZ+xtOETo7VCKIMcUAViaqOIdic="/>
         <field:display field="listento" id="s_com_aeiou_bigbang_domain_UserAccount_listento" object="${useraccount}" z="JtzFe8TvnepQ8GMjO9D4Y/o29uw="/>
         <field:display field="price" id="s_com_aeiou_bigbang_domain_UserAccount_price" object="${useraccount}" z="V9iLJpoHt4wG14hkxUksOkB+2/8="/>
+        <field:display field="layout" id="s_com_aeiou_bigbang_domain_UserAccount_layout" object="${useraccount}" z="NS81Ys0LF+/4bke4iyyfgc/JtA8="/>
+        <field:display field="balance" id="s_com_aeiou_bigbang_domain_UserAccount_balance" object="${useraccount}" z="F4Qfd0bIjC8dyXhV+XEtJcBIgDs="/>
     </page:Bigshow>
 </div>

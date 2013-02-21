@@ -117,11 +117,15 @@ public class PublicController{
             Set<Integer> tAuthSet = BigAuthority.getAuthSet(userContextService.getCurrentUserName(), tPublisher);
             uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo));
             uiModel.addAttribute("publisher", pPublisher);
-            uiModel.addAttribute("price", String.valueOf(tPublisher.getPrice()));
-            String tOwnerName = userContextService.getCurrentUserName();
-            if(tOwnerName != null){
-            	UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);
-        		if(tOwner.getListento().contains(tPublisher)){
+            uiModel.addAttribute("price",tPublisher.getPrice());
+            String tCurUserName = userContextService.getCurrentUserName();
+            if(tCurUserName != null){
+            	UserAccount tCurUser = UserAccount.findUserAccountByName(tCurUserName);
+                uiModel.addAttribute("balance", tCurUser.getBalance());
+            	if(pPublisher.equals(tCurUserName)){
+        			uiModel.addAttribute("nothireable", "true");
+        			uiModel.addAttribute("notfireable", "true");
+            	}else if(tCurUser.getListento().contains(tPublisher)){
         			uiModel.addAttribute("nothireable", "true");
         		}else{
         			uiModel.addAttribute("notfireable", "true");
@@ -149,13 +153,27 @@ public class PublicController{
 				return "";
 		}
 		
+		int tSalary = tPublisher.getPrice();
 		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);			//in who's space right now?
 		tOwner.getListento().add(tPublisher);
+		tOwner.setBalance(tOwner.getBalance() - tSalary);
+		tPublisher.setBalance(tPublisher.getBalance() + tSalary);
+		//TODO: better should put them in a transaction.
 		tOwner.persist();
+		tPublisher.persist();
+		
 		PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
 		return(tController.index(tOwnerName, page, size, uiModel));
-    }    
+    }
     
+    /**
+     * TODO: give the guy one month salary to fire.
+     * @param publisher
+     * @param page
+     * @param size
+     * @param uiModel
+     * @return
+     */
     @RequestMapping(params = "fire", produces = "text/html")
     public String firePublisher(@RequestParam(value = "fire", required = false) String publisher,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
@@ -172,9 +190,14 @@ public class PublicController{
 				return "";
 		}
 		
-		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);
+		int tSalary = tPublisher.getPrice();
+		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);			//in who's space right now?
 		tOwner.getListento().remove(tPublisher);
+		tOwner.setBalance(tOwner.getBalance() - tSalary);
+		tPublisher.setBalance(tPublisher.getBalance() + tSalary);
+		//TODO: better should put them in a transaction.
 		tOwner.persist();
+		tPublisher.persist();
 
 		return(SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tOwnerName, page, size, uiModel));
     }

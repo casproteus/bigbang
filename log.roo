@@ -70,3 +70,12 @@ quit
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-15 10:35:54
 field number --fieldName price --type int --class ~.domain.UserAccount --min 0 --max 9
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-19 09:48:20
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-20 19:48:27
+field string --class ~.domain.UserAccount --fieldName layout
+field number --type java.lang.Integer --fieldName balance --notNull --class ~.domain.UserAccount
+quit
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-20 20:02:02
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-21 09:50:49
+field number --type int --class ~.domain.UserAccount --fieldName balance --notNull 
+quit
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-21 10:37:58

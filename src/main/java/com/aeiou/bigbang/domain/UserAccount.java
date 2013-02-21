@@ -40,6 +40,11 @@ public class UserAccount {
     @Max(9L)
     private int price;
 
+    private String layout;
+
+    @NotNull
+    private int balance;
+
     public static com.aeiou.bigbang.domain.UserAccount findUserAccountByName(String pUserName) {
         List tList = entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE o.name = :tname", UserAccount.class).setParameter("tname", pUserName).getResultList();
         if (tList != null && tList.size() == 1) return (UserAccount) tList.get(0); else return null;

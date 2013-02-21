@@ -56,4 +56,20 @@ privileged aspect UserAccount_Roo_JavaBean {
         this.price = price;
     }
     
+    public String UserAccount.getLayout() {
+        return this.layout;
+    }
+    
+    public void UserAccount.setLayout(String layout) {
+        this.layout = layout;
+    }
+    
+    public int UserAccount.getBalance() {
+        return this.balance;
+    }
+    
+    public void UserAccount.setBalance(int balance) {
+        this.balance = balance;
+    }
+    
 }

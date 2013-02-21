@@ -24,12 +24,19 @@ privileged aspect UserAccountDataOnDemand_Roo_DataOnDemand {
     
     public UserAccount UserAccountDataOnDemand.getNewTransientUserAccount(int index) {
         UserAccount obj = new UserAccount();
+        setBalance(obj, index);
         setDescription(obj, index);
         setEmail(obj, index);
+        setLayout(obj, index);
         setName(obj, index);
         setPassword(obj, index);
         setPrice(obj, index);
         return obj;
+    }
+    
+    public void UserAccountDataOnDemand.setBalance(UserAccount obj, int index) {
+        int balance = index;
+        obj.setBalance(balance);
     }
     
     public void UserAccountDataOnDemand.setDescription(UserAccount obj, int index) {
@@ -40,6 +47,11 @@ privileged aspect UserAccountDataOnDemand_Roo_DataOnDemand {
     public void UserAccountDataOnDemand.setEmail(UserAccount obj, int index) {
         String email = "foo" + index + "@bar.com";
         obj.setEmail(email);
+    }
+    
+    public void UserAccountDataOnDemand.setLayout(UserAccount obj, int index) {
+        String layout = "layout_" + index;
+        obj.setLayout(layout);
     }
     
     public void UserAccountDataOnDemand.setName(UserAccount obj, int index) {

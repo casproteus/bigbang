@@ -1,6 +1,8 @@
 package com.aeiou.bigbang.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -98,6 +100,33 @@ public class BigTag {
             }
             return tListFR;
         }
+    }
+    
+    public static BigTag findTagByNameAndOwner(String pTagName, String pOwnerName) {
+    	BigTag tBigTag = null;
+    	TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and o.type = :pOwnerName", BigTag.class);
+    	tQuery = tQuery.setParameter("pTagName", pTagName).setParameter("pOwnerName", pOwnerName);
+    	try{
+    		tBigTag = tQuery.getSingleResult();
+    	}catch(Exception e){
+    	}
+    	
+    	if(tBigTag == null){
+    		Set<String> tOwnerNameSet = new HashSet<String>();
+    		UserAccount tOwner = UserAccount.findUserAccountByName(pOwnerName);
+    		Iterator<UserAccount> tList = tOwner.getListento().iterator();
+    	    while (tList.hasNext())
+    	    	tOwnerNameSet.add(tList.next().getName());
+    	    
+    		tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and o.type in :tOwnerNameSet", BigTag.class);
+        	tQuery = tQuery.setParameter("pTagName", pTagName).setParameter("tOwnerNameSet", tOwnerNameSet);
+        	try{
+        		tBigTag = tQuery.getSingleResult();
+        	}catch(Exception e){
+        	}
+    	}
+    	
+    	return tBigTag;
     }
     
     public String toString() {

@@ -1,5 +1,6 @@
 package com.aeiou.bigbang.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.aeiou.bigbang.domain.BigTag;
@@ -64,4 +65,20 @@ public class BigUtil {
 		
 		return false;
 	}
+	
+	public static List<BigTag> transferToTags(String[] tAryTagStrs, String pOwnerName){
+    	List<BigTag> tBigTags = new ArrayList<BigTag>();
+    	for(int i = 0; i < tAryTagStrs.length; i++){
+    		if(tAryTagStrs[i].startsWith("¶")){
+    			BigTag tTag = BigTag.findTagByNameAndOwner(tAryTagStrs[i].substring(1), "admin");
+    			if(tTag != null)
+    				tBigTags.add(tTag);
+    		}else{
+    			BigTag tTag = BigTag.findTagByNameAndOwner(tAryTagStrs[i], pOwnerName);
+    			if(tTag != null)
+    				tBigTags.add(tTag);
+    		}
+    	}
+    	return tBigTags;
+    }
 }

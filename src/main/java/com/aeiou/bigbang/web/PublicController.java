@@ -39,21 +39,117 @@ public class PublicController{
     
     @RequestMapping(produces = "text/html")
     public String index( Model uiModel){
-    	List<BigTag> tBigTags = BigTag.findTagsByOwner("admin"); 
-    	List<Long> tTagIds = new ArrayList<Long>();
-    	for(int i = 0; i < tBigTags.size(); i++){
-    		BigTag tTag = tBigTags.get(i);
-    		tTagIds.add(tTag.getId());
+    	
+    	String[] tAryTagStrsLeft = null;
+    	String[] tAryTagStrsRight = null;
+    	String[] tAryNumStrsLeft = null;
+    	String[] tAryNumStrsRight = null;
+    	List<BigTag> tBigTagsLeft = new ArrayList<BigTag>();
+    	List<BigTag> tBigTagsRight = new ArrayList<BigTag>();
+    	List<Long> tTagIdsLeft = new ArrayList<Long>();
+    	List<Long> tTagIdsRight = new ArrayList<Long>();
+    	
+    	UserAccount tOwner = UserAccount.findUserAccountByName("admin");
+    	String tLayout = tOwner.getLayout();										//get the layout info from DB.
+    	if(tLayout != null && tLayout.length() > 2){
+    		int p = tLayout.indexOf('™');
+    		if(p >= 0){
+    			String tTagStr = tLayout.substring(0, p);
+    			String tSizeStr = tLayout.substring(p+1);
+    			
+        		p = tTagStr.indexOf('¬');
+        		if(p >=0 ){
+        			tAryTagStrsLeft = tTagStr.substring(0, p).split("¯");
+        			tAryTagStrsRight = tTagStr.substring(p+1).split("¯");
+        		}
+        		p = tSizeStr.indexOf('¬');
+        		if(p >=0 ){
+        			tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
+        			tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
+        		}
+    		}
     	}
-        uiModel.addAttribute("bigTags", tBigTags);
-        uiModel.addAttribute("tagIds", tTagIds);
-        uiModel.addAttribute("spaceOwner", "admin");
+    	
+		//if the layout info in DB is not good, create it from beginning.
+		if(((tAryTagStrsLeft == null || tAryTagStrsLeft.length == 0) && (tAryTagStrsRight == null || tAryTagStrsRight.length == 0))
+				|| ((tAryNumStrsLeft == null || tAryNumStrsLeft.length == 0) && (tAryNumStrsRight == null || tAryNumStrsRight.length == 0))
+				|| (tAryTagStrsLeft.length != tAryNumStrsLeft.length || tAryTagStrsRight.length != tAryNumStrsRight.length)){
+			
+	    	List<BigTag> tBigTags = BigTag.findTagsByOwner("admin"); 	//fetch out all tags of admin's, owner's and his team's, 
+    		List<Long> tTagIds = new ArrayList<Long>();						//then adjust it. @note: don't know if we can use AthenSet to move this into JPQL, because 
+	    	for(int i = 0; i < tBigTags.size(); i++){						//here, we need to compare the tag names, to avoid duplication.
+	    		tTagIds.add(tBigTags.get(i).getId());
+	    	}
+	    	
+	    	int tSize = tBigTags.size();									//Separate tags and IDs into 2 columns and prepare the Layout String.
+	    	StringBuilder tStrB = new StringBuilder();
+	    	StringBuilder tStrB_Num = new StringBuilder();
+    		for(int j = 0; j < tSize/2; j++){
+    			BigTag tTag = tBigTags.get(j);
+    	    	tBigTagsLeft.add(tBigTags.get(j));
+    	    	tTagIdsLeft.add(tTagIds.get(j));
+    	    	if("admin".equals(tTag.getType())){
+    	    		tStrB.append('¶');
+    	    	}
+    	    	tStrB.append(tTag.getTagName());
+    	    	tStrB_Num.append('8');
+    	    	if(j + 1 < tSize/2){
+    	    		tStrB.append('¯');
+        	    	tStrB_Num.append('¯');
+    	    	}
+	    	}
 
-        List<List> tContentLists = new ArrayList<List>();
-    	for(int i = 0; i < tBigTags.size(); i++){
-    		tContentLists.add(Content.findContentsByTag(tBigTags.get(i), 0, 8));
+    		tStrB.append('¬');
+    		tStrB_Num.append('¬');
+    		
+    		for(int j = tSize/2; j < tSize; j++){
+    			BigTag tTag = tBigTags.get(j);
+    			tBigTagsRight.add(tBigTags.get(j));
+    	    	tTagIdsRight.add(tTagIds.get(j));
+    	    	if("admin".equals(tTag.getType())){
+    	    		tStrB.append('¶');
+    	    	}
+    	    	tStrB.append(tTag.getTagName());
+    	    	tStrB_Num.append('8');
+    	    	if(j + 1 < tSize){
+    	    		tStrB.append('¯');
+        	    	tStrB_Num.append('¯');
+    	    	}
+	    	}
+    		tStrB.append('™').append(tStrB_Num);
+
+    		tOwner.setLayout(tStrB.toString());	    						//save to DB
+    		tOwner.persist();
+		}else{																			//prepare the info for view base on the string in db:
+    		tBigTagsLeft = BigUtil.transferToTags(tAryTagStrsLeft, "admin");
+    		for(int i = 0; i < tBigTagsLeft.size(); i++){
+    			tTagIdsLeft.add(tBigTagsLeft.get(i).getId());
+    		}
+    		
+    		tBigTagsRight = BigUtil.transferToTags(tAryTagStrsRight, "admin");
+    		for(int i = 0; i < tBigTagsRight.size(); i++){
+    			tTagIdsRight.add(tBigTagsRight.get(i).getId());
+    		}
     	}
-        uiModel.addAttribute("contents", tContentLists);
+		
+        List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
+        List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
+    	for(int i = 0; i < tBigTagsLeft.size(); i++){
+    		tContentListsLeft.add(Content.findContentsByTag(tBigTagsLeft.get(i), 0, 8));
+    	}
+    	for(int i = 0; i < tBigTagsRight.size(); i++){
+    		tContentListsRight.add(Content.findContentsByTag(tBigTagsRight.get(i), 0, 8));
+    	}
+
+        uiModel.addAttribute("spaceOwner", "admin");
+        uiModel.addAttribute("description", tOwner.getDescription());
+        uiModel.addAttribute("bigTagsLeft", tBigTagsLeft);
+        uiModel.addAttribute("bigTagsRight", tBigTagsRight);
+        uiModel.addAttribute("tagIdsLeft", tTagIdsLeft);
+        uiModel.addAttribute("tagIdsRight", tTagIdsRight);
+        uiModel.addAttribute("contentsLeft", tContentListsLeft);
+        uiModel.addAttribute("contentsRight", tContentListsRight);
+        
         return "public/index";
     }
 

@@ -1,0 +1,74 @@
+<jsp:root xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:spring="http://www.springframework.org/tags" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+  
+  <jsp:directive.attribute name="tagId" type="java.lang.Long" required="true" rtexprvalue="true" description="for Indicating which tag need to be adjusted." />
+  <jsp:directive.attribute name="spaceOwner" type="java.lang.String" required="true" rtexprvalue="true" description="indicating who's space is being adjusted." />
+  <jsp:directive.attribute name="list_size" type="java.lang.Integer" required="true" rtexprvalue="true" description="Indicate how many items is displaying now" />
+  <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
+
+  <c:if test="${empty render or render}">
+    
+    <spring:url value="/public" var="adjustUrl">
+		<spring:param name="relayouttype" value="close"/>
+		<spring:param name="tagId" value="${tagId}"/>
+    </spring:url>
+    <a href="${adjustUrl}">
+        <spring:url value="/resources/images/close.png" var="direction_img_close" />
+        <spring:message arguments="${typeName}" code="relayout_move_left" var="add_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_close}" title="${fn:escapeXml(add_message)}" />
+    </a>
+    
+    <c:out value=" | " />
+    
+    <spring:url value="/public" var="adjustUrl">
+		<spring:param name="relayouttype" value="left"/>
+		<spring:param name="tagId" value="${tagId}"/>
+    </spring:url>
+    <a href="${adjustUrl}">
+        <spring:url value="/resources/images/left.png" var="direction_img_left" />
+        <spring:message arguments="${typeName}" code="relayout_move_left" var="add_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_left}" title="${fn:escapeXml(add_message)}" />
+    </a>
+    
+    <c:out value="  " />
+    
+    <spring:url value="/public" var="adjustUrl">
+		<spring:param name="relayouttype" value="up"/>
+		<spring:param name="tagId" value="${tagId}"/>
+    </spring:url>
+    <a href="${adjustUrl}">
+        <spring:url value="/resources/images/up.png" var="direction_img_up" />
+        <spring:message arguments="${typeName}" code="relayout_move_up" var="add_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_up}" title="${fn:escapeXml(add_message)}" />
+    </a>
+    
+    <c:out value="  " />
+    
+    <spring:url value="/public" var="adjustUrl">
+		<spring:param name="relayouttype" value="down"/>
+		<spring:param name="tagId" value="${tagId}"/>
+    </spring:url>
+    <a href="${adjustUrl}">
+        <spring:url value="/resources/images/down.png" var="direction_img_down" />
+        <spring:message arguments="${typeName}" code="relayout_move_down" var="add_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_down}" title="${fn:escapeXml(add_message)}" />
+    </a>
+    
+    <c:out value="  " />
+    
+    <spring:url value="/public" var="adjustUrl">
+		<spring:param name="relayouttype" value="right"/>
+		<spring:param name="tagId" value="${tagId}"/>
+    </spring:url>
+    <a href="${adjustUrl}">
+        <spring:url value="/resources/images/right.png" var="direction_img_right" />
+        <spring:message arguments="${typeName}" code="relayout_move_left" var="add_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_right}" title="${fn:escapeXml(add_message)}" />
+    </a>
+    
+    <c:out value=" | " />
+    
+    <spring:message code="relayout_list_size" htmlEscape="false" />
+    <c:out value="${list_size} " />
+  </c:if>
+</jsp:root>

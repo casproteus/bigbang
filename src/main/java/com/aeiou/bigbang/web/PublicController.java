@@ -137,6 +137,14 @@ public class PublicController{
         return "public/list_publisher";
     }
     
+    /**
+     * will give 1 month salary when click the hire button.
+     * @param publisher
+     * @param page
+     * @param size
+     * @param uiModel
+     * @return
+     */
     @RequestMapping(params = "hire", produces = "text/html")
     public String hirePublisher(@RequestParam(value = "hire", required = false) String publisher,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
@@ -167,7 +175,7 @@ public class PublicController{
     }
     
     /**
-     * TODO: give the guy one month salary to fire.
+     * will give the guy one month salary to fire.
      * @param publisher
      * @param page
      * @param size
@@ -200,5 +208,25 @@ public class PublicController{
 		tPublisher.persist();
 
 		return(SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tOwnerName, page, size, uiModel));
+    }
+    
+    /**
+     * adjust the layout
+     * @param publisher
+     * @param page
+     * @param size
+     * @param uiModel
+     * @return
+     */
+    @RequestMapping(params = "relayouttype", produces = "text/html")
+    public String relayout(@RequestParam(value = "relayouttype", required = true) String relayouttype, 
+    		@RequestParam(value = "tagId", required = true) Long tagId, Model uiModel) {
+    	
+    	String tOwnerName = userContextService.getCurrentUserName();
+		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);
+		//TODO:
+		String tLayout = tOwner.getLayout();
+		
+		return (SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tOwnerName, 0, 8, uiModel));
     }
 }

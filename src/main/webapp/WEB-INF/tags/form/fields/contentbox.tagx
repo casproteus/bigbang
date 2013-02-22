@@ -65,6 +65,9 @@
             	</c:otherwise>
             </c:choose>
           </c:if>
+          <c:if test="${empty maxPages and pageContext['request'].userPrincipal.name eq spaceOwner}">
+          	<util:contentLayout tagId="${tagId}" spaceOwner="${spaceOwner}" list_size="${8}"/>
+          </c:if>
         </td>
         <td class="tWireless namebox">
         	<c:if test="${empty maxPages}">

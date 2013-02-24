@@ -28,6 +28,45 @@
         <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
       </a>
     </span>
+    <c:if test="${empty maxPages and pageContext['request'].userPrincipal.name eq spaceOwner}">
+      <br/>
+	  <spring:url value="/public" var="reset_url">
+		<spring:param name="relayouttype" value="reset"/>
+		<spring:param name="tagId" value="-1"/>
+      </spring:url>
+      <a href="${reset_url}">
+        <spring:url value="/resources/images/reset.png" var="reset_img_url" />
+        <spring:message code="global_menu_resetView" var="reset_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(reset_message)}" src="${reset_img_url}" title="${fn:escapeXml(reset_message)}" />
+      </a>
+      
+      <c:out value=" | " />
+      <spring:url value="/contents" var="contents_url"/>
+      <a href="${contents_url}">
+        <spring:url value="/resources/images/content.png" var="content_img_url" />
+        <spring:message code="global_menu_contentsManage" var="contentsManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(contentsManage_message)}" src="${content_img_url}" title="${fn:escapeXml(contentsManage_message)}" />
+      </a>
+      
+      <c:out value="  " />
+      <spring:url value="/bigtags" var="bigtags_url"/>
+      <a href="${bigtags_url}">
+        <spring:url value="/resources/images/tag.png" var="tag_img_url" />
+        <spring:message code="global_menu_tagsManage" var="tagsManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(tagsManage_message)}" src="${tag_img_url}" title="${fn:escapeXml(tagsManage_message)}" />
+      </a>
+      
+      <c:out value="  " />
+      <spring:url value="/useraccounts/${spaceOwnerId}" var="useraccounts_url">
+		<spring:param name="form"/>
+      </spring:url>
+      <a href="${useraccounts_url}">
+        <spring:url value="/resources/images/account.png" var="account_img_url" />
+        <spring:message code="global_menu_accountsManage" var="accountsManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(accountsManage_message)}" src="${account_img_url}" title="${fn:escapeXml(accountsManage_message)}" />
+      </a>
+    </c:if>
+    
   </util:panel>
   <!-- c:set var="tagsize" value="${bigTags.size()}" scope="request" /> -->
   <table class="tWireless" style="margin-top: 13px;"><tr>

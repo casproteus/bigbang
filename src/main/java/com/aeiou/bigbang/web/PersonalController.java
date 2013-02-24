@@ -182,6 +182,7 @@ public class PersonalController{
     	}
 
         uiModel.addAttribute("spaceOwner", spaceOwner);
+        uiModel.addAttribute("spaceOwnerId", tOwner.getId());
         uiModel.addAttribute("description", tOwner.getDescription());
         uiModel.addAttribute("bigTagsLeft", tBigTagsLeft);
         uiModel.addAttribute("bigTagsRight", tBigTagsRight);

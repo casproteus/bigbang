@@ -192,6 +192,7 @@ public class PublicController{
             }else{
             	Set<Integer> tAuthSet = BigAuthority.getAuthSet(userContextService.getCurrentUserName(), tOwner);
                 uiModel.addAttribute("spaceOwner", spaceOwner);
+                uiModel.addAttribute("spaceOwnerId", tOwner.getId());
             	uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet, firstResult, sizeNo));
             	float nrOfPages = (float) Content.countContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet) / sizeNo;
             	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
@@ -326,6 +327,12 @@ public class PublicController{
     	
     	String tOwnerName = userContextService.getCurrentUserName();
 		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);
+		if("reset".equals(relayouttype)){
+			tOwner.setLayout(null);
+			tOwner.persist();
+			return (SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tOwnerName, 0, 8, uiModel));
+		}
+		
 		BigTag tBigTag = BigTag.findBigTag(tagId);
 
 	   	String[] tAryTagStrsLeft = null;								//for generating the new layout string.
@@ -611,6 +618,5 @@ public class PublicController{
         uiModel.addAttribute("contentsRight", tContentListsRight);
        
         return "public/index";
-//		return (SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tOwnerName, 0, 8, uiModel));
     }
 }

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" 
+	xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:c="http://java.sun.com/jsp/jstl/core" version="2.0">
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <page:list id="pl_com_aeiou_bigbang_domain_BigTag" items="${bigtags}" z="mBEU4RMyTrfM90Um0dq9W8hKz2Y=">
         <table:table data="${bigtags}" id="l_com_aeiou_bigbang_domain_BigTag" path="/bigtags" z="5dlE+eB1WJnfzeOqGO3+hn3sAaQ=">
             <table:column id="c_com_aeiou_bigbang_domain_BigTag_tagName" property="tagName" z="iLkNv0/Tdje+o8+rpcjaHx3Nxrk="/>
-            <table:column id="c_com_aeiou_bigbang_domain_BigTag_type" property="type" z="tkz0+0kRCnDpFXhaqmTk8CLMEoM="/>
+            <c:if test="${pageContext['request'].userPrincipal.name eq 'admin'}">
+              <table:column id="c_com_aeiou_bigbang_domain_BigTag_type" property="type" z="tkz0+0kRCnDpFXhaqmTk8CLMEoM="/>
+			</c:if>
             <table:column id="c_com_aeiou_bigbang_domain_BigTag_authority" property="authority" z="+4tNws2DjP9P30Td3qwX0/4zFDE="/>
         </table:table>
     </page:list>

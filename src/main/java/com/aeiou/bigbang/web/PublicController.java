@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hsqldb.lib.ArrayUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -82,17 +83,21 @@ public class PublicController{
 	    	}
 	    	
 	    	int tSize = tBigTags.size();									//Separate tags and IDs into 2 columns and prepare the Layout String.
+	    	tAryNumStrsLeft = new String[tSize/2];
+	    	tAryNumStrsRight = new String[tSize - tSize/2] ;
+	    	
 	    	StringBuilder tStrB = new StringBuilder();
 	    	StringBuilder tStrB_Num = new StringBuilder();
     		for(int j = 0; j < tSize/2; j++){
     			BigTag tTag = tBigTags.get(j);
     	    	tBigTagsLeft.add(tBigTags.get(j));
     	    	tTagIdsLeft.add(tTagIds.get(j));
+    	    	tAryNumStrsLeft[j] = "8";
     	    	if("admin".equals(tTag.getType())){
     	    		tStrB.append('¶');
     	    	}
     	    	tStrB.append(tTag.getTagName());
-    	    	tStrB_Num.append('8');
+    	    	tStrB_Num.append(tAryNumStrsLeft[j]);
     	    	if(j + 1 < tSize/2){
     	    		tStrB.append('¯');
         	    	tStrB_Num.append('¯');
@@ -106,11 +111,12 @@ public class PublicController{
     			BigTag tTag = tBigTags.get(j);
     			tBigTagsRight.add(tBigTags.get(j));
     	    	tTagIdsRight.add(tTagIds.get(j));
+    	    	tAryNumStrsRight[j - tSize/2] = "8";
     	    	if("admin".equals(tTag.getType())){
     	    		tStrB.append('¶');
     	    	}
     	    	tStrB.append(tTag.getTagName());
-    	    	tStrB_Num.append('8');
+    	    	tStrB_Num.append(tAryNumStrsRight[j - tSize/2]);
     	    	if(j + 1 < tSize){
     	    		tStrB.append('¯');
         	    	tStrB_Num.append('¯');
@@ -135,10 +141,10 @@ public class PublicController{
         List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
         List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
     	for(int i = 0; i < tBigTagsLeft.size(); i++){
-    		tContentListsLeft.add(Content.findContentsByTag(tBigTagsLeft.get(i), 0, 8));
+    		tContentListsLeft.add(Content.findContentsByTag(tBigTagsLeft.get(i), 0, Integer.valueOf(tAryNumStrsLeft[i]).intValue()));
     	}
     	for(int i = 0; i < tBigTagsRight.size(); i++){
-    		tContentListsRight.add(Content.findContentsByTag(tBigTagsRight.get(i), 0, 8));
+    		tContentListsRight.add(Content.findContentsByTag(tBigTagsRight.get(i), 0, Integer.valueOf(tAryNumStrsRight[i]).intValue()));
     	}
 
         uiModel.addAttribute("spaceOwner", "admin");
@@ -320,9 +326,291 @@ public class PublicController{
     	
     	String tOwnerName = userContextService.getCurrentUserName();
 		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);
-		//TODO:
-		String tLayout = tOwner.getLayout();
+		BigTag tBigTag = BigTag.findBigTag(tagId);
+
+	   	String[] tAryTagStrsLeft = null;								//for generating the new layout string.
+	   	String[] tAryTagStrsRight = null;
+	   	String[] tAryNumStrsLeft = null;
+	   	String[] tAryNumStrsRight = null;
+	   	
+	   	String tLayout = tOwner.getLayout();							//get the layout info from DB.and separate it into the array
+   		int p = tLayout.indexOf('™');
+		String tTagStr = tLayout.substring(0, p);
+		String tSizeStr = tLayout.substring(p+1);
+		p = tTagStr.indexOf('¬');
+		if(p >= 0){
+    		tAryTagStrsLeft = tTagStr.substring(0, p).split("¯");
+    		tAryTagStrsRight = tTagStr.substring(p+1).split("¯");
+		}
+		p = tSizeStr.indexOf('¬');
+		if(p >= 0){
+    		tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
+    		tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
+		}
+		//---------adjusting the Sting Arys-------------
+		tTagStr = "admin".equals(tBigTag.getType()) ? "¶"+ tBigTag.getTagName() : tBigTag.getTagName();
+		boolean tIsInLeftColumn = false;
+		int tPos;
+		for(tPos = 0; tPos < tAryTagStrsLeft.length; tPos++){
+			if(tTagStr.equals(tAryTagStrsLeft[tPos])){
+				tIsInLeftColumn = true;
+				break;
+			}
+		}
+		if(!tIsInLeftColumn){
+			for(tPos = 0; tPos < tAryTagStrsRight.length; tPos++){
+				if(tTagStr.equals(tAryTagStrsRight[tPos])){
+					break;
+				}
+			}
+		}	//now know the column and position.
 		
-		return (SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tOwnerName, 0, 8, uiModel));
+		if("close".equals(relayouttype)){
+			if(tIsInLeftColumn){
+				String[] tAryTagStrsLeft2 = new String[tAryTagStrsLeft.length - 1];
+				String[] tAryNumStrsLeft2 = new String[tAryNumStrsLeft.length - 1];
+				for(int j = 0; j < tAryTagStrsLeft.length; j++){
+					if(j < tPos){
+						tAryTagStrsLeft2[j] = tAryTagStrsLeft[j];
+						tAryNumStrsLeft2[j] = tAryNumStrsLeft[j];
+					}else if(j == tPos){
+						continue;
+					}else{
+						tAryTagStrsLeft2[j - 1] = tAryTagStrsLeft[j];
+						tAryNumStrsLeft2[j - 1] = tAryNumStrsLeft[j];
+					}
+				}
+				tAryTagStrsLeft = tAryTagStrsLeft2;
+				tAryNumStrsLeft = tAryNumStrsLeft2;				
+			}else{
+				String[] tAryTagStrsRight2 = new String[tAryTagStrsRight.length - 1];
+				String[] tAryNumStrsRight2 = new String[tAryNumStrsRight.length - 1];
+				for(int j = 0; j < tAryTagStrsRight.length; j++){
+					if(j < tPos){
+						tAryTagStrsRight2[j] = tAryTagStrsRight[j];
+						tAryNumStrsRight2[j] = tAryNumStrsRight[j];
+					}else if(j == tPos){
+						continue;
+					}else{
+						tAryTagStrsRight2[j - 1] = tAryTagStrsRight[j];
+						tAryNumStrsRight2[j - 1] = tAryNumStrsRight[j];
+					}
+				}
+				tAryTagStrsRight = tAryTagStrsRight2;
+				tAryNumStrsRight = tAryNumStrsRight2;
+			}
+		}else if("left".equals(relayouttype) && !tIsInLeftColumn){
+			String[] tAryTagStrsLeft2 = new String[tAryTagStrsLeft.length + 1];
+			String[] tAryNumStrsLeft2 = new String[tAryNumStrsLeft.length + 1];
+			for(int j = 0; j < tAryTagStrsLeft2.length; j++){
+				if(j == tAryNumStrsLeft2.length){
+					tAryTagStrsLeft2[j] = tAryTagStrsRight[tPos];
+					tAryNumStrsLeft2[j] = tAryNumStrsRight[tPos];
+				}else if(j < tPos){
+					tAryTagStrsLeft2[j] = tAryTagStrsLeft[j];
+					tAryNumStrsLeft2[j] = tAryNumStrsLeft[j];
+				}else if(j == tPos){
+					tAryTagStrsLeft2[j] = tAryTagStrsRight[j];
+					tAryNumStrsLeft2[j] = tAryNumStrsRight[j];
+				}else{
+					tAryTagStrsLeft2[j] = tAryTagStrsLeft[j - 1];
+					tAryNumStrsLeft2[j] = tAryNumStrsLeft[j - 1];
+				}
+			}
+			
+			String[] tAryTagStrsRight2 = new String[tAryTagStrsRight.length - 1];
+			String[] tAryNumStrsRight2 = new String[tAryNumStrsRight.length - 1];
+			for(int j = 0; j < tAryTagStrsRight.length; j++){
+				if(j < tPos){
+					tAryTagStrsRight2[j] = tAryTagStrsRight[j];
+					tAryNumStrsRight2[j] = tAryNumStrsRight[j];
+				}else if(j == tPos){
+					continue;
+				}else{
+					tAryTagStrsRight2[j - 1] = tAryTagStrsRight[j];
+					tAryNumStrsRight2[j - 1] = tAryNumStrsRight[j];
+				}
+			}
+			tAryTagStrsLeft = tAryTagStrsLeft2;
+			tAryNumStrsLeft = tAryNumStrsLeft2;
+			tAryTagStrsRight = tAryTagStrsRight2;
+			tAryNumStrsRight = tAryNumStrsRight2;
+		}else if("up".equals(relayouttype) && tPos > 0){
+			if(tIsInLeftColumn){
+				String[] tAryTagStrsLeft2 = new String[tAryTagStrsLeft.length];
+				String[] tAryNumStrsLeft2 = new String[tAryNumStrsLeft.length];
+				for(int j = 0; j < tAryTagStrsLeft.length; j++){
+					if(j == tPos - 1){
+						tAryTagStrsLeft2[j] = tAryTagStrsLeft[j + 1];
+						tAryNumStrsLeft2[j] = tAryNumStrsLeft[j + 1];
+					}else if(j == tPos){
+						tAryTagStrsLeft2[j] = tAryTagStrsLeft[j - 1];
+						tAryNumStrsLeft2[j] = tAryNumStrsLeft[j - 1];
+					}else{
+						tAryTagStrsLeft2[j] = tAryTagStrsLeft[j];
+						tAryNumStrsLeft2[j] = tAryNumStrsLeft[j];
+					}
+				}
+				tAryTagStrsLeft = tAryTagStrsLeft2;
+				tAryNumStrsLeft = tAryNumStrsLeft2;
+			}else{
+				String[] tAryTagStrsRight2 = new String[tAryTagStrsRight.length];
+				String[] tAryNumStrsRight2 = new String[tAryNumStrsRight.length];
+				for(int j = 0; j < tAryTagStrsRight.length; j++){
+					if(j == tPos - 1){
+						tAryTagStrsRight2[j] = tAryTagStrsRight[j + 1];
+						tAryNumStrsRight2[j] = tAryNumStrsRight[j + 1];
+					}else if(j == tPos){
+						tAryTagStrsRight2[j] = tAryTagStrsRight[j - 1];
+						tAryNumStrsRight2[j] = tAryNumStrsRight[j - 1];
+					}else{
+						tAryTagStrsRight2[j] = tAryTagStrsRight[j];
+						tAryNumStrsRight2[j] = tAryNumStrsRight[j];
+					}
+				}
+				tAryTagStrsRight = tAryTagStrsRight2;
+				tAryNumStrsRight = tAryNumStrsRight2;
+			}
+		}else if("down".equals(relayouttype) && 
+				((tIsInLeftColumn && tPos < tAryTagStrsLeft.length - 1) || (!tIsInLeftColumn && tPos < tAryTagStrsRight.length - 1))){
+
+			if(tIsInLeftColumn){
+				String[] tAryTagStrsLeft2 = new String[tAryTagStrsLeft.length];
+				String[] tAryNumStrsLeft2 = new String[tAryNumStrsLeft.length];
+				for(int j = 0; j < tAryTagStrsLeft.length; j++){
+					if(j == tPos){
+						tAryTagStrsLeft2[j] = tAryTagStrsLeft[j + 1];
+						tAryNumStrsLeft2[j] = tAryNumStrsLeft[j + 1];
+					}else if(j == tPos + 1){
+						tAryTagStrsLeft2[j] = tAryTagStrsLeft[j - 1];
+						tAryNumStrsLeft2[j] = tAryNumStrsLeft[j - 1];
+					}else{
+						tAryTagStrsLeft2[j] = tAryTagStrsLeft[j];
+						tAryNumStrsLeft2[j] = tAryNumStrsLeft[j];
+					}
+				}
+				tAryTagStrsLeft = tAryTagStrsLeft2;
+				tAryNumStrsLeft = tAryNumStrsLeft2;
+			}else{
+				String[] tAryTagStrsRight2 = new String[tAryTagStrsRight.length];
+				String[] tAryNumStrsRight2 = new String[tAryNumStrsRight.length];
+				for(int j = 0; j < tAryTagStrsRight.length; j++){
+					if(j == tPos){
+						tAryTagStrsRight2[j] = tAryTagStrsRight[j + 1];
+						tAryNumStrsRight2[j] = tAryNumStrsRight[j + 1];
+					}else if(j == tPos + 1){
+						tAryTagStrsRight2[j] = tAryTagStrsRight[j - 1];
+						tAryNumStrsRight2[j] = tAryNumStrsRight[j - 1];
+					}else{
+						tAryTagStrsRight2[j] = tAryTagStrsRight[j];
+						tAryNumStrsRight2[j] = tAryNumStrsRight[j];
+					}
+				}
+				tAryTagStrsRight = tAryTagStrsRight2;
+				tAryNumStrsRight = tAryNumStrsRight2;
+			}
+		}else if("right".equals(relayouttype) && tIsInLeftColumn){
+			String[] tAryTagStrsLeft2 = new String[tAryTagStrsLeft.length - 1];
+			String[] tAryNumStrsLeft2 = new String[tAryNumStrsLeft.length - 1];
+			for(int j = 0; j < tAryTagStrsLeft.length; j++){
+				if(j < tPos){
+					tAryTagStrsLeft2[j] = tAryTagStrsLeft[j];
+					tAryNumStrsLeft2[j] = tAryNumStrsLeft[j];
+				}else if(j == tPos){
+					continue;
+				}else{
+					tAryTagStrsLeft2[j - 1] = tAryTagStrsLeft[j];
+					tAryNumStrsLeft2[j - 1] = tAryNumStrsLeft[j];
+				}
+			}
+
+			String[] tAryTagStrsRight2 = new String[tAryTagStrsRight.length + 1];
+			String[] tAryNumStrsRight2 = new String[tAryNumStrsRight.length + 1];
+			for(int j = 0; j < tAryTagStrsRight2.length; j++){
+				if(j == tAryTagStrsRight.length){
+					tAryTagStrsRight2[j] = tAryTagStrsLeft[tPos];
+					tAryNumStrsRight2[j] = tAryNumStrsLeft[tPos];
+				}else if(j < tPos){
+					tAryTagStrsRight2[j] = tAryTagStrsRight[j];
+					tAryNumStrsRight2[j] = tAryNumStrsRight[j];
+				}else if(j == tPos){
+					tAryTagStrsRight2[j] = tAryTagStrsLeft[j];
+					tAryNumStrsRight2[j] = tAryNumStrsLeft[j];
+				}else{
+					tAryTagStrsRight2[j] = tAryTagStrsRight[j-1];
+					tAryNumStrsRight2[j] = tAryNumStrsRight[j-1];
+				}
+			}
+			tAryTagStrsLeft = tAryTagStrsLeft2;
+			tAryNumStrsLeft = tAryNumStrsLeft2;
+			tAryTagStrsRight = tAryTagStrsRight2;
+			tAryNumStrsRight = tAryNumStrsRight2;
+		}
+		
+		//----------------------
+	    StringBuilder tStrB = new StringBuilder();						//construct the new String of layout
+	    StringBuilder tStrB_Num = new StringBuilder();
+   		for(int j = 0; j < tAryTagStrsLeft.length; j++){			
+   	    	tStrB.append(tAryTagStrsLeft[j]);
+   	    	tStrB_Num.append(tAryNumStrsLeft[j]);
+   	    	if(j + 1 < tAryTagStrsLeft.length){
+   	    		tStrB.append('¯');
+       	    	tStrB_Num.append('¯');
+   	    	}
+	    }
+
+   		tStrB.append('¬');
+   		tStrB_Num.append('¬');
+   		
+   		for(int j = 0; j < tAryTagStrsRight.length; j++){
+   	    	tStrB.append(tAryTagStrsRight[j]);
+   	    	tStrB_Num.append(tAryNumStrsRight[j]);
+   	    	if(j + 1 < tAryTagStrsRight.length){
+   	    		tStrB.append('¯');
+       	    	tStrB_Num.append('¯');
+   	    	}
+	    }
+   		tStrB.append('™').append(tStrB_Num);
+
+   		tOwner.setLayout(tStrB.toString());	    						//save the new layout string to DB
+   		tOwner.persist();
+   		
+   		//----------------prepare for show-------------------
+	   	List<BigTag> tBigTagsLeft = BigUtil.transferToTags(tAryTagStrsLeft, tOwnerName);
+	   	List<Long> tTagIdsLeft = new ArrayList<Long>();					//prepare the info for view base on the string in db:
+   		for(int i = 0; i < tBigTagsLeft.size(); i++){
+   			tTagIdsLeft.add(tBigTagsLeft.get(i).getId());
+   		}
+   		
+   		List<BigTag> tBigTagsRight = BigUtil.transferToTags(tAryTagStrsRight, tOwnerName);
+	   	List<Long> tTagIdsRight = new ArrayList<Long>();
+   		for(int i = 0; i < tBigTagsRight.size(); i++){
+   			tTagIdsRight.add(tBigTagsRight.get(i).getId());
+   		}
+   		
+        List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
+        List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
+    	for(int i = 0; i < tBigTagsLeft.size(); i++){
+    		tContentListsLeft.add(
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tOwnerName, tOwner),
+    				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue()));
+    	}
+    	for(int i = 0; i < tBigTagsRight.size(); i++){
+    		tContentListsRight.add(
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tOwnerName, tOwner),
+    				0, Integer.valueOf(tAryNumStrsRight[i]).intValue()));
+    	}
+    	
+        uiModel.addAttribute("spaceOwner", tOwnerName);
+        uiModel.addAttribute("description", tOwner.getDescription());
+        uiModel.addAttribute("bigTagsLeft", tBigTagsLeft);
+        uiModel.addAttribute("bigTagsRight", tBigTagsRight);
+        uiModel.addAttribute("tagIdsLeft", tTagIdsLeft);
+        uiModel.addAttribute("tagIdsRight", tTagIdsRight);
+        uiModel.addAttribute("contentsLeft", tContentListsLeft);
+        uiModel.addAttribute("contentsRight", tContentListsRight);
+       
+        return "public/index";
+//		return (SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tOwnerName, 0, 8, uiModel));
     }
 }

@@ -69,6 +69,8 @@ public class BigUtil {
 	public static List<BigTag> transferToTags(String[] tAryTagStrs, String pOwnerName){
     	List<BigTag> tBigTags = new ArrayList<BigTag>();
     	for(int i = 0; i < tAryTagStrs.length; i++){
+//    		System.out.println("i:" + i);
+//    		System.out.println("tAryTagStrs[i]:" + tAryTagStrs[i]);
     		if(tAryTagStrs[i].startsWith("¶")){
     			BigTag tTag = BigTag.findTagByNameAndOwner(tAryTagStrs[i].substring(1), "admin");
     			if(tTag != null)

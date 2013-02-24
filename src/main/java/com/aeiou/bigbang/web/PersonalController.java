@@ -113,17 +113,21 @@ public class PersonalController{
 	    		}
 	    	}					
 	    	int tSize = tBigTags.size();									//Separate tags and IDs into 2 columns and prepare the Layout String.
+	    	tAryNumStrsLeft = new String[tSize/2];
+	    	tAryNumStrsRight = new String[tSize - tSize/2] ;
+	    	
 	    	StringBuilder tStrB = new StringBuilder();
 	    	StringBuilder tStrB_Num = new StringBuilder();
     		for(int j = 0; j < tSize/2; j++){
     			BigTag tTag = tBigTags.get(j);
     	    	tBigTagsLeft.add(tBigTags.get(j));
     	    	tTagIdsLeft.add(tTagIds.get(j));
+    	    	tAryNumStrsLeft[j] = "8";
     	    	if("admin".equals(tTag.getType())){
     	    		tStrB.append('¶');
     	    	}
     	    	tStrB.append(tTag.getTagName());
-    	    	tStrB_Num.append('8');
+    	    	tStrB_Num.append(tAryNumStrsLeft[j]);
     	    	if(j + 1 < tSize/2){
     	    		tStrB.append('¯');
         	    	tStrB_Num.append('¯');
@@ -137,11 +141,12 @@ public class PersonalController{
     			BigTag tTag = tBigTags.get(j);
     			tBigTagsRight.add(tBigTags.get(j));
     	    	tTagIdsRight.add(tTagIds.get(j));
+    	    	tAryNumStrsRight[j - tSize/2] = "8";
     	    	if("admin".equals(tTag.getType())){
     	    		tStrB.append('¶');
     	    	}
     	    	tStrB.append(tTag.getTagName());
-    	    	tStrB_Num.append('8');
+    	    	tStrB_Num.append(tAryNumStrsRight[j - tSize/2]);
     	    	if(j + 1 < tSize){
     	    		tStrB.append('¯');
         	    	tStrB_Num.append('¯');
@@ -166,10 +171,14 @@ public class PersonalController{
         List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
         List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
     	for(int i = 0; i < tBigTagsLeft.size(); i++){
-    		tContentListsLeft.add(Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tCurUserName, tOwner), 0, 8));
+    		tContentListsLeft.add(
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tCurUserName, tOwner),
+    				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue()));
     	}
     	for(int i = 0; i < tBigTagsRight.size(); i++){
-    		tContentListsRight.add(Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tCurUserName, tOwner), 0, 8));
+    		tContentListsRight.add(
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tCurUserName, tOwner),
+    				0, Integer.valueOf(tAryNumStrsRight[i]).intValue()));
     	}
 
         uiModel.addAttribute("spaceOwner", spaceOwner);

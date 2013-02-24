@@ -40,11 +40,26 @@ public class BigTagController {
             populateEditForm(uiModel, bigTag);
             return "bigtags/create";
         }
+        
+        String tCurName = userContextService.getCurrentUserName();
         if(StringUtils.isEmpty(bigTag.getType())){
-        	bigTag.setType(userContextService.getCurrentUserName());
+        	bigTag.setType(tCurName);
         }
         uiModel.asMap().clear();
         bigTag.persist();
+        
+        //update the layout string of useraccount
+        UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
+        String tLayout = tUserAccount.getLayout();
+   		int p = tLayout.indexOf('™');
+		String tTagStr = tLayout.substring(0, p);
+		String tSizeStr = tLayout.substring(p+1);
+		StringBuilder tStrB = new StringBuilder();
+		tStrB.append(tTagStr).append("¯").append("admin".equals(tCurName) ? ("¶" + bigTag.getTagName()) : bigTag.getTagName());
+		tStrB.append("™").append(tSizeStr).append("¯").append("8");
+		tUserAccount.setLayout(tStrB.toString());
+		tUserAccount.persist();
+		
         return "redirect:/bigtags/" + encodeUrlPathSegment(bigTag.getId().toString(), httpServletRequest);
     }
 

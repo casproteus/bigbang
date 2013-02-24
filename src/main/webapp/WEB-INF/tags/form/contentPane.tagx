@@ -4,6 +4,7 @@
   <jsp:directive.attribute name="id" type="java.lang.String" required="true" rtexprvalue="true" description="The identifier for this tag (do not change!)" />
   <jsp:directive.attribute name="items" type="java.util.Collection" required="true" rtexprvalue="true" description="The form backing object name" />
   <jsp:directive.attribute name="label" type="java.lang.String" required="false" rtexprvalue="true" description="The label used for this object, will default to a message bundle if not supplied" />
+  <jsp:directive.attribute name="tagId" type="java.lang.Long" required="false" rtexprvalue="true" description="for Indicating the URL of the 'read more' button." />
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
   <jsp:directive.attribute name="openPane" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Control if the title pane is opened or closed by default (default: true)" />
   <jsp:directive.attribute name="z" type="java.lang.String" required="false" description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
@@ -16,6 +17,10 @@
         </c:when>
         <c:otherwise>
           <spring:message arguments="${label}" code="entity_not_found" />
+          <c:if test="${empty maxPages and pageContext['request'].userPrincipal.name eq spaceOwner}">
+          	<br/>
+          	<util:contentLayout tagId="${tagId}" spaceOwner="${spaceOwner}" list_size="${8}"/>
+          </c:if>
         </c:otherwise>
       </c:choose>
     </util:panel>

@@ -83,34 +83,7 @@ public class PersonalController{
     		List<BigTag> tBigTags = BigTag.findTagsByOwner(spaceOwner); 	//fetch out all tags of admin's, owner's and his team's, 
     		List<Long> tTagIds = new ArrayList<Long>();						//then adjust it. @note: don't know if we can use AthenSet to move this into JPQL, because 
 	    	for(int i = 0; i < tBigTags.size(); i++){						//here, we need to compare the tag names, to avoid duplication.
-	    		BigTag tTag = tBigTags.get(i);
-	    		int tAuthority = tTag.getAuthority() == null ? 0 : tTag.getAuthority().intValue();
-	    		if(tCurUserName == null){										//not logged in
-	    			if(tAuthority == 0){
-	    				tTagIds.add(tTag.getId());
-	    			}else{
-	    				tBigTags.remove(i);
-	    				i--;
-	    			}
-	    		}else{															//has logged in
-	    			if(tCurUserName.equals(spaceOwner)){							//it's owner himself
-	    				tTagIds.add(tTag.getId());
-	    			}else if(tOwner.getListento().contains(tCurUser)){				//it's team member
-		    			if(tAuthority == 2 || tAuthority == 0){
-		    				tTagIds.add(tTag.getId());
-		    			}else{	//TODO when we support "visible to specific person, should go on here.
-		    				tBigTags.remove(i);
-		    				i--;
-		    			}
-	    			}else{															//it's someone else
-	    				if(tAuthority == 0){
-	    					tTagIds.add(tTag.getId());
-	    				}else{
-		    				tBigTags.remove(i);
-		    				i--;
-		    			}
-	    			}
-	    		}
+	    		tTagIds.add(tBigTags.get(i).getId());
 	    	}					
 	    	int tSize = tBigTags.size();									//Separate tags and IDs into 2 columns and prepare the Layout String.
 	    	tAryNumStrsLeft = new String[tSize/2];
@@ -123,10 +96,18 @@ public class PersonalController{
     	    	tBigTagsLeft.add(tBigTags.get(j));
     	    	tTagIdsLeft.add(tTagIds.get(j));
     	    	tAryNumStrsLeft[j] = "8";
-    	    	if("admin".equals(tTag.getType())){
+    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType())){
     	    		tStrB.append('¶');
     	    	}
     	    	tStrB.append(tTag.getTagName());
+    			if(tTag.getAuthority() == 1){
+    				tStrB.append("¶");
+    			}else if(tTag.getAuthority() == 2){
+    				tStrB.append("");
+    			}else if(tTag.getAuthority() == 3){
+    				tStrB.append("†");
+    			}
+    	    	
     	    	tStrB_Num.append(tAryNumStrsLeft[j]);
     	    	if(j + 1 < tSize/2){
     	    		tStrB.append('¯');
@@ -142,10 +123,18 @@ public class PersonalController{
     			tBigTagsRight.add(tBigTags.get(j));
     	    	tTagIdsRight.add(tTagIds.get(j));
     	    	tAryNumStrsRight[j - tSize/2] = "8";
-    	    	if("admin".equals(tTag.getType())){
+    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType())){
     	    		tStrB.append('¶');
     	    	}
     	    	tStrB.append(tTag.getTagName());
+    			if(tTag.getAuthority() == 1){
+    				tStrB.append("¶");
+    			}else if(tTag.getAuthority() == 2){
+    				tStrB.append("");
+    			}else if(tTag.getAuthority() == 3){
+    				tStrB.append("†");
+    			}
+    			
     	    	tStrB_Num.append(tAryNumStrsRight[j - tSize/2]);
     	    	if(j + 1 < tSize){
     	    		tStrB.append('¯');
@@ -167,7 +156,50 @@ public class PersonalController{
     			tTagIdsRight.add(tBigTagsRight.get(i).getId());
     		}
     	}
-
+																						//final adjust---not all tags should be shown to curUser:
+		if(tCurUserName == null){										//not logged in
+			for(int i = tBigTagsLeft.size()-1; i >=0 ; i--){
+				if(tBigTagsLeft.get(i).getAuthority() != 0){
+					tBigTagsLeft.remove(i);
+					tTagIdsLeft.remove(i);
+				}
+			}
+			for(int i = tBigTagsRight.size()-1; i >=0 ; i--){
+				if(tBigTagsRight.get(i).getAuthority() != 0){
+					tBigTagsRight.remove(i);
+					tTagIdsRight.remove(i);
+				}
+			}
+		}else if(!tCurUserName.equals(spaceOwner)){						//has logged in but not self.
+			if(tOwner.getListento().contains(tCurUser)){					//it's team member
+				for(int i = tBigTagsLeft.size()-1; i >=0 ; i--){
+					if(tBigTagsLeft.get(i).getAuthority() != 0 && tBigTagsLeft.get(i).getAuthority() != 2){
+						tBigTagsLeft.remove(i);
+						tTagIdsLeft.remove(i);
+					}
+				}
+				for(int i = tBigTagsRight.size()-1; i >=0 ; i--){
+					if(tBigTagsRight.get(i).getAuthority() != 0 && tBigTagsRight.get(i).getAuthority() != 2){
+						tBigTagsRight.remove(i);
+						tTagIdsRight.remove(i);
+					}
+				}
+			}else{															//it's someone else TODO: consider about case 3 in future.
+				for(int i = tBigTagsLeft.size()-1; i >=0 ; i--){
+					if(tBigTagsLeft.get(i).getAuthority() != 0){
+						tBigTagsLeft.remove(i);
+						tTagIdsLeft.remove(i);
+					}
+				}
+				for(int i = tBigTagsRight.size()-1; i >=0 ; i--){
+					if(tBigTagsRight.get(i).getAuthority() != 0){
+						tBigTagsRight.remove(i);
+						tTagIdsRight.remove(i);
+					}
+				}
+			}
+		}
+		
         List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
         List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
     	for(int i = 0; i < tBigTagsLeft.size(); i++){

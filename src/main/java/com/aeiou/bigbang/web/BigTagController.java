@@ -55,7 +55,19 @@ public class BigTagController {
 		String tTagStr = tLayout.substring(0, p);
 		String tSizeStr = tLayout.substring(p+1);
 		StringBuilder tStrB = new StringBuilder();
-		tStrB.append(tTagStr).append("¯").append("admin".equals(tCurName) ? ("¶" + bigTag.getTagName()) : bigTag.getTagName());
+		tStrB.append(tTagStr).append("¯");
+		if("admin".equals(tCurName) || "administrator".equals(tCurName)){
+			tStrB.append("¶");
+		}
+		tStrB.append(bigTag.getTagName());
+		if(bigTag.getAuthority() == 1){
+			tStrB.append("¶");
+		}else if(bigTag.getAuthority() == 2){
+			tStrB.append("");
+		}else if(bigTag.getAuthority() == 3){
+			tStrB.append("†");
+		}
+	
 		tStrB.append("™").append(tSizeStr).append("¯").append("8");
 		tUserAccount.setLayout(tStrB.toString());
 		tUserAccount.persist();

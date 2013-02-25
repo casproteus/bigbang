@@ -65,6 +65,8 @@
         <spring:message code="global_menu_accountsManage" var="accountsManage_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(accountsManage_message)}" src="${account_img_url}" title="${fn:escapeXml(accountsManage_message)}" />
       </a>
+      
+  	  <util:theme/>
     </c:if>
     
   </util:panel>

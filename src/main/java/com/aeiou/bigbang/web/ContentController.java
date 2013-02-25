@@ -27,7 +27,10 @@ public class ContentController {
 	
 	void populateEditForm(Model uiModel, Content content) {
         uiModel.addAttribute("content", content);
-        uiModel.addAttribute("bigtags", BigTag.findTagsByPublisher("admin", 0, 1000));
+        List<BigTag> tCommontags = new ArrayList<BigTag>();
+        tCommontags.addAll(BigTag.findTagsByPublisher("administrator", 0, 10));
+        tCommontags.addAll(BigTag.findTagsByPublisher("admin", 0, 200));
+        uiModel.addAttribute("bigtags", tCommontags);
         
         //tag in private space can be leave as null;
         List<BigTag> tList_Tag = new ArrayList<BigTag>();

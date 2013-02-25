@@ -67,6 +67,7 @@ public class BigTag {
     	
     	//first fetch out all admin's tags.
     	tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", "admin").getResultList());
+    	tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", "administrator").getResultList());
         //if displaying public page, then tListFR is enough for return
     	if (pOwnerName == null || "admin".equals(pOwnerName))
             return tListFR;
@@ -88,12 +89,12 @@ public class BigTag {
             	if("admin".equals(tPublisher.getName()))
             		continue;
             	
-            	List<BigTag> tTagListOfListenedPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type", BigTag.class).setParameter("type", tPublisher.getName()).getResultList();
+            	List<BigTag> tTagListOfListenedPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type AND o.authority = 0", BigTag.class).setParameter("type", tPublisher.getName()).getResultList();
             	//remove the duplicated ones.
-            	for(int i2 = 0; i2 < tTagListOfListenedPublisher.size(); i2++){
-            		String tTagName = tTagListOfListenedPublisher.get(i2).getTagName();
+            	for(int j = 0; j < tTagListOfListenedPublisher.size(); j++){
+            		String tTagName = tTagListOfListenedPublisher.get(j).getTagName();
             		if(!tListOfTagNames.contains(tTagName)){
-            			tListFR.add(tTagListOfListenedPublisher.get(i2));
+            			tListFR.add(tTagListOfListenedPublisher.get(j));
             			tListOfTagNames.add(tTagName);
             		}
             	}

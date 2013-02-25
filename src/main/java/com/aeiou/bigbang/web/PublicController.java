@@ -1,7 +1,6 @@
 package com.aeiou.bigbang.web;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -9,7 +8,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hsqldb.lib.ArrayUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -93,7 +91,7 @@ public class PublicController{
     	    	tBigTagsLeft.add(tBigTags.get(j));
     	    	tTagIdsLeft.add(tTagIds.get(j));
     	    	tAryNumStrsLeft[j] = "8";
-    	    	if("admin".equals(tTag.getType())){
+    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType())){
     	    		tStrB.append('¶');
     	    	}
     	    	tStrB.append(tTag.getTagName());
@@ -112,7 +110,7 @@ public class PublicController{
     			tBigTagsRight.add(tBigTags.get(j));
     	    	tTagIdsRight.add(tTagIds.get(j));
     	    	tAryNumStrsRight[j - tSize/2] = "8";
-    	    	if("admin".equals(tTag.getType())){
+    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType())){
     	    		tStrB.append('¶');
     	    	}
     	    	tStrB.append(tTag.getTagName());
@@ -323,7 +321,7 @@ public class PublicController{
      */
     @RequestMapping(params = "relayouttype", produces = "text/html")
     public String relayout(@RequestParam(value = "relayouttype", required = true) String relayouttype, 
-    		@RequestParam(value = "tagId", required = true) Long tagId, Model uiModel) {
+    		@RequestParam(value = "tagId", required = true) Long tagId, HttpServletRequest request, Model uiModel) {
     	
     	String tOwnerName = userContextService.getCurrentUserName();
 		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);
@@ -355,7 +353,7 @@ public class PublicController{
     		tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
 		}
 		//---------adjusting the Sting Arys-------------
-		tTagStr = "admin".equals(tBigTag.getType()) ? "¶"+ tBigTag.getTagName() : tBigTag.getTagName();
+		tTagStr = "admin".equals(tBigTag.getType()) || "administrator".equals(tBigTag.getType())? "¶"+ tBigTag.getTagName() : tBigTag.getTagName();
 		boolean tIsInLeftColumn = false;
 		int tPos;
 		for(tPos = 0; tPos < tAryTagStrsLeft.length; tPos++){
@@ -552,6 +550,38 @@ public class PublicController{
 			tAryNumStrsLeft = tAryNumStrsLeft2;
 			tAryTagStrsRight = tAryTagStrsRight2;
 			tAryNumStrsRight = tAryNumStrsRight2;
+		}else if("list_size".equals(relayouttype)){
+			String[] tAry = request.getParameterValues("j_username");
+			if(tAry == null || tAry.length ==0)
+				tAry = new String[]{"8"};			
+			String tNewSize = tAry[0];
+			int tList_size = Integer.parseInt(tNewSize);
+			if(tList_size < 0)
+				tNewSize = "8";
+			if(tList_size > 200)
+				tNewSize = "200";						//validate the parameters.
+			
+			if(tIsInLeftColumn){
+				String[] tAryNumStrsLeft2 = new String[tAryNumStrsLeft.length];
+				for(int j = 0; j < tAryTagStrsLeft.length; j++){
+					if(j == tPos){
+						tAryNumStrsLeft2[j] = tNewSize;
+					}else{
+						tAryNumStrsLeft2[j] = tAryNumStrsLeft[j];
+					}
+				}
+				tAryNumStrsLeft = tAryNumStrsLeft2;
+			}else{
+				String[] tAryNumStrsRight2 = new String[tAryNumStrsRight.length];
+				for(int j = 0; j < tAryTagStrsRight.length; j++){
+					if(j == tPos){
+						tAryNumStrsRight2[j] = tNewSize;
+					}else{
+						tAryNumStrsRight2[j] = tAryNumStrsRight[j];
+					}
+				}
+				tAryNumStrsRight = tAryNumStrsRight2;
+			}
 		}
 		
 		//----------------------

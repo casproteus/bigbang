@@ -1,6 +1,6 @@
 use:
-1/goto: http://localhost/useraccounts/ -> generate admin user. -> then login with admin -> then added tags for default display.
-2/
+1/goto: http://localhost/useraccounts/ -> generate admin user. -> then login as admin -> then added tags for default display.
+2/generate a user administrator. -> then login as administrator -> then create a "unclassified tag with this administrator. (it will be the default one when creating content).
 
 dev:
 1/I used ... as other tag (for not classified content., and have to find a way to replace ... with I18n. because this field can not be null or empty, and how to use a string to match it our so I can make it not display in personal page.

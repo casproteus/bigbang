@@ -71,10 +71,17 @@ public class BigUtil {
     	for(int i = 0; i < tAryTagStrs.length; i++){
 //    		System.out.println("i:" + i);
 //    		System.out.println("tAryTagStrs[i]:" + tAryTagStrs[i]);
+    		if(tAryTagStrs[i].endsWith("¶") ||tAryTagStrs[i].endsWith("") ||tAryTagStrs[i].endsWith("†"))
+    			tAryTagStrs[i] = tAryTagStrs[i].substring(0, tAryTagStrs[i].length() - 1);
+    		
     		if(tAryTagStrs[i].startsWith("¶")){
     			BigTag tTag = BigTag.findTagByNameAndOwner(tAryTagStrs[i].substring(1), "admin");
     			if(tTag != null)
     				tBigTags.add(tTag);
+    			else{
+    				tTag = BigTag.findTagByNameAndOwner(tAryTagStrs[i].substring(1), "administrator");
+    				tBigTags.add(tTag);
+    			}
     		}else{
     			BigTag tTag = BigTag.findTagByNameAndOwner(tAryTagStrs[i], pOwnerName);
     			if(tTag != null)

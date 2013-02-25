@@ -130,7 +130,7 @@ public class Content {
         EntityManager tEntityManager = entityManager();
         Set<UserAccount> tTeamSet = pOwner.getListento();	//if tTeamSet is empty, then can not use it in parameter. will cause jpql exception.
         TypedQuery<Content> tQuery = null;
-        if ("admin".equals(pTag.getType())) {	//for common tags.
+        if ("admin".equals(pTag.getType()) || "administrator".equals(pTag.getType())) {	//for common tags.
         	if(tTeamSet.isEmpty()){					//has no team 
         		tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner) and (o.authority in :pAuthSet) ORDER BY o.id DESC", Content.class);
         		tQuery = tQuery.setParameter("pTag", pTag);
@@ -176,7 +176,7 @@ public class Content {
         EntityManager tEntityManager = entityManager();
         Set<UserAccount> tTeamSet = pOwner.getListento();	//if tTeamSet is empty, then can not use it in parameter. will cause jpql exception.
         TypedQuery<Long> tQuery = null;
-        if ("admin".equals(pTag.getType())) {	//for common tags.
+        if ("admin".equals(pTag.getType()) || "administrator".equals(pTag.getType())) {	//for common tags.
         	if(tTeamSet.isEmpty()){
         		tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner) and (o.authority in :pAuthSet)", Long.class);
         		tQuery = tQuery.setParameter("pTag", pTag);

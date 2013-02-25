@@ -1,4 +1,5 @@
-<jsp:root xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:spring="http://www.springframework.org/tags" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+<jsp:root xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
+  xmlns:spring="http://www.springframework.org/tags" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
   <jsp:output omit-xml-declaration="yes" />
   
   <jsp:directive.attribute name="tagId" type="java.lang.Long" required="true" rtexprvalue="true" description="for Indicating which tag need to be adjusted." />
@@ -7,68 +8,89 @@
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
 
   <c:if test="${empty render or render}">
-    
-    <spring:url value="/public" var="adjustUrl">
-		<spring:param name="relayouttype" value="close"/>
+     <spring:url value="/public" var="listSize_url">
+		<spring:param name="relayouttype" value="list_size"/>
 		<spring:param name="tagId" value="${tagId}"/>
-    </spring:url>
-    <a href="${adjustUrl}">
-        <spring:url value="/resources/images/close.png" var="direction_img_close" />
-        <spring:message arguments="${typeName}" code="relayout_move_left" var="add_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_close}" title="${fn:escapeXml(add_message)}" />
-    </a>
-    
-    <c:out value=" | " />
-    
-    <spring:url value="/public" var="adjustUrl">
-		<spring:param name="relayouttype" value="left"/>
-		<spring:param name="tagId" value="${tagId}"/>
-    </spring:url>
-    <a href="${adjustUrl}">
-        <spring:url value="/resources/images/left.png" var="direction_img_left" />
-        <spring:message arguments="${typeName}" code="relayout_move_left" var="add_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_left}" title="${fn:escapeXml(add_message)}" />
-    </a>
-    
-    <c:out value="  " />
-    
-    <spring:url value="/public" var="adjustUrl">
-		<spring:param name="relayouttype" value="up"/>
-		<spring:param name="tagId" value="${tagId}"/>
-    </spring:url>
-    <a href="${adjustUrl}">
-        <spring:url value="/resources/images/up.png" var="direction_img_up" />
-        <spring:message arguments="${typeName}" code="relayout_move_up" var="add_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_up}" title="${fn:escapeXml(add_message)}" />
-    </a>
-    
-    <c:out value="  " />
-    
-    <spring:url value="/public" var="adjustUrl">
-		<spring:param name="relayouttype" value="down"/>
-		<spring:param name="tagId" value="${tagId}"/>
-    </spring:url>
-    <a href="${adjustUrl}">
-        <spring:url value="/resources/images/down.png" var="direction_img_down" />
-        <spring:message arguments="${typeName}" code="relayout_move_down" var="add_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_down}" title="${fn:escapeXml(add_message)}" />
-    </a>
-    
-    <c:out value="  " />
-    
-    <spring:url value="/public" var="adjustUrl">
-		<spring:param name="relayouttype" value="right"/>
-		<spring:param name="tagId" value="${tagId}"/>
-    </spring:url>
-    <a href="${adjustUrl}">
-        <spring:url value="/resources/images/right.png" var="direction_img_right" />
-        <spring:message arguments="${typeName}" code="relayout_move_left" var="add_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_right}" title="${fn:escapeXml(add_message)}" />
-    </a>
-    
-    <c:out value=" | " />
-    
-    <spring:message code="relayout_list_size" htmlEscape="false" />
-    <c:out value="${list_size} " />
+     </spring:url>
+	 <form action="${listSize_url}"  method="POST" style="text-align: left">
+	    <spring:url value="/public" var="adjustUrl">
+			<spring:param name="relayouttype" value="close"/>
+			<spring:param name="tagId" value="${tagId}"/>
+	    </spring:url>
+	    <a href="${adjustUrl}">
+	        <spring:url value="/resources/images/close.png" var="direction_img_close" />
+	        <spring:message arguments="${typeName}" code="relayout_move_left" var="add_message" htmlEscape="false" />
+	        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_close}" title="${fn:escapeXml(add_message)}" />
+	    </a>
+	    
+	    <c:out value=" | " />
+	    
+	    <spring:url value="/public" var="adjustUrl">
+			<spring:param name="relayouttype" value="left"/>
+			<spring:param name="tagId" value="${tagId}"/>
+	    </spring:url>
+	    <a href="${adjustUrl}">
+	        <spring:url value="/resources/images/left.png" var="direction_img_left" />
+	        <spring:message arguments="${typeName}" code="relayout_move_left" var="add_message" htmlEscape="false" />
+	        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_left}" title="${fn:escapeXml(add_message)}" />
+	    </a>
+	    
+	    <c:out value="  " />
+	    
+	    <spring:url value="/public" var="adjustUrl">
+			<spring:param name="relayouttype" value="up"/>
+			<spring:param name="tagId" value="${tagId}"/>
+	    </spring:url>
+	    <a href="${adjustUrl}">
+	        <spring:url value="/resources/images/up.png" var="direction_img_up" />
+	        <spring:message arguments="${typeName}" code="relayout_move_up" var="add_message" htmlEscape="false" />
+	        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_up}" title="${fn:escapeXml(add_message)}" />
+	    </a>
+	    
+	    <c:out value="  " />
+	    
+	    <spring:url value="/public" var="adjustUrl">
+			<spring:param name="relayouttype" value="down"/>
+			<spring:param name="tagId" value="${tagId}"/>
+	    </spring:url>
+	    <a href="${adjustUrl}">
+	        <spring:url value="/resources/images/down.png" var="direction_img_down" />
+	        <spring:message arguments="${typeName}" code="relayout_move_down" var="add_message" htmlEscape="false" />
+	        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_down}" title="${fn:escapeXml(add_message)}" />
+	    </a>
+	    
+	    <c:out value="  " />
+	    
+	    <spring:url value="/public" var="adjustUrl">
+			<spring:param name="relayouttype" value="right"/>
+			<spring:param name="tagId" value="${tagId}"/>
+	    </spring:url>
+	    <a href="${adjustUrl}">
+	        <spring:url value="/resources/images/right.png" var="direction_img_right" />
+	        <spring:message arguments="${typeName}" code="relayout_move_left" var="add_message" htmlEscape="false" />
+	        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_right}" title="${fn:escapeXml(add_message)}" />
+	    </a>
+	    
+	    <c:out value=" | " />
+	    
+	    <spring:message code="relayout_list_size" htmlEscape="false" />
+	    
+	    <input id="j_username" type='text' name='j_username' value="${list_size}" style="width:20px;height:12px" />
+	    <spring:message code="security_login_form_name_message" var="name_msg" htmlEscape="false" />
+	    <script type="text/javascript">
+	          <c:set var="sec_name_msg">
+	            <spring:escapeBody javaScriptEscape="true">${name_msg}</spring:escapeBody>
+	          </c:set>
+	          Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_username", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_name_msg}", required : true}})); 
+	      </script>
+	    <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
+    	
+    	<spring:message code="relayout_submit" var="submit" htmlEscape="false" />
+    	<button id="proceed" type="submit" value="submit" title="${fn:escapeXml(submit)}" style="width:18px;height:16px;vertical-align: top; border: 0px;">
+    		<spring:url value="/resources/images/submit.png" var="direction_img_submit" />
+	        <img alt="${fn:escapeXml(submit)}" src="${direction_img_submit}" title="${fn:escapeXml(submit)}" />
+    	</button>
+		<!-- <button type="button" onclick="JavaScript:alert('Once upon a time, there lived a princess and a frog. They both got married and lived happily ever after. The end.')"/> -->
+	</form>
   </c:if>
 </jsp:root>

@@ -91,10 +91,18 @@ public class PublicController{
     	    	tBigTagsLeft.add(tBigTags.get(j));
     	    	tTagIdsLeft.add(tTagIds.get(j));
     	    	tAryNumStrsLeft[j] = "8";
-    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType())){
+    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType()))
     	    		tStrB.append('¶');
-    	    	}
+    	    	
     	    	tStrB.append(tTag.getTagName());
+    	    	
+    	    	if(tTag.getAuthority() == 1)
+    	    		tStrB.append("¶");
+    	    	if(tTag.getAuthority() == 2)
+    	    		tStrB.append("");
+    	    	if(tTag.getAuthority() == 3)
+    	    		tStrB.append("†");
+    	    	
     	    	tStrB_Num.append(tAryNumStrsLeft[j]);
     	    	if(j + 1 < tSize/2){
     	    		tStrB.append('¯');
@@ -110,10 +118,18 @@ public class PublicController{
     			tBigTagsRight.add(tBigTags.get(j));
     	    	tTagIdsRight.add(tTagIds.get(j));
     	    	tAryNumStrsRight[j - tSize/2] = "8";
-    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType())){
+    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType()))
     	    		tStrB.append('¶');
-    	    	}
+    	    	
     	    	tStrB.append(tTag.getTagName());
+
+    	    	if(tTag.getAuthority() == 1)
+    	    		tStrB.append("¶");
+    	    	if(tTag.getAuthority() == 2)
+    	    		tStrB.append("");
+    	    	if(tTag.getAuthority() == 3)
+    	    		tStrB.append("†");
+    	    	
     	    	tStrB_Num.append(tAryNumStrsRight[j - tSize/2]);
     	    	if(j + 1 < tSize){
     	    		tStrB.append('¯');
@@ -353,19 +369,33 @@ public class PublicController{
     		tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
 		}
 		//---------adjusting the Sting Arys-------------
+		//to find out the column and position
 		tTagStr = "admin".equals(tBigTag.getType()) || "administrator".equals(tBigTag.getType())? "¶"+ tBigTag.getTagName() : tBigTag.getTagName();
 		boolean tIsInLeftColumn = false;
 		int tPos;
 		for(tPos = 0; tPos < tAryTagStrsLeft.length; tPos++){
-			if(tTagStr.equals(tAryTagStrsLeft[tPos])){
-				tIsInLeftColumn = true;
-				break;
+			if(tAryTagStrsLeft[tPos].startsWith(tTagStr)){
+				if(tAryTagStrsLeft[tPos].length() == tTagStr.length()){
+					tIsInLeftColumn = true;
+					break;
+				}else if(tAryTagStrsLeft[tPos].length() == tTagStr.length() + 1 ){
+					if(tAryTagStrsLeft[tPos].endsWith("¶") || tAryTagStrsLeft[tPos].endsWith("") || tAryTagStrsLeft[tPos].endsWith("†")){
+						tIsInLeftColumn = true;
+						break;
+					}
+				}
 			}
 		}
 		if(!tIsInLeftColumn){
 			for(tPos = 0; tPos < tAryTagStrsRight.length; tPos++){
-				if(tTagStr.equals(tAryTagStrsRight[tPos])){
-					break;
+				if(tAryTagStrsRight[tPos].startsWith(tTagStr)){
+					if(tAryTagStrsRight[tPos].length() == tTagStr.length()){
+						break;
+					}else if(tAryTagStrsRight[tPos].length() == tTagStr.length() + 1 ){
+						if(tAryTagStrsRight[tPos].endsWith("¶") || tAryTagStrsRight[tPos].endsWith("") || tAryTagStrsRight[tPos].endsWith("†")){
+							break;
+						}
+					}
 				}
 			}
 		}	//now know the column and position.
@@ -408,12 +438,14 @@ public class PublicController{
 			String[] tAryTagStrsLeft2 = new String[tAryTagStrsLeft.length + 1];
 			String[] tAryNumStrsLeft2 = new String[tAryNumStrsLeft.length + 1];
 			for(int j = 0; j < tAryTagStrsLeft2.length; j++){
-				if(j == tAryNumStrsLeft.length){
-					tAryTagStrsLeft2[j] = tAryTagStrsRight[tPos];
-					tAryNumStrsLeft2[j] = tAryNumStrsRight[tPos];
-				}else if(j < tPos){
-					tAryTagStrsLeft2[j] = tAryTagStrsLeft[j];
-					tAryNumStrsLeft2[j] = tAryNumStrsLeft[j];
+				if(j < tPos){
+					if(j < tAryNumStrsLeft.length){
+						tAryTagStrsLeft2[j] = tAryTagStrsLeft[j];
+						tAryNumStrsLeft2[j] = tAryNumStrsLeft[j];
+					}else{
+						tAryTagStrsLeft2[j] = tAryTagStrsRight[tPos];
+						tAryNumStrsLeft2[j] = tAryNumStrsRight[tPos];
+					}
 				}else if(j == tPos){
 					tAryTagStrsLeft2[j] = tAryTagStrsRight[j];
 					tAryNumStrsLeft2[j] = tAryNumStrsRight[j];
@@ -532,12 +564,14 @@ public class PublicController{
 			String[] tAryTagStrsRight2 = new String[tAryTagStrsRight.length + 1];
 			String[] tAryNumStrsRight2 = new String[tAryNumStrsRight.length + 1];
 			for(int j = 0; j < tAryTagStrsRight2.length; j++){
-				if(j == tAryTagStrsRight.length){
-					tAryTagStrsRight2[j] = tAryTagStrsLeft[tPos];
-					tAryNumStrsRight2[j] = tAryNumStrsLeft[tPos];
-				}else if(j < tPos){
-					tAryTagStrsRight2[j] = tAryTagStrsRight[j];
-					tAryNumStrsRight2[j] = tAryNumStrsRight[j];
+				if(j < tPos){
+					if(j < tAryTagStrsRight.length){
+						tAryTagStrsRight2[j] = tAryTagStrsRight[j];
+						tAryNumStrsRight2[j] = tAryNumStrsRight[j];
+					}else{
+						tAryTagStrsRight2[j] = tAryTagStrsLeft[tPos];
+						tAryNumStrsRight2[j] = tAryNumStrsLeft[tPos];
+					}
 				}else if(j == tPos){
 					tAryTagStrsRight2[j] = tAryTagStrsLeft[j];
 					tAryNumStrsRight2[j] = tAryNumStrsLeft[j];

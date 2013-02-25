@@ -96,17 +96,16 @@ public class PersonalController{
     	    	tBigTagsLeft.add(tBigTags.get(j));
     	    	tTagIdsLeft.add(tTagIds.get(j));
     	    	tAryNumStrsLeft[j] = "8";
-    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType())){
+    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType()))
     	    		tStrB.append('¶');
-    	    	}
+    	    	
     	    	tStrB.append(tTag.getTagName());
-    			if(tTag.getAuthority() == 1){
+    			if(tTag.getAuthority() == 1)
     				tStrB.append("¶");
-    			}else if(tTag.getAuthority() == 2){
+    			else if(tTag.getAuthority() == 2)
     				tStrB.append("");
-    			}else if(tTag.getAuthority() == 3){
+    			else if(tTag.getAuthority() == 3)
     				tStrB.append("†");
-    			}
     	    	
     	    	tStrB_Num.append(tAryNumStrsLeft[j]);
     	    	if(j + 1 < tSize/2){
@@ -123,17 +122,16 @@ public class PersonalController{
     			tBigTagsRight.add(tBigTags.get(j));
     	    	tTagIdsRight.add(tTagIds.get(j));
     	    	tAryNumStrsRight[j - tSize/2] = "8";
-    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType())){
+    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType()))
     	    		tStrB.append('¶');
-    	    	}
+    	    	
     	    	tStrB.append(tTag.getTagName());
-    			if(tTag.getAuthority() == 1){
+    			if(tTag.getAuthority() == 1)
     				tStrB.append("¶");
-    			}else if(tTag.getAuthority() == 2){
+    			else if(tTag.getAuthority() == 2)
     				tStrB.append("");
-    			}else if(tTag.getAuthority() == 3){
+    			else if(tTag.getAuthority() == 3)
     				tStrB.append("†");
-    			}
     			
     	    	tStrB_Num.append(tAryNumStrsRight[j - tSize/2]);
     	    	if(j + 1 < tSize){

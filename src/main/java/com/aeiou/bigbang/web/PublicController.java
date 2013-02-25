@@ -408,7 +408,7 @@ public class PublicController{
 			String[] tAryTagStrsLeft2 = new String[tAryTagStrsLeft.length + 1];
 			String[] tAryNumStrsLeft2 = new String[tAryNumStrsLeft.length + 1];
 			for(int j = 0; j < tAryTagStrsLeft2.length; j++){
-				if(j == tAryNumStrsLeft2.length){
+				if(j == tAryNumStrsLeft.length){
 					tAryTagStrsLeft2[j] = tAryTagStrsRight[tPos];
 					tAryNumStrsLeft2[j] = tAryNumStrsRight[tPos];
 				}else if(j < tPos){

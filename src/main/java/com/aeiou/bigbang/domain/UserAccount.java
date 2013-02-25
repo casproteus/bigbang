@@ -46,8 +46,11 @@ public class UserAccount {
     private int balance;
 
     public static com.aeiou.bigbang.domain.UserAccount findUserAccountByName(String pUserName) {
-        List tList = entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE o.name = :tname", UserAccount.class).setParameter("tname", pUserName).getResultList();
-        if (tList != null && tList.size() == 1) return (UserAccount) tList.get(0); else return null;
+        List tList = entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)", UserAccount.class).setParameter("tname", pUserName).getResultList();
+        if (tList != null && tList.size() == 1)
+        	return (UserAccount) tList.get(0);
+        else
+        	return null;
     }
 
     public String toString() {

@@ -10,7 +10,7 @@
   		<spring:url value="/${pageContext['request'].userPrincipal.name}" var="home"/>
   	 </c:when>
   	 <c:otherwise>
-  		<spring:url value="/" var="home"/>
+  		<spring:url value="/useraccounts?form" var="home"/>
   	 </c:otherwise>
   </c:choose>
   <span>
@@ -20,7 +20,7 @@
       		<spring:message code="button_myhome"/>
 	  	 </c:when>
 	  	 <c:otherwise>
-      		<spring:message code="button_home"/>
+      		<spring:message code="button_signup"/>
 	  	 </c:otherwise>
 	  </c:choose>
     </a>

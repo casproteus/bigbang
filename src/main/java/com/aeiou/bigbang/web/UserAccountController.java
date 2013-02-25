@@ -40,10 +40,15 @@ public class UserAccountController {
             populateEditForm(uiModel, userAccount);
             return "useraccounts/create";
         }
-        uiModel.asMap().clear();
-        userAccount.setBalance(1000);
-        userAccount.persist();
-        return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
+        UserAccount tUserAccount = UserAccount.findUserAccountByName(userAccount.getName());
+        userAccount.setBalance(1000);// the 1000 in view was lost when transfered from view to back end because the field was set as disabled.
+        if(tUserAccount == null){
+	        uiModel.asMap().clear();
+	        userAccount.persist();
+	        return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
+        }else{
+        	return "useraccounts/create";
+        }
     }
 
 	@RequestMapping(produces = "text/html")

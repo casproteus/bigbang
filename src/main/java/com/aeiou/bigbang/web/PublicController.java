@@ -192,7 +192,7 @@ public class PublicController{
     		spaceOwner = BigUtil.getUTFString(spaceOwner);
     		tOwner = UserAccount.findUserAccountByName(spaceOwner);
     		if(tOwner == null){
-    			return "";
+    			return null;
     		}
     	}
     	if (page != null || size != null) {

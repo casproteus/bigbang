@@ -47,6 +47,7 @@ public class UserAccountController {
 	        userAccount.persist();
 	        return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
         }else{
+        	uiModel.addAttribute("create_error", "abc");
         	return "useraccounts/create";
         }
     }

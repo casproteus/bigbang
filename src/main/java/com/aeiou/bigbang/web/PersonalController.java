@@ -41,7 +41,7 @@ public class PersonalController{
     		spaceOwner = BigUtil.getUTFString(spaceOwner);
     		tOwner = UserAccount.findUserAccountByName(spaceOwner); //bet it might still not UTF8 encoded.
     		if(tOwner == null)
-    			return null;//TODO: add a page showing something like this account does not exist!
+    			return null;
     	}
 
 		String tCurUserName = userContextService.getCurrentUserName();				//the current user.

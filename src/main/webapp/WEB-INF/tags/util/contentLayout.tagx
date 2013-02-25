@@ -19,7 +19,7 @@
 	    </spring:url>
 	    <a href="${adjustUrl}">
 	        <spring:url value="/resources/images/close.png" var="direction_img_close" />
-	        <spring:message arguments="${typeName}" code="relayout_move_left" var="add_message" htmlEscape="false" />
+	        <spring:message arguments="${typeName}" code="relayout_close" var="add_message" htmlEscape="false" />
 	        <img alt="${fn:escapeXml(add_message)}" src="${direction_img_close}" title="${fn:escapeXml(add_message)}" />
 	    </a>
 	    

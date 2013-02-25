@@ -31,6 +31,7 @@ privileged aspect UserAccountDataOnDemand_Roo_DataOnDemand {
         setName(obj, index);
         setPassword(obj, index);
         setPrice(obj, index);
+        setTheme(obj, index);
         return obj;
     }
     
@@ -70,6 +71,11 @@ privileged aspect UserAccountDataOnDemand_Roo_DataOnDemand {
             price = 9;
         }
         obj.setPrice(price);
+    }
+    
+    public void UserAccountDataOnDemand.setTheme(UserAccount obj, int index) {
+        int theme = index;
+        obj.setTheme(theme);
     }
     
     public UserAccount UserAccountDataOnDemand.getSpecificUserAccount(int index) {

@@ -72,4 +72,12 @@ privileged aspect UserAccount_Roo_JavaBean {
         this.balance = balance;
     }
     
+    public int UserAccount.getTheme() {
+        return this.theme;
+    }
+    
+    public void UserAccount.setTheme(int theme) {
+        this.theme = theme;
+    }
+    
 }

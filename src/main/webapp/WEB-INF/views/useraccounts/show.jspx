@@ -11,5 +11,6 @@
         <field:display field="price" id="s_com_aeiou_bigbang_domain_UserAccount_price" object="${useraccount}" z="V9iLJpoHt4wG14hkxUksOkB+2/8="/>
         <field:display field="layout" id="s_com_aeiou_bigbang_domain_UserAccount_layout" object="${useraccount}" z="NS81Ys0LF+/4bke4iyyfgc/JtA8="/>
         <field:display field="balance" id="s_com_aeiou_bigbang_domain_UserAccount_balance" object="${useraccount}" z="F4Qfd0bIjC8dyXhV+XEtJcBIgDs="/>
+        <field:display field="theme" id="s_com_aeiou_bigbang_domain_UserAccount_theme" object="${useraccount}" z="Jn9qHI1X5Qh1bKfMY/7yfCkAmzU="/>
     </page:Bigshow>
 </div>

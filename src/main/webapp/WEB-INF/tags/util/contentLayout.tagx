@@ -86,7 +86,7 @@
 	    <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
     	
     	<spring:message code="relayout_submit" var="submit" htmlEscape="false" />
-    	<button id="proceed" type="submit" value="submit" title="${fn:escapeXml(submit)}" style="width:18px;height:16px;vertical-align: top; border: 0px;">
+    	<button id="proceed" type="submit" value="submit" title="${fn:escapeXml(submit)}" style="width:22px;height:16px;vertical-align: top; cursor:pointer; border: 0px; ">
     		<spring:url value="/resources/images/submit.png" var="direction_img_submit" />
 	        <img alt="${fn:escapeXml(submit)}" src="${direction_img_submit}" title="${fn:escapeXml(submit)}" />
     	</button>

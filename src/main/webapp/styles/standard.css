@@ -1,7 +1,7 @@
 /* main elements */
 
 body,div,td {
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif, SimSun;
 	font-size: 12px;
 	color: #666;
 }
@@ -182,7 +182,7 @@ h4 {
 }
 
 a {
-	text-decoration: underline;
+	text-decoration: none;
 	font-size: 12px;
 }
 
@@ -205,6 +205,7 @@ a:link {
 
 a:hover {
 	color: #456314;
+	text-decoration: underline;
 }
 
 a:active {
@@ -266,6 +267,10 @@ table thead {
 }
 
 table a:link {color: #303030;}
+table a:hover {
+	color: #741717;
+	text-decoration: underline;
+}
 
 .utilbox {width: 18px;}
 .namebox {

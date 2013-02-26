@@ -24,7 +24,7 @@ body {
 
 	/* fix max-width incompatibility in IE6 */
 	width:expression(document.body.clientWidth > 800? "800px": "auto" );
-	
+
 	overflow:hidden;
 	display:block;
 }
@@ -37,12 +37,12 @@ body {
 }
 
 #menu {
-    background: #eee;
-  	position:relative;
-  	float:right;  	
-  	left:0px;
-  	width:220px;
-  	margin-left:15px;
+	background: #eee;
+	position:relative;
+	float:left;
+	left:0px;
+	width:220px;
+	margin-right:15px;
 }
 
 #menu ul{
@@ -90,18 +90,22 @@ body {
 	border-top:1px solid #999999;
 }
 
-#footer .new {
-	float:left;
+.new {
+	float:right;
 }
 
 #footer a:link {color: #7db223;}
 
 .quicklinks {
-	clear:both; 
+	clear:both;
 	padding-bottom: 15px
 }
 .quicklinks span {
 	float: right;
+}
+
+table.navigation {
+	border: 0px;
 }
 
 label {
@@ -140,8 +144,8 @@ div .box {
 
 /* menu elements*/
 
-a.menu, a.menu:link, a.menu:visited {display:block; width:150px; height:25px;} 
-	
+a.menu, a.menu:link, a.menu:visited {display:block; width:150px; height:25px;}
+
 /* text styles */
 
 h1,h2,h3 {
@@ -264,6 +268,10 @@ table thead {
 table a:link {color: #303030;}
 
 .utilbox {width: 18px;}
+.namebox {
+	width: 50px;
+	text-align: right;
+}
 
 caption {
 	caption-side: top;
@@ -324,6 +332,9 @@ fieldset th {
 	border:none;
 }
 
+.submit {
+	text-align: center;
+}
 .submit input {
 	border: 1px solid #BBBBBB;
 	color:#777777;
@@ -366,4 +377,14 @@ fieldset th {
 .flag {
 	height: 11px;
 	width: 16px;
+}
+
+.tWireless{
+	border: 0px;
+}
+.nopaddingleft{
+	padding-left: 0px;
+}
+.nopaddingright{
+	padding-right: 0px;
 }

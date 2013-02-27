@@ -3,10 +3,13 @@ package com.aeiou.bigbang.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.MessageSource;
+
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 
 public class BigUtil {
+	
 	public static String getUTFString(String pString){
 		byte tByteAry[];
 		try{
@@ -90,4 +93,29 @@ public class BigUtil {
     	}
     	return tBigTags;
     }
+	
+	public static void addDefaultUserTags(MessageSource messageSource, String pType){BigTag tBigTag1 = new BigTag();
+	    tBigTag1.setTagName(messageSource.getMessage("admin_suggested_tag1", new Object[0], null));
+	    tBigTag1.setType(pType);
+	    tBigTag1.setAuthority(0);
+	    tBigTag1.persist();
+	    
+	    BigTag tBigTag2 = new BigTag();
+	    tBigTag2.setTagName(messageSource.getMessage("admin_suggested_tag2", new Object[0], null));
+	    tBigTag2.setType(pType);
+	    tBigTag2.setAuthority(0);
+	    tBigTag2.persist();
+	    
+	    BigTag tBigTag3 = new BigTag();
+	    tBigTag3.setTagName(messageSource.getMessage("admin_suggested_tag3", new Object[0], null));
+	    tBigTag3.setType(pType);
+	    tBigTag3.setAuthority(0);
+	    tBigTag3.persist();
+	    
+	    BigTag tBigTag4 = new BigTag();
+	    tBigTag4.setTagName(messageSource.getMessage("admin_suggested_tag4", new Object[0], null));
+	    tBigTag4.setType(pType);
+	    tBigTag4.setAuthority(0);
+	    tBigTag4.persist();
+	}
 }

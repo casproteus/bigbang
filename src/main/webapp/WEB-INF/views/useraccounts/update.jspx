@@ -9,8 +9,8 @@
         <field:input field="email" id="c_com_aeiou_bigbang_domain_UserAccount_email" validationMessageCode="field_invalid_email" z="ceq1TElqZB2WL71Mrwy7m1UNg0o="/>
         <field:input field="description" id="c_com_aeiou_bigbang_domain_UserAccount_description" z="IHXfmTHIFzCFUY3TARmFZXUT838="/>
         <field:input field="price" id="c_com_aeiou_bigbang_domain_UserAccount_price" max="9" min="0" required="true" z="NNXWMQKTCd/lmw4Q/AvzmkSI5cs="/>
-        <field:input field="layout" id="c_com_aeiou_bigbang_domain_UserAccount_layout" z="DZP4oppDs9iitXlz6zafXsQ860o="/>
         <c:if test="${pageContext['request'].userPrincipal.name eq 'admin'}">            
+        	<field:input field="layout" id="c_com_aeiou_bigbang_domain_UserAccount_layout" z="DZP4oppDs9iitXlz6zafXsQ860o="/>
         	<field:input field="balance" id="c_com_aeiou_bigbang_domain_UserAccount_balance" required="true" z="iGBZ2hYbTCMyVVJ+abO7tKBIjIM="/>
 		</c:if>
     </form:update>

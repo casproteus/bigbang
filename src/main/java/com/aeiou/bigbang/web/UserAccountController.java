@@ -51,30 +51,29 @@ public class UserAccountController {
 	        uiModel.asMap().clear();
 	        userAccount.persist();
 	        //give some default tags.
-	        List<BigTag> tList = new ArrayList<BigTag>();
 	        BigTag tBigTag1 = new BigTag();
 	        tBigTag1.setTagName(messageSource.getMessage("admin_suggested_tag1", new Object[0], null));
 	        tBigTag1.setType(userAccount.getName());
+	        tBigTag1.setAuthority(0);
 	        tBigTag1.persist();
-	        tList.add(tBigTag1);
 	        
 	        BigTag tBigTag2 = new BigTag();
 	        tBigTag2.setTagName(messageSource.getMessage("admin_suggested_tag2", new Object[0], null));
 	        tBigTag2.setType(userAccount.getName());
+	        tBigTag2.setAuthority(0);
 	        tBigTag2.persist();
-	        tList.add(tBigTag2);
 	        
 	        BigTag tBigTag3 = new BigTag();
 	        tBigTag3.setTagName(messageSource.getMessage("admin_suggested_tag3", new Object[0], null));
 	        tBigTag3.setType(userAccount.getName());
+	        tBigTag3.setAuthority(0);
 	        tBigTag3.persist();
-	        tList.add(tBigTag3);
 	        
 	        BigTag tBigTag4 = new BigTag();
 	        tBigTag4.setTagName(messageSource.getMessage("admin_suggested_tag4", new Object[0], null));
 	        tBigTag4.setType(userAccount.getName());
+	        tBigTag4.setAuthority(0);
 	        tBigTag4.persist();
-	        tList.add(tBigTag4);
 	        
 	        return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
         }else{

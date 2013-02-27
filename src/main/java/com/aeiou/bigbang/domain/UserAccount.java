@@ -55,4 +55,8 @@ public class UserAccount {
     public String toString() {
         return this.getName();
     }
+
+	public static List<UserAccount> findUserAccountEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM UserAccount o ORDER BY o.id DESC", UserAccount.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
 }

@@ -33,10 +33,6 @@ privileged aspect UserAccount_Roo_Jpa_ActiveRecord {
         return entityManager().find(UserAccount.class, id);
     }
     
-    public static List<UserAccount> UserAccount.findUserAccountEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM UserAccount o", UserAccount.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-    }
-    
     @Transactional
     public void UserAccount.persist() {
         if (this.entityManager == null) this.entityManager = entityManager();

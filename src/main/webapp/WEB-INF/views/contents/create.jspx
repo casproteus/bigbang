@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" 
+     xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" 
+     xmlns:spring="http://www.springframework.org/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" version="2.0">
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
-    <table>
+    <table class="tWireless">
         <tr>
-            <td class="tWireless">
+            <td class="tWireless" valign="top">
                 <form:create id="fc_com_aeiou_bigbang_domain_Content" modelAttribute="content" path="/contents" render="${empty dependencies}" z="mZcFXRVgd+YQsRIO+7SoQkhNsmo=">
                     <field:input field="title" id="c_com_aeiou_bigbang_domain_Content_title" required="true" z="KykRIB9kokqjzUlWGTykm0UCgVk="/>
                     <field:input field="sourceURL" id="c_com_aeiou_bigbang_domain_Content_sourceURL" required="true" z="Hk2QDdFCnal0PPA/nrv6B/Kw28U="/>
@@ -18,15 +20,16 @@
                 <form:dependency dependencies="${dependencies}" id="d_com_aeiou_bigbang_domain_Content" render="${not empty dependencies}" z="OIaGm9/s9pNT5CEMnSapCWMx+DY="/>
             </td>
             <td class="tWireless" valign="top" width="450px">
-                <div style="font-weight: bold;"/>
-                <p>Hi Big Editor, Adding some interesting content?</p>
-                <p>Cool! And here's some notes for you:</p>
-                <p>1.Just put down the Title and URL, they will be displayed on both public space and your own space.</p>
-                <p>2.Don't know where is your own space yet? How about this: <a>http://loacalhost/${'tao'}</a>
-                </p>
-                <p>3.What? can not find a tag for your content in public space? OK, please use 'other' for now.</p>
-                <p>4.Sure you can create new tag, you are the big editor! BTW, in your own space, content will be organised with tags you edited.</p>
-                <p>5.Why set as private? Because we thought you may have some content don't others to see yet. Set it private, so only you can see.</p>
+               <util:panel id="title2" title="${title2}">
+				    <p>Hi Big Editor, Adding some interesting content?</p>
+	                <p>Cool! And here's some notes for you:</p>
+	                <p>1.Just put down the Title and URL, they will be displayed on both public space and your own space.</p>
+	                <p>2.Don't know where is your own space yet? How about this: <a>http://ShareTheGoodOnes.com/${pageContext['request'].userPrincipal.name}</a>
+	                </p>
+	                <p>3.What? can not find a tag for your content in public space? OK, please use 'other' for now.</p>
+	                <p>4.Sure you can create new tag, you are the big editor! BTW, in your own space, content will be organised with tags you edited.</p>
+	                <p>5.Why set as private? Because we thought you may have some content don't others to see yet. Set it private, so only you can see.</p>
+			   </util:panel>
             </td>
         </tr>
     </table>

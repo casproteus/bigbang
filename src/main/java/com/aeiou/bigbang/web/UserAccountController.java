@@ -51,7 +51,7 @@ public class UserAccountController {
 	        uiModel.asMap().clear();
 	        userAccount.persist();
 	        //give some default tags.
-	        //BigUtil.addDefaultUserTags(messageSource, userAccount.getName());
+	        BigUtil.addDefaultUserTags(messageSource, userAccount.getName());
 	        
 	        return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
         }else{

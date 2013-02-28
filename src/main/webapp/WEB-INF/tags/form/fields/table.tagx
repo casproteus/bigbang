@@ -81,7 +81,14 @@
                 </c:when>
                 <c:otherwise>
                   <c:set var="colTxt">
-                    <spring:eval expression="item[column]" htmlEscape="false" />
+                  	<c:choose>
+                	  <c:when test="${empty item[column]}">
+                    	<spring:eval expression="item[column]" htmlEscape="false" />
+                	  </c:when>
+                	  <c:otherwise>
+                    	<spring:eval expression="item[column].toString()" htmlEscape="false" />
+                	  </c:otherwise>
+                	</c:choose>
                   </c:set>
                 </c:otherwise>
               </c:choose>

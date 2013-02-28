@@ -235,11 +235,12 @@ public class PublicController{
             uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo));
             uiModel.addAttribute("publisher", pPublisher);
             uiModel.addAttribute("price",tPublisher.getPrice());
-            String tCurUserName = userContextService.getCurrentUserName();
-            if(tCurUserName != null){
-            	UserAccount tCurUser = UserAccount.findUserAccountByName(tCurUserName);
+            String tCurName = userContextService.getCurrentUserName();
+            if(tCurName != null){
+            	UserAccount tCurUser = UserAccount.findUserAccountByName(tCurName);
+            	tCurName = tCurUser.getName();
                 uiModel.addAttribute("balance", tCurUser.getBalance());
-            	if(pPublisher.equals(tCurUserName)){
+            	if(pPublisher.equals(tCurName)){
         			uiModel.addAttribute("nothireable", "true");
         			uiModel.addAttribute("notfireable", "true");
             	}else if(tCurUser.getListento().contains(tPublisher)){
@@ -266,8 +267,8 @@ public class PublicController{
     public String hirePublisher(@RequestParam(value = "hire", required = false) String publisher,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
     	
-    	String tOwnerName = userContextService.getCurrentUserName();				// not logged in? to login page.
-		if(tOwnerName == null)
+    	String tCurName = userContextService.getCurrentUserName();				// not logged in? to login page.
+		if(tCurName == null)
 	        return "login";
 			
 		UserAccount tPublisher = UserAccount.findUserAccountByName(publisher);		//make sure the publisher still exist.
@@ -279,7 +280,8 @@ public class PublicController{
 		}
 		
 		int tSalary = tPublisher.getPrice();
-		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);			//in who's space right now?
+		UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);			//in who's space right now?
+		tCurName = tOwner.getName();
 		tOwner.getListento().add(tPublisher);
 		tOwner.setBalance(tOwner.getBalance() - tSalary);
 		tPublisher.setBalance(tPublisher.getBalance() + tSalary);
@@ -288,7 +290,7 @@ public class PublicController{
 		tPublisher.persist();
 		
 		PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
-		return(tController.index(tOwnerName, page, size, uiModel));
+		return(tController.index(tCurName, page, size, uiModel));
     }
     
     /**
@@ -303,8 +305,8 @@ public class PublicController{
     public String firePublisher(@RequestParam(value = "fire", required = false) String publisher,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
     	
-    	String tOwnerName = userContextService.getCurrentUserName();
-		if(tOwnerName == null)
+    	String tCurName = userContextService.getCurrentUserName();
+		if(tCurName == null)
 	        return "login";
 			
 		UserAccount tPublisher = UserAccount.findUserAccountByName(publisher);
@@ -316,7 +318,8 @@ public class PublicController{
 		}
 		
 		int tSalary = tPublisher.getPrice();
-		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);			//in who's space right now?
+		UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);			//in who's space right now?
+		tCurName = tOwner.getName();
 		tOwner.getListento().remove(tPublisher);
 		tOwner.setBalance(tOwner.getBalance() - tSalary);
 		tPublisher.setBalance(tPublisher.getBalance() + tSalary);
@@ -324,7 +327,7 @@ public class PublicController{
 		tOwner.persist();
 		tPublisher.persist();
 
-		return(SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tOwnerName, page, size, uiModel));
+		return(SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tCurName, page, size, uiModel));
     }
     
     /**
@@ -339,12 +342,13 @@ public class PublicController{
     public String relayout(@RequestParam(value = "relayouttype", required = true) String relayouttype, 
     		@RequestParam(value = "tagId", required = true) Long tagId, HttpServletRequest request, Model uiModel) {
     	
-    	String tOwnerName = userContextService.getCurrentUserName();
-		UserAccount tOwner = UserAccount.findUserAccountByName(tOwnerName);
+    	String tCurName = userContextService.getCurrentUserName();
+		UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);
+		tCurName = tOwner.getName();
 		if("reset".equals(relayouttype)){
 			tOwner.setLayout(null);
 			tOwner.persist();
-			return (SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tOwnerName, 0, 8, uiModel));
+			return (SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tCurName, 0, 8, uiModel));
 		}
 		
 		BigTag tBigTag = BigTag.findBigTag(tagId);
@@ -647,13 +651,13 @@ public class PublicController{
    		tOwner.persist();
    		
    		//----------------prepare for show-------------------
-	   	List<BigTag> tBigTagsLeft = BigUtil.transferToTags(tAryTagStrsLeft, tOwnerName);
+	   	List<BigTag> tBigTagsLeft = BigUtil.transferToTags(tAryTagStrsLeft, tCurName);
 	   	List<Long> tTagIdsLeft = new ArrayList<Long>();					//prepare the info for view base on the string in db:
    		for(int i = 0; i < tBigTagsLeft.size(); i++){
    			tTagIdsLeft.add(tBigTagsLeft.get(i).getId());
    		}
    		
-   		List<BigTag> tBigTagsRight = BigUtil.transferToTags(tAryTagStrsRight, tOwnerName);
+   		List<BigTag> tBigTagsRight = BigUtil.transferToTags(tAryTagStrsRight, tCurName);
 	   	List<Long> tTagIdsRight = new ArrayList<Long>();
    		for(int i = 0; i < tBigTagsRight.size(); i++){
    			tTagIdsRight.add(tBigTagsRight.get(i).getId());
@@ -663,16 +667,16 @@ public class PublicController{
         List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
     	for(int i = 0; i < tBigTagsLeft.size(); i++){
     		tContentListsLeft.add(
-    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tOwnerName, tOwner),
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tCurName, tOwner),
     				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue()));
     	}
     	for(int i = 0; i < tBigTagsRight.size(); i++){
     		tContentListsRight.add(
-    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tOwnerName, tOwner),
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tCurName, tOwner),
     				0, Integer.valueOf(tAryNumStrsRight[i]).intValue()));
     	}
     	
-        uiModel.addAttribute("spaceOwner", tOwnerName);
+        uiModel.addAttribute("spaceOwner", tCurName);
         uiModel.addAttribute("description", tOwner.getDescription());
         uiModel.addAttribute("bigTagsLeft", tBigTagsLeft);
         uiModel.addAttribute("bigTagsRight", tBigTagsRight);

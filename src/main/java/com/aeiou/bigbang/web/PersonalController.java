@@ -44,8 +44,7 @@ public class PersonalController{
     			return null;
     	}
 
-		String tCurUserName = userContextService.getCurrentUserName();				//the current user.
-		UserAccount tCurUser = UserAccount.findUserAccountByName(tCurUserName);
+		String tCurName = userContextService.getCurrentUserName();				//the current user.
 
     	String[] tAryTagStrsLeft = null;
     	String[] tAryTagStrsRight = null;
@@ -155,7 +154,7 @@ public class PersonalController{
     		}
     	}
 																						//final adjust---not all tags should be shown to curUser:
-		if(tCurUserName == null){										//not logged in
+		if(tCurName == null){										//not logged in
 			for(int i = tBigTagsLeft.size()-1; i >=0 ; i--){
 				if(tBigTagsLeft.get(i).getAuthority() != 0){
 					tBigTagsLeft.remove(i);
@@ -168,8 +167,8 @@ public class PersonalController{
 					tTagIdsRight.remove(i);
 				}
 			}
-		}else if(!tCurUserName.equals(spaceOwner)){						//has logged in but not self.
-			if(tOwner.getListento().contains(tCurUser)){					//it's team member
+		}else if(!tCurName.equalsIgnoreCase(spaceOwner)){						//has logged in but not self.
+			if(tOwner.getListento().contains(UserAccount.findUserAccountByName(tCurName))){					//it's team member
 				for(int i = tBigTagsLeft.size()-1; i >=0 ; i--){
 					if(tBigTagsLeft.get(i).getAuthority() != 0 && tBigTagsLeft.get(i).getAuthority() != 2){
 						tBigTagsLeft.remove(i);
@@ -202,12 +201,12 @@ public class PersonalController{
         List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
     	for(int i = 0; i < tBigTagsLeft.size(); i++){
     		tContentListsLeft.add(
-    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tCurUserName, tOwner),
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tCurName, tOwner),
     				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue()));
     	}
     	for(int i = 0; i < tBigTagsRight.size(); i++){
     		tContentListsRight.add(
-    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tCurUserName, tOwner),
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tCurName, tOwner),
     				0, Integer.valueOf(tAryNumStrsRight[i]).intValue()));
     	}
 

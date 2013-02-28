@@ -42,6 +42,8 @@ public class BigTagController {
         }
         
         String tCurName = userContextService.getCurrentUserName();
+        UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
+        tCurName = tUserAccount.getName();	//because we allow user to login with capital characters
         if(StringUtils.isEmpty(bigTag.getType())){
         	bigTag.setType(tCurName);
         }
@@ -49,7 +51,6 @@ public class BigTagController {
         bigTag.persist();
         
         //update the layout string of useraccount
-        UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
         String tLayout = tUserAccount.getLayout();
    		int p = tLayout.indexOf('™');
 		String tTagStr = tLayout.substring(0, p);
@@ -77,21 +78,22 @@ public class BigTagController {
 
 	@RequestMapping(produces = "text/html")
     public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        String tUserName = userContextService.getCurrentUserName();
-        if(tUserName == null)
+        String tCurName = userContextService.getCurrentUserName();
+        if(tCurName == null)
         	return "login";
+        tCurName = UserAccount.findUserAccountByName(tCurName).getName();
         
 		int sizeNo = size == null ? 10 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
        
         float nrOfPages;
-    	if(tUserName.equals("admin")){
+    	if(tCurName.equals("admin")){
     		uiModel.addAttribute("bigtags", BigTag.findBigTagEntries(firstResult, sizeNo));
     		nrOfPages = (float) BigTag.countBigTags() / sizeNo;
 	        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
     	}else{
-	        uiModel.addAttribute("bigtags", BigTag.findTagsByPublisher(tUserName, firstResult, sizeNo));
-	        nrOfPages = (float) BigTag.countTagsByPublisher(tUserName) / sizeNo;
+	        uiModel.addAttribute("bigtags", BigTag.findTagsByPublisher(tCurName, firstResult, sizeNo));
+	        nrOfPages = (float) BigTag.countTagsByPublisher(tCurName) / sizeNo;
     	}
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         return "bigtags/list";

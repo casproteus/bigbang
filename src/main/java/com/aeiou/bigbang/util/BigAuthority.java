@@ -46,7 +46,7 @@ public class BigAuthority {
 		UserAccount tCurUser = UserAccount.findUserAccountByName(pCurUserName);
 		Set<Integer> tAuthSetFR = new HashSet<Integer>();
     	tAuthSetFR.add(Integer.valueOf(0));
-    	if(pOwner.getName().equals(pCurUserName)){
+    	if(pOwner.getName().equalsIgnoreCase(pCurUserName)){
     		tAuthSetFR.add(Integer.valueOf(1));
     		tAuthSetFR.add(Integer.valueOf(2));
     		tAuthSetFR.add(Integer.valueOf(3));

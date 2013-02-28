@@ -66,7 +66,7 @@ public class UserAccountController {
         if(tUserName == null)
          	return "login";
         
-        if(tUserName.equals("admin")){
+        if(tUserName.equalsIgnoreCase("admin")){
             int sizeNo = size == null ? 10 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
             uiModel.addAttribute("useraccounts", UserAccount.findUserAccountEntries(firstResult, sizeNo));

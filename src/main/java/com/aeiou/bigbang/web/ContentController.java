@@ -36,12 +36,15 @@ public class ContentController {
         List<BigTag> tList_Tag = new ArrayList<BigTag>();
         BigTag tTag = new BigTag(){public String toString(){return "";}};
         tTag.setId(Long.valueOf(-1));
-        tList_Tag.add(tTag);        
-        tList_Tag.addAll(BigTag.findTagsByPublisher(userContextService.getCurrentUserName(), 0, 1000));
+        tList_Tag.add(tTag);
+        
+
+        String tCurName = UserAccount.findUserAccountByName(userContextService.getCurrentUserName()).getName();
+        tList_Tag.addAll(BigTag.findTagsByPublisher(tCurName, 0, 1000));
         uiModel.addAttribute("mytags", tList_Tag);
         
         List<UserAccount> tList = new ArrayList<UserAccount>();
-        tList.add(UserAccount.findUserAccountByName(userContextService.getCurrentUserName())); //Can not use CurrentUser directly, because it's not of UserAccount type.
+        tList.add(UserAccount.findUserAccountByName(tCurName)); //Can not use CurrentUser directly, because it's not of UserAccount type.
         uiModel.addAttribute("useraccounts", tList);		//why must return a list?
         uiModel.addAttribute("authorities",BigAuthority.getAllOptions());
     }
@@ -50,19 +53,20 @@ public class ContentController {
     public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
         int sizeNo = size == null ? 10 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-        String tUserName = userContextService.getCurrentUserName();
+        String tCurName = userContextService.getCurrentUserName();
         
-        if(tUserName == null)
+        if(tCurName == null)
         	return "login";
-        
+
+    	UserAccount tPublisher = UserAccount.findUserAccountByName(tCurName);
+    	tCurName = tPublisher.getName();
         float nrOfPages;
-    	if(tUserName.equals("admin")){
+    	if(tCurName.equals("admin")){
 	        uiModel.addAttribute("contents", Content.findContentEntries(firstResult, sizeNo));
 	        nrOfPages = (float) Content.countContents() / sizeNo;
 	        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
     	}else{
-	    	UserAccount tPublisher = UserAccount.findUserAccountByName(tUserName);
-	    	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tUserName, tPublisher);
+	    	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurName, tPublisher);
 	        uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo));
 	        nrOfPages = (float) Content.countContentsByPublisher(tPublisher, tAuthSet) / sizeNo;
     	}

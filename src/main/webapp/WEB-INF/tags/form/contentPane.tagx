@@ -17,7 +17,7 @@
         </c:when>
         <c:otherwise>
           <spring:message arguments="${label}" code="entity_not_found" />
-          <c:if test="${empty maxPages and pageContext['request'].userPrincipal.name eq spaceOwner}">
+          <c:if test="${empty maxPages and fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(spaceOwner)}">
           	<br/>
           	<util:contentLayout tagId="${tagId}" spaceOwner="${spaceOwner}" list_size="${0}"/>
           </c:if>

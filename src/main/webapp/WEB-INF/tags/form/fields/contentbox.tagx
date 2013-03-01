@@ -65,7 +65,7 @@
             	</c:otherwise>
             </c:choose>
           </c:if>
-          <c:if test="${empty maxPages and pageContext['request'].userPrincipal.name eq spaceOwner}">
+          <c:if test="${empty maxPages and fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(spaceOwner)}">
           	<util:contentLayout tagId="${tagId}" spaceOwner="${spaceOwner}" list_size="${data.size()}"/>
           </c:if>
         </td>

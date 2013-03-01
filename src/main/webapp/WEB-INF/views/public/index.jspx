@@ -28,7 +28,7 @@
         <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
       </a>
     </span>
-    <c:if test="${empty maxPages and pageContext['request'].userPrincipal.name eq spaceOwner}">
+    <c:if test="${empty maxPages and fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(spaceOwner)}">
       <br/>
 	  <spring:url value="/public" var="reset_url">
 		<spring:param name="relayouttype" value="reset"/>

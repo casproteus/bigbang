@@ -15,7 +15,7 @@
 		<spring:message code="label_public_index" arguments="${spaceOwner},${empty description ? publicDescription : description}" htmlEscape="false" var="title"/>
   	</c:otherwise>
   </c:choose>
-  <util:panel id="title" title="${title}">
+  <util:Bigpanel id="title" title="${title}">
   	<spring:message code="pleaseAddSomeContentHere" htmlEscape="false"/>
     <span class="new">
       <spring:url value="/contents" var="create_url">
@@ -81,9 +81,9 @@
     </span>
     </c:if>
     
-  </util:panel>
+  </util:Bigpanel>
   <!-- c:set var="tagsize" value="${bigTags.size()}" scope="request" /> -->
-  <table class="tWireless" style="margin-top: 13px;"><tr>
+  <table class="tWireless"><tr>
   	<td class="tWireless nopaddingleft" valign="top">
 	  	<c:forEach items="${contentsLeft}" var="content" varStatus="num">			<!-- don't need these two params anymore: begin="0" end="${tagsize/2 - 1}" -->
 		  <page:contentPane id="contentlistleft${(num.count - 1)}" items="${content}" label="${bigTagsLeft[num.count - 1]}" tagId="${tagIdsLeft[num.count - 1]}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
@@ -93,7 +93,6 @@
 		        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
 		    </table:contentbox>
 		  </page:contentPane>
-		  <br/>
 	  </c:forEach>
   	</td>
   	<td class="tWireless nopaddingright" valign="top" >
@@ -105,7 +104,6 @@
 		        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
 		    </table:contentbox>
 		  </page:contentPane>
-		  <br/>
 	  </c:forEach>
   	</td>
   </tr></table>

@@ -93,7 +93,7 @@ body {
 	float:right;
 }
 
-#footer a:link {color: #7db223;}
+#footer a:link {color: #aaaaaa;}
 
 .quicklinks {
 	clear:both;
@@ -198,11 +198,11 @@ tr:nth-child(even) {
 }
 
 a:link {
-	color: #7db223;
+	color: #aaaaaa;
 }
 
 a:hover {
-	color: #456314;
+	color: #888888;
 	text-decoration: underline;
 }
 
@@ -387,10 +387,12 @@ fieldset th {
 .nopaddingleft{
 	padding-top: 0px;
 	padding-left: 0px;
+	padding-right: 1px;
 	padding-buttom: 0px;
 }
 .nopaddingright{
 	padding-top: 0px;
+	padding-left: 1px;
 	padding-right: 0px;
 	padding-buttom: 0px;
 }

@@ -6,8 +6,6 @@
   <c:if test="${empty render or render}">
     <span>
       <c:out value=" | " />
-      <spring:message code="global_language" />
-      <c:out value=": " />
       <spring:url var="url_language1" value="http://fr.sharethegoodones.com"/>
       <spring:message code="global_language_french" var="language_french" htmlEscape="false" />
       <a href="${url_language1}" title="${fn:escapeXml(language_french)}">${fn:escapeXml(language_french)}</a>

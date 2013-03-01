@@ -43,9 +43,11 @@ public class PersonalController{
     		if(tOwner == null)
     			return null;
     	}
+    	spaceOwner = tOwner.getName();
 
 		String tCurName = userContextService.getCurrentUserName();				//the current user.
-
+		UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+		
     	String[] tAryTagStrsLeft = null;
     	String[] tAryTagStrsRight = null;
     	String[] tAryNumStrsLeft = null;
@@ -167,46 +169,48 @@ public class PersonalController{
 					tTagIdsRight.remove(i);
 				}
 			}
-		}else if(!tCurName.equalsIgnoreCase(spaceOwner)){						//has logged in but not self.
-			if(tOwner.getListento().contains(UserAccount.findUserAccountByName(tCurName))){					//it's team member
-				for(int i = tBigTagsLeft.size()-1; i >=0 ; i--){
-					if(tBigTagsLeft.get(i).getAuthority() != 0 && tBigTagsLeft.get(i).getAuthority() != 2){
-						tBigTagsLeft.remove(i);
-						tTagIdsLeft.remove(i);
+		}else{
+			tCurName = tCurUser.getName();
+			if(!tCurName.equals(spaceOwner)){						//has logged in but not self.
+				if(tOwner.getListento().contains(tCurUser)){					//it's team member
+					for(int i = tBigTagsLeft.size()-1; i >=0 ; i--){
+						if(tBigTagsLeft.get(i).getAuthority() != 0 && tBigTagsLeft.get(i).getAuthority() != 2){
+							tBigTagsLeft.remove(i);
+							tTagIdsLeft.remove(i);
+						}
 					}
-				}
-				for(int i = tBigTagsRight.size()-1; i >=0 ; i--){
-					if(tBigTagsRight.get(i).getAuthority() != 0 && tBigTagsRight.get(i).getAuthority() != 2){
-						tBigTagsRight.remove(i);
-						tTagIdsRight.remove(i);
+					for(int i = tBigTagsRight.size()-1; i >=0 ; i--){
+						if(tBigTagsRight.get(i).getAuthority() != 0 && tBigTagsRight.get(i).getAuthority() != 2){
+							tBigTagsRight.remove(i);
+							tTagIdsRight.remove(i);
+						}
 					}
-				}
-			}else{															//it's someone else TODO: consider about case 3 in future.
-				for(int i = tBigTagsLeft.size()-1; i >=0 ; i--){
-					if(tBigTagsLeft.get(i).getAuthority() != 0){
-						tBigTagsLeft.remove(i);
-						tTagIdsLeft.remove(i);
+				}else{															//it's someone else TODO: consider about case 3 in future.
+					for(int i = tBigTagsLeft.size()-1; i >=0 ; i--){
+						if(tBigTagsLeft.get(i).getAuthority() != 0){
+							tBigTagsLeft.remove(i);
+							tTagIdsLeft.remove(i);
+						}
 					}
-				}
-				for(int i = tBigTagsRight.size()-1; i >=0 ; i--){
-					if(tBigTagsRight.get(i).getAuthority() != 0){
-						tBigTagsRight.remove(i);
-						tTagIdsRight.remove(i);
+					for(int i = tBigTagsRight.size()-1; i >=0 ; i--){
+						if(tBigTagsRight.get(i).getAuthority() != 0){
+							tBigTagsRight.remove(i);
+							tTagIdsRight.remove(i);
+						}
 					}
 				}
 			}
 		}
-		
         List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
         List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
     	for(int i = 0; i < tBigTagsLeft.size(); i++){
     		tContentListsLeft.add(
-    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tCurName, tOwner),
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tCurUser, tOwner),
     				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue()));
     	}
     	for(int i = 0; i < tBigTagsRight.size(); i++){
     		tContentListsRight.add(
-    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tCurName, tOwner),
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tCurUser, tOwner),
     				0, Integer.valueOf(tAryNumStrsRight[i]).intValue()));
     	}
 

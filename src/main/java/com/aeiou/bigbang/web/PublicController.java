@@ -204,7 +204,9 @@ public class PublicController{
             	float nrOfPages = (float) Content.countContentsByTag(tBigTag) / sizeNo;
             	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
             }else{
-            	Set<Integer> tAuthSet = BigAuthority.getAuthSet(userContextService.getCurrentUserName(), tOwner);
+            	String tCurName = userContextService.getCurrentUserName();
+            	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+            	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
                 uiModel.addAttribute("spaceOwner", spaceOwner);
                 uiModel.addAttribute("spaceOwnerId", tOwner.getId());
             	uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet, firstResult, sizeNo));
@@ -231,13 +233,14 @@ public class PublicController{
     	if (page != null || size != null) {
             int sizeNo = size == null ? 20 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            Set<Integer> tAuthSet = BigAuthority.getAuthSet(userContextService.getCurrentUserName(), tPublisher);
+
+            String tCurName = userContextService.getCurrentUserName();
+        	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+            Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tPublisher);
             uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo));
             uiModel.addAttribute("publisher", pPublisher);
             uiModel.addAttribute("price",tPublisher.getPrice());
-            String tCurName = userContextService.getCurrentUserName();
             if(tCurName != null){
-            	UserAccount tCurUser = UserAccount.findUserAccountByName(tCurName);
             	tCurName = tCurUser.getName();
                 uiModel.addAttribute("balance", tCurUser.getBalance());
             	if(pPublisher.equals(tCurName)){
@@ -667,12 +670,12 @@ public class PublicController{
         List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
     	for(int i = 0; i < tBigTagsLeft.size(); i++){
     		tContentListsLeft.add(
-    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tCurName, tOwner),
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tOwner, tOwner),
     				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue()));
     	}
     	for(int i = 0; i < tBigTagsRight.size(); i++){
     		tContentListsRight.add(
-    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tCurName, tOwner),
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tOwner, tOwner),
     				0, Integer.valueOf(tAryNumStrsRight[i]).intValue()));
     	}
     	

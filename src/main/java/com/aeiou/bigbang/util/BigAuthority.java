@@ -42,15 +42,14 @@ public class BigAuthority {
 		return tArrayFR;
 	}
 	
-	public static Set<Integer> getAuthSet(String pCurUserName, UserAccount pOwner){
-		UserAccount tCurUser = UserAccount.findUserAccountByName(pCurUserName);
+	public static Set<Integer> getAuthSet(UserAccount pCurUser, UserAccount pOwner){
 		Set<Integer> tAuthSetFR = new HashSet<Integer>();
     	tAuthSetFR.add(Integer.valueOf(0));
-    	if(pOwner.getName().equalsIgnoreCase(pCurUserName)){
+    	if(pOwner.equals(pCurUser)){
     		tAuthSetFR.add(Integer.valueOf(1));
     		tAuthSetFR.add(Integer.valueOf(2));
     		tAuthSetFR.add(Integer.valueOf(3));
-    	}else if(pOwner.getListento().contains(tCurUser)){
+    	}else if(pOwner.getListento().contains(pCurUser)){
     		tAuthSetFR.add(Integer.valueOf(2));
     	}else{//TODO: consider the case that visible to specific person.
     		

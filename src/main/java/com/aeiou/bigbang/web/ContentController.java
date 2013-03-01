@@ -66,7 +66,7 @@ public class ContentController {
 	        nrOfPages = (float) Content.countContents() / sizeNo;
 	        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
     	}else{
-	    	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurName, tPublisher);
+	    	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tPublisher, tPublisher);
 	        uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo));
 	        nrOfPages = (float) Content.countContentsByPublisher(tPublisher, tAuthSet) / sizeNo;
     	}

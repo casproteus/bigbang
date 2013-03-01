@@ -62,11 +62,11 @@ public class UserAccountController {
 
 	@RequestMapping(produces = "text/html")
     public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-    	String tUserName = userContextService.getCurrentUserName();
-        if(tUserName == null)
+    	String tCurName = userContextService.getCurrentUserName();
+        if(tCurName == null)
          	return "login";
         
-        if(tUserName.equalsIgnoreCase("admin")){
+        if(tCurName.equalsIgnoreCase("admin")){
             int sizeNo = size == null ? 10 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
             uiModel.addAttribute("useraccounts", UserAccount.findUserAccountEntries(firstResult, sizeNo));
@@ -74,7 +74,7 @@ public class UserAccountController {
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
     	}else{
     		List<UserAccount> tList = new ArrayList<UserAccount>();
-    		tList.add(UserAccount.findUserAccountByName(tUserName));
+    		tList.add(UserAccount.findUserAccountByName(tCurName));
             uiModel.addAttribute("useraccounts", tList);
             uiModel.addAttribute("maxPages", 1);
     	}

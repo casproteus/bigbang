@@ -53,26 +53,27 @@ public class BigTagController {
         //update the layout string of useraccount
         String tLayout = tUserAccount.getLayout();
    		int p = tLayout.indexOf('™');
-		String tTagStr = tLayout.substring(0, p);
-		String tSizeStr = tLayout.substring(p+1);
-		StringBuilder tStrB = new StringBuilder();
-		tStrB.append(tTagStr).append("¯");
-		if("admin".equals(tCurName) || "administrator".equals(tCurName)){
-			tStrB.append("¶");
-		}
-		tStrB.append(bigTag.getTagName());
-		if(bigTag.getAuthority() == 1){
-			tStrB.append("¶");
-		}else if(bigTag.getAuthority() == 2){
-			tStrB.append("");
-		}else if(bigTag.getAuthority() == 3){
-			tStrB.append("†");
-		}
-	
-		tStrB.append("™").append(tSizeStr).append("¯").append("8");
-		tUserAccount.setLayout(tStrB.toString());
-		tUserAccount.persist();
+   		if(p > 0){
+			String tTagStr = tLayout.substring(0, p);
+			String tSizeStr = tLayout.substring(p+1);
+			StringBuilder tStrB = new StringBuilder();
+			tStrB.append(tTagStr).append("¯");
+			if("admin".equals(tCurName) || "administrator".equals(tCurName)){
+				tStrB.append("¶");
+			}
+			tStrB.append(bigTag.getTagName());
+			if(bigTag.getAuthority() == 1){
+				tStrB.append("¶");
+			}else if(bigTag.getAuthority() == 2){
+				tStrB.append("");
+			}else if(bigTag.getAuthority() == 3){
+				tStrB.append("†");
+			}
 		
+			tStrB.append("™").append(tSizeStr).append("¯").append("8");
+			tUserAccount.setLayout(tStrB.toString());
+			tUserAccount.persist();
+   		}
         return "redirect:/bigtags/" + encodeUrlPathSegment(bigTag.getId().toString(), httpServletRequest);
     }
 

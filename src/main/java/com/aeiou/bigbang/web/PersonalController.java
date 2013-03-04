@@ -58,24 +58,22 @@ public class PersonalController{
     	List<Long> tTagIdsRight = new ArrayList<Long>();
     	
     	String tLayout = tOwner.getLayout();										//get the layout info from DB.
-    	if(tLayout != null && tLayout.length() > 2){
-    		int p = tLayout.indexOf('™');
+    	int p = tLayout == null ? -1 : tLayout.indexOf('™');
+		if(p > -1){
+    		String tTagStr = tLayout.substring(0, p);
+    		String tSizeStr = tLayout.substring(p+1);
+    		
+    		p = tTagStr.indexOf('¬');
     		if(p >= 0){
-	    		String tTagStr = tLayout.substring(0, p);
-	    		String tSizeStr = tLayout.substring(p+1);
-	    		
-	    		p = tTagStr.indexOf('¬');
-	    		if(p >= 0){
-		    		tAryTagStrsLeft = tTagStr.substring(0, p).split("¯");
-		    		tAryTagStrsRight = tTagStr.substring(p+1).split("¯");
-	    		}
-	    		p = tSizeStr.indexOf('¬');
-	    		if(p >= 0){
-		    		tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
-		    		tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
-	    		}
+	    		tAryTagStrsLeft = tTagStr.substring(0, p).split("¯");
+	    		tAryTagStrsRight = tTagStr.substring(p+1).split("¯");
     		}
-    	}
+    		p = tSizeStr.indexOf('¬');
+    		if(p >= 0){
+	    		tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
+	    		tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
+    		}
+		}
     																				//if the layout info in DB is not good, create it from beginning.
     	if(((tAryTagStrsLeft == null || tAryTagStrsLeft.length == 0) && (tAryTagStrsRight == null || tAryTagStrsRight.length == 0))
     			|| ((tAryNumStrsLeft == null || tAryNumStrsLeft.length == 0) && (tAryNumStrsRight == null || tAryNumStrsRight.length == 0))
@@ -96,19 +94,12 @@ public class PersonalController{
     			BigTag tTag = tBigTags.get(j);
     	    	tBigTagsLeft.add(tBigTags.get(j));
     	    	tTagIdsLeft.add(tTagIds.get(j));
+    	    	
+    	    	tStrB.append(BigUtil.getTagInLayoutString(tTag));
+
     	    	tAryNumStrsLeft[j] = "8";
-    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType()))
-    	    		tStrB.append('¶');
-    	    	
-    	    	tStrB.append(tTag.getTagName());
-    			if(tTag.getAuthority() == 1)
-    				tStrB.append("¶");
-    			else if(tTag.getAuthority() == 2)
-    				tStrB.append("");
-    			else if(tTag.getAuthority() == 3)
-    				tStrB.append("†");
-    	    	
     	    	tStrB_Num.append(tAryNumStrsLeft[j]);
+    	    	
     	    	if(j + 1 < tSize/2){
     	    		tStrB.append('¯');
         	    	tStrB_Num.append('¯');
@@ -122,19 +113,12 @@ public class PersonalController{
     			BigTag tTag = tBigTags.get(j);
     			tBigTagsRight.add(tBigTags.get(j));
     	    	tTagIdsRight.add(tTagIds.get(j));
+
+    	    	tStrB.append(BigUtil.getTagInLayoutString(tTag));
+
     	    	tAryNumStrsRight[j - tSize/2] = "8";
-    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType()))
-    	    		tStrB.append('¶');
-    	    	
-    	    	tStrB.append(tTag.getTagName());
-    			if(tTag.getAuthority() == 1)
-    				tStrB.append("¶");
-    			else if(tTag.getAuthority() == 2)
-    				tStrB.append("");
-    			else if(tTag.getAuthority() == 3)
-    				tStrB.append("†");
-    			
     	    	tStrB_Num.append(tAryNumStrsRight[j - tSize/2]);
+    	    	
     	    	if(j + 1 < tSize){
     	    		tStrB.append('¯');
         	    	tStrB_Num.append('¯');

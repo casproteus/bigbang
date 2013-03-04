@@ -7,8 +7,8 @@
     <p>
       <spring:message code="error_uncaughtexception_problemdescription" />
     </p>
-    <c:if test="${not empty exception and (fn:toLowerCase(pageContext['request'].userPrincipal.name) eq 'tao' or fn:toLowerCase(pageContext['request'].userPrincipal.name) eq 'admin')}">
-      <p>
+      <c:if test="${not empty exception and (fn:toLowerCase(pageContext['request'].userPrincipal.name) eq 'tao' or fn:toLowerCase(pageContext['request'].userPrincipal.name) eq 'admin')}">
+       <p>
         <h4>
           <spring:message code="exception_details" />
         </h4>

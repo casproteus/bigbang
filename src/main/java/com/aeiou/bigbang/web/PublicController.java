@@ -50,24 +50,22 @@ public class PublicController{
     	
     	UserAccount tOwner = UserAccount.findUserAccountByName("admin");
     	String tLayout = tOwner.getLayout();										//get the layout info from DB.
-    	if(tLayout != null && tLayout.length() > 2){
-    		int p = tLayout.indexOf('™');
-    		if(p >= 0){
-    			String tTagStr = tLayout.substring(0, p);
-    			String tSizeStr = tLayout.substring(p+1);
-    			
-        		p = tTagStr.indexOf('¬');
-        		if(p >=0 ){
-        			tAryTagStrsLeft = tTagStr.substring(0, p).split("¯");
-        			tAryTagStrsRight = tTagStr.substring(p+1).split("¯");
-        		}
-        		p = tSizeStr.indexOf('¬');
-        		if(p >=0 ){
-        			tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
-        			tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
-        		}
+    	int p = tLayout == null ? -1 : tLayout.indexOf('™');
+		if(p > -1){
+			String tTagStr = tLayout.substring(0, p);
+			String tSizeStr = tLayout.substring(p+1);
+			
+    		p = tTagStr.indexOf('¬');
+    		if(p >=0 ){
+    			tAryTagStrsLeft = tTagStr.substring(0, p).split("¯");
+    			tAryTagStrsRight = tTagStr.substring(p+1).split("¯");
     		}
-    	}
+    		p = tSizeStr.indexOf('¬');
+    		if(p >=0 ){
+    			tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
+    			tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
+    		}
+		}
     	
 		//if the layout info in DB is not good, create it from beginning.
 		if(((tAryTagStrsLeft == null || tAryTagStrsLeft.length == 0) && (tAryTagStrsRight == null || tAryTagStrsRight.length == 0))
@@ -90,20 +88,12 @@ public class PublicController{
     			BigTag tTag = tBigTags.get(j);
     	    	tBigTagsLeft.add(tBigTags.get(j));
     	    	tTagIdsLeft.add(tTagIds.get(j));
+    	    	
+    	    	tStrB.append(BigUtil.getTagInLayoutString(tTag));
+
     	    	tAryNumStrsLeft[j] = "8";
-    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType()))
-    	    		tStrB.append('¶');
-    	    	
-    	    	tStrB.append(tTag.getTagName());
-    	    	
-    	    	if(tTag.getAuthority() == 1)
-    	    		tStrB.append("¶");
-    	    	if(tTag.getAuthority() == 2)
-    	    		tStrB.append("");
-    	    	if(tTag.getAuthority() == 3)
-    	    		tStrB.append("†");
-    	    	
     	    	tStrB_Num.append(tAryNumStrsLeft[j]);
+    	    	
     	    	if(j + 1 < tSize/2){
     	    		tStrB.append('¯');
         	    	tStrB_Num.append('¯');
@@ -117,20 +107,12 @@ public class PublicController{
     			BigTag tTag = tBigTags.get(j);
     			tBigTagsRight.add(tBigTags.get(j));
     	    	tTagIdsRight.add(tTagIds.get(j));
+    	    	
+    	    	tStrB.append(BigUtil.getTagInLayoutString(tTag));
+    	    	
     	    	tAryNumStrsRight[j - tSize/2] = "8";
-    	    	if("admin".equals(tTag.getType()) || "administrator".equals(tTag.getType()))
-    	    		tStrB.append('¶');
-    	    	
-    	    	tStrB.append(tTag.getTagName());
-
-    	    	if(tTag.getAuthority() == 1)
-    	    		tStrB.append("¶");
-    	    	if(tTag.getAuthority() == 2)
-    	    		tStrB.append("");
-    	    	if(tTag.getAuthority() == 3)
-    	    		tStrB.append("†");
-    	    	
     	    	tStrB_Num.append(tAryNumStrsRight[j - tSize/2]);
+    	    	
     	    	if(j + 1 < tSize){
     	    		tStrB.append('¯');
         	    	tStrB_Num.append('¯');
@@ -378,31 +360,32 @@ public class PublicController{
 		//---------adjusting the Sting Arys-------------
 		//to find out the column and position
 		tTagStr = "admin".equals(tBigTag.getType()) || "administrator".equals(tBigTag.getType())? "¶"+ tBigTag.getTagName() : tBigTag.getTagName();
+		switch (tBigTag.getAuthority()) {
+		case 1:
+			tTagStr = tTagStr + "¶";
+			break;
+		case 2:
+			tTagStr = tTagStr + "";
+			break;
+		case 3:
+			tTagStr = tTagStr + "†";
+			break;
+		default:
+			break;
+		}
+		
 		boolean tIsInLeftColumn = false;
 		int tPos;
 		for(tPos = 0; tPos < tAryTagStrsLeft.length; tPos++){
-			if(tAryTagStrsLeft[tPos].startsWith(tTagStr)){
-				if(tAryTagStrsLeft[tPos].length() == tTagStr.length()){
-					tIsInLeftColumn = true;
-					break;
-				}else if(tAryTagStrsLeft[tPos].length() == tTagStr.length() + 1 ){
-					if(tAryTagStrsLeft[tPos].endsWith("¶") || tAryTagStrsLeft[tPos].endsWith("") || tAryTagStrsLeft[tPos].endsWith("†")){
-						tIsInLeftColumn = true;
-						break;
-					}
-				}
+			if(tAryTagStrsLeft[tPos].equals(tTagStr)){
+				tIsInLeftColumn = true;
+				break;
 			}
 		}
 		if(!tIsInLeftColumn){
 			for(tPos = 0; tPos < tAryTagStrsRight.length; tPos++){
-				if(tAryTagStrsRight[tPos].startsWith(tTagStr)){
-					if(tAryTagStrsRight[tPos].length() == tTagStr.length()){
-						break;
-					}else if(tAryTagStrsRight[tPos].length() == tTagStr.length() + 1 ){
-						if(tAryTagStrsRight[tPos].endsWith("¶") || tAryTagStrsRight[tPos].endsWith("") || tAryTagStrsRight[tPos].endsWith("†")){
-							break;
-						}
-					}
+				if(tAryTagStrsRight[tPos].equals(tTagStr)){
+					break;
 				}
 			}
 		}	//now know the column and position.

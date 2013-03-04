@@ -7,6 +7,7 @@ import org.springframework.context.MessageSource;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.UserAccount;
 
 public class BigUtil {
 	
@@ -118,4 +119,68 @@ public class BigUtil {
 	    tBigTag4.setAuthority(0);
 	    tBigTag4.persist();
 	}
+	
+	public static void resetLayoutString(UserAccount pUser){
+    	
+		List<BigTag> tBigTags = BigTag.findTagsByOwner(pUser.getName()); 	//fetch out all tags of admin's, owner's and his team's, 
+    	int tSize = tBigTags.size();									//Separate tags and IDs into 2 columns and prepare the Layout String.
+    	
+    	StringBuilder tStrB = new StringBuilder();
+    	StringBuilder tStrB_Num = new StringBuilder();
+		for(int j = 0; j < tSize/2; j++){
+	    	tStrB.append(getTagInLayoutString(tBigTags.get(j)));
+	    	
+	    	tStrB_Num.append("8");
+	    	
+	    	if(j + 1 < tSize/2){
+	    		tStrB.append('¯');
+    	    	tStrB_Num.append('¯');
+	    	}
+    	}
+
+		tStrB.append('¬');
+		tStrB_Num.append('¬');
+		
+		for(int j = tSize/2; j < tSize; j++){
+	    	tStrB.append(getTagInLayoutString(tBigTags.get(j)));
+	    	
+	    	tStrB_Num.append("8");
+	    	
+	    	if(j + 1 < tSize){
+	    		tStrB.append('¯');
+    	    	tStrB_Num.append('¯');
+	    	}
+    	}
+		tStrB.append('™').append(tStrB_Num);
+
+		pUser.setLayout(tStrB.toString());	    						//save to DB
+		pUser.persist();
+	}
+	
+	public static String getTagInLayoutString(BigTag pTag){
+		
+		StringBuilder tStrB = new StringBuilder();
+		
+		if("admin".equals(pTag.getType()) || "administrator".equals(pTag.getType()))
+    		tStrB.append('¶');
+    	
+    	tStrB.append(pTag.getTagName());
+    	
+    	switch (pTag.getAuthority()) {
+		case 1:
+			tStrB.append("¶");
+			break;
+		case 2:
+			tStrB.append("");
+			break;
+		case 3:
+			tStrB.append("†");
+			break;
+		default:
+			break;
+		}
+    	
+    	return tStrB.toString();
+	}
+
 }

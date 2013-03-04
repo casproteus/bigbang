@@ -3,7 +3,8 @@ use:
 2/generate a user administrator. -> then login as administrator -> then create a "unclassified tag with this administrator. (it will be the default one when creating content).
 
 dev:
-1/I used ... as other tag (for not classified content., and have to find a way to replace ... with I18n. because this field can not be null or empty, and how to use a string to match it our so I can make it not display in personal page.
+1/
+2/
 
 test:
 1/when run the selenium, set the speed, make it not the fastest.
@@ -15,6 +16,6 @@ test:
 		while, if some content is 2, but the othor is not lady but some one else
 
 know bugs:
-1/
+1/works better with the tomcat6 on rhcloud, when work with the tomcat7 on rhcloud, the select component will not pop up the options (when with my local tomcat7.0.27 everything's fine). 
 2/
 

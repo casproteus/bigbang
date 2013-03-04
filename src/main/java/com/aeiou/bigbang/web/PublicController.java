@@ -359,20 +359,7 @@ public class PublicController{
 		}
 		//---------adjusting the Sting Arys-------------
 		//to find out the column and position
-		tTagStr = "admin".equals(tBigTag.getType()) || "administrator".equals(tBigTag.getType())? "¶"+ tBigTag.getTagName() : tBigTag.getTagName();
-		switch (tBigTag.getAuthority()) {
-		case 1:
-			tTagStr = tTagStr + "¶";
-			break;
-		case 2:
-			tTagStr = tTagStr + "";
-			break;
-		case 3:
-			tTagStr = tTagStr + "†";
-			break;
-		default:
-			break;
-		}
+		tTagStr = BigUtil.getTagInLayoutString(tBigTag);
 		
 		boolean tIsInLeftColumn = false;
 		int tPos;

@@ -106,21 +106,7 @@ public class BigTagController {
 			}else{
 	   			//---------adjusting the Sting Arys-------------
 	   			//to find out the column and position
-	   			tTagStr = "admin".equals(bigTag.getType()) || "administrator".equals(bigTag.getType())? "¶"+ bigTag.getTagName() : bigTag.getTagName();
-	   			switch (bigTag.getAuthority()) {
-	   			case 1:
-	   				tTagStr = tTagStr + "¶";
-	   				break;
-	   			case 2:
-	   				tTagStr = tTagStr + "";
-	   				break;
-	   			case 3:
-	   				tTagStr = tTagStr + "†";
-	   				break;
-	   			default:
-	   				break;
-	   			}
-	   			
+	   			tTagStr = BigUtil.getTagInLayoutString(bigTag);	   			
 	   			boolean tIsInLeftColumn = false;
 	   			int tPos;
 	   			for(tPos = 0; tPos < tAryTagStrsLeft.length; tPos++){

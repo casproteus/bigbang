@@ -31,7 +31,7 @@
     </span>
   </util:panel>
   <br/>
-  <c:set var="tagsize" value="${bigTags.size()}" scope="request" />
+  <c:set var="tagsize" value="${fn:length(bigTags)}" scope="request" />
     <page:contentPane id="pl_com_aeiou_bigbang_domain_Content" items="${contents}" label="${tag}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
         <table:contentlist data="${contents}" id="l_com_aeiou_bigbang_domain_Content" tagId="${tagId}" path="/contents" spaceOwner="${spaceOwner}" publisher="${publisher}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
             <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>

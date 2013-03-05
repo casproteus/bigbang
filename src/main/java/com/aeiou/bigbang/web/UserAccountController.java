@@ -51,7 +51,7 @@ public class UserAccountController {
 	        uiModel.asMap().clear();
 	        userAccount.persist();
 	        //give some default tags.
-	        // If I open this, the local is OK, the server will report error when persisting the tags! BigUtil.addDefaultUserTags(messageSource, userAccount.getName()); 
+	        BigUtil.addDefaultUserTags(messageSource, userAccount.getName()); // If I open this, the local is OK, the server will report error when persisting the tags! 
 	        
 	        return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
         }else{

@@ -121,6 +121,7 @@ public class BigUtil {
 	}
 	
 	public static void resetLayoutString(UserAccount pUser){
+    	if(pUser == null) return;
     	
 		List<BigTag> tBigTags = BigTag.findTagsByOwner(pUser.getName()); 	//fetch out all tags of admin's, owner's and his team's, 
     	int tSize = tBigTags.size();									//Separate tags and IDs into 2 columns and prepare the Layout String.

@@ -74,10 +74,8 @@ public class BigTagController {
         bigTag.remove();
         
         //update the layout string of useraccount
-        String tCurName = userContextService.getCurrentUserName();
-        UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
-        tCurName = tUserAccount.getName();	//because we allow user to login with capital characters
-        String tLayout = tUserAccount.getLayout();
+        UserAccount tUserAccount = UserAccount.findUserAccountByName(bigTag.getType());
+        String tLayout = tUserAccount == null ? null : tUserAccount.getLayout();
         int p = tLayout == null ? -1 : tLayout.indexOf('™');
    		if(p > -1){
    		   	String[] tAryTagStrsLeft = null;								//for generating the new layout string.

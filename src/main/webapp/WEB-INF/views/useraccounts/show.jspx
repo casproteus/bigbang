@@ -2,7 +2,7 @@
 <div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
-    <page:Bigshow id="ps_com_aeiou_bigbang_domain_UserAccount" object="${useraccount}" path="/useraccounts" z="user-managed">
+    <page:show id="ps_com_aeiou_bigbang_domain_UserAccount" object="${useraccount}" delete="false" create="false" list="false" path="/useraccounts" z="user-managed">
         <field:display field="name" id="s_com_aeiou_bigbang_domain_UserAccount_name" object="${useraccount}" z="sZ0pvaHkqnS6MIAO9NjfBa1NU7E="/>
         <field:display field="email" id="s_com_aeiou_bigbang_domain_UserAccount_email" object="${useraccount}" z="Wphd9e9VW7ZCR3I3GnXrHNjuxfY="/>
         <field:display field="password" id="s_com_aeiou_bigbang_domain_UserAccount_password" object="${useraccount}" z="jITHy8I1B6Lt6Fd7ojGJuh8j+Vg="/>
@@ -12,5 +12,5 @@
         <field:display field="layout" id="s_com_aeiou_bigbang_domain_UserAccount_layout" object="${useraccount}" z="NS81Ys0LF+/4bke4iyyfgc/JtA8="/>
         <field:display field="balance" id="s_com_aeiou_bigbang_domain_UserAccount_balance" object="${useraccount}" z="F4Qfd0bIjC8dyXhV+XEtJcBIgDs="/>
         <field:display field="theme" id="s_com_aeiou_bigbang_domain_UserAccount_theme" object="${useraccount}" z="Jn9qHI1X5Qh1bKfMY/7yfCkAmzU="/>
-    </page:Bigshow>
+    </page:show>
 </div>

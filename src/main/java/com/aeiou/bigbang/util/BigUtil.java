@@ -95,7 +95,9 @@ public class BigUtil {
     	return tBigTags;
     }
 	
-	public static void addDefaultUserTags(MessageSource messageSource, String pType){BigTag tBigTag1 = new BigTag();
+	public static void addDefaultUserTags(MessageSource messageSource, String pType){
+		
+		BigTag tBigTag1 = new BigTag();
 	    tBigTag1.setTagName(messageSource.getMessage("admin_suggested_tag1", new Object[0], null));
 	    tBigTag1.setType(pType);
 	    tBigTag1.setAuthority(0);

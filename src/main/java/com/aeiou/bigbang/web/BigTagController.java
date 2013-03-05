@@ -68,6 +68,130 @@ public class BigTagController {
         return "redirect:/bigtags/" + encodeUrlPathSegment(bigTag.getId().toString(), httpServletRequest);
     }
 	
+	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")
+    public String update(@Valid BigTag bigTag, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+		if (StringUtils.isEmpty(bigTag.getTagName())) {
+            populateEditForm(uiModel, bigTag);
+            return "bigtags/update";
+        }
+        
+        //update the layout string of useraccount
+		BigTag tBigTag = BigTag.findBigTag(bigTag.getId());
+        UserAccount tUserAccount = UserAccount.findUserAccountByName(tBigTag.getType());
+        String tLayout = tUserAccount == null ? null : tUserAccount.getLayout();
+        int p = tLayout == null ? -1 : tLayout.indexOf('™');
+   		if(p > -1){
+   		   	String[] tAryTagStrsLeft = null;								//for generating the new layout string.
+   		   	String[] tAryTagStrsRight = null;
+   		   	String[] tAryNumStrsLeft = null;
+   		   	String[] tAryNumStrsRight = null;
+   		   	
+   			String tTagStr = tLayout.substring(0, p);
+   			String tSizeStr = tLayout.substring(p+1);
+   			p = tTagStr.indexOf('¬');
+   			if(p >= 0){
+   	    		tAryTagStrsLeft = tTagStr.substring(0, p).split("¯");
+   	    		tAryTagStrsRight = tTagStr.substring(p+1).split("¯");
+   			}
+   			p = tSizeStr.indexOf('¬');
+   			if(p >= 0){
+   	    		tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
+   	    		tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
+   			}
+   			
+			//if the layout info in DB is not good, reset it.
+			if(((tAryTagStrsLeft == null || tAryTagStrsLeft.length == 0) && (tAryTagStrsRight == null || tAryTagStrsRight.length == 0))
+					|| ((tAryNumStrsLeft == null || tAryNumStrsLeft.length == 0) && (tAryNumStrsRight == null || tAryNumStrsRight.length == 0))
+					|| (tAryTagStrsLeft.length != tAryNumStrsLeft.length || tAryTagStrsRight.length != tAryNumStrsRight.length)){
+				BigUtil.resetLayoutString(tUserAccount);
+			}else{
+	   			//---------adjusting the Sting Arys-------------
+	   			//to find out the column and position
+	   			tTagStr = BigUtil.getTagInLayoutString(tBigTag);
+	   			String tTagStrNEW = BigUtil.getTagInLayoutString(bigTag);
+	   			
+	   			boolean tIsInLeftColumn = false;
+	   			int tPos;
+	   			for(tPos = 0; tPos < tAryTagStrsLeft.length; tPos++){
+	   				if(tAryTagStrsLeft[tPos].equals(tTagStr)){
+	   					tIsInLeftColumn = true;
+	   					break;
+	   				}
+	   			}
+	   			if(!tIsInLeftColumn){
+	   				for(tPos = 0; tPos < tAryTagStrsRight.length; tPos++){
+	   					if(tAryTagStrsRight[tPos].equals(tTagStr)){
+	   						break;
+	   					}
+	   				}
+	   			}	//now know the column and position.
+	   			
+   				if(tIsInLeftColumn){
+   					String[] tAryTagStrsLeft2 = new String[tAryTagStrsLeft.length];
+   					String[] tAryNumStrsLeft2 = new String[tAryNumStrsLeft.length];
+   					for(int j = 0; j < tAryTagStrsLeft.length; j++){
+   						if(j != tPos){
+   							tAryTagStrsLeft2[j] = tAryTagStrsLeft[j];
+   							tAryNumStrsLeft2[j] = tAryNumStrsLeft[j];
+   						}else{
+   							tAryTagStrsLeft2[j] = tTagStrNEW;
+   							tAryNumStrsLeft2[j] = tAryNumStrsLeft[j];
+   						}
+   					}
+   					tAryTagStrsLeft = tAryTagStrsLeft2;
+   					tAryNumStrsLeft = tAryNumStrsLeft2;				
+   				}else{
+   					String[] tAryTagStrsRight2 = new String[tAryTagStrsRight.length];
+   					String[] tAryNumStrsRight2 = new String[tAryNumStrsRight.length];
+   					for(int j = 0; j < tAryTagStrsRight.length; j++){
+   						if(j != tPos){
+   							tAryTagStrsRight2[j] = tAryTagStrsRight[j];
+   							tAryNumStrsRight2[j] = tAryNumStrsRight[j];
+   						}else{
+   							tAryTagStrsRight2[j] = tTagStrNEW;
+   							tAryNumStrsRight2[j] = tAryNumStrsRight[j];
+   						}
+   					}
+   					tAryTagStrsRight = tAryTagStrsRight2;
+   					tAryNumStrsRight = tAryNumStrsRight2;
+   				}
+   			
+	   			StringBuilder tStrB = new StringBuilder();						//construct the new String of layout
+	   		    StringBuilder tStrB_Num = new StringBuilder();
+	   	   		for(int j = 0; j < tAryTagStrsLeft.length; j++){			
+	   	   	    	tStrB.append(tAryTagStrsLeft[j]);
+	   	   	    	tStrB_Num.append(tAryNumStrsLeft[j]);
+	   	   	    	if(j + 1 < tAryTagStrsLeft.length){
+	   	   	    		tStrB.append('¯');
+	   	       	    	tStrB_Num.append('¯');
+	   	   	    	}
+	   		    }
+	
+	   	   		tStrB.append('¬');
+	   	   		tStrB_Num.append('¬');
+	   	   		
+	   	   		for(int j = 0; j < tAryTagStrsRight.length; j++){
+	   	   	    	tStrB.append(tAryTagStrsRight[j]);
+	   	   	    	tStrB_Num.append(tAryNumStrsRight[j]);
+	   	   	    	if(j + 1 < tAryTagStrsRight.length){
+	   	   	    		tStrB.append('¯');
+	   	       	    	tStrB_Num.append('¯');
+	   	   	    	}
+	   		    }
+	   	   		tStrB.append('™').append(tStrB_Num);
+	
+	   	   		tUserAccount.setLayout(tStrB.toString());	    						//save the new layout string to DB
+	   	   		tUserAccount.persist();
+			}
+   		}else{
+   			BigUtil.resetLayoutString(tUserAccount);
+   		}
+
+        uiModel.asMap().clear();
+        bigTag.merge();
+        return "redirect:/bigtags/" + encodeUrlPathSegment(bigTag.getId().toString(), httpServletRequest);
+    }
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
         BigTag bigTag = BigTag.findBigTag(id);
@@ -96,7 +220,7 @@ public class BigTagController {
    	    		tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
    			}
    			
-			//if the layout info in DB is not good, leave it empty
+			//if the layout info in DB is not good,  reset it.
 			if(((tAryTagStrsLeft == null || tAryTagStrsLeft.length == 0) && (tAryTagStrsRight == null || tAryTagStrsRight.length == 0))
 					|| ((tAryNumStrsLeft == null || tAryNumStrsLeft.length == 0) && (tAryNumStrsRight == null || tAryNumStrsRight.length == 0))
 					|| (tAryTagStrsLeft.length != tAryNumStrsLeft.length || tAryTagStrsRight.length != tAryNumStrsRight.length)){

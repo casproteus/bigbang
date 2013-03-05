@@ -32,17 +32,7 @@ privileged aspect BigTagController_Roo_Controller {
         return "bigtags/show";
     }
     
-    @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
-    public String BigTagController.update(@Valid BigTag bigTag, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, bigTag);
-            return "bigtags/update";
-        }
-        uiModel.asMap().clear();
-        bigTag.merge();
-        return "redirect:/bigtags/" + encodeUrlPathSegment(bigTag.getId().toString(), httpServletRequest);
-    }
-    
+        
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String BigTagController.updateForm(@PathVariable("id") Long id, Model uiModel) {
         populateEditForm(uiModel, BigTag.findBigTag(id));

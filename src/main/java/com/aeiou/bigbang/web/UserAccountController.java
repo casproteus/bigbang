@@ -12,10 +12,12 @@ import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigUtil;
@@ -58,6 +60,42 @@ public class UserAccountController {
         	uiModel.addAttribute("create_error", "abc");
         	return "useraccounts/create";
         }
+    }
+
+	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")
+    public String update(@Valid UserAccount userAccount, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+        if (bindingResult.hasErrors()) {
+            populateEditForm(uiModel, userAccount);
+            return "useraccounts/update";
+        }
+        
+        UserAccount tUserAccount = UserAccount.findUserAccount(userAccount.getId());
+        if(!tUserAccount.getName().equals(userAccount.getName())){
+	        List<BigTag> tBigTags = BigTag.findTagsByPublisher(tUserAccount.getName(), 0, 1000);
+	        for(int i = tBigTags.size() - 1; i > -1 ; i--){
+	        	tBigTags.get(i).setType(userAccount.getName());
+	        	tBigTags.get(i).merge();
+	        }
+        }
+        
+        uiModel.asMap().clear();
+        userAccount.merge();
+        return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
+    }
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
+    public String delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+        UserAccount userAccount = UserAccount.findUserAccount(id);
+        List<BigTag> tBigTags = BigTag.findTagsByPublisher(userAccount.getName(), 0, 1000);
+        for(int i = tBigTags.size() - 1; i > -1 ; i--){
+        	tBigTags.get(i).remove();
+        }
+        userAccount.remove();
+        
+        uiModel.asMap().clear();
+        uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
+        uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
+        return "redirect:/useraccounts";
     }
 
 	@RequestMapping(produces = "text/html")

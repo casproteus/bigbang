@@ -26,33 +26,14 @@ privileged aspect UserAccountController_Roo_Controller {
         return "useraccounts/show";
     }
     
-    @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
-    public String UserAccountController.update(@Valid UserAccount userAccount, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, userAccount);
-            return "useraccounts/update";
-        }
-        uiModel.asMap().clear();
-        userAccount.merge();
-        return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
-    }
-    
+        
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String UserAccountController.updateForm(@PathVariable("id") Long id, Model uiModel) {
         populateEditForm(uiModel, UserAccount.findUserAccount(id));
         return "useraccounts/update";
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
-    public String UserAccountController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        UserAccount userAccount = UserAccount.findUserAccount(id);
-        userAccount.remove();
-        uiModel.asMap().clear();
-        uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
-        uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
-        return "redirect:/useraccounts";
-    }
-    
+        
     void UserAccountController.populateEditForm(Model uiModel, UserAccount userAccount) {
         uiModel.addAttribute("userAccount", userAccount);
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());

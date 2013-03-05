@@ -13,9 +13,6 @@
                     <field:input field="description" id="c_com_aeiou_bigbang_domain_UserAccount_description" z="IHXfmTHIFzCFUY3TARmFZXUT838="/>
                     <field:input field="price" id="c_com_aeiou_bigbang_domain_UserAccount_price" max="9" min="0" required="true" z="NNXWMQKTCd/lmw4Q/AvzmkSI5cs="/>
                     <field:input disabled="true" field="balance" id="c_com_aeiou_bigbang_domain_UserAccount_balance" required="true" z="user-managed"/>
-                    <field:select field="listento" id="c_com_aeiou_bigbang_domain_UserAccount_listento" itemValue="id" items="${useraccounts}" multiple="true" path="/useraccounts" z="IQaeFE4bTXuS6y9TJhi8R2WV+84="/>
-                    <field:input field="layout" id="c_com_aeiou_bigbang_domain_UserAccount_layout" z="DZP4oppDs9iitXlz6zafXsQ860o="/>
-                    <field:input field="theme" id="c_com_aeiou_bigbang_domain_UserAccount_theme" z="LUE/j9k+XsvseHOVeyb1+Q3fFY0="/>
                 </form:Bigcreate>
                 <form:dependency dependencies="${dependencies}" id="d_com_aeiou_bigbang_domain_UserAccount" render="${not empty dependencies}" z="pRXKbS1jO/JZHS6yO3aerzXp/Tc="/>
             </td>

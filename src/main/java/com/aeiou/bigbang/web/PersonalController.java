@@ -131,12 +131,14 @@ public class PersonalController{
     	}else{																			//prepare the info for view base on the string in db:
     		tBigTagsLeft = BigUtil.transferToTags(tAryTagStrsLeft, spaceOwner);
     		for(int i = 0; i < tBigTagsLeft.size(); i++){
-    			tTagIdsLeft.add(tBigTagsLeft.get(i).getId());
+    			if(tBigTagsLeft.get(i) != null)								//it can be null, like when admin chenged the name of the tags, thought it seldom happen.
+    				tTagIdsLeft.add(tBigTagsLeft.get(i).getId());
     		}
     		
     		tBigTagsRight = BigUtil.transferToTags(tAryTagStrsRight, spaceOwner);
     		for(int i = 0; i < tBigTagsRight.size(); i++){
-    			tTagIdsRight.add(tBigTagsRight.get(i).getId());
+    			if(tBigTagsRight.get(i) != null)							//it can be null, like when admin chenged the name of the tags, thought it seldom happen.
+    				tTagIdsRight.add(tBigTagsRight.get(i).getId());
     		}
     	}
 																						//final adjust---not all tags should be shown to curUser:

@@ -40,8 +40,7 @@ public class UserDetailsAuthenticationProvider extends AbstractUserDetailsAuthen
 	}
 
 	@Override
-	public UserDetails retrieveUser(String userName, UsernamePasswordAuthenticationToken authentication)
-			throws AuthenticationException {
+	public UserDetails retrieveUser(String userName, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 
 		log.debug("Authenticating {} against server", userName);
 

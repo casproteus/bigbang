@@ -100,9 +100,7 @@ public class BigTagController {
    			}
    			
 			//if the layout info in DB is not good, reset it.
-			if(((tAryTagStrsLeft == null || tAryTagStrsLeft.length == 0) && (tAryTagStrsRight == null || tAryTagStrsRight.length == 0))
-					|| ((tAryNumStrsLeft == null || tAryNumStrsLeft.length == 0) && (tAryNumStrsRight == null || tAryNumStrsRight.length == 0))
-					|| (tAryTagStrsLeft.length != tAryNumStrsLeft.length || tAryTagStrsRight.length != tAryNumStrsRight.length)){
+			if(BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)){
 				BigUtil.resetLayoutString(tUserAccount);
 			}else{
 	   			//---------adjusting the Sting Arys-------------
@@ -221,9 +219,7 @@ public class BigTagController {
    			}
    			
 			//if the layout info in DB is not good,  reset it.
-			if(((tAryTagStrsLeft == null || tAryTagStrsLeft.length == 0) && (tAryTagStrsRight == null || tAryTagStrsRight.length == 0))
-					|| ((tAryNumStrsLeft == null || tAryNumStrsLeft.length == 0) && (tAryNumStrsRight == null || tAryNumStrsRight.length == 0))
-					|| (tAryTagStrsLeft.length != tAryNumStrsLeft.length || tAryTagStrsRight.length != tAryNumStrsRight.length)){
+			if(BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)){
 				BigUtil.resetLayoutString(tUserAccount);
 			}else{
 	   			//---------adjusting the Sting Arys-------------

@@ -186,5 +186,24 @@ public class BigUtil {
     	
     	return tStrB.toString();
 	}
+	
+    public static boolean notCorrect(String[] tAryTagStrsLeft, String[] tAryTagStrsRight, String[] tAryNumStrsLeft, String[] tAryNumStrsRight){
+    	if((tAryTagStrsLeft == null || tAryTagStrsLeft.length == 0) && (tAryTagStrsRight == null || tAryTagStrsRight.length == 0))
+    		return true;
+		if((tAryNumStrsLeft == null || tAryNumStrsLeft.length == 0) && (tAryNumStrsRight == null || tAryNumStrsRight.length == 0))
+			return true;
+		if(tAryTagStrsLeft.length != tAryNumStrsLeft.length || tAryTagStrsRight.length != tAryNumStrsRight.length)
+			return true;
+		try{
+			for(int i = tAryNumStrsLeft.length - 1; i >= 0; i--)
+				Integer.parseInt(tAryNumStrsLeft[i]);			
+			for(int i = tAryNumStrsRight.length - 1; i >= 0; i--)
+				Integer.parseInt(tAryNumStrsRight[i]);			
+		}catch(Exception e){
+			return true;
+		}
+		
+		return false;
+    }
 
 }

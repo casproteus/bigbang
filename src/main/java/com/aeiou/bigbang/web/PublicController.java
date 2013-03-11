@@ -35,7 +35,7 @@ public class PublicController{
     public void post(@PathVariable Long id, ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
     	System.out.println("go to his big uncle's!");
     }
-    
+
     @RequestMapping(produces = "text/html")
     public String index( Model uiModel){
     	
@@ -68,9 +68,7 @@ public class PublicController{
 		}
     	
 		//if the layout info in DB is not good, create it from beginning.
-		if(((tAryTagStrsLeft == null || tAryTagStrsLeft.length == 0) && (tAryTagStrsRight == null || tAryTagStrsRight.length == 0))
-				|| ((tAryNumStrsLeft == null || tAryNumStrsLeft.length == 0) && (tAryNumStrsRight == null || tAryNumStrsRight.length == 0))
-				|| (tAryTagStrsLeft.length != tAryNumStrsLeft.length || tAryTagStrsRight.length != tAryNumStrsRight.length)){
+		if(BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)){
 			
 	    	List<BigTag> tBigTags = BigTag.findTagsByOwner("admin"); 	//fetch out all tags of admin's, owner's and his team's, 
     		List<Long> tTagIds = new ArrayList<Long>();						//then adjust it. @note: don't know if we can use AthenSet to move this into JPQL, because 

@@ -84,7 +84,8 @@ public class BigUtil {
     				tBigTags.add(tTag);
     			else{
     				tTag = BigTag.findTagByNameAndOwner(tAryTagStrs[i].substring(1), "administrator");
-    				tBigTags.add(tTag);
+    				if(tTag != null)
+    					tBigTags.add(tTag);
     			}
     		}else{
     			BigTag tTag = BigTag.findTagByNameAndOwner(tAryTagStrs[i], pOwnerName);

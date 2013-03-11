@@ -131,13 +131,13 @@ public class PersonalController{
     	}else{																			//prepare the info for view base on the string in db:
     		tBigTagsLeft = BigUtil.transferToTags(tAryTagStrsLeft, spaceOwner);
     		for(int i = 0; i < tBigTagsLeft.size(); i++){
-    			if(tBigTagsLeft.get(i) != null)								//it can be null, like when admin chenged the name of the tags, thought it seldom happen.
+    			//if(tBigTagsLeft.get(i) != null)							//it can be null, like when admin chenged the name of the tags, while it's handled in BigtUtil
     				tTagIdsLeft.add(tBigTagsLeft.get(i).getId());
     		}
     		
     		tBigTagsRight = BigUtil.transferToTags(tAryTagStrsRight, spaceOwner);
     		for(int i = 0; i < tBigTagsRight.size(); i++){
-    			if(tBigTagsRight.get(i) != null)							//it can be null, like when admin chenged the name of the tags, thought it seldom happen.
+    			//if(tBigTagsRight.get(i) != null)							//it can be null, like when admin chenged the name of the tags, while it's handled in BigtUtil
     				tTagIdsRight.add(tBigTagsRight.get(i).getId());
     		}
     	}

@@ -44,9 +44,6 @@
 	          <spring:message code="security_login_form_password" />
 	        </label>
 	        <input id="j_password" type='password' name='j_password' style="width:150px" />
-	        
-	        <checkbox id="j_rememberme"/>
-	        
 	        <spring:message code="security_login_form_password_message" var="pwd_msg" htmlEscape="false" />
 	        <script type="text/javascript">
 	          <c:set var="sec_pwd_msg">
@@ -55,7 +52,26 @@
 	          Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_password", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_pwd_msg}", required : true}})); 
 	        </script>
 	      </div>
-	      <br />
+	      <input id="j_rememberme" name="j_rememberme" type="checkbox" style="vertical-align: bottom; margin-bottom: 0px;">
+	      	<spring:message code="label_rememberme" htmlEscape="false" />
+	      </input>
+           
+          <script type="text/javascript">
+			dojo.addOnLoad(function() {
+			  dojo.require("dojo.cookie");
+			  var rememberedName = dojo.cookie('login_nameJiangTao');
+			  var rememberedPassword = dojo.cookie('login_passwordJiangTao');
+			  //alert("name is: " + rememberedName + "  password: " + rememberedPassword);
+			  if (rememberedName != null) {
+			    dojo.byId('j_rememberme').setAttribute('checked', 'true');
+			    dijit.byId('j_username').set("value", rememberedName);
+			    dijit.byId('j_password').set("value", rememberedPassword);
+			  }
+			})
+          </script>
+           
+	      <br/>
+	      <br/>
 	      <div class="submit">
 	        <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
 	        <spring:message code="button_submit" var="submit_label" htmlEscape="false" />

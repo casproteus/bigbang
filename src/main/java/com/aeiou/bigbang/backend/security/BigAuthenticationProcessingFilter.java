@@ -1,6 +1,8 @@
 package com.aeiou.bigbang.backend.security;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -51,15 +53,20 @@ public class BigAuthenticationProcessingFilter extends AbstractAuthenticationPro
 		final Authentication authentication = this.getAuthenticationManager().authenticate(authRequest);
 
 		if (rememberMe) {
-			final Cookie cookie = new Cookie("login_nameJiangTao", login_name);
-			cookie.setMaxAge(31536000); // One year
-			cookie.setPath(request.getContextPath());
-			response.addCookie(cookie);
-			
-			final Cookie cookie2 = new Cookie("login_passwordJiangTao", login_password);
-			cookie2.setMaxAge(31536000); // One year
-			cookie2.setPath(request.getContextPath());
-			response.addCookie(cookie2);
+			try { 
+				login_name = URLEncoder.encode(login_name,"UTF-8");
+				final Cookie cookie = new Cookie("login_nameJiangTao", login_name);
+				cookie.setMaxAge(31536000); // One year
+				cookie.setPath(request.getContextPath());
+				response.addCookie(cookie);
+				
+				login_password = URLEncoder.encode(login_password,"UTF-8");
+				final Cookie cookie2 = new Cookie("login_passwordJiangTao", login_password);
+				cookie2.setMaxAge(31536000); // One year
+				cookie2.setPath(request.getContextPath());
+				response.addCookie(cookie2);
+		    } catch (UnsupportedEncodingException e) {
+		    } 
 		}
 		
 		return authentication;

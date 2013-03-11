@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ManyToMany;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -48,7 +49,9 @@ public class UserAccount {
     private int theme;
 
     public static com.aeiou.bigbang.domain.UserAccount findUserAccountByName(String pUserName) {
-        List<UserAccount> tList = entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)", UserAccount.class).setParameter("tname", pUserName).getResultList();
+        TypedQuery<UserAccount> tQuery = entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)", UserAccount.class);
+        tQuery = tQuery.setParameter("tname", pUserName);
+    	List<UserAccount> tList = tQuery.getResultList();
         if (tList != null && tList.size() == 1) return (UserAccount) tList.get(0); else return null;
     }
 

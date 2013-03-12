@@ -5,7 +5,6 @@
     <page:list id="pl_com_aeiou_bigbang_domain_Content" items="${contents}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
         <table:table data="${contents}" id="l_com_aeiou_bigbang_domain_Content" path="/contents" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
             <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
-            <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="sourceURL" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
             <!-- <table:column id="c_com_aeiou_bigbang_domain_Content_conentCache" property="conentCache" z="sAVFtEgMHZWvr7+XXfV96xRXMC0="/> -->
             <c:if test="${fn:toLowerCase(pageContext['request'].userPrincipal.name) eq 'admin'}">
                 <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>

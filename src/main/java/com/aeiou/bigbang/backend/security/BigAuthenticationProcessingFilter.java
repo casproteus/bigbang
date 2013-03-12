@@ -43,10 +43,15 @@ public class BigAuthenticationProcessingFilter extends AbstractAuthenticationPro
 		final boolean rememberMe = "on".equals(request.getParameter("j_rememberme"));
 
 		if (!rememberMe) {
-			final Cookie cookie = new Cookie("login_nameJiangTao", "");
+			final Cookie cookie = new Cookie("login_name", "");
 			cookie.setMaxAge(0);
-			cookie.setPath(request.getContextPath());
+			cookie.setPath("/");
 			response.addCookie(cookie);
+			
+			final Cookie cookie2 = new Cookie("login_password", "");
+			cookie2.setMaxAge(0);
+			cookie2.setPath("/");
+			response.addCookie(cookie2);
 		}
 
 		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(login_name, login_password);
@@ -55,15 +60,15 @@ public class BigAuthenticationProcessingFilter extends AbstractAuthenticationPro
 		if (rememberMe) {
 			try { 
 				login_name = URLEncoder.encode(login_name,"UTF-8");
-				final Cookie cookie = new Cookie("login_nameJiangTao", login_name);
+				final Cookie cookie = new Cookie("login_name", login_name);
 				cookie.setMaxAge(31536000); // One year
-				cookie.setPath(request.getContextPath());
+				cookie.setPath("/");
 				response.addCookie(cookie);
 				
 				login_password = URLEncoder.encode(login_password,"UTF-8");
-				final Cookie cookie2 = new Cookie("login_passwordJiangTao", login_password);
+				final Cookie cookie2 = new Cookie("login_password", login_password);
 				cookie2.setMaxAge(31536000); // One year
-				cookie2.setPath(request.getContextPath());
+				cookie2.setPath("/");
 				response.addCookie(cookie2);
 		    } catch (UnsupportedEncodingException e) {
 		    } 

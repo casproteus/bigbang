@@ -59,8 +59,8 @@
           <script type="text/javascript">
 			dojo.addOnLoad(function() {
 			  dojo.require("dojo.cookie");
-			  var rememberedName = dojo.cookie('login_nameJiangTao');
-			  var rememberedPassword = dojo.cookie('login_passwordJiangTao');
+			  var rememberedName = dojo.cookie('login_name');
+			  var rememberedPassword = dojo.cookie('login_password');
 			  //alert("name is: " + rememberedName + "  password: " + rememberedPassword);
 			  if (rememberedName != null) {
 			    dojo.byId('j_rememberme').setAttribute('checked', 'true');

@@ -11,7 +11,7 @@
         
         <!-- <form-login login-processing-url="/resources/j_spring_security_check" login-page="/login" authentication-failure-url="/login?login_error=t" />
          -->
-        <logout logout-url="/resources/j_spring_security_logout" />
+        <logout logout-url="/resources/j_spring_security_logout" success-handler-ref="logoutSuccessHandler"/>
         <!-- Configure these elements to secure URIs in your application -->
         <intercept-url pattern="/contents/**" access="isAuthenticated()" />
         <intercept-url pattern="/bigtags/**" access="isAuthenticated()" />

@@ -10,10 +10,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 
 import com.aeiou.bigbang.backend.security.BigAuthenticationFailureHandler;
 import com.aeiou.bigbang.backend.security.BigAuthenticationProcessingFilter;
+import com.aeiou.bigbang.backend.security.BigAuthenticationSuccessHandler;
 import com.aeiou.bigbang.backend.security.UserDetailsAuthenticationProvider;
 import com.aeiou.bigbang.util.SpringApplicationContext;
 import com.aeiou.bigbang.web.PersonalController;
@@ -43,7 +46,7 @@ public class SecurityConfig {
 		BigAuthenticationProcessingFilter filter = new BigAuthenticationProcessingFilter();
 		filter.setAuthenticationManager(authenticationManager);
 		filter.setAuthenticationFailureHandler(authenticationFailureHandler());
-//		filter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+		filter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
 		return filter;
 	}
 	
@@ -52,6 +55,22 @@ public class SecurityConfig {
 	// We just need to set the default failure url here
 	AuthenticationFailureHandler authenticationFailureHandler() {
 		return new BigAuthenticationFailureHandler();
+	}
+	
+	@Bean
+	@Scope("singleton")
+	// We just need to set the default success url here
+	AuthenticationSuccessHandler authenticationSuccessHandler() {
+		BigAuthenticationSuccessHandler handler = new BigAuthenticationSuccessHandler();
+		return handler;
+	}
+
+	@Bean
+	@Scope("singleton")
+	SimpleUrlLogoutSuccessHandler logoutSuccessHandler() {
+		SimpleUrlLogoutSuccessHandler handler = new SimpleUrlLogoutSuccessHandler();
+		handler.setUseReferer(true);
+		return handler;
 	}
 	
 	@Bean(autowire = Autowire.BY_NAME)

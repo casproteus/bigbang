@@ -12,8 +12,8 @@
                     <field:selectPriTag field="uncommonBigTag" id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" itemValue="id" items="${mytags}" path="/bigtags" z="user-managed"/>
                     <!-- <field:input field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" validationMessageCode="field_invalid_integer" z="13lgct4/IuNNNQhfERdHcr1QQ4A="/> -->
                     <field:select field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" itemValue="id" items="${authorities}" path="/bigtags" z="user-managed"/>
-                    <!-- <field:textarea field="conentCache" id="c_com_aeiou_bigbang_domain_Content_conentCache" z="user-managed"/> -->
-                    <field:select field="publisher" id="c_com_aeiou_bigbang_domain_Content_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="K9RgD0iIpWMOvR2WiE3Lm7LaX5I="/>
+                    <!-- <field:textarea field="conentCache" id="c_com_aeiou_bigbang_domain_Content_conentCache" z="user-managed"/> 
+                    <field:select field="publisher" id="c_com_aeiou_bigbang_domain_Content_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="K9RgD0iIpWMOvR2WiE3Lm7LaX5I="/>-->
                 </form:create>
                 <form:dependency dependencies="${dependencies}" id="d_com_aeiou_bigbang_domain_Content" render="${not empty dependencies}" z="OIaGm9/s9pNT5CEMnSapCWMx+DY="/>
             </td>
@@ -25,8 +25,8 @@
                     <p>2.Don't know where is your own space yet? How about this: <a>http://ShareTheGoodOnes.com/${pageContext['request'].userPrincipal.name}</a>
                     </p>
                     <p>3.What? can not find a tag for your content in public space? OK, please use 'other' for now.</p>
-                    <p>4.Sure you can create new tag, you are the big editor! BTW, in your own space, content will be organised with tags you edited.</p>
-                    <p>5.Why set as private? Because we thought you may have some content don't others to see yet. Set it private, so only you can see.</p>
+                    <p>4.Sure you can create new tag, you are the big editor! BTW, in your own space, content will be organised with tags you created.</p>
+                    <p>5.Why set as private? Because we thought you may have some content don't want others to see yet. Set it private, so only you can see.</p>
                 </util:panel>
             </td>
         </tr>

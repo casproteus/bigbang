@@ -22,17 +22,6 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect ContentController_Roo_Controller {
     
-    @RequestMapping(method = RequestMethod.POST, produces = "text/html")
-    public String ContentController.create(@Valid Content content, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, content);
-            return "contents/create";
-        }
-        uiModel.asMap().clear();
-        content.persist();
-        return "redirect:/contents/" + encodeUrlPathSegment(content.getId().toString(), httpServletRequest);
-    }
-    
     @RequestMapping(params = "form", produces = "text/html")
     public String ContentController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Content());

@@ -7,13 +7,9 @@ import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.web.UserAccountController;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
@@ -26,14 +22,12 @@ privileged aspect UserAccountController_Roo_Controller {
         return "useraccounts/show";
     }
     
-        
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String UserAccountController.updateForm(@PathVariable("id") Long id, Model uiModel) {
         populateEditForm(uiModel, UserAccount.findUserAccount(id));
         return "useraccounts/update";
     }
     
-        
     void UserAccountController.populateEditForm(Model uiModel, UserAccount userAccount) {
         uiModel.addAttribute("userAccount", userAccount);
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());

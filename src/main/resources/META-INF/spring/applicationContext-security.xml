@@ -15,11 +15,11 @@
         <!-- Configure these elements to secure URIs in your application -->
         <intercept-url pattern="/contents/**" access="isAuthenticated()" />
         <intercept-url pattern="/bigtags/**" access="isAuthenticated()" />
+        <intercept-url pattern="/twitters/**" access="isAuthenticated()" />
         <intercept-url pattern="/choices/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/circles/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/customizes/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/remarks/**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/twitters/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/useraccounts/**" access="permitAll" />
         <intercept-url pattern="/member/**" access="isAuthenticated()" />
         <intercept-url pattern="/resources/**" access="permitAll" />

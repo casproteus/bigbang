@@ -31,7 +31,9 @@ public class BigTag {
 
     private Integer owner;
 
-    /**@for test.
+    /**
+     * called when listing all created tags from bigtagController.
+     * called when the userlogin name changes from UserAccountController.
      * called when deleting a user account, all his tag should be also deleted, this can happen only when running test script.
      * @param pUserAccount
      * @param firstResult
@@ -44,18 +46,35 @@ public class BigTag {
         return tQuery.getResultList();
     }
 
+    /**
+     * called when listing all created tags from bigtagController.
+     * @param pPublisher
+     * @return
+     */
+    public static long countTagsByPublisher(String pPublisher) {
+        TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM BigTag o WHERE o.type = :pPublisher", Long.class);
+        tQuery = tQuery.setParameter("pPublisher", pPublisher);
+        return tQuery.getSingleResult();
+    }
+
+    /**
+     * called only by contentController.populateEditForm().
+     * @param pUserAccount
+     * @param firstResult
+     * @param maxResults
+     * @return
+     */
     public static List<com.aeiou.bigbang.domain.BigTag> findBMTagsByPublisher(String pUserAccount, int firstResult, int maxResults) {
         TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0 ORDER BY o.id DESC", BigTag.class);
         tQuery = tQuery.setParameter("type", pUserAccount).setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
 
-    public static long countBMTagsByPublisher(String pPublisher) {
-        TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM BigTag o WHERE o.type = :pPublisher and o.owner = 0", Long.class);
-        tQuery = tQuery.setParameter("pPublisher", pPublisher);
-        return tQuery.getSingleResult();
-    }
-
+    /**
+     * called only by twitterController.populateEditForm().
+     * @param pUserAccount
+     * @return
+     */
     public static List<com.aeiou.bigbang.domain.BigTag> findTWTagsByPublisher(String pUserAccount) {
         TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = :owner ORDER BY o.id DESC", BigTag.class);
         tQuery = tQuery.setParameter("type", pUserAccount).setParameter("owner", 1).setFirstResult(0).setMaxResults(1000);

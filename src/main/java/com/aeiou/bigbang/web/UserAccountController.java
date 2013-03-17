@@ -71,7 +71,7 @@ public class UserAccountController {
         
         UserAccount tUserAccount = UserAccount.findUserAccount(userAccount.getId());
         if(!tUserAccount.getName().equals(userAccount.getName())){
-	        List<BigTag> tBigTags = BigTag.findBMTagsByPublisher(tUserAccount.getName(), 0, 1000);
+	        List<BigTag> tBigTags = BigTag.findTagsByPublisher(tUserAccount.getName(), 0, 1000);
 	        for(int i = tBigTags.size() - 1; i > -1 ; i--){
 	        	tBigTags.get(i).setType(userAccount.getName());
 	        	tBigTags.get(i).merge();

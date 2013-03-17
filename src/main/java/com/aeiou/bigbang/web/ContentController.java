@@ -32,8 +32,8 @@ public class ContentController {
 	void populateEditForm(Model uiModel, Content content) {
         uiModel.addAttribute("content", content);
         List<BigTag> tCommontags = new ArrayList<BigTag>();
-        tCommontags.addAll(BigTag.findTagsByPublisher("administrator", 0, 10));
-        tCommontags.addAll(BigTag.findTagsByPublisher("admin", 0, 200));
+        tCommontags.addAll(BigTag.findBMTagsByPublisher("administrator", 0, 10));
+        tCommontags.addAll(BigTag.findBMTagsByPublisher("admin", 0, 200));
         uiModel.addAttribute("bigtags", tCommontags);
         
         //tag in private space can be leave as null;
@@ -44,7 +44,7 @@ public class ContentController {
         
 
         String tCurName = UserAccount.findUserAccountByName(userContextService.getCurrentUserName()).getName();
-        tList_Tag.addAll(BigTag.findTagsByPublisher(tCurName, 0, 1000));
+        tList_Tag.addAll(BigTag.findBMTagsByPublisher(tCurName, 0, 1000));
         uiModel.addAttribute("mytags", tList_Tag);
         
         List<UserAccount> tList = new ArrayList<UserAccount>();

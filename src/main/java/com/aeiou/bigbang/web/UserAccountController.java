@@ -53,7 +53,7 @@ public class UserAccountController {
 	        uiModel.asMap().clear();
 	        userAccount.persist();
 	        //give some default tags.
-	        //BigUtil.addDefaultUserTags(messageSource, userAccount.getName()); // If I open this, the local is OK, the server will report error when persisting the tags! 
+	        BigUtil.addDefaultUserTags(messageSource, userAccount.getName()); // If I open this, the local is OK, the server will report error when persisting the tags! 
 	        
 	        return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
         }else{
@@ -71,7 +71,7 @@ public class UserAccountController {
         
         UserAccount tUserAccount = UserAccount.findUserAccount(userAccount.getId());
         if(!tUserAccount.getName().equals(userAccount.getName())){
-	        List<BigTag> tBigTags = BigTag.findTagsByPublisher(tUserAccount.getName(), 0, 1000);
+	        List<BigTag> tBigTags = BigTag.findBMTagsByPublisher(tUserAccount.getName(), 0, 1000);
 	        for(int i = tBigTags.size() - 1; i > -1 ; i--){
 	        	tBigTags.get(i).setType(userAccount.getName());
 	        	tBigTags.get(i).merge();
@@ -82,7 +82,15 @@ public class UserAccountController {
         userAccount.merge();
         return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
     }
-
+	
+	/**
+	 * will only called by admin and only for deleting a test account. no one should ever delete a user account, will cause trouble for the records with publisher info.
+	 * @param id
+	 * @param page
+	 * @param size
+	 * @param uiModel
+	 * @return
+	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
         UserAccount userAccount = UserAccount.findUserAccount(id);

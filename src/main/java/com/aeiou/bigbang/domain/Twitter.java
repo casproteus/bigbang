@@ -26,4 +26,11 @@ public class Twitter {
     @NotNull
     @ManyToOne
     private UserAccount publisher;
+
+    @ManyToOne
+    private BigTag twittertag;
+
+    private int authority;
+
+    private String twtitle;
 }

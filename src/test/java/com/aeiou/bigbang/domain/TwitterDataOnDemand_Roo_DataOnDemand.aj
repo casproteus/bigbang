@@ -3,6 +3,7 @@
 
 package com.aeiou.bigbang.domain;
 
+import com.aeiou.bigbang.domain.BigTagDataOnDemand;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.TwitterDataOnDemand;
 import com.aeiou.bigbang.domain.UserAccount;
@@ -31,12 +32,22 @@ privileged aspect TwitterDataOnDemand_Roo_DataOnDemand {
     @Autowired
     private UserAccountDataOnDemand TwitterDataOnDemand.userAccountDataOnDemand;
     
+    @Autowired
+    private BigTagDataOnDemand TwitterDataOnDemand.bigTagDataOnDemand;
+    
     public Twitter TwitterDataOnDemand.getNewTransientTwitter(int index) {
         Twitter obj = new Twitter();
+        setAuthority(obj, index);
         setPublisher(obj, index);
         setTwitDate(obj, index);
         setTwitent(obj, index);
+        setTwtitle(obj, index);
         return obj;
+    }
+    
+    public void TwitterDataOnDemand.setAuthority(Twitter obj, int index) {
+        int authority = index;
+        obj.setAuthority(authority);
     }
     
     public void TwitterDataOnDemand.setPublisher(Twitter obj, int index) {
@@ -52,6 +63,11 @@ privileged aspect TwitterDataOnDemand_Roo_DataOnDemand {
     public void TwitterDataOnDemand.setTwitent(Twitter obj, int index) {
         String twitent = "twitent_" + index;
         obj.setTwitent(twitent);
+    }
+    
+    public void TwitterDataOnDemand.setTwtitle(Twitter obj, int index) {
+        String twtitle = "twtitle_" + index;
+        obj.setTwtitle(twtitle);
     }
     
     public Twitter TwitterDataOnDemand.getSpecificTwitter(int index) {

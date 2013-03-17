@@ -31,7 +31,7 @@
             <spring:eval expression="object[field]" />
           </c:when>
           <c:otherwise>
-            <spring:eval expression="object[field].toString()" />
+            <spring:eval htmlEscape="false" expression="object[field].toString()" />
           </c:otherwise>
         </c:choose>
       </div>

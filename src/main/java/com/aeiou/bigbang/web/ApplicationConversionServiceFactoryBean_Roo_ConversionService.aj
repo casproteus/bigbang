@@ -22,7 +22,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<BigTag, String> ApplicationConversionServiceFactoryBean.getBigTagToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.BigTag, java.lang.String>() {
             public String convert(BigTag bigTag) {
-                return new StringBuilder().append(bigTag.getTagName()).append(' ').append(bigTag.getType()).append(' ').append(bigTag.getAuthority()).toString();
+                return new StringBuilder().append(bigTag.getTagName()).append(' ').append(bigTag.getType()).append(' ').append(bigTag.getAuthority()).append(' ').append(bigTag.getOwner()).toString();
             }
         };
     }
@@ -142,7 +142,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Twitter, String> ApplicationConversionServiceFactoryBean.getTwitterToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.Twitter, java.lang.String>() {
             public String convert(Twitter twitter) {
-                return new StringBuilder().append(twitter.getTwitent()).append(' ').append(twitter.getTwitDate()).toString();
+                return new StringBuilder().append(twitter.getTwitent()).append(' ').append(twitter.getTwitDate()).append(' ').append(twitter.getAuthority()).append(' ').append(twitter.getTwtitle()).toString();
             }
         };
     }

@@ -328,8 +328,8 @@ public class BigTagController {
     		nrOfPages = (float) BigTag.countBigTags() / sizeNo;
 	        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
     	}else{
-	        uiModel.addAttribute("bigtags", BigTag.findTagsByPublisher(tCurName, firstResult, sizeNo));
-	        nrOfPages = (float) BigTag.countTagsByPublisher(tCurName) / sizeNo;
+	        uiModel.addAttribute("bigtags", BigTag.findBMTagsByPublisher(tCurName, firstResult, sizeNo));
+	        nrOfPages = (float) BigTag.countBMTagsByPublisher(tCurName) / sizeNo;
     	}
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         return "bigtags/list";

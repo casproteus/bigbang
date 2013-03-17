@@ -37,16 +37,16 @@
         :
       </label>
       <form:hidden id="_${sec_field}_id" path="${sec_field}" />
-      <div>
-        <div id="_${sec_field}_id_"></div>
+      <div style="height:150px; border: solid #666666 1px "> 
+        <div id="_${sec_field}_id_" style="height:100%;" ></div>     
         <script type="text/javascript">
-           Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id_', widgetType : 'dijit.Editor', widgetAttrs : {disabled: ${disabled}}}));
+           Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id_', widgetType : 'dijit.Editor', widgetAttrs : {height:'126px', disabled: ${disabled}}}));
            dojo.addOnLoad(function () {
               var src = dojo.byId('_${sec_field}_id');
               var rte = dijit.byId('_${sec_field}_id_');
               rte.disabled = ${disabled};
               rte.onLoadDeferred.addCallback(function(){
-                rte.setValue(src.value);
+                rte.setValue(src.value); 
                 dojo.connect(rte, 'onBlur', function(){src.value = rte.getValue();});
               });
             });

@@ -31,4 +31,12 @@ privileged aspect BigTag_Roo_JavaBean {
         this.authority = authority;
     }
     
+    public Integer BigTag.getOwner() {
+        return this.owner;
+    }
+    
+    public void BigTag.setOwner(Integer owner) {
+        this.owner = owner;
+    }
+    
 }

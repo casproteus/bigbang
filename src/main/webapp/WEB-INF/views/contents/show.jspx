@@ -6,9 +6,9 @@
         <field:display field="title" id="s_com_aeiou_bigbang_domain_Content_title" object="${content}" z="EPiePz/bvTLq2tH6kFx8pWHS/Xs="/>
         <field:display field="sourceURL" id="s_com_aeiou_bigbang_domain_Content_sourceURL" object="${content}" z="+HsVhm9Xu1zua8vJFU/krXxHFFg="/>
         <!-- <field:display field="conentCache" id="s_com_aeiou_bigbang_domain_Content_conentCache" object="${content}" z="9IBFHV9Z4gUjQm25cCPf1NibIbw="/> -->
-        <field:Bigdisplay field="publisher" id="s_com_aeiou_bigbang_domain_Content_publisher" object="${content}" z="user-managed"/>
         <field:Bigdisplay field="commonBigTag" id="s_com_aeiou_bigbang_domain_Content_commonBigTag" object="${content}" z="user-managed"/>
-        <field:display field="authority" id="s_com_aeiou_bigbang_domain_Content_authority" object="${content}" z="NXij6Y7D7z9rqayfqqzb64H9uvI="/>
         <field:Bigdisplay field="uncommonBigTag" id="s_com_aeiou_bigbang_domain_Content_uncommonBigTag" object="${content}" z="user-managed"/>
+        <field:display field="authority" id="s_com_aeiou_bigbang_domain_Content_authority" object="${content}" z="NXij6Y7D7z9rqayfqqzb64H9uvI="/>
+        <field:Bigdisplay field="publisher" id="s_com_aeiou_bigbang_domain_Content_publisher" object="${content}" z="user-managed"/>
     </page:show>
 </div>

@@ -70,7 +70,7 @@ public class PublicController{
 		//if the layout info in DB is not good, create it from beginning.
 		if(BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)){
 			
-	    	List<BigTag> tBigTags = BigTag.findTagsByOwner("admin"); 	//fetch out all tags of admin's, owner's and his team's, 
+	    	List<BigTag> tBigTags = BigTag.findBMTagsByOwner("admin"); 	//fetch out all tags of admin's, owner's and his team's, 
     		List<Long> tTagIds = new ArrayList<Long>();						//then adjust it. @note: don't know if we can use AthenSet to move this into JPQL, because 
 	    	for(int i = 0; i < tBigTags.size(); i++){						//here, we need to compare the tag names, to avoid duplication.
 	    		tTagIds.add(tBigTags.get(i).getId());

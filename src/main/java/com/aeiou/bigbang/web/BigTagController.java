@@ -18,6 +18,7 @@ import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.BigType;
 import com.aeiou.bigbang.util.BigUtil;
 
 @RequestMapping("/bigtags")
@@ -30,6 +31,7 @@ public class BigTagController {
 	void populateEditForm(Model uiModel, BigTag bigTag) {
 		uiModel.addAttribute("bigTag", bigTag);
         uiModel.addAttribute("authorities",BigAuthority.getAllOptions());
+        uiModel.addAttribute("types",BigType.getAllOptions(bigTag.getOwner()));
     }
 	
 	@RequestMapping(method = RequestMethod.POST, produces = "text/html")
@@ -334,5 +336,12 @@ public class BigTagController {
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         return "bigtags/list";
     }
-
+	
+	@RequestMapping(params = "form", produces = "text/html")
+    public String createForm(Model uiModel, @RequestParam(value = "type", required = false) String type) {
+		BigTag tBigTag = new BigTag();
+		tBigTag.setOwner(("0".equals(type) || "1".equals(type)) ? Integer.valueOf(type) : null);
+        populateEditForm(uiModel, tBigTag);
+        return "bigtags/create";
+    }
 }

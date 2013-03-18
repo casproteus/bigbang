@@ -9,7 +9,7 @@
                     <field:input field="title" id="c_com_aeiou_bigbang_domain_Content_title" required="true" z="KykRIB9kokqjzUlWGTykm0UCgVk="/>
                     <field:input field="sourceURL" id="c_com_aeiou_bigbang_domain_Content_sourceURL" required="true" z="Hk2QDdFCnal0PPA/nrv6B/Kw28U="/>
                     <field:select field="commonBigTag" id="c_com_aeiou_bigbang_domain_Content_commonBigTag" itemValue="id" items="${bigtags}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/>
-                    <field:selectPriTag field="uncommonBigTag" id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" itemValue="id" items="${mytags}" path="/bigtags" z="user-managed"/>
+                    <field:selectPriTag field="uncommonBigTag" id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" itemValue="id" items="${mytags}" path="/bigtags" type="0" z="user-managed"/>
                     <!-- <field:input field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" validationMessageCode="field_invalid_integer" z="13lgct4/IuNNNQhfERdHcr1QQ4A="/> -->
                     <field:select field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" itemValue="id" items="${authorities}" path="/bigtags" z="user-managed"/>
                     <!-- <field:textarea field="conentCache" id="c_com_aeiou_bigbang_domain_Content_conentCache" z="user-managed"/> 

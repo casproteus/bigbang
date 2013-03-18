@@ -7,7 +7,7 @@
         <c:if test="${fn:toLowerCase(pageContext['request'].userPrincipal.name) eq 'admin'}">
             <field:input field="type" id="c_com_aeiou_bigbang_domain_BigTag_type" min="2" required="true" z="i5pbNZdQACWxPbWZSvKltv3CLmQ="/>
         </c:if>
-        <field:input field="authority" id="c_com_aeiou_bigbang_domain_BigTag_authority" validationMessageCode="field_invalid_integer" z="Rn/Hq/wpLmkl7RpvXtybZFQoBvE="/>
-        <field:input field="owner" id="c_com_aeiou_bigbang_domain_BigTag_owner" required="true" validationMessageCode="field_invalid_integer" z="3g1PbIKzWlrjGlrzwgAE78RiEcg="/>
+        <field:select field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" itemValue="id" items="${authorities}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/>
+        <field:select field="owner" id="c_com_aeiou_bigbang_domain_BigTag_owner" itemValue="id" items="${types}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/>
     </form:update>
 </div>

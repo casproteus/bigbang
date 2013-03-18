@@ -7,7 +7,7 @@
         <field:editor field="twitent" id="c_com_aeiou_bigbang_domain_Twitter_twitent" required="true" z="user-managed"/>
         <!-- <field:datetime dateTimePattern="${twitter_twitdate_date_format}" field="twitDate" id="c_com_aeiou_bigbang_domain_Twitter_twitDate" required="true" z="RtLPo9UnRiHc0ybqItC4AqnRkw4="/>
         <field:select field="publisher" id="c_com_aeiou_bigbang_domain_Twitter_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="X87ZwFVlxa5uM0I8SRgxWxXqjLI="/> -->
-        <field:selectPriTag field="twittertag" id="c_com_aeiou_bigbang_domain_Twitter_twittertag" itemValue="id" items="${mytags}" path="/bigtags" z="user-managed"/>
+        <field:selectPriTag field="twittertag" id="c_com_aeiou_bigbang_domain_Twitter_twittertag" itemValue="id" items="${mytags}" path="/bigtags" type="1" z="user-managed"/>
         <field:select field="authority" id="c_com_aeiou_bigbang_domain_Twitter_authority" itemValue="id" items="${authorities}" path="/bigtags" z="user-managed"/>
     </form:update>
 </div>

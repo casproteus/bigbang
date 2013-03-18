@@ -15,12 +15,6 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect BigTagController_Roo_Controller {
     
-    @RequestMapping(params = "form", produces = "text/html")
-    public String BigTagController.createForm(Model uiModel) {
-        populateEditForm(uiModel, new BigTag());
-        return "bigtags/create";
-    }
-    
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String BigTagController.show(@PathVariable("id") Long id, Model uiModel) {
         uiModel.addAttribute("bigtag", BigTag.findBigTag(id));

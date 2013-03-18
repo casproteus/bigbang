@@ -61,6 +61,14 @@
       </a>
       
       <c:out value="  " />
+      <spring:url value="/twitters" var="twitter_url"/>
+      <a href="${twitter_url}">
+        <spring:url value="/resources/images/diary.png" var="diary_img_url" />
+        <spring:message code="global_menu_diaryManage" var="diaryManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(diaryManage_message)}" src="${diary_img_url}" title="${fn:escapeXml(diaryManage_message)}" />
+      </a>
+      
+      <c:out value="  " />
       <spring:url value="/bigtags" var="bigtags_url"/>
       <a href="${bigtags_url}">
         <spring:url value="/resources/images/tag.png" var="tag_img_url" />

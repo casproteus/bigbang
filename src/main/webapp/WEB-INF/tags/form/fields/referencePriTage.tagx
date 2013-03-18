@@ -4,6 +4,7 @@
   <jsp:directive.attribute name="id" type="java.lang.String" required="true" rtexprvalue="true" description="The identifier for this tag (do not change!)" />
   <jsp:directive.attribute name="path" type="java.lang.String" required="true" rtexprvalue="true" description="The relative path to the respource" />
   <jsp:directive.attribute name="field" type="java.lang.String" required="true" rtexprvalue="true" description="The field exposed from the form backing object" />
+  <jsp:directive.attribute name="type" type="java.lang.String" required="true" rtexprvalue="true" description="when creating a new tag, know the defaut type base on this" />
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
   <jsp:directive.attribute name="z" type="java.lang.String" required="false" description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
 
@@ -12,6 +13,7 @@
       <c:out value=" " />
       <spring:url value="${path}" var="create_url">
         <spring:param name="form" />
+        <spring:param name="type" value="${type}" />
       </spring:url>
       <a href="${create_url}">
         <spring:url value="/resources/images/addtag.png" var="create_img_url" />

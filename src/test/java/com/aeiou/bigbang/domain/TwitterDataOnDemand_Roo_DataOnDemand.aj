@@ -46,7 +46,7 @@ privileged aspect TwitterDataOnDemand_Roo_DataOnDemand {
     }
     
     public void TwitterDataOnDemand.setAuthority(Twitter obj, int index) {
-        int authority = index;
+        Integer authority = new Integer(index);
         obj.setAuthority(authority);
     }
     

@@ -42,11 +42,11 @@ privileged aspect Twitter_Roo_JavaBean {
         this.twittertag = twittertag;
     }
     
-    public int Twitter.getAuthority() {
+    public Integer Twitter.getAuthority() {
         return this.authority;
     }
     
-    public void Twitter.setAuthority(int authority) {
+    public void Twitter.setAuthority(Integer authority) {
         this.authority = authority;
     }
     

@@ -43,21 +43,6 @@ privileged aspect TwitterController_Roo_Controller {
         return "twitters/show";
     }
     
-    @RequestMapping(produces = "text/html")
-    public String TwitterController.list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        if (page != null || size != null) {
-            int sizeNo = size == null ? 10 : size.intValue();
-            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("twitters", Twitter.findTwitterEntries(firstResult, sizeNo));
-            float nrOfPages = (float) Twitter.countTwitters() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        } else {
-            uiModel.addAttribute("twitters", Twitter.findAllTwitters());
-        }
-        addDateTimeFormatPatterns(uiModel);
-        return "twitters/list";
-    }
-    
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String TwitterController.updateForm(@PathVariable("id") Long id, Model uiModel) {
         populateEditForm(uiModel, Twitter.findTwitter(id));

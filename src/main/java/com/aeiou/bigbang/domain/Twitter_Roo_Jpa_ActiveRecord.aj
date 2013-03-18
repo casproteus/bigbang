@@ -33,10 +33,6 @@ privileged aspect Twitter_Roo_Jpa_ActiveRecord {
         return entityManager().find(Twitter.class, id);
     }
     
-    public static List<Twitter> Twitter.findTwitterEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM Twitter o", Twitter.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-    }
-    
     @Transactional
     public void Twitter.persist() {
         if (this.entityManager == null) this.entityManager = entityManager();

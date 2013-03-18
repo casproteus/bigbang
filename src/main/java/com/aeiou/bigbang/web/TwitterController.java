@@ -3,8 +3,10 @@ package com.aeiou.bigbang.web;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.aeiou.bigbang.domain.BigTag;
+import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
@@ -19,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/twitters")
 @Controller
@@ -58,7 +61,7 @@ public class TwitterController {
             	    	 int tIdx = content.indexOf("<br />");
             	    	 if (tIdx > 0)
             	    		 content = content.substring(0, tIdx);
-            	    	 content = content.length() > 100 ? content.substring(0, 90) : content;
+            	    	 content = content.length() > 30 ? content.substring(0, 30) : content;
             	    	 twitter.setTwtitle(content);
             	     }
             	}else{
@@ -85,7 +88,7 @@ public class TwitterController {
         	    	 int tIdx = content.indexOf("<br />");
         	    	 if (tIdx > 0)
         	    		 content = content.substring(0, tIdx);
-        	    	 content = content.length() > 100 ? content.substring(0, 90) : content;
+        	    	 content = content.length() > 30 ? content.substring(0, 30) : content;
         	    	 twitter.setTwtitle(content);
         	     }
         	}else{
@@ -96,5 +99,32 @@ public class TwitterController {
         uiModel.asMap().clear();
         twitter.merge();
         return "redirect:/twitters/" + encodeUrlPathSegment(twitter.getId().toString(), httpServletRequest);
+    }
+
+	@RequestMapping(produces = "text/html")
+    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+		
+        int sizeNo = size == null ? 10 : size.intValue();
+        final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
+        String tCurName = userContextService.getCurrentUserName();
+        
+        if(tCurName == null)
+        	return "login";
+
+    	UserAccount tPublisher = UserAccount.findUserAccountByName(tCurName);
+    	tCurName = tPublisher.getName();
+        float nrOfPages;
+    	if(tCurName.equals("admin")){
+	        uiModel.addAttribute("twitters", Twitter.findTwitterEntries(firstResult, sizeNo));
+	        nrOfPages = (float) Twitter.countTwitters() / sizeNo;
+	        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+    	}else{
+	    	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tPublisher, tPublisher);
+	        uiModel.addAttribute("twitters", Twitter.findTwitterByPublisher(tPublisher, tAuthSet, firstResult, sizeNo));
+	        nrOfPages = (float) Twitter.countTwitterByPublisher(tPublisher, tAuthSet) / sizeNo;
+    	}
+        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+        addDateTimeFormatPatterns(uiModel);
+        return "twitters/list";
     }
 }

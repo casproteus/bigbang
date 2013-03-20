@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.Remark;
+import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
@@ -197,9 +199,90 @@ public class PublicController{
 
         uiModel.addAttribute("tag", tBigTag.getTagName());
         uiModel.addAttribute("tagId", tagId);
+        uiModel.addAttribute("description", tOwner.getDescription());
         return "public/list_more";
     }
+    
+    /**
+     * We have to use both tag's tagname and type to match out a single tag, because different user can create tags with same name. 
+     * if we match content with only tag name, will cause mistake when clicking the "more" button from personal space. 
+     * so we have to use tag's ID to match content.
+     * @param tag
+     * @param page
+     * @param size
+     * @param uiModel
+     * @return
+     */
+    @RequestMapping(params = "twittertype", produces = "text/html")
+    public String showMoreTwitters(@RequestParam(value = "twittertype", required = false) String twittertype, @RequestParam(value = "owner", required = false) String spaceOwner,
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
+    	UserAccount tOwner = UserAccount.findUserAccountByName(spaceOwner);
+    	if(tOwner == null){
+    		spaceOwner = BigUtil.getUTFString(spaceOwner);
+    		tOwner = UserAccount.findUserAccountByName(spaceOwner);
+    		if(tOwner == null){
+    			return null;
+    		}
+    	}
+        int sizeNo = size == null ? 25 : size.intValue();
+        final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
+       
+    	String tCurName = userContextService.getCurrentUserName();
+    	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+    	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
+        uiModel.addAttribute("spaceOwner", spaceOwner);
+        uiModel.addAttribute("spaceOwnerId", tOwner.getId());
+        float nrOfPages;
+        if("friend".equals(twittertype)){
+        	uiModel.addAttribute("contents", Twitter.findTwitterByOwner(tOwner, tAuthSet, firstResult, sizeNo));
+        	nrOfPages = (float) Twitter.countTwittersByOwner(tOwner, tAuthSet) / sizeNo;
+        }else{
+        	uiModel.addAttribute("contents", Twitter.findTwitterByPublisher(tOwner, tAuthSet, firstResult, sizeNo));
+        	nrOfPages = (float) Twitter.countTwitterByPublisher(tOwner, tAuthSet) / sizeNo;
+        }
+    	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
 
+        return "public/list_more_twitter";
+    }
+
+    /**
+     * We have to use both tag's tagname and type to match out a single tag, because different user can create tags with same name. 
+     * if we match content with only tag name, will cause mistake when clicking the "more" button from personal space. 
+     * so we have to use tag's ID to match content.
+     * @param tag
+     * @param page
+     * @param size
+     * @param uiModel
+     * @return
+     */
+    @RequestMapping(params = "twitterid", produces = "text/html")
+    public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, @RequestParam(value = "owner", required = false) String spaceOwner,
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
+    	UserAccount tOwner = UserAccount.findUserAccountByName(spaceOwner);
+    	if(tOwner == null){
+    		spaceOwner = BigUtil.getUTFString(spaceOwner);
+    		tOwner = UserAccount.findUserAccountByName(spaceOwner);
+    		if(tOwner == null){
+    			return null;
+    		}
+    	}
+        int sizeNo = size == null ? 25 : size.intValue();
+        final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
+       
+    	String tCurName = userContextService.getCurrentUserName();
+    	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+    	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
+        uiModel.addAttribute("spaceOwner", spaceOwner);
+        float nrOfPages;
+        uiModel.addAttribute("remarks", Remark.findRemarkByTwitter(twitterid, tAuthSet, firstResult, size));
+        nrOfPages = (float) Remark.countRemarksByTwitter(twitterid, tAuthSet) / sizeNo;
+    	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+        uiModel.addAttribute("twitter", Twitter.findTwitter(twitterid));
+        uiModel.addAttribute("newremark", new Remark());
+        
+        return "public/list_detail_twitter";
+    }
+    
     @RequestMapping(params = "publisher", produces = "text/html")
     public String listContentByPublisher(@RequestParam(value = "publisher", required = false) String pPublisher,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {

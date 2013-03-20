@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_aeiou_bigbang_domain_Twitter" object="${twitter}" path="/twitters" z="uLnVWzeo9CFWqAOLKukuqndR2CE=">
+        <field:display field="twtitle" id="s_com_aeiou_bigbang_domain_Twitter_twtitle" object="${twitter}" z="7SQnu40z7VLkD5J1VEKohShx3n4="/>
+        <field:Bigdisplay field="twitent" id="s_com_aeiou_bigbang_domain_Twitter_twitent" object="${twitter}" z="user-managed"/>
+        <!-- 
+        <field:display date="true" dateTimePattern="${twitter_twitdate_date_format}" field="twitDate" id="s_com_aeiou_bigbang_domain_Twitter_twitDate" object="${twitter}" z="PVdzwL9/B7RnKMMtGecJl0/H6zg="/>
+        <field:Bigdisplay field="publisher" id="s_com_aeiou_bigbang_domain_Twitter_publisher" object="${twitter}" z="user-managed"/>
+         -->
+        <field:Bigdisplay field="twittertag" id="s_com_aeiou_bigbang_domain_Twitter_twittertag" object="${twitter}" z="+qiSYHiitZ71c0vVmMPhR5oiQms="/>
+        <field:display date="true" dateTimePattern="${twitter_twitdate_date_format}" field="twitDate" id="s_com_aeiou_bigbang_domain_Twitter_twitDate" object="${twitter}" z="PVdzwL9/B7RnKMMtGecJl0/H6zg="/>
+        <field:display field="authority" id="s_com_aeiou_bigbang_domain_Twitter_authority" object="${twitter}" z="rYGtAvDjW8786BoWHrN5E2+EAJA="/>
+    </page:show>
+</div>

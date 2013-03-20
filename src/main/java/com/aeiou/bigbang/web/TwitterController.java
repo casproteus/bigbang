@@ -103,13 +103,12 @@ public class TwitterController {
 
 	@RequestMapping(produces = "text/html")
     public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-		
-        int sizeNo = size == null ? 10 : size.intValue();
-        final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
         String tCurName = userContextService.getCurrentUserName();
-        
         if(tCurName == null)
         	return "login";
+        
+        int sizeNo = size == null ? 10 : size.intValue();
+        final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
 
     	UserAccount tPublisher = UserAccount.findUserAccountByName(tCurName);
     	tCurName = tPublisher.getName();

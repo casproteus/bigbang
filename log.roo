@@ -79,3 +79,14 @@ quit
 field number --type int --class ~.domain.UserAccount --fieldName balance --notNull 
 quit
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-21 10:37:58
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-03-14 09:26:29
+help
+field string --class ~.domain.Twitter --fieldName title --notNull
+field number --fieldName owner --type int --class ~.domain.BigTag
+// [failed] field reference --fieldName commontag --type ~.domain.BigTag --class  
+field reference --fieldName commontag --type ~.domain.BigTag --class ~.domain.Twitter
+field reference --fieldName uncommontag --type ~.domain.BigTag --class ~.domain.Twitter
+field reference --fieldName twittertag --type ~.domain.BigTag --class ~.domain.Twitter
+field number --fieldName authority --type int --class ~.domain.Twitter
+field number --fieldName owner --type java.lang.Integer --class ~.domain.BigTag --notNull 
+field string --fieldName twtitle --class ~.domain.Twitter

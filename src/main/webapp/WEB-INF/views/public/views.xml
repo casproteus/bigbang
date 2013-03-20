@@ -4,10 +4,21 @@
     <definition extends="default" name="public/index">
         <put-attribute name="body" value="/WEB-INF/views/public/index.jspx"/>
     </definition>
+    
     <definition extends="default" name="public/list_publisher">
         <put-attribute name="body" value="/WEB-INF/views/public/list_publisher.jspx"/>
     </definition>
     <definition extends="default" name="public/list_more">
         <put-attribute name="body" value="/WEB-INF/views/public/list_more.jspx"/>
+    </definition>
+    
+    <definition extends="default" name="public/list_publisher_twitter">
+        <put-attribute name="body" value="/WEB-INF/views/public/list_publisher_twitter.jspx"/>
+    </definition>
+    <definition extends="default" name="public/list_more_twitter">
+        <put-attribute name="body" value="/WEB-INF/views/public/list_more_twitter.jspx"/>
+    </definition>
+    <definition extends="default" name="public/list_detail_twitter">
+        <put-attribute name="body" value="/WEB-INF/views/public/list_detail_twitter.jspx"/>
     </definition>
 </tiles-definitions>

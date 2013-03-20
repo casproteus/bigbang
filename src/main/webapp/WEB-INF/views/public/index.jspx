@@ -15,7 +15,8 @@
 		<spring:message code="label_public_index" arguments="${spaceOwner},${empty description ? publicDescription : description}" htmlEscape="false" var="title"/>
   	</c:otherwise>
   </c:choose>
-  <util:Bigpanel id="title" title="${title}">
+  <div style="background: #efefef; padding: 5px; margin-bottom: 3px">
+    <div style="text-align: center; padding-bottom: 5px"><b>${title}</b></div>
   	<spring:message code="pleaseAddSomeContentHere" htmlEscape="false"/>
     <span>
       <spring:url value="/contents" var="create_url">
@@ -86,11 +87,36 @@
         <img alt="${fn:escapeXml(accountsManage_message)}" src="${account_img_url}" title="${fn:escapeXml(accountsManage_message)}" />
       </a>
       
-  	  <util:theme/>
-  	  
-    </c:if>
-    
-  </util:Bigpanel>
+  	  <util:theme/>  	  
+    </c:if>    
+  </div>
+  <!-- display the diary of the user -->
+  <c:if test="${not empty twitterLeft}">
+	  <table class="tWireless" style="margin-bottom: 0px"><tr>
+	  	<c:if test="${not empty twitterLeft}">
+		  	<td class="tWireless nopaddingleft" valign="top">
+			  <page:contentPane id="twitterLeft" items="${twitterLeft}" label="diary" bottom="8">
+			    <table:twitterbox data="${twitterLeft}" id="l_com_aeiou_bigbang_domain_Content" type="self" path="/public" spaceOwner="${spaceOwner}">
+			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
+			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
+			        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="type" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
+			    </table:twitterbox>
+			  </page:contentPane>
+		  	</td>
+		</c:if>
+	  	<c:if test="${not empty twitterRight}">
+		   <td class="tWireless nopaddingright" valign="top" >
+			  <page:contentPane id="twitterRight" items="${twitterRight}" label="friends" bottom="8">
+			    <table:twitterbox data="${twitterRight}" id="l_com_aeiou_bigbang_domain_Content" type="friend" path="/public" spaceOwner="${spaceOwner}">
+			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
+			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
+			        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
+			    </table:twitterbox>
+			  </page:contentPane>
+		   </td>
+	  	</c:if>
+	  </tr></table>
+  </c:if>
   <!-- c:set var="tagsize" value="${bigTags.size()}" scope="request" /> -->
   <table class="tWireless"><tr>
   	<td class="tWireless nopaddingleft" valign="top">

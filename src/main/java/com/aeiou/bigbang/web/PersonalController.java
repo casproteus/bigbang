@@ -2,26 +2,23 @@ package com.aeiou.bigbang.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.aeiou.bigbang.backend.security.BigAuthenticationSuccessHandler;
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
 import com.aeiou.bigbang.util.BigUtil;
-import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/")
 @Controller
@@ -123,19 +120,17 @@ public class PersonalController{
 	    	}
     		tStrB.append('™').append(tStrB_Num);
 
-    		tOwner.setLayout(tStrB.toString());	    						//save to DB
+    		tOwner.setLayout(tStrB.toString());	    						//save the correct layout string back to DB
     		tOwner.persist();
     	}else{																			//prepare the info for view base on the string in db:
     		tBigTagsLeft = BigUtil.transferToTags(tAryTagStrsLeft, spaceOwner);
     		for(int i = 0; i < tBigTagsLeft.size(); i++){
-    			//if(tBigTagsLeft.get(i) != null)							//it can be null, like when admin chenged the name of the tags, while it's handled in BigtUtil
-    				tTagIdsLeft.add(tBigTagsLeft.get(i).getId());
+    				tTagIdsLeft.add(tBigTagsLeft.get(i).getId());   //it can not be null, even if admin changed the name of the tags, cause it's handled in BigtUtil
     		}
     		
     		tBigTagsRight = BigUtil.transferToTags(tAryTagStrsRight, spaceOwner);
     		for(int i = 0; i < tBigTagsRight.size(); i++){
-    			//if(tBigTagsRight.get(i) != null)							//it can be null, like when admin chenged the name of the tags, while it's handled in BigtUtil
-    				tTagIdsRight.add(tBigTagsRight.get(i).getId());
+    				tTagIdsRight.add(tBigTagsRight.get(i).getId()); //it can not be null, even if admin changed the name of the tags, cause it's handled in BigtUtil
     		}
     	}
 																						//final adjust---not all tags should be shown to curUser:
@@ -184,16 +179,18 @@ public class PersonalController{
 				}
 			}
 		}
+		
+		Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
         List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
         List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
     	for(int i = 0; i < tBigTagsLeft.size(); i++){
     		tContentListsLeft.add(
-    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tCurUser, tOwner),
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, tAuthSet,
     				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue()));
     	}
     	for(int i = 0; i < tBigTagsRight.size(); i++){
     		tContentListsRight.add(
-    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tCurUser, tOwner),
+    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, tAuthSet,
     				0, Integer.valueOf(tAryNumStrsRight[i]).intValue()));
     	}
 
@@ -207,6 +204,12 @@ public class PersonalController{
         uiModel.addAttribute("contentsLeft", tContentListsLeft);
         uiModel.addAttribute("contentsRight", tContentListsRight);
         
+        //====================prepare content for twitter area ============================
+    	List<Twitter> twitterLeft = Twitter.findTwitterByPublisher(tOwner, tAuthSet, 0, 8);
+    	List<Twitter> twitterRight = Twitter.findTwitterByOwner(tOwner, tAuthSet, 0, 8);
+        uiModel.addAttribute("twitterLeft", twitterLeft);
+        uiModel.addAttribute("twitterRight", twitterRight);
+        //---------------------------------------------------------------------------------
         //to save the reqeust to requestCache;
     	/**If I add @ModelAttribute(), and add HttpServletRequest and HttpServletResponse in params, 
     	 * then will throw out exception (can not resolve a view with name tao), and this method will be called twice.

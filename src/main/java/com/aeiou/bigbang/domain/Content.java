@@ -118,8 +118,8 @@ public class Content {
      * 1.when users are adding a content, he has to tell in which tag it will display in public space and in which space it will be in personal space.
      * 2.in private space,  there should be no tags with same name with pulic tags.
      * 3.all contents will have a public tag(not_classified if not select), want it displayed only in his private space is not allowed for now, he can set it as private or show only to team to hide it from main page.
-     * 4.the owner of the BigTag is not necessary to be the space owner. all team's 0 and 2 tag will also be showed.
-     * 5.every space display admin's tags by default. but use can hide it. 
+     * 4.the owner of the BigTag is not necessary to be the space owner. all team's 0 will also be showed.
+     * 5.every space display admin's tags by default. but user can hide it. 
      * @note: after get the result, should work on it to do more filter, e.g. content from other publihser, should remove the private ones.(auth == 1 <@TODO and auth=2 if cur user is not in the list>)
      * @param pTag
      * @param pOwner

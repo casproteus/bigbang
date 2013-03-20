@@ -3,7 +3,6 @@
 
 package com.aeiou.bigbang.web;
 
-import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.web.RemarkController;
@@ -42,9 +41,6 @@ privileged aspect RemarkController_Roo_Controller {
         List<String[]> dependencies = new ArrayList<String[]>();
         if (UserAccount.countUserAccounts() == 0) {
             dependencies.add(new String[] { "useraccount", "useraccounts" });
-        }
-        if (Content.countContents() == 0) {
-            dependencies.add(new String[] { "content", "contents" });
         }
         uiModel.addAttribute("dependencies", dependencies);
         return "remarks/create";
@@ -101,13 +97,13 @@ privileged aspect RemarkController_Roo_Controller {
     }
     
     void RemarkController.addDateTimeFormatPatterns(Model uiModel) {
-        uiModel.addAttribute("remark_remarttime_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("remark_remarktime_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
     
     void RemarkController.populateEditForm(Model uiModel, Remark remark) {
         uiModel.addAttribute("remark", remark);
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("contents", Content.findAllContents());
+        uiModel.addAttribute("remarks", Remark.findAllRemarks());
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
     }
     

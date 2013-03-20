@@ -118,7 +118,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Remark, String> ApplicationConversionServiceFactoryBean.getRemarkToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.Remark, java.lang.String>() {
             public String convert(Remark remark) {
-                return new StringBuilder().append(remark.getContent()).append(' ').append(remark.getRemartTime()).append(' ').append(remark.getPrivilege()).toString();
+                return new StringBuilder().append(remark.getContent()).append(' ').append(remark.getRemarkTime()).append(' ').append(remark.getAuthority()).toString();
             }
         };
     }

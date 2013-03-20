@@ -9,7 +9,7 @@
         <field:display date="true" dateTimePattern="${twitter_twitdate_date_format}" field="twitDate" id="s_com_aeiou_bigbang_domain_Twitter_twitDate" object="${twitter}" z="PVdzwL9/B7RnKMMtGecJl0/H6zg="/>
         <field:Bigdisplay field="publisher" id="s_com_aeiou_bigbang_domain_Twitter_publisher" object="${twitter}" z="user-managed"/>
          -->
-        <field:Bigdisplay field="twittertag" id="s_com_aeiou_bigbang_domain_Twitter_twittertag" object="${twitter}" z="+qiSYHiitZ71c0vVmMPhR5oiQms="/>
+        <field:Bigdisplay field="twittertag" id="s_com_aeiou_bigbang_domain_Twitter_twittertag" object="${twitter}" z="user-managed"/>
         <field:display date="true" dateTimePattern="${twitter_twitdate_date_format}" field="twitDate" id="s_com_aeiou_bigbang_domain_Twitter_twitDate" object="${twitter}" z="PVdzwL9/B7RnKMMtGecJl0/H6zg="/>
         <field:display field="authority" id="s_com_aeiou_bigbang_domain_Twitter_authority" object="${twitter}" z="rYGtAvDjW8786BoWHrN5E2+EAJA="/>
     </page:show>

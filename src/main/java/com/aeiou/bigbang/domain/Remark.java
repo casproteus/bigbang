@@ -10,6 +10,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -24,22 +25,18 @@ public class Remark {
     private String content;
 
     @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date remartTime;
-
-    @NotNull
-    private int privilege;
-
-    @NotNull
     @ManyToOne
     private UserAccount publisher;
 
-    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date remarkTime;
+
+    private Integer authority;
+
     @ManyToOne
-    private Content replyTo;
+    private com.aeiou.bigbang.domain.Remark remarkto;
     
-	
 	/**
      * @called from RemarkController->list when not admin as logged user. and PublicController->listRemarkByPublisher
      * @param pPublisher

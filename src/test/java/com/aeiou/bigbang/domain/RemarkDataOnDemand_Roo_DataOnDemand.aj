@@ -3,8 +3,6 @@
 
 package com.aeiou.bigbang.domain;
 
-import com.aeiou.bigbang.domain.Content;
-import com.aeiou.bigbang.domain.ContentDataOnDemand;
 import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.RemarkDataOnDemand;
 import com.aeiou.bigbang.domain.UserAccount;
@@ -33,17 +31,19 @@ privileged aspect RemarkDataOnDemand_Roo_DataOnDemand {
     @Autowired
     private UserAccountDataOnDemand RemarkDataOnDemand.userAccountDataOnDemand;
     
-    @Autowired
-    private ContentDataOnDemand RemarkDataOnDemand.contentDataOnDemand;
-    
     public Remark RemarkDataOnDemand.getNewTransientRemark(int index) {
         Remark obj = new Remark();
+        setAuthority(obj, index);
         setContent(obj, index);
-        setPrivilege(obj, index);
         setPublisher(obj, index);
-        setRemartTime(obj, index);
-        setReplyTo(obj, index);
+        setRemarkTime(obj, index);
+        setRemarkto(obj, index);
         return obj;
+    }
+    
+    public void RemarkDataOnDemand.setAuthority(Remark obj, int index) {
+        Integer authority = new Integer(index);
+        obj.setAuthority(authority);
     }
     
     public void RemarkDataOnDemand.setContent(Remark obj, int index) {
@@ -51,24 +51,19 @@ privileged aspect RemarkDataOnDemand_Roo_DataOnDemand {
         obj.setContent(content);
     }
     
-    public void RemarkDataOnDemand.setPrivilege(Remark obj, int index) {
-        int privilege = index;
-        obj.setPrivilege(privilege);
-    }
-    
     public void RemarkDataOnDemand.setPublisher(Remark obj, int index) {
         UserAccount publisher = userAccountDataOnDemand.getRandomUserAccount();
         obj.setPublisher(publisher);
     }
     
-    public void RemarkDataOnDemand.setRemartTime(Remark obj, int index) {
-        Date remartTime = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setRemartTime(remartTime);
+    public void RemarkDataOnDemand.setRemarkTime(Remark obj, int index) {
+        Date remarkTime = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setRemarkTime(remarkTime);
     }
     
-    public void RemarkDataOnDemand.setReplyTo(Remark obj, int index) {
-        Content replyTo = contentDataOnDemand.getRandomContent();
-        obj.setReplyTo(replyTo);
+    public void RemarkDataOnDemand.setRemarkto(Remark obj, int index) {
+        Remark remarkto = obj;
+        obj.setRemarkto(remarkto);
     }
     
     public Remark RemarkDataOnDemand.getSpecificRemark(int index) {

@@ -274,10 +274,11 @@ public class PublicController{
     	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
         uiModel.addAttribute("spaceOwner", spaceOwner);
         float nrOfPages;
-        uiModel.addAttribute("remarks", Remark.findRemarkByTwitter(twitterid, tAuthSet, firstResult, size));
-        nrOfPages = (float) Remark.countRemarksByTwitter(twitterid, tAuthSet) / sizeNo;
+        Twitter tTwitter = Twitter.findTwitter(twitterid);
+        uiModel.addAttribute("twitter", tTwitter);
+        uiModel.addAttribute("remarks", Remark.findRemarkByTwitter(tTwitter, tAuthSet, firstResult, size));
+        nrOfPages = (float) Remark.countRemarksByTwitter(tTwitter, tAuthSet) / sizeNo;
     	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        uiModel.addAttribute("twitter", Twitter.findTwitter(twitterid));
         uiModel.addAttribute("newremark", new Remark());
         
         return "public/list_detail_twitter";

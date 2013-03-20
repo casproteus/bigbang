@@ -44,7 +44,7 @@ public class Remark {
      * @param maxResults
      * @return
      */
-    public static List<com.aeiou.bigbang.domain.Remark> findRemarkByTwitter(Long id, Set<Integer> pAuthSet, int firstResult, int maxResults) {
+    public static List<com.aeiou.bigbang.domain.Remark> findRemarkByTwitter(Twitter pTwitter, Set<Integer> pAuthSet, int firstResult, int maxResults) {
         EntityManager tEntityManager = entityManager();
         TypedQuery<Remark> tQuery = tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY o.id DESC", Remark.class);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
@@ -52,7 +52,7 @@ public class Remark {
         return tQuery.getResultList(); 
     }
 
-    public static long countRemarksByTwitter(Long id, Set<Integer> pAuthSet) {
+    public static long countRemarksByTwitter(Twitter pTwitter, Set<Integer> pAuthSet) {
     	TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM Remark AS o WHERE o.publisher = :pPublisher and (o.authority in :pAuthSet)", Long.class);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
     	return tQuery.getSingleResult();

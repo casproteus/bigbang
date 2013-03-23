@@ -4,6 +4,7 @@
 package com.aeiou.bigbang.web;
 
 import com.aeiou.bigbang.domain.Remark;
+import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.web.RemarkController;
 import java.io.UnsupportedEncodingException;
@@ -24,17 +25,6 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect RemarkController_Roo_Controller {
     
-    @RequestMapping(method = RequestMethod.POST, produces = "text/html")
-    public String RemarkController.create(@Valid Remark remark, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, remark);
-            return "remarks/create";
-        }
-        uiModel.asMap().clear();
-        remark.persist();
-        return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
-    }
-    
     @RequestMapping(params = "form", produces = "text/html")
     public String RemarkController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Remark());
@@ -54,32 +44,8 @@ privileged aspect RemarkController_Roo_Controller {
         return "remarks/show";
     }
     
-    @RequestMapping(produces = "text/html")
-    public String RemarkController.list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        if (page != null || size != null) {
-            int sizeNo = size == null ? 10 : size.intValue();
-            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("remarks", Remark.findRemarkEntries(firstResult, sizeNo));
-            float nrOfPages = (float) Remark.countRemarks() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        } else {
-            uiModel.addAttribute("remarks", Remark.findAllRemarks());
-        }
-        addDateTimeFormatPatterns(uiModel);
-        return "remarks/list";
-    }
-    
-    @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
-    public String RemarkController.update(@Valid Remark remark, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, remark);
-            return "remarks/update";
-        }
-        uiModel.asMap().clear();
-        remark.merge();
-        return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
-    }
-    
+        
+        
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String RemarkController.updateForm(@PathVariable("id") Long id, Model uiModel) {
         populateEditForm(uiModel, Remark.findRemark(id));
@@ -103,7 +69,7 @@ privileged aspect RemarkController_Roo_Controller {
     void RemarkController.populateEditForm(Model uiModel, Remark remark) {
         uiModel.addAttribute("remark", remark);
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("remarks", Remark.findAllRemarks());
+        uiModel.addAttribute("twitters", Twitter.findAllTwitters());
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
     }
     

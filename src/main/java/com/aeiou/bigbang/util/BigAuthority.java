@@ -27,11 +27,13 @@ public class BigAuthority {
 			return "visible_to_team_members";
 		}else if(id == 3){
 			return "visible_to_specific_person";
+		}else if(id == 11){
+			return "visible_only_to_author";
 		}else{
 			return null;
 		}
 	}
-	
+
 	public static List<BigAuthority> getAllOptions(){
 		List<BigAuthority> tArrayFR = new ArrayList<BigAuthority>();
 		for(Short i = 0; i < 3; i++){
@@ -39,6 +41,19 @@ public class BigAuthority {
 			tBigAuthority.setId(i);
 			tArrayFR.add(tBigAuthority);
 		}
+		return tArrayFR;
+	}
+	
+	public static List<BigAuthority> getRemarkOptions(){
+		List<BigAuthority> tArrayFR = new ArrayList<BigAuthority>();
+
+		BigAuthority tBigAuthority = new BigAuthority();
+		tBigAuthority.setId((short)0);
+		tArrayFR.add(tBigAuthority);
+		BigAuthority tBigAuthority2 = new BigAuthority();
+		tBigAuthority2.setId((short)11);
+		tArrayFR.add(tBigAuthority2);
+		
 		return tArrayFR;
 	}
 	

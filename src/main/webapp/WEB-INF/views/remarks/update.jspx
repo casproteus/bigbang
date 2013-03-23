@@ -4,9 +4,6 @@
     <jsp:output omit-xml-declaration="yes"/>
     <form:update id="fu_com_aeiou_bigbang_domain_Remark" modelAttribute="remark" path="/remarks" versionField="Version" z="JYRKFQqMEvbVvr6ux+p68mWw5HI=">
         <field:input field="content" id="c_com_aeiou_bigbang_domain_Remark_content" required="true" z="T3F6giLLpXJrNETuQerWplAqyFY="/>
-        <field:select field="publisher" id="c_com_aeiou_bigbang_domain_Remark_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="0V2r7TDOZFQG5T9KX40gLZmk/t4="/>
-        <field:datetime dateTimePattern="${remark_remarktime_date_format}" field="remarkTime" id="c_com_aeiou_bigbang_domain_Remark_remarkTime" z="+vIge32Vmvb6Cx3svdC8uGLrjPY="/>
         <field:input field="authority" id="c_com_aeiou_bigbang_domain_Remark_authority" validationMessageCode="field_invalid_integer" z="B4LbmxFRJYLBE3k63GWtCGocJ9E="/>
-        <field:select field="remarkto" id="c_com_aeiou_bigbang_domain_Remark_remarkto" itemValue="id" items="${remarks}" path="/remarks" z="2QgMurw4Yg8v7qwjY4aa7+c61sQ="/>
     </form:update>
 </div>

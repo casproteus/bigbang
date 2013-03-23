@@ -4,9 +4,6 @@
     <jsp:output omit-xml-declaration="yes"/>
     <page:show id="ps_com_aeiou_bigbang_domain_Remark" object="${remark}" path="/remarks" z="Sh9c1iZNpsmXM1/Z3kVu9y0xoJc=">
         <field:display field="content" id="s_com_aeiou_bigbang_domain_Remark_content" object="${remark}" z="QJIdoG8cGYR0n86nfffMPaw0YtA="/>
-        <field:display field="publisher" id="s_com_aeiou_bigbang_domain_Remark_publisher" object="${remark}" z="bo9I2vwdHjepuwzbccdIv2GxhNo="/>
-        <field:display date="true" dateTimePattern="${remark_remarktime_date_format}" field="remarkTime" id="s_com_aeiou_bigbang_domain_Remark_remarkTime" object="${remark}" z="cWrNK0REyudJXRXLtb56OUnc/5A="/>
         <field:display field="authority" id="s_com_aeiou_bigbang_domain_Remark_authority" object="${remark}" z="z6Zsx0qO9ceKJ8ecHfZ6AaA2PGE="/>
-        <field:display field="remarkto" id="s_com_aeiou_bigbang_domain_Remark_remarkto" object="${remark}" z="jFcWCPCOA+Da0YAPNaZeJ36TuvM="/>
     </page:show>
 </div>

@@ -3,14 +3,14 @@ package com.aeiou.bigbang.domain;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
-
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -35,26 +35,58 @@ public class Remark {
     private Integer authority;
 
     @ManyToOne
-    private com.aeiou.bigbang.domain.Remark remarkto;
+    private Twitter remarkto;
+
+    public static List<com.aeiou.bigbang.domain.Remark> findRemarkByTwitter(Twitter pTwitter, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults) {
+        EntityManager tEntityManager = entityManager();
+        TypedQuery<Remark> tQuery = tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet) ORDER BY o.id DESC", Remark.class);
+        tQuery = tQuery.setParameter("pTwitter", pTwitter);
+        tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
+        tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        return tQuery.getResultList();
+    }
+
+    public static long countRemarksByTwitter(Twitter pTwitter, Set<java.lang.Integer> pAuthSet) {
+        TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet)", Long.class);
+        tQuery = tQuery.setParameter("pTwitter", pTwitter);
+        tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
+        return tQuery.getSingleResult();
+    }
     
-	/**
-     * @called from RemarkController->list when not admin as logged user. and PublicController->listRemarkByPublisher
+    /**
+     * @called from RemarkController->list when not admin as logged user.
      * @param pPublisher
      * @param firstResult
      * @param maxResults
      * @return
      */
-    public static List<com.aeiou.bigbang.domain.Remark> findRemarkByTwitter(Twitter pTwitter, Set<Integer> pAuthSet, int firstResult, int maxResults) {
+    public static List<com.aeiou.bigbang.domain.Remark> findRemarkByPublisher(UserAccount pPublisher, int firstResult, int maxResults) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Remark> tQuery = tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY o.id DESC", Remark.class);
-        tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
+        TypedQuery<Remark> tQuery = tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.publisher = :publisher ORDER BY o.id DESC", Remark.class);
+        tQuery = tQuery.setParameter("publisher", pPublisher);
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList(); 
     }
 
-    public static long countRemarksByTwitter(Twitter pTwitter, Set<Integer> pAuthSet) {
-    	TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM Remark AS o WHERE o.publisher = :pPublisher and (o.authority in :pAuthSet)", Long.class);
-        tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
-    	return tQuery.getSingleResult();
+    public static long countRemarkByPublisher(UserAccount pPublisher) {
+        if (pPublisher == null) {
+            System.out.println("Remark 64 is called!");
+            Thread.dumpStack();
+            return 0;
+        } else {
+        	TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM Remark AS o WHERE o.publisher = :pPublisher", Long.class);
+        	tQuery = tQuery.setParameter("pPublisher", pPublisher);
+        	return tQuery.getSingleResult();
+        }
+    }
+    
+	public String toString() {
+         //return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+		 String tContent = content;
+    	 int tIdx = tContent.indexOf("<br />");
+    	 if (tIdx > 0)
+    		 tContent = tContent.substring(0, tIdx);
+    	 tContent = tContent.length() > 30 ? tContent.substring(0, 30) : tContent;
+    	 return tContent;
     }
 }

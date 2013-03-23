@@ -4,6 +4,7 @@
 package com.aeiou.bigbang.domain;
 
 import com.aeiou.bigbang.domain.Remark;
+import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import java.util.Date;
 
@@ -41,11 +42,11 @@ privileged aspect Remark_Roo_JavaBean {
         this.authority = authority;
     }
     
-    public Remark Remark.getRemarkto() {
+    public Twitter Remark.getRemarkto() {
         return this.remarkto;
     }
     
-    public void Remark.setRemarkto(Remark remarkto) {
+    public void Remark.setRemarkto(Twitter remarkto) {
         this.remarkto = remarkto;
     }
     

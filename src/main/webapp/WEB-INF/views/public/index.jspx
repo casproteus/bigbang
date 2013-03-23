@@ -7,12 +7,16 @@
   <jsp:output omit-xml-declaration="yes"/>
   <spring:message code="public" htmlEscape="false" var="publicspace"/>
   <spring:message code="publicDescription" htmlEscape="false" var="publicDescription"/>
+  <spring:message code="NotesAndPraysOfFriend" htmlEscape="false" arguments="${spaceOwner}" var="NotesAndPraysFromFriend"/>
+  
   <c:choose>
   	<c:when test="${empty spaceOwner or spaceOwner eq 'admin'}">
 		<spring:message code="publicDescription" htmlEscape="false" var="title"/>
+  		<!-- Admin has only one right column <spring:message code="NotesAndPrays" arguments="${spaceOwner}" htmlEscape="false" var="NotesAndPrays"/> -->
     </c:when>
   	<c:otherwise>
 		<spring:message code="label_public_index" arguments="${spaceOwner},${empty description ? publicDescription : description}" htmlEscape="false" var="title"/>
+  		<spring:message code="NotesAndPrays" arguments="${spaceOwner}" htmlEscape="false" var="NotesAndPrays"/>
   	</c:otherwise>
   </c:choose>
   <div style="background: #efefef; padding: 5px; margin-bottom: 3px">
@@ -95,7 +99,7 @@
 	  <table class="tWireless" style="margin-bottom: 0px"><tr>
 	  	<c:if test="${not empty twitterLeft}">
 		  	<td class="tWireless nopaddingleft" valign="top">
-			  <page:contentPane id="twitterLeft" items="${twitterLeft}" label="diary" bottom="8">
+			  <page:contentPane id="twitterLeft" items="${twitterLeft}" label="${NotesAndPrays}" bottom="8">
 			    <table:twitterbox data="${twitterLeft}" id="l_com_aeiou_bigbang_domain_Content" type="self" path="/public" spaceOwner="${spaceOwner}">
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
@@ -106,7 +110,7 @@
 		</c:if>
 	  	<c:if test="${not empty twitterRight}">
 		   <td class="tWireless nopaddingright" valign="top" >
-			  <page:contentPane id="twitterRight" items="${twitterRight}" label="friends" bottom="8">
+			  <page:contentPane id="twitterRight" items="${twitterRight}" label="${NotesAndPraysFromFriend}" bottom="8">
 			    <table:twitterbox data="${twitterRight}" id="l_com_aeiou_bigbang_domain_Content" type="friend" path="/public" spaceOwner="${spaceOwner}">
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>

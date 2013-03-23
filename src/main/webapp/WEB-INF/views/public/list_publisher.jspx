@@ -17,7 +17,7 @@
 		        <spring:url value="/resources/images/add.png" var="add_img_url" />
 		        <img alt="add this guy to my employee list" src="${add_img_url}" title="click this button to add this guy to my employee list." />
 		      </a>
-		      ${" "}
+		      ${" | "}
 	      </c:if>
 	      <c:if test="${empty notfireable}">
 		      <spring:url value="/public" var="fire_url">
@@ -28,11 +28,11 @@
 		        <spring:url value="/resources/images/delete.png" var="delete_img_url" />
 		        <img alt="remove this guy from my employee list" src="${delete_img_url}" title="click this button to remove this guy from my employee list." />
 		      </a>
-		      ${" "}
+		      ${" | "}
 		  </c:if>
 		  <c:if test="${not empty balance and not empty notfireable and not empty nothireable}">
 		 	 <spring:message code="label_public_balance" arguments="${balance}" htmlEscape="false"/>
-		      ${" "}
+		      ${" | "}
 		  </c:if>
 		  <c:if test="${empty notfireable or empty nothireable}">
 		  	  <spring:url value="/${publisher}" var="home"/>
@@ -45,6 +45,20 @@
 	   </span>
 	</util:panel>
 	<br/>
+	<!-- display the diary of the user -->
+    <c:if test="${not empty twitterLeft}">
+	  <table class="tWireless" style="margin-bottom: 0px"><tr>
+	  	<td class="tWireless" valign="top">
+		  <page:contentPane id="twitterLeft" items="${twitterLeft}" label="diary" bottom="8">
+		    <table:twitterbox data="${twitterLeft}" id="l_com_aeiou_bigbang_domain_Content" type="self" path="/public" spaceOwner="${spaceOwner}">
+		        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
+		        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
+		        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="type" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
+		    </table:twitterbox>
+		  </page:contentPane>
+	  	</td>
+	  </tr></table>
+    </c:if>
     <page:contentPane id="pl_com_aeiou_bigbang_domain_Content" items="${contents}" label="${label}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
         <table:contentlist data="${contents}" id="l_com_aeiou_bigbang_domain_Content" tagId="${tagId}" path="/contents" spaceOwner="${spaceOwner}" publisher="${publisher}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
             <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>

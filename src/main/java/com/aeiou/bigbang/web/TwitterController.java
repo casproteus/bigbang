@@ -5,16 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import com.aeiou.bigbang.domain.BigTag;
-import com.aeiou.bigbang.domain.Content;
-import com.aeiou.bigbang.domain.Twitter;
-import com.aeiou.bigbang.domain.UserAccount;
-import com.aeiou.bigbang.services.secutiry.UserContextService;
-import com.aeiou.bigbang.util.BigAuthority;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +16,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.aeiou.bigbang.domain.BigTag;
+import com.aeiou.bigbang.domain.Twitter;
+import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigAuthority;
 
 @RequestMapping("/twitters")
 @Controller
@@ -49,26 +49,36 @@ public class TwitterController {
 
 	@RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(@Valid Twitter twitter, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+		if(twitter.getTwitent() == null || twitter.getTwitent().length() < 1)
+            return "twitters/create";
+		
+		//get his last twitter in db compare with it.
+		String tCurName = userContextService.getCurrentUserName();
+	    UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
+		List<Twitter> tList = Twitter.findTwitterByPublisher(tUserAccount, BigAuthority.getAuthSet(tUserAccount, tUserAccount), 0, 1);
+		
+		if(tList != null && tList.size() > 0){
+			Twitter tTwitter = tList.get(0);
+			if(twitter.getTwitent().equals(tTwitter.getTwitent()))
+				 return "twitters/create";
+		}
+		
         if (bindingResult.hasErrors()) {
-        	if (bindingResult.hasErrors()) {
-            	if(bindingResult.getAllErrors().size() == 2 && twitter.getPublisher() == null && twitter.getTwitDate() == null){
-            		 String tCurName = userContextService.getCurrentUserName();
-            	     UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
-            	     twitter.setPublisher(tUserAccount);
-            	     twitter.setTwitDate(new Date());
-            	     if(twitter.getTwtitle() == null || twitter.getTwtitle().trim().length() == 0){
-            	    	 String content = twitter.getTwitent();
-            	    	 int tIdx = content.indexOf("<br />");
-            	    	 if (tIdx > 0)
-            	    		 content = content.substring(0, tIdx);
-            	    	 content = content.length() > 30 ? content.substring(0, 30) : content;
-            	    	 twitter.setTwtitle(content);
-            	     }
-            	}else{
-                    populateEditForm(uiModel, twitter);
-                    return "twitters/create";
-            	}
-            }
+        	if(bindingResult.getAllErrors().size() == 2 && twitter.getPublisher() == null && twitter.getTwitDate() == null){
+        	     twitter.setPublisher(tUserAccount);
+        	     twitter.setTwitDate(new Date());
+        	     if(twitter.getTwtitle() == null || twitter.getTwtitle().trim().length() == 0){
+        	    	 String content = twitter.getTwitent();
+        	    	 int tIdx = content.indexOf("<br />");
+        	    	 if (tIdx > 0)
+        	    		 content = content.substring(0, tIdx);
+        	    	 content = content.length() > 30 ? content.substring(0, 30) : content;
+        	    	 twitter.setTwtitle(content);
+        	     }
+        	}else{
+                populateEditForm(uiModel, twitter);
+                return "twitters/create";
+        	}
         }
         uiModel.asMap().clear();
         twitter.persist();

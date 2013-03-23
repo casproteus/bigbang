@@ -279,7 +279,12 @@ public class PublicController{
         uiModel.addAttribute("remarks", Remark.findRemarkByTwitter(tTwitter, tAuthSet, firstResult, size));
         nrOfPages = (float) Remark.countRemarksByTwitter(tTwitter, tAuthSet) / sizeNo;
     	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        uiModel.addAttribute("newremark", new Remark());
+    	Remark tRemark = new Remark();
+        uiModel.addAttribute("newremark", tRemark);
+        uiModel.addAttribute("authorities",BigAuthority.getRemarkOptions());
+        List<Twitter> remarktos = new ArrayList<Twitter>();
+        remarktos.add(tTwitter);
+        uiModel.addAttribute("remarktos", remarktos);
         
         return "public/list_detail_twitter";
     }

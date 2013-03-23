@@ -34,7 +34,13 @@
       <c:forEach items="${data}" var="item">
       	<tr>
       		<td class="tWireless">
-      			<a href="twitters/${item['id']}">
+      			<spring:url value="${path}" var="readDetail_url">
+        			<spring:param name="owner" value="${spaceOwner}"/>
+        			<spring:param name="twitterid" value="${item['id']}"/>
+        			<spring:param name="page" value="1"/>
+        			<spring:param name="size" value="${empty param.size ? 25 : param.size}"/>
+	        	</spring:url>
+      			<a href="${readDetail_url}">
       				<c:out value="${item['twtitle']}" />
       			</a>
       		</td>

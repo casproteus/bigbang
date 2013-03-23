@@ -5,6 +5,7 @@ package com.aeiou.bigbang.domain;
 
 import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.RemarkDataOnDemand;
+import com.aeiou.bigbang.domain.TwitterDataOnDemand;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.domain.UserAccountDataOnDemand;
 import java.security.SecureRandom;
@@ -31,13 +32,15 @@ privileged aspect RemarkDataOnDemand_Roo_DataOnDemand {
     @Autowired
     private UserAccountDataOnDemand RemarkDataOnDemand.userAccountDataOnDemand;
     
+    @Autowired
+    private TwitterDataOnDemand RemarkDataOnDemand.twitterDataOnDemand;
+    
     public Remark RemarkDataOnDemand.getNewTransientRemark(int index) {
         Remark obj = new Remark();
         setAuthority(obj, index);
         setContent(obj, index);
         setPublisher(obj, index);
         setRemarkTime(obj, index);
-        setRemarkto(obj, index);
         return obj;
     }
     
@@ -59,11 +62,6 @@ privileged aspect RemarkDataOnDemand_Roo_DataOnDemand {
     public void RemarkDataOnDemand.setRemarkTime(Remark obj, int index) {
         Date remarkTime = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setRemarkTime(remarkTime);
-    }
-    
-    public void RemarkDataOnDemand.setRemarkto(Remark obj, int index) {
-        Remark remarkto = obj;
-        obj.setRemarkto(remarkto);
     }
     
     public Remark RemarkDataOnDemand.getSpecificRemark(int index) {

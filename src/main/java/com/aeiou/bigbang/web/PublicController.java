@@ -413,8 +413,11 @@ public class PublicController{
     @RequestMapping(params = "relayouttype", produces = "text/html")
     public String relayout(@RequestParam(value = "relayouttype", required = true) String relayouttype, 
     		@RequestParam(value = "tagId", required = true) Long tagId, HttpServletRequest request, Model uiModel) {
-    	
     	String tCurName = userContextService.getCurrentUserName();
+    	//@Note:this method can be called by logoutfilter when click the logout link, don't know the reason yet. so for now, just add a check of the curname.
+    	if(tCurName ==  null){
+    		return(index(uiModel));
+    	}
 		UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);
 		tCurName = tOwner.getName();
 		if("reset".equals(relayouttype)){

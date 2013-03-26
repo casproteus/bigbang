@@ -75,8 +75,8 @@
 	    
 	    <spring:message code="relayout_list_size" htmlEscape="false" />
 	    
-	    <input id="j_username" type='text' name='j_username' value="${list_size}" style="width:20px;height:12px" />
-	    <spring:message code="security_login_form_name_message" var="name_msg" htmlEscape="false" />
+	    <input type='text' name='j_username' value="${list_size}" style="width:20px;height:12px" />
+	    <!-- <spring:message code="security_login_form_name_message" var="name_msg" htmlEscape="false" />
 	    <script type="text/javascript">
 	          <c:set var="sec_name_msg">
 	            <spring:escapeBody javaScriptEscape="true">${name_msg}</spring:escapeBody>
@@ -84,7 +84,7 @@
 	          Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_username", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_name_msg}", required : true}})); 
 	      </script>
 	    <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
-    	
+    	 -->
     	<spring:message code="relayout_submit" var="submit" htmlEscape="false" />
     	<button id="proceed" type="submit" value="submit" title="${fn:escapeXml(submit)}" style="width:22px;height:16px;vertical-align: top; cursor:pointer; border: 0px; ">
     		<spring:url value="/resources/images/submit.png" var="direction_img_submit" />

@@ -51,7 +51,7 @@ xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"  xmlns:spring="http://www.
             <c:set var="columnMaxLength" value="${lengths[num.count-1]}" />
             <c:set var="columnType" value="${types[num.count-1]}" />
             <c:set var="columnDatePattern" value="${patterns[num.count-1]}" />
-            <td class="tWireless" valign="top">
+            <td class="tWireless" valign="top" style="padding: 5px">
               <c:choose>
                 <c:when test="${columnType eq 'date'}">
                   <spring:escapeBody>

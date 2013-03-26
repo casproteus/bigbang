@@ -81,12 +81,13 @@ public class Remark {
     }
     
 	public String toString() {
-         //return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-		 String tContent = content;
-    	 int tIdx = tContent.indexOf("<br />");
-    	 if (tIdx > 0)
-    		 tContent = tContent.substring(0, tIdx);
-    	 tContent = tContent.length() > 30 ? tContent.substring(0, 30) : tContent;
-    	 return tContent;
+        //return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+		return content;
+//		String tContent = content;
+//    	 int tIdx = tContent.indexOf("<br />");
+//    	 if (tIdx > 0)
+//    		 tContent = tContent.substring(0, tIdx);
+//    	 tContent = tContent.length() > 30 ? tContent.substring(0, 30) : tContent;
+//    	 return tContent;
     }
 }

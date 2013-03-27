@@ -14,6 +14,10 @@ public class UpdatingBalanceJobProcessor {
 		if(log.isDebugEnabled()){
 			log.debug("Quartz excuting.......................................");
 		}
-        System.out.println("Quartz excuting.......................................");
+        //TODO:
+		//1.get all user out.
+		//	2.go through each user, and get all the user he's listening.
+		//		3.for each listened user, fetch out his salary.
+		//		4.give him his salary.(for now we don't allow user to change his salary.
 	}
 }

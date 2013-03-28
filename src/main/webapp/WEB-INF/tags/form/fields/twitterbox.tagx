@@ -37,7 +37,7 @@
         			<spring:param name="owner" value="${spaceOwner}"/>
         			<spring:param name="twitterid" value="${item['id']}"/>
         			<spring:param name="page" value="1"/>
-        			<spring:param name="size" value="${empty param.size ? 25 : param.size}"/>
+        			<spring:param name="size" value="${empty param.size ? 10 : param.size}"/>
 	        	</spring:url>
       			<a href="${readDetail_url}">
       				<c:out value="${item['twtitle']}" />
@@ -66,17 +66,11 @@
       	</tr>
       </c:forEach>
       <tr>
-        <td class="tWireless" colspan="${colCounter}">          
+        <td class="tWireless" colspan="${colCounter}">
+          <!-- for now it's used only by public/index, so will never display a contentPagination....
           <c:if test="${not empty maxPages}">
-          	<c:choose>
-		        <c:when test="${not empty publisher}">
-		        	<util:contentPagination maxPages="${maxPages}" publisher="${publisher}" page="${param.page}" size="${param.size}" />
-		        </c:when>
-		        <c:otherwise>
-            		<util:contentPagination maxPages="${maxPages}" tagId="${tagId}" spaceOwner="${spaceOwner}" page="${param.page}" size="${param.size}" />
-            	</c:otherwise>
-            </c:choose>
-          </c:if>
+		  	<util:contentPagination maxPages="${maxPages}" twittertype="${type}" publisher="${publisher}" spaceOwner="${spaceOwner}" page="${param.page}" size="${param.size}" />
+          </c:if> -->
           <!--<c:if test="${empty maxPages and fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(spaceOwner)}">
           	<util:contentLayout tagId="${tagId}" spaceOwner="${spaceOwner}" list_size="${fn:length(data)}"/>
           </c:if> -->

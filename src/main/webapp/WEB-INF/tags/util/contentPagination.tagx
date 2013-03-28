@@ -4,6 +4,8 @@
   <jsp:directive.attribute name="tagId" type="java.lang.Long" required="false" rtexprvalue="true" description="for Indicating the URL of the 'read more' button." />
   <jsp:directive.attribute name="publisher" type="java.lang.String" required="false" rtexprvalue="true" description="used for contributing the URL of the 'how many content a page' button." />
   <jsp:directive.attribute name="spaceOwner" type="java.lang.String" required="false" rtexprvalue="true" description="used for contributing the URL of the 'how many content a page' button." />
+  <jsp:directive.attribute name="twittertype" type="java.lang.String" required="false" rtexprvalue="true" description="used for contributing the URL of the 'how many content a page' button." />
+  <jsp:directive.attribute name="twitterid" type="java.lang.Long" required="false" rtexprvalue="true" description="used for contributing the URL of the 'how many content a page' button." />
   <jsp:directive.attribute name="maxPages" type="java.lang.Integer" required="true" rtexprvalue="true" description="The maximum number of pages available (ie tableRecordCount / size)" />
   <jsp:directive.attribute name="page" type="java.lang.Integer" required="false" rtexprvalue="true" description="The current page (not required, defaults to 1)" />
   <jsp:directive.attribute name="size" type="java.lang.Integer" required="false" rtexprvalue="true" description="The number of records per page (not required, defaults to 10)" />
@@ -21,7 +23,6 @@
 
     <spring:message code="list_size" var="list_size" htmlEscape="false" />
     <c:out value="${list_size} " />
-
     <c:forEach var="i" begin="5" end="25" step="5">
       <c:choose>
         <c:when test="${size == i}">
@@ -30,6 +31,13 @@
         <c:otherwise>
           <spring:url value="" var="sizeUrl">
           	<c:choose>
+		        <c:when test="${not empty twittertype}">
+		     		<spring:param name="twittertype" value="${twittertype}"/>
+        			<spring:param name="owner" value="${spaceOwner}"/>
+		      	</c:when>
+		        <c:when test="${not empty twitterid}">		<!-- this case, it's remarks under a specific twitter. -->
+		     		<spring:param name="twitterid" value="${twitterid}"/>
+		      	</c:when>
 		        <c:when test="${not empty publisher}">
 	      			<spring:param name="publisher" value="${publisher}"/>
 		      	</c:when>
@@ -52,6 +60,12 @@
     <c:if test="${page ne 1}">
       <spring:url value="" var="first">
       	<c:choose>
+	        <c:when test="${not empty twittertype}">
+	     			<spring:param name="twittertype" value="${twittertype}"/>
+	      	</c:when>
+	        <c:when test="${not empty twitterid}">
+	     			<spring:param name="twitterid" value="${twitterid}"/>
+	      	</c:when>
 	        <c:when test="${not empty publisher}">
 	     			<spring:param name="publisher" value="${publisher}"/>
 	      	</c:when>
@@ -63,17 +77,7 @@
         <spring:param name="page" value="1" />
         <spring:param name="size" value="${size}" />
       </spring:url>
-      <spring:url value="/resources/images/resultset_first.png" var="first_image_url">
-      	<c:choose>
-	        <c:when test="${not empty publisher}">
-	     			<spring:param name="publisher" value="${publisher}"/>
-	      	</c:when>
-	        <c:otherwise>
-	      			<spring:param name="spaceOwner" value="${spaceOwner}"/>
-	      			<spring:param name="tagId" value="${tagId}"/>
-	        </c:otherwise>
-	    </c:choose>
-      </spring:url>
+      <spring:url value="/resources/images/resultset_first.png" var="first_image_url"/>
       <spring:message code="list_first" var="first_label" htmlEscape="false" />
       <a class="image" href="${first}" title="${fn:escapeXml(first_label)}">
         <img alt="${fn:escapeXml(first_label)}" src="${first_image_url}" />
@@ -85,6 +89,12 @@
 	        <c:when test="${not empty publisher}">
 	     			<spring:param name="publisher" value="${publisher}"/>
 	      	</c:when>
+	        <c:when test="${not empty twittertype}">
+	     			<spring:param name="twittertype" value="${twittertype}"/>
+	      	</c:when>
+	        <c:when test="${not empty twitterid}">
+	     			<spring:param name="twitterid" value="${twitterid}"/>
+	      	</c:when>
 	        <c:otherwise>
 	      			<spring:param name="spaceOwner" value="${spaceOwner}"/>
 	      			<spring:param name="tagId" value="${tagId}"/>
@@ -93,17 +103,7 @@
         <spring:param name="page" value="${page - 1}" />
         <spring:param name="size" value="${size}" />
       </spring:url>
-      <spring:url value="/resources/images/resultset_previous.png" var="previous_image_url">
-      	<c:choose>
-	        <c:when test="${not empty publisher}">
-	     			<spring:param name="publisher" value="${publisher}"/>
-	      	</c:when>
-	        <c:otherwise>
-	      			<spring:param name="spaceOwner" value="${spaceOwner}"/>
-	      			<spring:param name="tagId" value="${tagId}"/>
-	        </c:otherwise>
-	    </c:choose>
-      </spring:url>
+      <spring:url value="/resources/images/resultset_previous.png" var="previous_image_url"/>
       <spring:message code="list_previous" var="previous_label" htmlEscape="false" />
       <a class="image" href="${previous}" title="${fn:escapeXml(previous_label)}">
         <img alt="${fn:escapeXml(previous_label)}" src="${previous_image_url}" />
@@ -118,6 +118,12 @@
 	        <c:when test="${not empty publisher}">
 	     			<spring:param name="publisher" value="${publisher}"/>
 	      	</c:when>
+	        <c:when test="${not empty twittertype}">
+	     			<spring:param name="twittertype" value="${twittertype}"/>
+	      	</c:when>
+	        <c:when test="${not empty twitterid}">
+	     			<spring:param name="twitterid" value="${twitterid}"/>
+	      	</c:when>
 	        <c:otherwise>
 	      			<spring:param name="spaceOwner" value="${spaceOwner}"/>
 	      			<spring:param name="tagId" value="${tagId}"/>
@@ -126,17 +132,7 @@
         <spring:param name="page" value="${page + 1}" />
         <spring:param name="size" value="${size}" />
       </spring:url>
-      <spring:url value="/resources/images/resultset_next.png" var="next_image_url">
-      	<c:choose>
-	        <c:when test="${not empty publisher}">
-	     			<spring:param name="publisher" value="${publisher}"/>
-	      	</c:when>
-	        <c:otherwise>
-	      			<spring:param name="spaceOwner" value="${spaceOwner}"/>
-	      			<spring:param name="tagId" value="${tagId}"/>
-	        </c:otherwise>
-	    </c:choose>
-      </spring:url>
+      <spring:url value="/resources/images/resultset_next.png" var="next_image_url"/>
       <spring:message code="list_next" var="next_label" htmlEscape="false" />
       <a class="image" href="${next}" title="${fn:escapeXml(next_label)}">
         <img alt="${fn:escapeXml(next_label)}" src="${next_image_url}" />
@@ -148,6 +144,12 @@
 	        <c:when test="${not empty publisher}">
 	     			<spring:param name="publisher" value="${publisher}"/>
 	      	</c:when>
+	        <c:when test="${not empty twittertype}">
+	     			<spring:param name="twittertype" value="${twittertype}"/>
+	      	</c:when>
+	        <c:when test="${not empty twitterid}">
+	     			<spring:param name="twitterid" value="${twitterid}"/>
+	      	</c:when>
 	        <c:otherwise>
 	      			<spring:param name="spaceOwner" value="${spaceOwner}"/>
 	      			<spring:param name="tagId" value="${tagId}"/>
@@ -156,17 +158,7 @@
         <spring:param name="page" value="${maxPages}" />
         <spring:param name="size" value="${size}" />
       </spring:url>
-      <spring:url value="/resources/images/resultset_last.png" var="last_image_url">
-      	<c:choose>
-	        <c:when test="${not empty publisher}">
-	     			<spring:param name="publisher" value="${publisher}"/>
-	      	</c:when>
-	        <c:otherwise>
-	      			<spring:param name="spaceOwner" value="${spaceOwner}"/>
-	      			<spring:param name="tagId" value="${tagId}"/>
-	        </c:otherwise>
-	    </c:choose>
-      </spring:url>
+      <spring:url value="/resources/images/resultset_last.png" var="last_image_url"/>
       <spring:message code="list_last" var="last_label" htmlEscape="false" />
       <a class="image" href="${last}" title="${fn:escapeXml(last_label)}">
         <img alt="${fn:escapeXml(last_label)}" src="${last_image_url}" />

@@ -207,6 +207,7 @@ public class PublicController{
      * We have to use both tag's tagname and type to match out a single tag, because different user can create tags with same name. 
      * if we match content with only tag name, will cause mistake when clicking the "more" button from personal space. 
      * so we have to use tag's ID to match content.
+     * @note we have to use "owner" instead of "spaceowner", to avoid spring can not matching the request to the other method.
      * @param tag
      * @param page
      * @param size
@@ -234,9 +235,11 @@ public class PublicController{
         uiModel.addAttribute("spaceOwnerId", tOwner.getId());
         float nrOfPages;
         if("friend".equals(twittertype)){
+        	uiModel.addAttribute("twittertype", "friend");
         	uiModel.addAttribute("contents", Twitter.findTwitterByOwner(tOwner, tAuthSet, firstResult, sizeNo));
         	nrOfPages = (float) Twitter.countTwittersByOwner(tOwner, tAuthSet) / sizeNo;
         }else{
+        	uiModel.addAttribute("twittertype", "self");
         	uiModel.addAttribute("contents", Twitter.findTwitterByPublisher(tOwner, tAuthSet, firstResult, sizeNo));
         	nrOfPages = (float) Twitter.countTwitterByPublisher(tOwner, tAuthSet) / sizeNo;
         }
@@ -256,25 +259,18 @@ public class PublicController{
      * @return
      */
     @RequestMapping(params = "twitterid", produces = "text/html")
-    public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, @RequestParam(value = "owner", required = false) String spaceOwner,
+    public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
-    	UserAccount tOwner = UserAccount.findUserAccountByName(spaceOwner);
-    	if(tOwner == null){
-    		spaceOwner = BigUtil.getUTFString(spaceOwner);
-    		tOwner = UserAccount.findUserAccountByName(spaceOwner);
-    		if(tOwner == null){
-    			return null;
-    		}
-    	}
+        Twitter tTwitter = Twitter.findTwitter(twitterid);
+    	UserAccount tOwner = tTwitter.getPublisher();
         int sizeNo = size == null ? 25 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
        
     	String tCurName = userContextService.getCurrentUserName();
     	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
     	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
-        uiModel.addAttribute("spaceOwner", spaceOwner);
+        uiModel.addAttribute("spaceOwner", tOwner);
         float nrOfPages;
-        Twitter tTwitter = Twitter.findTwitter(twitterid);
         uiModel.addAttribute("twitter", tTwitter);
         uiModel.addAttribute("remarks", Remark.findRemarkByTwitter(tTwitter, tAuthSet, firstResult, size));
         nrOfPages = (float) Remark.countRemarksByTwitter(tTwitter, tAuthSet) / sizeNo;

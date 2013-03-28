@@ -13,7 +13,7 @@
     
     <c:if test="${not empty remarks}">
 	    <page:list id="pl_com_aeiou_bigbang_domain_Remark" items="${remarks}" z="KLqpUVNJsKiu4VOjx76+vDx7988=">
-	        <table:BigRemarkTable data="${remarks}" id="l_com_aeiou_bigbang_domain_Remark" path="/remarks" z="adZ9QX5p0p5Qz2fIt8EVxJHpMH0=">
+	        <table:BigRemarkTable data="${remarks}" twitterid="${twitter['id']}" id="l_com_aeiou_bigbang_domain_Remark" path="/remarks" z="adZ9QX5p0p5Qz2fIt8EVxJHpMH0=">
 	            <table:column id="c_com_aeiou_bigbang_domain_Remark_content" property="content" z="WsTKbTSNdVI9Ur/PID9to9j5Q+Q="/>
 	            <table:column id="c_com_aeiou_bigbang_domain_Remark_publisher" property="publisher" z="/MCkBnq2SAbaEYDclJ/Zh3aPyIs="/>
 	            <table:column date="true" id="c_com_aeiou_bigbang_domain_Remark_remarkTime" property="remarkTime" z="JcnWePBsDBs4KzGQzxe1ZsM+1PU="/>
@@ -22,7 +22,7 @@
 	    <br/>
     </c:if>
     
-    <form:Bigcreate passenger="${twitter}" id="fc_com_aeiou_bigbang_domain_Remark" modelAttribute="newremark" path="/remarks" render="${empty dependencies}" z="sWlU6AsGIe2//4XQNOSFZm9xQRQ=">
+    <form:Bigcreate passenger="${twitter}" id="fc_com_aeiou_bigbang_domain_Remark" modelAttribute="newremark" path="/twitter" render="${empty dependencies}" z="sWlU6AsGIe2//4XQNOSFZm9xQRQ=">
         <field:editor field="content" id="c_com_aeiou_bigbang_domain_Remark_content" required="true" z="user-managed"/>
         <field:select field="authority" id="c_com_aeiou_bigbang_domain_Remark_authority" itemValue="id" items="${authorities}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/>
         <field:select field="remarkto" id="c_com_aeiou_bigbang_domain_Remark_remarkto" itemValue="id" items="${remarktos}" path="/twitters" z="1fwYviEwBT209mmo9KsB8ptx/5M="/>

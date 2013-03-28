@@ -45,7 +45,8 @@
 	   </span>
 	</util:panel>
 	<br/>
-	<!-- display the diary of the user -->
+	<!-- display the diary of the user  @NOTE: might not a good idea to display diary together with bookmarks. because when you are navigation twitter,
+	 the bookmar will also be effected. or you have to use more parameters..
     <c:if test="${not empty twitterLeft}">
 	  <table class="tWireless" style="margin-bottom: 0px"><tr>
 	  	<td class="tWireless" valign="top">
@@ -58,7 +59,7 @@
 		  </page:contentPane>
 	  	</td>
 	  </tr></table>
-    </c:if>
+    </c:if> -->
     <page:contentPane id="pl_com_aeiou_bigbang_domain_Content" items="${contents}" label="${label}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
         <table:contentlist data="${contents}" id="l_com_aeiou_bigbang_domain_Content" tagId="${tagId}" path="/contents" spaceOwner="${spaceOwner}" publisher="${publisher}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
             <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>

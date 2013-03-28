@@ -3,14 +3,17 @@ package com.aeiou.bigbang.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.springframework.context.MessageSource;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.services.quartz.UpdatingBalanceJobProcessor;
 
 public class BigUtil {
-	
+
 	public static String getUTFString(String pString){
 		byte tByteAry[];
 		try{
@@ -23,13 +26,14 @@ public class BigUtil {
 	}
 
 	public static boolean isSystemCommand(String pCommand){
-		if("2745_setDefaultValueForContents".equals(pCommand)){
+		if("5203_setDefaultValueForContents".equals(pCommand)){
 			setDefaultValueForContents();
 			return true;
-		}
-		
-		if("1214_setDefaultValueForTags".equals(pCommand)){
+		} else if("2745_setDefaultValueForTags".equals(pCommand)){
 			setDefaultValueForTags();
+			return true;
+		} else if("1214_updateUserBalances".equals(pCommand)){
+			SpringApplicationContext.getApplicationContext().getBean("updatingBalanceJobProcessor", UpdatingBalanceJobProcessor.class).updateBalance();
 			return true;
 		}
 		

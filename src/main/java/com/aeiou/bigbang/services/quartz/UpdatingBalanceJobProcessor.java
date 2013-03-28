@@ -1,5 +1,6 @@
 package com.aeiou.bigbang.services.quartz;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class UpdatingBalanceJobProcessor {
 	 */
 	public synchronized void updateBalance() {
 		if(log.isDebugEnabled()){
-			log.debug("Quartz excuting.......................................");
+			log.debug("Quartz excuting" + new Date().toString());
 		}
 		
 		List<UserAccount> tMainList = UserAccount.findAllUserAccounts();

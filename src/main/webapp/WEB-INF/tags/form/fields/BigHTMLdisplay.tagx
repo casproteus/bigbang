@@ -3,6 +3,7 @@
 
   <jsp:directive.attribute name="object" type="java.lang.Object" required="true" rtexprvalue="true" description="The form backing object" />
   <jsp:directive.attribute name="field" type="java.lang.String" required="true" rtexprvalue="true" description="The field name" />
+  <jsp:directive.attribute name="time" type="java.lang.String" required="false" rtexprvalue="true" description="The publish time" />
   <jsp:directive.attribute name="date" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate that this field is of type java.util.Date" />
   <jsp:directive.attribute name="calendar" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate that this field is of type java.util.Calendar" />
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
@@ -14,7 +15,10 @@
           <spring:eval expression="object[field]" />
         </c:when>
         <c:otherwise>
-          <spring:eval htmlEscape="false" expression="object[field].toString()" />
+          	<spring:eval htmlEscape="false" expression="object[field].toString()" />
+      		<div style="text-align: right;">
+          		------${object['publisher']} (${time})
+          	</div>
         </c:otherwise>
       </c:choose>
   </c:if>

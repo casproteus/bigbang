@@ -6,8 +6,8 @@
           
     <c:set value="MM/dd/yyyy" var="dateTimePattern" />
     <fmt:formatDate var="TimeStr" value="${twitter['twitDate']}" pattern="${fn:escapeXml(dateTimePattern)}" />
-    <page:BigTwitterShow id="ps_com_aeiou_bigbang_domain_Twitter" object="${twitter}" delete="${isloggedInUser}" update="${isloggedInUser}" label="${twitter['twtitle']} (${TimeStr})" path="/twitters" z="uLnVWzeo9CFWqAOLKukuqndR2CE=">
-        <field:BigHTMLdisplay field="twitent" object="${twitter}" z="user-managed"/>
+    <page:BigTwitterShow id="ps_com_aeiou_bigbang_domain_Twitter" object="${twitter}" delete="${isloggedInUser}" update="${isloggedInUser}" label="${twitter['twtitle']}" path="/twitters" z="uLnVWzeo9CFWqAOLKukuqndR2CE=">
+        <field:BigHTMLdisplay field="twitent" time="${TimeStr}" object="${twitter}" z="user-managed"/>
     </page:BigTwitterShow>
     <br/>
     

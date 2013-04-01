@@ -10,6 +10,7 @@ import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.SpringApplicationContext;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -61,6 +62,9 @@ public class RemarkController {
         remark.persist();
 //        return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
 
+        PublicController tController = SpringApplicationContext.getApplicationContext().getBean("publicController", PublicController.class);
+        return tController.showDetailTwitters(remark.getRemarkto().getId(), null, null, uiModel);
+        /*
         int sizeNo = 25;
         final int firstResult = 0;
         
@@ -82,7 +86,7 @@ public class RemarkController {
         remarktos.add(tTwitter);
         uiModel.addAttribute("remarktos", remarktos);
         
-        return "public/list_detail_twitter";
+        return "public/list_detail_twitter";*/
     }
 
 	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")

@@ -62,6 +62,7 @@
       	<c:choose>
 	        <c:when test="${not empty twittertype}">
 	     			<spring:param name="twittertype" value="${twittertype}"/>
+        			<spring:param name="owner" value="${spaceOwner}"/>
 	      	</c:when>
 	        <c:when test="${not empty twitterid}">
 	     			<spring:param name="twitterid" value="${twitterid}"/>
@@ -86,14 +87,15 @@
     <c:if test="${page gt 1}">
       <spring:url value="" var="previous">
       	<c:choose>
-	        <c:when test="${not empty publisher}">
-	     			<spring:param name="publisher" value="${publisher}"/>
-	      	</c:when>
 	        <c:when test="${not empty twittertype}">
 	     			<spring:param name="twittertype" value="${twittertype}"/>
+        			<spring:param name="owner" value="${spaceOwner}"/>
 	      	</c:when>
 	        <c:when test="${not empty twitterid}">
 	     			<spring:param name="twitterid" value="${twitterid}"/>
+	      	</c:when>
+	        <c:when test="${not empty publisher}">
+	     			<spring:param name="publisher" value="${publisher}"/>
 	      	</c:when>
 	        <c:otherwise>
 	      			<spring:param name="spaceOwner" value="${spaceOwner}"/>
@@ -115,14 +117,15 @@
     <c:if test="${page lt maxPages}">
       <spring:url value="" var="next">
       	<c:choose>
-	        <c:when test="${not empty publisher}">
-	     			<spring:param name="publisher" value="${publisher}"/>
-	      	</c:when>
 	        <c:when test="${not empty twittertype}">
 	     			<spring:param name="twittertype" value="${twittertype}"/>
+        			<spring:param name="owner" value="${spaceOwner}"/>
 	      	</c:when>
 	        <c:when test="${not empty twitterid}">
 	     			<spring:param name="twitterid" value="${twitterid}"/>
+	      	</c:when>
+	        <c:when test="${not empty publisher}">
+	     			<spring:param name="publisher" value="${publisher}"/>
 	      	</c:when>
 	        <c:otherwise>
 	      			<spring:param name="spaceOwner" value="${spaceOwner}"/>
@@ -141,14 +144,15 @@
     <c:if test="${page ne maxPages}">
       <spring:url value="" var="last">
       	<c:choose>
-	        <c:when test="${not empty publisher}">
-	     			<spring:param name="publisher" value="${publisher}"/>
-	      	</c:when>
 	        <c:when test="${not empty twittertype}">
 	     			<spring:param name="twittertype" value="${twittertype}"/>
+        			<spring:param name="owner" value="${spaceOwner}"/>
 	      	</c:when>
 	        <c:when test="${not empty twitterid}">
 	     			<spring:param name="twitterid" value="${twitterid}"/>
+	      	</c:when>
+	        <c:when test="${not empty publisher}">
+	     			<spring:param name="publisher" value="${publisher}"/>
 	      	</c:when>
 	        <c:otherwise>
 	      			<spring:param name="spaceOwner" value="${spaceOwner}"/>

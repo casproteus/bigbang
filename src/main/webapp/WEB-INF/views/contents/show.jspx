@@ -11,6 +11,5 @@
             <field:Bigdisplay field="uncommonBigTag" id="s_com_aeiou_bigbang_domain_Content_uncommonBigTag" object="${content}" z="user-managed"/>
         </c:if>
         <field:display field="authority" id="s_com_aeiou_bigbang_domain_Content_authority" object="${content}" z="NXij6Y7D7z9rqayfqqzb64H9uvI="/>
-        <field:Bigdisplay field="publisher" id="s_com_aeiou_bigbang_domain_Content_publisher" object="${content}" z="user-managed"/>
     </page:show>
 </div>

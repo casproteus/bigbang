@@ -20,6 +20,7 @@ import com.aeiou.bigbang.backend.security.BigAuthenticationSuccessHandler;
 import com.aeiou.bigbang.backend.security.UserDetailsAuthenticationProvider;
 import com.aeiou.bigbang.util.SpringApplicationContext;
 import com.aeiou.bigbang.web.PersonalController;
+import com.aeiou.bigbang.web.PublicController;
 
 @Configuration
 public class SecurityConfig {
@@ -83,5 +84,11 @@ public class SecurityConfig {
 	@Scope("singleton")
 	PersonalController personalController() {
 		return new PersonalController();
+	}
+
+	@Bean(autowire = Autowire.BY_NAME)
+	@Scope("singleton")
+	PublicController publicController() {
+		return new PublicController();
 	}
 }

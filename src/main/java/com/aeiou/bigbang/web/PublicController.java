@@ -272,7 +272,7 @@ public class PublicController{
         uiModel.addAttribute("spaceOwner", tOwner);
         float nrOfPages;
         uiModel.addAttribute("twitter", tTwitter);
-        uiModel.addAttribute("remarks", Remark.findRemarkByTwitter(tTwitter, tAuthSet, firstResult, size));
+        uiModel.addAttribute("remarks", Remark.findRemarkByTwitter(tTwitter, tAuthSet, firstResult, sizeNo));
         nrOfPages = (float) Remark.countRemarksByTwitter(tTwitter, tAuthSet) / sizeNo;
     	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
     	Remark tRemark = new Remark();

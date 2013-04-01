@@ -54,7 +54,7 @@ xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"  xmlns:spring="http://www.
         </tr>
       </c:forEach>
       <tr class="footer">
-        <td colspan="${3}" class="tWireless">
+        <td class="tWireless"><!-- colspan="${3}"  -->
           <c:if test="${not empty maxPages and maxPages gt 1}">
             <util:contentPagination maxPages="${maxPages}" twitterid="${twitterid}" page="${param.page}" size="${param.size}" />
           </c:if>

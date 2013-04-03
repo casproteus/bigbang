@@ -16,9 +16,17 @@
   	</c:otherwise>
   </c:choose>
   <util:panel id="title" title="${title}">
-  	<spring:message code="pleaseAddSomeContentHere" htmlEscape="false"/>
-  	<span class="new">
-  	  <spring:message code="pleaseAddSomeTwitterHere" htmlEscape="false"/>
+  <!-- <span class="new">
+      <spring:url value="/twitters" var="write_url">
+        <spring:param name="form" />
+      </spring:url>
+      <a href="${write_url}">
+        <spring:url value="/resources/images/addnote.png" var="write_img_url" />
+        <spring:message arguments="${typeName}" code="global_menu_newnote" var="add_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(add_message)}" src="${write_img_url}" title="${fn:escapeXml(add_message)}" />
+      </a>
+    </span> -->	
+   <span> <!-- class="new" this style make a right align, while make the line height too low.-->
       <spring:url value="/twitters" var="write_url">
         <spring:param name="form" />
       </spring:url>
@@ -27,6 +35,16 @@
         <spring:url value="/resources/images/addnote.png" var="write_img_url" />
         <spring:message arguments="${typeName}" code="global_menu_newnote" var="add_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(add_message)}" src="${write_img_url}" title="${fn:escapeXml(add_message)}" />
+      </a>
+	  <c:out value=" || "/>
+      <spring:url value="/contents" var="create_url">
+        <spring:param name="form" />
+      </spring:url>
+      <a href="${create_url}">
+        <spring:message code="contributeContent" htmlEscape="false"/>
+        <spring:url value="/resources/images/addcontent.png" var="create_img_url" />
+        <spring:message arguments="${typeName}" code="global_menu_newbookmark" var="add_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
       </a>
     </span>
   </util:panel>

@@ -17,7 +17,7 @@
     </c:if>
 
     <c:if test="${empty dateTimePattern}">
-      <c:set value="MM/dd/yyyy" var="dateTimePattern" />
+      <c:set value="HH:mm dd/MM/yyyy" var="dateTimePattern" />
     </c:if>
 
     <div id="_${fn:escapeXml(id)}_id">

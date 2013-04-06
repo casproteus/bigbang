@@ -12,6 +12,6 @@
   <jsp:directive.attribute name="z" type="java.lang.String" required="false" description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
 
 
-      <c:set value="MM/dd/yyyy" var="dateTimePattern" />
+      <c:set value="HH:mm dd/MM/yyyy" var="dateTimePattern" />
       <fmt:formatDate var="TimeStr" value="${object[field]}" pattern="${fn:escapeXml(dateTimePattern)}" />
 </jsp:root>

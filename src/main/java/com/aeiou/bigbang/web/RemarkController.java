@@ -41,7 +41,10 @@ public class RemarkController {
 		String tCurName = userContextService.getCurrentUserName();
 	    UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
 		List<Remark> tList = Remark.findRemarkByPublisher(tUserAccount, 0, 1);
-		
+		//This is good, but not good enough, because when user press F5 after modifying a remark, and press back->back
+		//will trick out the form to submit again, and then in this method, the content are different....
+		//TODO: add a hidden field in From and save a token in it.then verify, if the token not there, then stop saving
+		//http://stackoverflow.com/questions/2324931/duplicate-form-submission-in-spring
 		if(tList != null && tList.size() > 0){
 			Remark tTwitter = tList.get(0);
 			if(remark.getContent().equals(tTwitter.getContent()) && remark.getRemarkto().equals(tTwitter.getRemarkto()))

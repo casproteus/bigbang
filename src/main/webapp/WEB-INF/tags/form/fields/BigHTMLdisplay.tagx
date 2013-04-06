@@ -17,7 +17,7 @@
         <c:otherwise>
           	<spring:eval htmlEscape="false" expression="object[field].toString()" />
       		<div style="text-align: right;">
-          		------${object['publisher']} (${time})
+          		-- ${object['publisher']} ${time}
           	</div>
         </c:otherwise>
       </c:choose>

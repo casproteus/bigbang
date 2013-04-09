@@ -11,11 +11,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,8 +42,6 @@ privileged aspect RemarkController_Roo_Controller {
         return "remarks/show";
     }
     
-        
-        
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String RemarkController.updateForm(@PathVariable("id") Long id, Model uiModel) {
         populateEditForm(uiModel, Remark.findRemark(id));

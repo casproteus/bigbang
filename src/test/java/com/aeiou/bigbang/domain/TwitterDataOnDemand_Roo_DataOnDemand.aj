@@ -38,6 +38,7 @@ privileged aspect TwitterDataOnDemand_Roo_DataOnDemand {
     public Twitter TwitterDataOnDemand.getNewTransientTwitter(int index) {
         Twitter obj = new Twitter();
         setAuthority(obj, index);
+        setLastupdate(obj, index);
         setPublisher(obj, index);
         setTwitDate(obj, index);
         setTwitent(obj, index);
@@ -48,6 +49,11 @@ privileged aspect TwitterDataOnDemand_Roo_DataOnDemand {
     public void TwitterDataOnDemand.setAuthority(Twitter obj, int index) {
         Integer authority = new Integer(index);
         obj.setAuthority(authority);
+    }
+    
+    public void TwitterDataOnDemand.setLastupdate(Twitter obj, int index) {
+        Date lastupdate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setLastupdate(lastupdate);
     }
     
     public void TwitterDataOnDemand.setPublisher(Twitter obj, int index) {

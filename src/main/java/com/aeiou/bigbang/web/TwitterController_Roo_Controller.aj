@@ -5,7 +5,6 @@ package com.aeiou.bigbang.web;
 
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.web.TwitterController;
-import com.aeiou.bigbang.domain.UserAccount;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +58,7 @@ privileged aspect TwitterController_Roo_Controller {
     
     void TwitterController.addDateTimeFormatPatterns(Model uiModel) {
         uiModel.addAttribute("twitter_twitdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("twitter_lastupdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
     
     String TwitterController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

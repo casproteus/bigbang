@@ -58,4 +58,12 @@ privileged aspect Twitter_Roo_JavaBean {
         this.twtitle = twtitle;
     }
     
+    public Date Twitter.getLastupdate() {
+        return this.lastupdate;
+    }
+    
+    public void Twitter.setLastupdate(Date lastupdate) {
+        this.lastupdate = lastupdate;
+    }
+    
 }

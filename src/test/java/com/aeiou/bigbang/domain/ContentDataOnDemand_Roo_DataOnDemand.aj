@@ -10,6 +10,9 @@ import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.domain.UserAccountDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -36,6 +39,7 @@ privileged aspect ContentDataOnDemand_Roo_DataOnDemand {
         Content obj = new Content();
         setAuthority(obj, index);
         setConentCache(obj, index);
+        setMarkDate(obj, index);
         setPublisher(obj, index);
         setSourceURL(obj, index);
         setTitle(obj, index);
@@ -50,6 +54,11 @@ privileged aspect ContentDataOnDemand_Roo_DataOnDemand {
     public void ContentDataOnDemand.setConentCache(Content obj, int index) {
         String conentCache = "conentCache_" + index;
         obj.setConentCache(conentCache);
+    }
+    
+    public void ContentDataOnDemand.setMarkDate(Content obj, int index) {
+        Date markDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setMarkDate(markDate);
     }
     
     public void ContentDataOnDemand.setPublisher(Content obj, int index) {

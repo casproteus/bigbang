@@ -6,6 +6,7 @@ package com.aeiou.bigbang.domain;
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.UserAccount;
+import java.util.Date;
 
 privileged aspect Content_Roo_JavaBean {
     
@@ -63,6 +64,14 @@ privileged aspect Content_Roo_JavaBean {
     
     public void Content.setUncommonBigTag(BigTag uncommonBigTag) {
         this.uncommonBigTag = uncommonBigTag;
+    }
+    
+    public Date Content.getMarkDate() {
+        return this.markDate;
+    }
+    
+    public void Content.setMarkDate(Date markDate) {
+        this.markDate = markDate;
     }
     
 }

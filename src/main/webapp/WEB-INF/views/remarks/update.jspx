@@ -3,7 +3,7 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:update id="fu_com_aeiou_bigbang_domain_Remark" modelAttribute="remark" path="/remarks" versionField="Version" z="JYRKFQqMEvbVvr6ux+p68mWw5HI=">
-        <field:editor field="content" id="c_com_aeiou_bigbang_domain_Remark_content" required="true" z="T3F6giLLpXJrNETuQerWplAqyFY="/>
+        <field:editor field="content" height="300" id="c_com_aeiou_bigbang_domain_Remark_content" required="true" z="T3F6giLLpXJrNETuQerWplAqyFY="/>
         <field:select field="authority" id="c_com_aeiou_bigbang_domain_Twitter_authority" itemValue="id" items="${authorities}" path="/bigtags" z="user-managed"/>
     </form:update>
 </div>

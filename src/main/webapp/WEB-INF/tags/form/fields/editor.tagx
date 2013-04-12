@@ -3,6 +3,7 @@
 
   <jsp:directive.attribute name="id" type="java.lang.String" required="true" rtexprvalue="true" description="The identifier for this tag (do not change!)" />
   <jsp:directive.attribute name="field" type="java.lang.String" required="true" rtexprvalue="true" description="The field exposed from the form backing object" />
+  <jsp:directive.attribute name="height" type="java.lang.Integer" required="false" rtexprvalue="true" description="The height of the editor" />
   <jsp:directive.attribute name="label" type="java.lang.String" required="false" rtexprvalue="true" description="The label used for this field, will default to a message bundle if not supplied" />
   <jsp:directive.attribute name="required" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicates if this field is required (default false)" />
   <jsp:directive.attribute name="disabled" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Specify if this field should be enabled" />
@@ -21,6 +22,10 @@
     <c:if test="${empty label}">
       <spring:message code="label_${fn:toLowerCase(fn:substringAfter(id,'_'))}" var="label" htmlEscape="false" />
     </c:if>
+    
+    <c:if test="${empty height}">
+      <c:set value="150" var="height" />
+    </c:if>
 
     <c:if test="${empty required}">
       <c:set value="false" var="required" />
@@ -37,10 +42,10 @@
         :
       </label>
       <form:hidden id="_${sec_field}_id" path="${sec_field}" />
-      <div style="height:150px; border: solid #666666 1px "> 
+      <div style="height:${height}px; border: solid #666666 1px "> 
         <div id="_${sec_field}_id_" style="height:100%;" ></div>     
         <script type="text/javascript">
-           Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id_', widgetType : 'dijit.Editor', widgetAttrs : {height:'126px', disabled: ${disabled}}}));
+           Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id_', widgetType : 'dijit.Editor', widgetAttrs : {height:'${height - 24}px', disabled: ${disabled}}}));
            dojo.addOnLoad(function () {
               var src = dojo.byId('_${sec_field}_id');
               var rte = dijit.byId('_${sec_field}_id_');

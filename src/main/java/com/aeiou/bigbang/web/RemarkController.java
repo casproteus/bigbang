@@ -1,20 +1,12 @@
 package com.aeiou.bigbang.web;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
-import com.aeiou.bigbang.domain.Remark;
-import com.aeiou.bigbang.domain.Twitter;
-import com.aeiou.bigbang.domain.UserAccount;
-import com.aeiou.bigbang.services.secutiry.UserContextService;
-import com.aeiou.bigbang.util.BigAuthority;
-import com.aeiou.bigbang.util.SpringApplicationContext;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +14,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.Remark;
+import com.aeiou.bigbang.domain.Twitter;
+import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/remarks")
 @Controller
@@ -63,8 +62,9 @@ public class RemarkController {
         }
         uiModel.asMap().clear();
         remark.persist();
-//        return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
 
+        refreshULastUpdateTimeOfTwitter(remark);
+        
         PublicController tController = SpringApplicationContext.getApplicationContext().getBean("publicController", PublicController.class);
         return tController.showDetailTwitters(remark.getRemarkto().getId(), null, null, uiModel);
         /*
@@ -91,7 +91,7 @@ public class RemarkController {
         
         return "public/list_detail_twitter";*/
     }
-
+	
 	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String update(@Valid Remark remark, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
@@ -107,6 +107,7 @@ public class RemarkController {
         }
         uiModel.asMap().clear();
         remark.merge();
+        refreshULastUpdateTimeOfTwitter(remark);
         return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
     }
 
@@ -134,4 +135,14 @@ public class RemarkController {
         addDateTimeFormatPatterns(uiModel);
         return "remarks/list";
     }
+
+	/*
+	 * update the lastupdate field of twitter.
+	 */
+	private void refreshULastUpdateTimeOfTwitter(Remark remark){
+		remark = Remark.findRemark(remark.getId());	//this remark may got from webpage, and has no some field like "remarkto"
+        Twitter tTwitter = remark.getRemarkto();
+        tTwitter.setLastupdate(remark.getRemarkTime());
+        tTwitter.merge();
+	}
 }

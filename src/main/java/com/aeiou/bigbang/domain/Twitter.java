@@ -50,7 +50,7 @@ public class Twitter {
 
     public static List<com.aeiou.bigbang.domain.Twitter> findTwitterByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Twitter> tQuery = tEntityManager.createQuery("SELECT o FROM Twitter AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY o.id DESC", Twitter.class);
+        TypedQuery<Twitter> tQuery = tEntityManager.createQuery("SELECT o FROM Twitter AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY o.lastupdate DESC", Twitter.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);

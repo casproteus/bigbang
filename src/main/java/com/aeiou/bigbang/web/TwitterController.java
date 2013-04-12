@@ -81,6 +81,7 @@ public class TwitterController {
         	}
         }
         uiModel.asMap().clear();
+        twitter.setLastupdate(new Date());
         twitter.persist();
         return "redirect:/twitters/" + encodeUrlPathSegment(twitter.getId().toString(), httpServletRequest);
     }
@@ -107,6 +108,7 @@ public class TwitterController {
         	}
         }
         uiModel.asMap().clear();
+        twitter.setLastupdate(new Date());
         twitter.merge();
         return "redirect:/twitters/" + encodeUrlPathSegment(twitter.getId().toString(), httpServletRequest);
     }

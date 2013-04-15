@@ -22,9 +22,8 @@
 	    <br/>
     </c:if>
     
-    <form:Bigcreate passenger="${twitter}" id="fc_com_aeiou_bigbang_domain_Remark" modelAttribute="newremark" path="/remarks" render="${empty dependencies}" z="sWlU6AsGIe2//4XQNOSFZm9xQRQ=">
+    <form:BigRemarkCreate twitterId="${twitter.id}" id="fc_com_aeiou_bigbang_domain_Remark" modelAttribute="newremark" path="/remarks" render="${empty dependencies}" z="sWlU6AsGIe2//4XQNOSFZm9xQRQ=">
         <field:editor field="content" id="c_com_aeiou_bigbang_domain_Remark_content" required="true" z="user-managed"/>
         <field:select field="authority" id="c_com_aeiou_bigbang_domain_Remark_authority" itemValue="id" items="${authorities}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/>
-        <field:select field="remarkto" id="c_com_aeiou_bigbang_domain_Remark_remarkto" itemValue="id" items="${remarktos}" path="/twitters" z="1fwYviEwBT209mmo9KsB8ptx/5M="/>
-    </form:Bigcreate>
+    </form:BigRemarkCreate>
 </div> 

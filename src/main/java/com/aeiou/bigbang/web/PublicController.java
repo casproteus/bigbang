@@ -304,10 +304,9 @@ public class PublicController{
             Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tPublisher);
             uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo));
             uiModel.addAttribute("publisher", pPublisher);
-            uiModel.addAttribute("price",tPublisher.getPrice());
+            uiModel.addAttribute("balance",tPublisher.getBalance());
             if(tCurName != null){
             	tCurName = tCurUser.getName();
-                uiModel.addAttribute("balance", tCurUser.getBalance());
             	if(pPublisher.equals(tCurName)){
         			uiModel.addAttribute("nothireable", "true");
         			uiModel.addAttribute("notfireable", "true");

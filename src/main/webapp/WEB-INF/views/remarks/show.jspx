@@ -2,7 +2,7 @@
 <div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
-    <page:show id="ps_com_aeiou_bigbang_domain_Remark" object="${remark}" path="/remarks" z="Sh9c1iZNpsmXM1/Z3kVu9y0xoJc=">
+    <page:show id="ps_com_aeiou_bigbang_domain_Remark" object="${remark}" delete="false" create="false" path="/remarks" z="Sh9c1iZNpsmXM1/Z3kVu9y0xoJc=">
         <field:Bigdisplay field="content" id="s_com_aeiou_bigbang_domain_Remark_content" object="${remark}" z="QJIdoG8cGYR0n86nfffMPaw0YtA="/>
         <field:display field="authority" id="s_com_aeiou_bigbang_domain_Remark_authority" object="${remark}" z="z6Zsx0qO9ceKJ8ecHfZ6AaA2PGE="/>
     </page:show>

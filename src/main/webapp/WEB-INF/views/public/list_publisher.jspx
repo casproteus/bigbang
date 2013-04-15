@@ -6,7 +6,7 @@
     <jsp:output omit-xml-declaration="yes"/>
     <spring:message code="allcontents" var="label" htmlEscape="false" />
 	<util:panel id="title" title="${publisher}">
-  		<spring:message code="label_public_expectedSalary" arguments="${price}" htmlEscape="false"/>
+  		<spring:message code="label_public_balance" arguments="${balance}" htmlEscape="false"/>
 	    <span class="new">
 	      <c:if test="${empty nothireable}">
 		      <spring:url value="/public" var="hire_url">
@@ -28,10 +28,6 @@
 		        <spring:url value="/resources/images/delete.png" var="delete_img_url" />
 		        <img alt="remove this guy from my employee list" src="${delete_img_url}" title="click this button to remove this guy from my employee list." />
 		      </a>
-		      ${" | "}
-		  </c:if>
-		  <c:if test="${not empty balance and not empty notfireable and not empty nothireable}">
-		 	 <spring:message code="label_public_balance" arguments="${balance}" htmlEscape="false"/>
 		      ${" | "}
 		  </c:if>
 		  <c:if test="${empty notfireable or empty nothireable}">

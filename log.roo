@@ -90,3 +90,6 @@ field reference --fieldName twittertag --type ~.domain.BigTag --class ~.domain.T
 field number --fieldName authority --type int --class ~.domain.Twitter
 field number --fieldName owner --type java.lang.Integer --class ~.domain.BigTag --notNull 
 field string --fieldName twtitle --class ~.domain.Twitter
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-04-09 14:12:36
+field date --class ~.domain.Twitter --fieldName lastupdate --type java.util.Date
+field date --class ~.domain.Content --fieldName markDate --type java.util.Date

@@ -26,7 +26,7 @@
   </span>
   <c:choose>
      <c:when test="${pageContext['request'].userPrincipal != null}">
-     	<c:out value=" | "/>
+     	<c:out value=" || "/>
 	    <span>
 	      <spring:url value="/resources/j_spring_security_logout" var="logout"/>
 	      <a href="${logout}">
@@ -35,7 +35,7 @@
 	    </span>
      </c:when>
      <c:otherwise>
-       	<c:out value=" | "/>
+       	<c:out value=" || "/>
 	    <span>
 	      <spring:url value="/login" var="login"/>
 	      <a href="${login}">

@@ -74,7 +74,7 @@ public class Twitter {
         Set<UserAccount> tTeamSet = pOwner.getListento();
         if (tTeamSet.isEmpty()) return null;
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Twitter> tQuery = tEntityManager.createQuery("SELECT o FROM Twitter AS o WHERE (o.publisher in :tTeamSet and o.authority = 0) ORDER BY o.id DESC", Twitter.class);
+        TypedQuery<Twitter> tQuery = tEntityManager.createQuery("SELECT o FROM Twitter AS o WHERE (o.publisher in :tTeamSet and o.authority = 0) ORDER BY o.lastupdate DESC", Twitter.class);
         tQuery = tQuery.setParameter("tTeamSet", tTeamSet);
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();

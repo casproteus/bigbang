@@ -1,5 +1,6 @@
 package com.aeiou.bigbang.web;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.BigUtil;
 import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/remarks")
@@ -38,8 +40,30 @@ public class RemarkController {
         uiModel.addAttribute("authorities",BigAuthority.getRemarkOptions());
     }
 	
-	@RequestMapping(method = RequestMethod.POST, produces = "text/html")
-    public String create(@Valid Remark remark, BindingResult bindingResult, @RequestParam(value = "pTwitterId", required = false)Long pTwitterId, Model uiModel, HttpServletRequest httpServletRequest) {
+    @RequestMapping(params = "messageform", produces = "text/html")
+    public String createMessageForm(Model uiModel, @RequestParam(value = "messageform", required = false)String pReceiver) {
+    	UserAccount tOwner = UserAccount.findUserAccountByName(pReceiver);			//make sure the owner exist, and set the name on title
+    	if(tOwner == null){
+    		pReceiver = BigUtil.getUTFString(pReceiver);
+    		tOwner = UserAccount.findUserAccountByName(pReceiver); //bet it might still not UTF8 encoded.
+    		if(tOwner == null)
+    			return null;
+    	}
+    	
+        populateEditForm(uiModel, new Remark());
+        List<String[]> dependencies = new ArrayList<String[]>();
+        if (UserAccount.countUserAccounts() == 0) {
+            dependencies.add(new String[] { "useraccount", "useraccounts" });
+        }
+        uiModel.addAttribute("dependencies", dependencies);
+        uiModel.addAttribute("receiverName", pReceiver);
+        return "remarks/createMessage";
+    }
+    
+	@RequestMapping(params = "pTwitterId", method = RequestMethod.POST, produces = "text/html")
+    public String create(@Valid Remark remark, BindingResult bindingResult,
+    		@RequestParam(value = "pTwitterId", required = false)Long pTwitterId,
+    		Model uiModel, HttpServletRequest httpServletRequest) {
 		//TODO: Should make the check before submit.
 		if(remark.getContent() == null || remark.getContent().length() < 1)
             return "remarks/create";
@@ -75,6 +99,56 @@ public class RemarkController {
         
         PublicController tController = SpringApplicationContext.getApplicationContext().getBean("publicController", PublicController.class);
         return tController.showDetailTwitters(remark.getRemarkto().getId(), null, null, uiModel);
+    }
+	
+	@RequestMapping(params = "pReceiver", method = RequestMethod.POST, produces = "text/html")
+    public String createMessage(@Valid Remark remark, BindingResult bindingResult,
+    		@RequestParam(value = "pReceiver", required = false)String pReceiver,
+    		Model uiModel, HttpServletRequest httpServletRequest) {
+		//TODO: Should make the check before submit.
+		if(remark.getContent() == null || remark.getContent().length() < 1)
+            return "remarks/create";
+		
+		UserAccount tReceiver = UserAccount.findUserAccountByName(pReceiver);			//make sure the owner exist, and set the name on title
+    	if(tReceiver == null){
+    		pReceiver = BigUtil.getUTFString(pReceiver);
+    		tReceiver = UserAccount.findUserAccountByName(pReceiver); //bet it might still not UTF8 encoded.
+    		if(tReceiver == null)
+    			return null;
+    	}
+    	
+		//get his last twitter in db compare with it.
+		String tCurName = userContextService.getCurrentUserName();
+	    UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
+		List<Remark> tList = Remark.findRemarkByPublisher(tUserAccount, 0, 1);
+		//This is good, but not good enough, because when user press F5 after modifying a remark, and press back->back
+		//will trick out the form to submit again, and then in this method, the content are different....
+		//TODO: add a hidden field in From and save a token in it.then verify, if the token not there, then stop saving
+		//http://stackoverflow.com/questions/2324931/duplicate-form-submission-in-spring
+		if(tList != null && tList.size() > 0){
+			Remark tTwitter = tList.get(0);
+			if(remark.getContent().equals(tTwitter.getContent()))//TODO: also need to compare remarto, incase that the message is happened to be same content with last normal remark. && remark.getRemarkto().equals(tTwitter.getRemarkto()))
+				return null;
+		}
+	
+		if (bindingResult.hasErrors()) {
+			if (bindingResult.getAllErrors().size() == 1 && remark.getPublisher() == null) {
+				remark.setPublisher(tUserAccount);
+				remark.setAuthority(1);
+				remark.setRemarkto(Twitter.findMessageTwitter(tReceiver));
+				remark.setRemarkTime(new Date());//add remark time when it's submitted.
+			} else {
+				populateEditForm(uiModel, remark);
+		        return null;
+			}
+        }
+        uiModel.asMap().clear();
+        remark.persist();
+
+        refreshULastUpdateTimeOfTwitter(remark);
+        
+        PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
+        return(tController.index(tReceiver.getName(), -1, -1, uiModel));
     }
 	
 	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")

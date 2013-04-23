@@ -42,6 +42,19 @@
         <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
       </a>
     </span>
+    <c:if test="${empty maxPages and (not empty spaceOwner and fn:toLowerCase(spaceOwner) ne 'admin') and fn:toLowerCase(pageContext['request'].userPrincipal.name) ne fn:toLowerCase(spaceOwner)}">
+	   <span class="new">
+		  <spring:url value="/remarks" var="create_message_url">
+	        <spring:param name="messageform" value="${spaceOwner}"/>
+	      </spring:url>
+	      <a href="${create_message_url}">
+	        <spring:message code="writeMessageToSpaceOwner" arguments="${spaceOwner}" htmlEscape="false"/>
+	        <spring:url value="/resources/images/addmessage.png" var="message_img_url" />
+	        <spring:message arguments="${typeName}" code="global_menu_newmessage" var="add_message" htmlEscape="false" />
+	        <img alt="${fn:escapeXml(add_message)}" src="${message_img_url}" title="${fn:escapeXml(add_message)}" />
+	      </a>
+	    </span>
+    </c:if>
     <c:if test="${empty maxPages and fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(spaceOwner)}">
       <br/>
 	  <spring:url value="/public" var="reset_url">
@@ -78,6 +91,15 @@
         <img alt="${fn:escapeXml(tagsManage_message)}" src="${tag_img_url}" title="${fn:escapeXml(tagsManage_message)}" />
       </a>
       
+      <c:out value=" | " />
+      <spring:url value="/useraccounts/${spaceOwnerId}" var="useraccounts_url">
+		<spring:param name="form"/>
+      </spring:url>
+      <a href="${useraccounts_url}">
+        <spring:url value="/resources/images/inbox.png" var="inbox_img_url" />
+        <spring:message code="global_menu_inboxManage" var="inboxManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}" title="${fn:escapeXml(inboxManage_message)}" />
+      </a>
       <c:out value="  " />
       <spring:url value="/useraccounts/${spaceOwnerId}" var="useraccounts_url">
 		<spring:param name="form"/>

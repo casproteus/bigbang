@@ -1,6 +1,7 @@
 package com.aeiou.bigbang.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,6 +10,7 @@ import org.springframework.context.MessageSource;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.quartz.UpdatingBalanceJobProcessor;
 
@@ -125,6 +127,18 @@ public class BigUtil {
 	    tBigTag8.setOwner(1);
 	    tBigTag8.persist();
 	}
+	
+
+	public static void addDefaultMessageTwitter(MessageSource messageSource, UserAccount pPublisher){
+		Twitter tTwitter = new Twitter();
+		tTwitter.setAuthority(1);
+		tTwitter.setPublisher(pPublisher);
+		tTwitter.setTwitDate(new Date());
+		tTwitter.setTwtitle(messageSource.getMessage("default_twitterTitle_for_message", new Object[0], null));
+		tTwitter.setTwitent(messageSource.getMessage("default_twitterConent_for_message", new Object[0], null));
+		tTwitter.persist();
+	}
+	
 	
 	public static void resetLayoutString(UserAccount pUser){
     	if(pUser == null) return;

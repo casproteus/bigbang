@@ -47,14 +47,16 @@ public class UserAccountController {
             populateEditForm(uiModel, userAccount);
             return "useraccounts/create";
         }
+        
         UserAccount tUserAccount = UserAccount.findUserAccountByName(userAccount.getName());
-        userAccount.setBalance(1000);// the 1000 in view was lost when transfered from view to back end because the field was set as disabled.
         if(tUserAccount == null){
 	        uiModel.asMap().clear();
+	        userAccount.setBalance(1000);// the 1000 in view was lost when transfered from view to back end because the field was set as disabled.
 	        userAccount.persist();
 	        //give some default tags.
-	        BigUtil.addDefaultUserTags(messageSource, userAccount.getName()); // If I open this, the local is OK, the server will report error when persisting the tags! 
-	        
+	        BigUtil.addDefaultUserTags(messageSource, userAccount.getName());
+	        //give a default twitter for place hte income messages.
+	        BigUtil.addDefaultMessageTwitter(messageSource, userAccount);
 	        return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
         }else{
         	uiModel.addAttribute("create_error", "abc");

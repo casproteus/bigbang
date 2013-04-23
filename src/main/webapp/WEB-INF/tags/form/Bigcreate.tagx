@@ -4,7 +4,6 @@
   <jsp:directive.attribute name="id" type="java.lang.String" required="true" rtexprvalue="true" description="The identifier for this tag (do not change!)"/>
   <jsp:directive.attribute name="modelAttribute" type="java.lang.String" required="true" rtexprvalue="true" description="The name of the model attribute for form binding"/>
   <jsp:directive.attribute name="info_error" type="java.lang.String" required="false" rtexprvalue="true" description="Specify the error infomation when create not successful" />
-  <jsp:directive.attribute name="twitterId" type="java.lang.Long" required="false" rtexprvalue="true" description="allow carrying an object. e.g. when creating a remark, the Obj will the twitter that remark to" />
   <jsp:directive.attribute name="path" type="java.lang.String" required="true" rtexprvalue="true" description="Specify the relative URL path (wit leading /)" />
   <jsp:directive.attribute name="compositePkField" type="java.lang.String" required="false" rtexprvalue="true" description="The field name of the composite primary key (only used if a composite PK is present in the form backing object)" />
   <jsp:directive.attribute name="multipart" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if this is a multipart form (default: false)" />
@@ -24,9 +23,7 @@
     <spring:message code="${label}" var="tArgument" htmlEscape="false" />
     <spring:message arguments="${tArgument}" code="entity_create" var="title_msg" htmlEscape="false" />
     <util:panel id="${id}" title="${title_msg}" openPane="${openPane}">
-      <spring:url value="${path}" var="form_url">
-        <spring:param name="pTwitterId" value="${twitterId}"/>
-      </spring:url>
+      <spring:url value="${path}" var="form_url"/>
       <c:set var="jsCall" value=""/>
       <c:if test="${not empty compositePkField}">
       	<c:set var="jsCall" value="encodePk()" />

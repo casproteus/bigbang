@@ -44,6 +44,18 @@ public class Twitter {
     @DateTimeFormat(style = "M-")
     private Date lastupdate;
 
+    /** return the first twitter of the user, that means when we create a new account, we have to add a default twitter automatically.
+     * @note: didn't use Id, because users who already created twitter, will have trouble. use twitDate, I can create a twitter and modify it's date easyly to be before every every other twitter:) 
+     * @param pReceiver
+     * @return
+     */
+    public static Twitter findMessageTwitter(UserAccount pReceiver) {
+        if (pReceiver == null) return null;
+        TypedQuery<Twitter> tQuery = entityManager().createQuery("SELECT o FROM Twitter o WHERE o.publisher = :publisher ORDER BY o.twitDate", Twitter.class);
+        tQuery = tQuery.setParameter("publisher", pReceiver);
+        return tQuery.getSingleResult();
+    }
+    
     public static List<com.aeiou.bigbang.domain.Twitter> findTwitterEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM Twitter o ORDER BY o.id DESC", Twitter.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }

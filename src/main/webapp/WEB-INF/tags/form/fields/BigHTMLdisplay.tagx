@@ -17,7 +17,13 @@
         <c:otherwise>
           	<spring:eval htmlEscape="false" expression="object[field].toString()" />
       		<div style="text-align: right;">
-          		-- ${object['publisher']} ${time}
+      			-- 
+      			<spring:url value="/${object['publisher']}" var="spaceOfPublisher">
+      			</spring:url>
+      			<a href="${spaceOfPublisher}">
+		            <c:out value="${object['publisher']}" />
+		        </a>
+          		${time}
           	</div>
         </c:otherwise>
       </c:choose>

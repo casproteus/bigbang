@@ -10,6 +10,9 @@
 <definition extends="default" name="remarks/create">
         <put-attribute name="body" value="/WEB-INF/views/remarks/create.jspx"/>
     </definition>
+<definition extends="default" name="remarks/createMessage">
+        <put-attribute name="body" value="/WEB-INF/views/remarks/createMessage.jspx"/>
+    </definition>
 <definition extends="default" name="remarks/update">
         <put-attribute name="body" value="/WEB-INF/views/remarks/update.jspx"/>
     </definition>

@@ -1,6 +1,5 @@
 package com.aeiou.bigbang.web;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,13 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.aeiou.bigbang.domain.Message;
 import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
-import com.aeiou.bigbang.util.BigUtil;
 import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/remarks")

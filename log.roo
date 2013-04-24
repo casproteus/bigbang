@@ -93,3 +93,14 @@ field string --fieldName twtitle --class ~.domain.Twitter
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-04-09 14:12:36
 field date --class ~.domain.Twitter --fieldName lastupdate --type java.util.Date
 field date --class ~.domain.Content --fieldName markDate --type java.util.Date
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-04-23 21:55:25
+entity jpa --class ~.domain.Message --testAutomatically 
+field reference --fieldName receiver --type ~.domain.UserAccount --notNull 
+field reference --fieldName sender --type ~.domain.UserAccount --notNull 
+field string --fieldName content --notNull 
+field date --fieldName postTime --type java.util.Date --notNull 
+field number --fieldName status --type int
+web mvc all --package com.aeiou.bigbang.web
+field date --class ~.domain.UserAccount --fieldName lastReadMessage --type java.util.Date
+field date --class ~.domain.UserAccount --fieldName lastLoginTime --type java.util.Date
+field number --fieldName status --type int

@@ -1,18 +1,20 @@
 package com.aeiou.bigbang.domain;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ManyToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -48,10 +50,20 @@ public class UserAccount {
 
     private int theme;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date lastReadMessage;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date lastLoginTime;
+
+    private int status;
+
     public static com.aeiou.bigbang.domain.UserAccount findUserAccountByName(String pUserName) {
         TypedQuery<UserAccount> tQuery = entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)", UserAccount.class);
         tQuery = tQuery.setParameter("tname", pUserName);
-    	List<UserAccount> tList = tQuery.getResultList();
+        List<UserAccount> tList = tQuery.getResultList();
         if (tList != null && tList.size() == 1) return (UserAccount) tList.get(0); else return null;
     }
 
@@ -59,7 +71,7 @@ public class UserAccount {
         return this.getName();
     }
 
-	public static List<UserAccount> findUserAccountEntries(int firstResult, int maxResults) {
+    public static List<com.aeiou.bigbang.domain.UserAccount> findUserAccountEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM UserAccount o ORDER BY o.id DESC", UserAccount.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 }

@@ -3,6 +3,7 @@ package com.aeiou.bigbang.web;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -16,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Message;
-import com.aeiou.bigbang.domain.Remark;
-import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigAuthority;
 import com.aeiou.bigbang.util.BigUtil;
 import com.aeiou.bigbang.util.SpringApplicationContext;
 
@@ -56,26 +57,73 @@ public class MessageController {
     public String create(@Valid Message message, BindingResult bindingResult,
     		@RequestParam(value = "pReceiverName", required = false)String pReceiverName,
     		Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, message);
-            return "messages/create";
+		
+		UserAccount pReceiver = UserAccount.findUserAccountByName(pReceiverName);			//make sure the user exist
+    	if(pReceiver == null){
+    		pReceiverName = BigUtil.getUTFString(pReceiverName);
+    		pReceiver = UserAccount.findUserAccountByName(pReceiverName); //bet it might still not UTF8 encoded.
+    		if(pReceiver == null)
+    			return null;
+    	}
+    	
+		//TODO: Should make the check before submit.
+		if(message.getContent() == null || message.getContent().length() < 1)
+            return "message/create";
+		
+		//get his last twitter in db compare with it.
+		String tCurName = userContextService.getCurrentUserName();
+	    UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
+		List<Message> tList = Message.findMessageByPublisher(pReceiver, tUserAccount, 0, 1);
+		//This is good, but not good enough, because when user press F5 after modifying a remark, and press back->back
+		//will trick out the form to submit again, and then in this method, the content are different....
+		//TODO: add a hidden field in From and save a token in it.then verify, if the token not there, then stop saving
+		//http://stackoverflow.com/questions/2324931/duplicate-form-submission-in-spring
+		if(tList != null && tList.size() > 0){
+			Message tMsgInDB = tList.get(0);
+			if(message.getContent().equals(tMsgInDB.getContent()) && (tMsgInDB.getPostTime().getHours() == new Date().getHours()))
+				return "messages/create";
+		}
+	
+		if (bindingResult.hasErrors()) {
+			if (bindingResult.getAllErrors().size() == 3 && message.getReceiver() == null) {
+				message.setSender(tUserAccount);
+				message.setReceiver(pReceiver);
+				message.setPostTime(new Date());//add remark time when it's submitted.
+			} else {
+				populateEditForm(uiModel, message);
+		        return "messages/create";
+			}
         }
         uiModel.asMap().clear();
         message.persist();
-        return "redirect:/messages/" + encodeUrlPathSegment(message.getId().toString(), httpServletRequest);
+        
+        PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
+        return tController.index(pReceiverName, -1, -1, uiModel);
     }
 	
 	@RequestMapping(produces = "text/html")
     public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        if (page != null || size != null) {
-            int sizeNo = size == null ? 10 : size.intValue();
-            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("messages", Message.findMessageEntries(firstResult, sizeNo));
-            float nrOfPages = (float) Message.countMessages() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        } else {
-            uiModel.addAttribute("messages", Message.findAllMessages());
-        }
+        int sizeNo = size == null ? 10 : size.intValue();
+        final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
+        
+        String tCurName = userContextService.getCurrentUserName();     
+	    UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
+        if(tUserAccount == null)
+        	return "login";
+        tCurName = tUserAccount.getName();
+
+    	UserAccount tSender = UserAccount.findUserAccountByName(tCurName);
+    	tCurName = tSender.getName();
+        float nrOfPages;
+    	if(tCurName.equals("admin")){
+	        uiModel.addAttribute("messages", Message.findMessageEntries(firstResult, sizeNo));
+	        nrOfPages = (float) Message.countMessages() / sizeNo;
+	        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+    	}else{
+	        uiModel.addAttribute("messages", Message.findMessageByReceiver(tUserAccount, firstResult, sizeNo));
+	        nrOfPages = (float) Message.countMessagesByReceiver(tSender) / sizeNo;
+    	}
+        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         addDateTimeFormatPatterns(uiModel);
         return "messages/list";
     }

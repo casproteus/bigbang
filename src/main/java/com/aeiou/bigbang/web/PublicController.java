@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -35,7 +36,7 @@ public class PublicController{
 	
     @RequestMapping(method = RequestMethod.POST, value = "{id}")
     public void post(@PathVariable Long id, ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
-    	System.out.println("go to his big uncle's!");
+    	LogFactory.getLog(PublicController.class).info("Called! PublicController.post is finally called from: " + Thread.getAllStackTraces().toString());
     }
 
     @RequestMapping(produces = "text/html")

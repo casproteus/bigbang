@@ -45,8 +45,8 @@ public class BigUtil {
 	public static List<BigTag> transferToTags(String[] tAryTagStrs, String pOwnerName){
     	List<BigTag> tBigTags = new ArrayList<BigTag>();
     	for(int i = 0; i < tAryTagStrs.length; i++){
-//    		System.out.println("i:" + i);
-//    		System.out.println("tAryTagStrs[i]:" + tAryTagStrs[i]);
+    		//System.out.println("i:" + i);
+    		//System.out.println("tAryTagStrs[i]:" + tAryTagStrs[i]);
     		if(tAryTagStrs[i].endsWith("¶") ||tAryTagStrs[i].endsWith("") ||tAryTagStrs[i].endsWith("†"))
     			tAryTagStrs[i] = tAryTagStrs[i].substring(0, tAryTagStrs[i].length() - 1);
     		
@@ -232,7 +232,7 @@ public class BigUtil {
 				tBigTag.setAuthority(new Integer(0));
 				tBigTag.persist();
 			}else if(!(tBigTag.getAuthority() instanceof Integer)){
-				System.out.println("N : " + tBigTag.getAuthority());
+				//System.out.println("N : " + tBigTag.getAuthority());
 				tBigTag.setAuthority(new Integer(0));
 				tBigTag.persist();
 			}
@@ -252,9 +252,9 @@ public class BigUtil {
 				tContent.setAuthority(new Integer(0));
 				tContent.persist();
 			}else if(tContent.getAuthority() instanceof Integer){
-				System.out.println("Y : " + tContent.getAuthority().intValue());
+				//System.out.println("Y : " + tContent.getAuthority().intValue());
 			}else{
-				System.out.println("N : " + tContent.getAuthority());
+				//System.out.println("N : " + tContent.getAuthority());
 				tContent.setAuthority(new Integer(0));
 				tContent.persist();
 			}

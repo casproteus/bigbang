@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -70,7 +71,7 @@ public class Remark {
 
     public static long countRemarkByPublisher(UserAccount pPublisher) {
         if (pPublisher == null) {
-            System.out.println("Remark 64 is called!");
+            LogFactory.getLog(Content.class).error("------received a null as param!(pPublisher is null)------Remark.countRemarkByPublisher()");
             Thread.dumpStack();
             return 0;
         } else {

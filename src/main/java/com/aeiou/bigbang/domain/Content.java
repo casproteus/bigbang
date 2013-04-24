@@ -15,6 +15,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
+
+import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -57,7 +59,7 @@ public class Content {
 
     public static long countContentsByTag(BigTag pTag) {
         if (pTag == null) {
-            System.out.println("Content l79 is called!");
+            LogFactory.getLog(Content.class).error("------received a null as param!------Content.countContentsByTag()");
             Thread.dumpStack();
             return 0;
         } else {
@@ -80,7 +82,7 @@ public class Content {
 
     public static long countContentsByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet) {
         if (pPublisher == null) {
-            System.out.println("Content l89 is called!");
+            LogFactory.getLog(Content.class).error("------received a null as param! pPublisher is null------Content.countContentsByPublisher()");
             Thread.dumpStack();
             return 0;
         } else {
@@ -125,7 +127,7 @@ public class Content {
 
     public static long countContentsByTagAndSpaceOwner(BigTag pTag, UserAccount pOwner, Set<java.lang.Integer> pAuthSet) {
         if (pTag == null) {
-            System.out.println("201302122306");
+            LogFactory.getLog(Content.class).error("------received a null as param! pTag is null------Content.countContentsByTagAndSpaceOwner()");
             Thread.dumpStack();
             return 0;
         }

@@ -10,6 +10,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
+
+import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -64,7 +66,7 @@ public class Message {
 
     public static long countMessagesByReceiver(UserAccount pPublisher) {
         if (pPublisher == null) {
-            System.out.println("Message 67 is called!");
+            LogFactory.getLog(Content.class).error("------received a null as param!(pPublisher is null)------Message.countMessagesByReceiver()");
             Thread.dumpStack();
             return 0;
         } else {

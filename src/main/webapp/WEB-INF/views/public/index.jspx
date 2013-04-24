@@ -44,8 +44,8 @@
     </span>
     <c:if test="${empty maxPages and (not empty spaceOwner and fn:toLowerCase(spaceOwner) ne 'admin') and fn:toLowerCase(pageContext['request'].userPrincipal.name) ne fn:toLowerCase(spaceOwner)}">
 	   <span class="new">
-		  <spring:url value="/remarks" var="create_message_url">
-	        <spring:param name="messageform" value="${spaceOwner}"/>
+		  <spring:url value="/messages" var="create_message_url">
+	        <spring:param name="pReceiverName" value="${spaceOwner}"/>
 	      </spring:url>
 	      <a href="${create_message_url}">
 	        <spring:message code="writeMessageToSpaceOwner" arguments="${spaceOwner}" htmlEscape="false"/>

@@ -20,9 +20,7 @@
     <spring:message arguments="${receiverName}" code="label_com_aeiou_bigbang_domain_message" var="title_msg" htmlEscape="false" />
     <util:panel id="${id}" title="${title_msg}" openPane="${openPane}">
       <spring:url value="${path}" var="form_url">
-        <c:if test="${not empty receiverName}">
-        	<spring:param name="pReceiver" value="${receiverName}"/>
-        </c:if>
+        <spring:param name="pReceiverName" value="${receiverName}"/>
       </spring:url>
       <c:set var="jsCall" value=""/>
       <c:if test="${not empty compositePkField}">

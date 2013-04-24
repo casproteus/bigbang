@@ -24,17 +24,6 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect MessageController_Roo_Controller {
     
-    @RequestMapping(method = RequestMethod.POST, produces = "text/html")
-    public String MessageController.create(@Valid Message message, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, message);
-            return "messages/create";
-        }
-        uiModel.asMap().clear();
-        message.persist();
-        return "redirect:/messages/" + encodeUrlPathSegment(message.getId().toString(), httpServletRequest);
-    }
-    
     @RequestMapping(params = "form", produces = "text/html")
     public String MessageController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Message());
@@ -55,21 +44,6 @@ privileged aspect MessageController_Roo_Controller {
         uiModel.addAttribute("message", Message.findMessage(id));
         uiModel.addAttribute("itemId", id);
         return "messages/show";
-    }
-    
-    @RequestMapping(produces = "text/html")
-    public String MessageController.list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        if (page != null || size != null) {
-            int sizeNo = size == null ? 10 : size.intValue();
-            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("messages", Message.findMessageEntries(firstResult, sizeNo));
-            float nrOfPages = (float) Message.countMessages() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        } else {
-            uiModel.addAttribute("messages", Message.findAllMessages());
-        }
-        addDateTimeFormatPatterns(uiModel);
-        return "messages/list";
     }
     
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")

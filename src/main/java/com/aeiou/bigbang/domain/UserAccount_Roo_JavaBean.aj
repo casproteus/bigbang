@@ -81,14 +81,6 @@ privileged aspect UserAccount_Roo_JavaBean {
         this.theme = theme;
     }
     
-    public Date UserAccount.getLastReadMessage() {
-        return this.lastReadMessage;
-    }
-    
-    public void UserAccount.setLastReadMessage(Date lastReadMessage) {
-        this.lastReadMessage = lastReadMessage;
-    }
-    
     public Date UserAccount.getLastLoginTime() {
         return this.lastLoginTime;
     }
@@ -103,6 +95,14 @@ privileged aspect UserAccount_Roo_JavaBean {
     
     public void UserAccount.setStatus(int status) {
         this.status = status;
+    }
+    
+    public int UserAccount.getNewMessageAmount() {
+        return this.newMessageAmount;
+    }
+    
+    public void UserAccount.setNewMessageAmount(int newMessageAmount) {
+        this.newMessageAmount = newMessageAmount;
     }
     
 }

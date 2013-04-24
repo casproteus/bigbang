@@ -32,7 +32,6 @@ privileged aspect UserAccountController_Roo_Controller {
     }
     
     void UserAccountController.addDateTimeFormatPatterns(Model uiModel) {
-        uiModel.addAttribute("userAccount_lastreadmessage_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
         uiModel.addAttribute("userAccount_lastlogintime_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
     

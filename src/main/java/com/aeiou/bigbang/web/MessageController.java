@@ -123,7 +123,7 @@ public class MessageController {
 	        uiModel.addAttribute("messages", Message.findMessageByReceiver(tUserAccount, firstResult, sizeNo));
 	        nrOfPages = (float) Message.countMessagesByReceiver(tSender) / sizeNo;
 	        //modifi the Account last check message time.
-	        tUserAccount.setLastReadMessage(new Date());
+	        tUserAccount.setNewMessageAmount(0);
 	        tUserAccount.persist();
     	}
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));

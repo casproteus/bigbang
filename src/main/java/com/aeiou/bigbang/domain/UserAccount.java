@@ -52,13 +52,11 @@ public class UserAccount {
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
-    private Date lastReadMessage;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
     private Date lastLoginTime;
 
     private int status;
+
+    private int newMessageAmount;
 
     public static com.aeiou.bigbang.domain.UserAccount findUserAccountByName(String pUserName) {
         TypedQuery<UserAccount> tQuery = entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)", UserAccount.class);

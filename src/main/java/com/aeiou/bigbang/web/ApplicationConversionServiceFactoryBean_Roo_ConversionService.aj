@@ -7,6 +7,7 @@ import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Circle;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Customize;
+import com.aeiou.bigbang.domain.Message;
 import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
@@ -115,6 +116,30 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         };
     }
     
+    public Converter<Message, String> ApplicationConversionServiceFactoryBean.getMessageToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.Message, java.lang.String>() {
+            public String convert(Message message) {
+                return new StringBuilder().append(message.getContent()).append(' ').append(message.getPostTime()).append(' ').append(message.getStatus()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, Message> ApplicationConversionServiceFactoryBean.getIdToMessageConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, com.aeiou.bigbang.domain.Message>() {
+            public com.aeiou.bigbang.domain.Message convert(java.lang.Long id) {
+                return Message.findMessage(id);
+            }
+        };
+    }
+    
+    public Converter<String, Message> ApplicationConversionServiceFactoryBean.getStringToMessageConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, com.aeiou.bigbang.domain.Message>() {
+            public com.aeiou.bigbang.domain.Message convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Message.class);
+            }
+        };
+    }
+    
     public Converter<Remark, String> ApplicationConversionServiceFactoryBean.getRemarkToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.Remark, java.lang.String>() {
             public String convert(Remark remark) {
@@ -200,6 +225,9 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         registry.addConverter(getCustomizeToStringConverter());
         registry.addConverter(getIdToCustomizeConverter());
         registry.addConverter(getStringToCustomizeConverter());
+        registry.addConverter(getMessageToStringConverter());
+        registry.addConverter(getIdToMessageConverter());
+        registry.addConverter(getStringToMessageConverter());
         registry.addConverter(getRemarkToStringConverter());
         registry.addConverter(getIdToRemarkConverter());
         registry.addConverter(getStringToRemarkConverter());

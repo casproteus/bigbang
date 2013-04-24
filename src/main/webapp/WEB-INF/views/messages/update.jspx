@@ -4,9 +4,9 @@
     <jsp:output omit-xml-declaration="yes"/>
     <form:update id="fu_com_aeiou_bigbang_domain_Message" modelAttribute="message" path="/messages" versionField="Version" z="7yBVYMbuYKTrKfgidRPKUQ9To4A=">
         <field:select field="receiver" id="c_com_aeiou_bigbang_domain_Message_receiver" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="KBafJ1iZJI5Y6D/zzIQM+RZZrgs="/>
-        <field:select field="sender" id="c_com_aeiou_bigbang_domain_Message_sender" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="p4rcyXFwHtw98Mh45cU6+rQdq5w="/>
         <field:input field="content" id="c_com_aeiou_bigbang_domain_Message_content" required="true" z="m83F1rQSWusDyAsdJZ7ArVMSvXQ="/>
         <field:datetime dateTimePattern="${message_posttime_date_format}" field="postTime" id="c_com_aeiou_bigbang_domain_Message_postTime" required="true" z="NlPIYmorgayuCMumxI0UVZ7rfiA="/>
         <field:input field="status" id="c_com_aeiou_bigbang_domain_Message_status" z="WxG7PdU2jtDB7TgnuSM5IlddQmA="/>
+        <field:select field="publisher" id="c_com_aeiou_bigbang_domain_Message_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="kVuoiOFU2w5AeBPPXvIfEN2PY74="/>
     </form:update>
 </div>

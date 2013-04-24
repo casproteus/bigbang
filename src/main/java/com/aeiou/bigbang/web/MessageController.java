@@ -86,7 +86,7 @@ public class MessageController {
 	
 		if (bindingResult.hasErrors()) {
 			if (bindingResult.getAllErrors().size() == 3 && message.getReceiver() == null) {
-				message.setSender(tUserAccount);
+				message.setPublisher(tUserAccount);
 				message.setReceiver(pReceiver);
 				message.setPostTime(new Date());//add remark time when it's submitted.
 			} else {

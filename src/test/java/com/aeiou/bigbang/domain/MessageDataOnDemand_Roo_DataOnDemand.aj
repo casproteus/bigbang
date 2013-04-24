@@ -35,8 +35,8 @@ privileged aspect MessageDataOnDemand_Roo_DataOnDemand {
         Message obj = new Message();
         setContent(obj, index);
         setPostTime(obj, index);
+        setPublisher(obj, index);
         setReceiver(obj, index);
-        setSender(obj, index);
         setStatus(obj, index);
         return obj;
     }
@@ -51,14 +51,14 @@ privileged aspect MessageDataOnDemand_Roo_DataOnDemand {
         obj.setPostTime(postTime);
     }
     
+    public void MessageDataOnDemand.setPublisher(Message obj, int index) {
+        UserAccount publisher = userAccountDataOnDemand.getRandomUserAccount();
+        obj.setPublisher(publisher);
+    }
+    
     public void MessageDataOnDemand.setReceiver(Message obj, int index) {
         UserAccount receiver = userAccountDataOnDemand.getRandomUserAccount();
         obj.setReceiver(receiver);
-    }
-    
-    public void MessageDataOnDemand.setSender(Message obj, int index) {
-        UserAccount sender = userAccountDataOnDemand.getRandomUserAccount();
-        obj.setSender(sender);
     }
     
     public void MessageDataOnDemand.setStatus(Message obj, int index) {

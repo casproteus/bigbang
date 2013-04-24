@@ -28,7 +28,7 @@ public class Message {
 
     @NotNull
     @ManyToOne
-    private UserAccount sender;
+    private UserAccount publisher;
 
     @NotNull
     private String content;
@@ -49,9 +49,9 @@ public class Message {
      */
     public static List<com.aeiou.bigbang.domain.Message> findMessageByPublisher(UserAccount pReceiver, UserAccount pSender, int firstResult, int maxResults) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Message> tQuery = tEntityManager.createQuery("SELECT o FROM Message AS o WHERE o.receiver = :pReceiver and o.sender = :pSender ORDER BY o.id DESC", Message.class);
+        TypedQuery<Message> tQuery = tEntityManager.createQuery("SELECT o FROM Message AS o WHERE o.receiver = :pReceiver and o.publisher = :pPublisher ORDER BY o.id DESC", Message.class);
         tQuery = tQuery.setParameter("pReceiver", pReceiver);
-        tQuery = tQuery.setParameter("pSender", pSender);
+        tQuery = tQuery.setParameter("pPublisher", pSender);
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList(); 
     }

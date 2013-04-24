@@ -17,12 +17,12 @@ privileged aspect Message_Roo_JavaBean {
         this.receiver = receiver;
     }
     
-    public UserAccount Message.getSender() {
-        return this.sender;
+    public UserAccount Message.getPublisher() {
+        return this.publisher;
     }
     
-    public void Message.setSender(UserAccount sender) {
-        this.sender = sender;
+    public void Message.setPublisher(UserAccount publisher) {
+        this.publisher = publisher;
     }
     
     public String Message.getContent() {

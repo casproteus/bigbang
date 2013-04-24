@@ -4,7 +4,6 @@
 package com.aeiou.bigbang.domain;
 
 import com.aeiou.bigbang.domain.UserAccount;
-import java.util.Date;
 import java.util.Set;
 
 privileged aspect UserAccount_Roo_JavaBean {
@@ -79,14 +78,6 @@ privileged aspect UserAccount_Roo_JavaBean {
     
     public void UserAccount.setTheme(int theme) {
         this.theme = theme;
-    }
-    
-    public Date UserAccount.getLastLoginTime() {
-        return this.lastLoginTime;
-    }
-    
-    public void UserAccount.setLastLoginTime(Date lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
     }
     
     public int UserAccount.getStatus() {

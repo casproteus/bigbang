@@ -50,10 +50,6 @@ public class UserAccount {
 
     private int theme;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date lastLoginTime;
-
     private int status;
 
     private int newMessageAmount;

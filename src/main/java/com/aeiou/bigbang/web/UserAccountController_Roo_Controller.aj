@@ -7,8 +7,6 @@ import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.web.UserAccountController;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
-import org.joda.time.format.DateTimeFormat;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +17,6 @@ privileged aspect UserAccountController_Roo_Controller {
     
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String UserAccountController.show(@PathVariable("id") Long id, Model uiModel) {
-        addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("useraccount", UserAccount.findUserAccount(id));
         uiModel.addAttribute("itemId", id);
         return "useraccounts/show";
@@ -31,13 +28,8 @@ privileged aspect UserAccountController_Roo_Controller {
         return "useraccounts/update";
     }
     
-    void UserAccountController.addDateTimeFormatPatterns(Model uiModel) {
-        uiModel.addAttribute("userAccount_lastlogintime_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
-    }
-    
     void UserAccountController.populateEditForm(Model uiModel, UserAccount userAccount) {
         uiModel.addAttribute("userAccount", userAccount);
-        addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
     }
     

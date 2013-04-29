@@ -104,3 +104,4 @@ web mvc all --package com.aeiou.bigbang.web
 field date --class ~.domain.UserAccount --fieldName lastReadMessage --type java.util.Date
 field date --class ~.domain.UserAccount --fieldName lastLoginTime --type java.util.Date
 field number --fieldName status --type int
+field number --fieldName newMessageAmount --type int --class ~.domain.UserAccount

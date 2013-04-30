@@ -55,7 +55,6 @@
           </c:if>
           <c:forTokens items="${columnLabels}" delims="${'&#9999;'}" var="columnHeading" varStatus="num">
             <th>
-              <c:if test="${not empty param.sortExpression}">
               	<spring:url value="" var="sort__url">
               		<spring:param name="sortExpression" value="o.${properties[num.count-1]} ${param.sortExpression.endsWith('DESC') ? '' : 'DESC' }" />
               		<spring:param name="size" value="${param.size}" />
@@ -63,10 +62,6 @@
               	<a href="${sort__url}">
               		<c:out value="${columnHeading}" />
               	</a>
-              </c:if>
-              <c:if test="${empty param.sortExpression}">
-              	<c:out value="${columnHeading}" />
-              </c:if>
               <spring:eval var="colCounter" expression="colCounter  + 1" />
             </th>
           </c:forTokens>

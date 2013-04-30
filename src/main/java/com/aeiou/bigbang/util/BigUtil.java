@@ -135,7 +135,8 @@ public class BigUtil {
 		tMessage.setReceiver(pPublisher);
 		tMessage.setPublisher(UserAccount.findUserAccountByName("admin"));
 		tMessage.setPostTime(new Date());
-		tMessage.setContent(messageSource.getMessage("default_welcome_message", [pPublisher.getName()], null));
+		Object[] tObjAry = new Object[]{pPublisher.getName()};
+		tMessage.setContent(messageSource.getMessage("default_welcome_message", tObjAry, null));
 		tMessage.persist();
 	}
 	

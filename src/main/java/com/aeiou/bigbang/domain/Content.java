@@ -67,13 +67,13 @@ public class Content {
         }
     }
 
-    public static List<com.aeiou.bigbang.domain.Content> findContentEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM Content o ORDER BY o.id DESC", Content.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    public static List<com.aeiou.bigbang.domain.Content> findContentEntries(int firstResult, int maxResults, String sortExpression) {
+        return entityManager().createQuery("SELECT o FROM Content o ORDER BY " + (sortExpression == null ? "o.id DESC" : sortExpression), Content.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 
-    public static List<com.aeiou.bigbang.domain.Content> findContentsByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults) {
+    public static List<com.aeiou.bigbang.domain.Content> findContentsByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults, String sortExpression) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Content> tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY o.id DESC", Content.class);
+        TypedQuery<Content> tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);

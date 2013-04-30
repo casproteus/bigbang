@@ -52,9 +52,10 @@ public class ContentController {
         uiModel.addAttribute("useraccounts", tList);		//why must return a list?
         uiModel.addAttribute("authorities",BigAuthority.getAllOptions());
     }
-
+	
 	@RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+    public String list(@RequestParam(value = "sortExpression", required = false) String sortExpression,
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
         int sizeNo = size == null ? 10 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
         String tCurName = userContextService.getCurrentUserName();
@@ -66,12 +67,12 @@ public class ContentController {
     	tCurName = tPublisher.getName();
         float nrOfPages;
     	if(tCurName.equals("admin")){
-	        uiModel.addAttribute("contents", Content.findContentEntries(firstResult, sizeNo));
+	        uiModel.addAttribute("contents", Content.findContentEntries(firstResult, sizeNo, sortExpression));
 	        nrOfPages = (float) Content.countContents() / sizeNo;
 	        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
     	}else{
 	    	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tPublisher, tPublisher);
-	        uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo));
+	        uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, sortExpression));
 	        nrOfPages = (float) Content.countContentsByPublisher(tPublisher, tAuthSet) / sizeNo;
     	}
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));

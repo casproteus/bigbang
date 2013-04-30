@@ -61,7 +61,7 @@ privileged aspect ContentIntegrationTest_Roo_IntegrationTest {
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<Content> result = Content.findContentEntries(firstResult, maxResults);
+        List<Content> result = Content.findContentEntries(firstResult, maxResults, null);
         Assert.assertNotNull("Find entries method for 'Content' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'Content' returned an incorrect number of entries", count, result.size());
     }

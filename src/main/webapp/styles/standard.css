@@ -254,7 +254,7 @@ table th {
 	text-align: left;
 	font-weight: bold;
 	color: #FFF;
-	background: #000;
+	background: #aaaaaa;
 }
 
 table thead {
@@ -263,7 +263,7 @@ table thead {
 	background-color: #BBBBBB;
 }
 
-table a:link {color: #bbbbbb;}
+table a:link {color: #303030;}
 table a:hover {
 	color: #741717;
 	text-decoration: underline;

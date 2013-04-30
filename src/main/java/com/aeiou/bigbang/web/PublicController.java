@@ -303,7 +303,7 @@ public class PublicController{
             String tCurName = userContextService.getCurrentUserName();
         	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
             Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tPublisher);
-            uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo));
+            uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, null));
             uiModel.addAttribute("publisher", pPublisher);
             uiModel.addAttribute("balance",tPublisher.getBalance());
             if(tCurName != null){

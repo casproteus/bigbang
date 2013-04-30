@@ -103,7 +103,7 @@ privileged aspect ContentDataOnDemand_Roo_DataOnDemand {
     public void ContentDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = Content.findContentEntries(from, to);
+        data = Content.findContentEntries(from, to, null);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Content' illegally returned null");
         }

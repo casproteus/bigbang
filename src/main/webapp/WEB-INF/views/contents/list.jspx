@@ -3,7 +3,7 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <page:list id="pl_com_aeiou_bigbang_domain_Content" items="${contents}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
-        <table:table data="${contents}" id="l_com_aeiou_bigbang_domain_Content" path="/contents" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
+        <table:BigSortable data="${contents}" id="l_com_aeiou_bigbang_domain_Content" path="/contents" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
             <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
             <!-- <table:column id="c_com_aeiou_bigbang_domain_Content_conentCache" property="conentCache" z="sAVFtEgMHZWvr7+XXfV96xRXMC0="/> -->
             <c:if test="${fn:toLowerCase(pageContext['request'].userPrincipal.name) eq 'admin'}">
@@ -12,6 +12,6 @@
             <table:column id="c_com_aeiou_bigbang_domain_Content_commonBigTag" property="commonBigTag" z="054H0l7u1U7D14UvHgTdwqh3sy4="/>
             <table:column id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" property="uncommonBigTag" z="kDjPyZY8s59nSnA4ASrIOJGmeps="/>
             <table:column id="c_com_aeiou_bigbang_domain_Content_authority" property="authority" z="E2Qyx7DFFNVJpORultT3Yy56EVQ="/>
-        </table:table>
+        </table:BigSortable>
     </page:list>
 </div>

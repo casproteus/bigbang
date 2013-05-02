@@ -49,6 +49,7 @@
 		     
             <spring:param name="page" value="1" />
             <spring:param name="size" value="${i}" />
+        	<spring:param name="sortExpression" value="${param.sortExpression}" />
           </spring:url>
           <a href="${sizeUrl}">${i}</a>
         </c:otherwise>
@@ -77,6 +78,7 @@
 	    </c:choose>
         <spring:param name="page" value="1" />
         <spring:param name="size" value="${size}" />
+        <spring:param name="sortExpression" value="${param.sortExpression}" />
       </spring:url>
       <spring:url value="/resources/images/resultset_first.png" var="first_image_url"/>
       <spring:message code="list_first" var="first_label" htmlEscape="false" />
@@ -104,6 +106,7 @@
 	    </c:choose>
         <spring:param name="page" value="${page - 1}" />
         <spring:param name="size" value="${size}" />
+        <spring:param name="sortExpression" value="${param.sortExpression}" />
       </spring:url>
       <spring:url value="/resources/images/resultset_previous.png" var="previous_image_url"/>
       <spring:message code="list_previous" var="previous_label" htmlEscape="false" />
@@ -134,6 +137,7 @@
 	    </c:choose>
         <spring:param name="page" value="${page + 1}" />
         <spring:param name="size" value="${size}" />
+        <spring:param name="sortExpression" value="${param.sortExpression}" />
       </spring:url>
       <spring:url value="/resources/images/resultset_next.png" var="next_image_url"/>
       <spring:message code="list_next" var="next_label" htmlEscape="false" />
@@ -161,6 +165,7 @@
 	    </c:choose>
         <spring:param name="page" value="${maxPages}" />
         <spring:param name="size" value="${size}" />
+        <spring:param name="sortExpression" value="${param.sortExpression}" />
       </spring:url>
       <spring:url value="/resources/images/resultset_last.png" var="last_image_url"/>
       <spring:message code="list_last" var="last_label" htmlEscape="false" />

@@ -56,11 +56,14 @@
 	  	</td>
 	  </tr></table>
     </c:if> -->
+    <spring:message code="label_com_aeiou_bigbang_publicspace" var="publicspace" htmlEscape="false" />
+    <spring:message code="label_com_aeiou_bigbang_personalspace" var="personalspace" htmlEscape="false" />
+    <spring:message code="label_com_aeiou_bigbang_title" var="title" htmlEscape="false" />
     <page:contentPane id="pl_com_aeiou_bigbang_domain_Content" items="${contents}" label="${label}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
         <table:contentlist data="${contents}" id="l_com_aeiou_bigbang_domain_Content" tagId="${tagId}" path="/contents" spaceOwner="${spaceOwner}" publisher="${publisher}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
-            <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
-            <table:column id="c_com_aeiou_bigbang_domain_Content_commonBigTag" property="commonBigTag" z="054H0l7u1U7D14UvHgTdwqh3sy4="/>
-            <table:column id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" property="uncommonBigTag" z="kDjPyZY8s59nSnA4ASrIOJGmeps="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" label="${title}" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Content_commonBigTag" property="commonBigTag" label="${publicspace}" maxLength="600" z="054H0l7u1U7D14UvHgTdwqh3sy4="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" property="uncommonBigTag" label="${personalspace}" z="kDjPyZY8s59nSnA4ASrIOJGmeps="/>
         </table:contentlist>
     </page:contentPane>
 </div>

@@ -138,10 +138,10 @@ public class PublicController{
         List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
         List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
     	for(int i = 0; i < tBigTagsLeft.size(); i++){
-    		tContentListsLeft.add(Content.findContentsByTag(tBigTagsLeft.get(i), 0, Integer.valueOf(tAryNumStrsLeft[i]).intValue()));
+    		tContentListsLeft.add(Content.findContentsByTag(tBigTagsLeft.get(i), 0, Integer.valueOf(tAryNumStrsLeft[i]).intValue(), null));
     	}
     	for(int i = 0; i < tBigTagsRight.size(); i++){
-    		tContentListsRight.add(Content.findContentsByTag(tBigTagsRight.get(i), 0, Integer.valueOf(tAryNumStrsRight[i]).intValue()));
+    		tContentListsRight.add(Content.findContentsByTag(tBigTagsRight.get(i), 0, Integer.valueOf(tAryNumStrsRight[i]).intValue(), null));
     	}
 
         uiModel.addAttribute("spaceOwner", "admin");
@@ -160,15 +160,16 @@ public class PublicController{
      * We have to use both tag's tagname and type to match out a single tag, because different user can create tags with same name. 
      * if we match content with only tag name, will cause mistake when clicking the "more" button from personal space. 
      * so we have to use tag's ID to match content.
-     * @param tag
      * @param page
      * @param size
      * @param uiModel
+     * @param sortExpression TODO
+     * @param tag
      * @return
      */
     @RequestMapping(params = "spaceOwner", produces = "text/html")
     public String showMore(@RequestParam(value = "tagId", required = false) Long tagId, @RequestParam(value = "spaceOwner", required = false) String spaceOwner,
-    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, String sortExpression) {
     	BigTag tBigTag = BigTag.findBigTag(tagId);
     	UserAccount tOwner = UserAccount.findUserAccountByName(spaceOwner);
     	if(tOwner == null){
@@ -183,7 +184,7 @@ public class PublicController{
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
             if("admin".equals(spaceOwner) || "".equals(spaceOwner)){
                 uiModel.addAttribute("spaceOwner", "admin");
-            	uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, firstResult, sizeNo));
+            	uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, firstResult, sizeNo, sortExpression));
             	float nrOfPages = (float) Content.countContentsByTag(tBigTag) / sizeNo;
             	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
             }else{
@@ -288,7 +289,7 @@ public class PublicController{
     
     @RequestMapping(params = "publisher", produces = "text/html")
     public String listContentByPublisher(@RequestParam(value = "publisher", required = false) String pPublisher,
-    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, String sortExpression) {
 		UserAccount tPublisher = UserAccount.findUserAccountByName(pPublisher);
 		if(tPublisher == null){
 			pPublisher = BigUtil.getUTFString(pPublisher);
@@ -303,7 +304,7 @@ public class PublicController{
             String tCurName = userContextService.getCurrentUserName();
         	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
             Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tPublisher);
-            uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, null));
+            uiModel.addAttribute("contents", Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, sortExpression));
             uiModel.addAttribute("publisher", pPublisher);
             uiModel.addAttribute("balance",tPublisher.getBalance());
             if(tCurName != null){
@@ -648,7 +649,7 @@ public class PublicController{
 			tAryTagStrsRight = tAryTagStrsRight2;
 			tAryNumStrsRight = tAryNumStrsRight2;
 		}else if("list_size".equals(relayouttype)){
-			String[] tAry = request.getParameterValues("j_username");
+			String[] tAry = request.getParameterValues("list_size");
 			if(tAry == null || tAry.length ==0)
 				tAry = new String[]{"8"};			
 			String tNewSize = tAry[0];

@@ -31,6 +31,37 @@
     <spring:eval var="colCounter" expression="1" />
 
     <table class="tWireless">
+      <thead>
+        <tr>
+          <c:forTokens items="${columnLabels}" delims="${'&#9999;'}" var="columnHeading" varStatus="num">
+            <th class="tWireless">
+              	<spring:url value="" var="sort__url">
+              		<spring:param name="sortExpression" value="o.${properties[num.count-1]} ${param.sortExpression.endsWith('DESC') ? '' : 'DESC' }" />
+              		<c:choose>
+				        <c:when test="${not empty twittertype}">
+				     			<spring:param name="twittertype" value="${twittertype}"/>
+			        			<spring:param name="owner" value="${spaceOwner}"/>
+				      	</c:when>
+				        <c:when test="${not empty twitterid}">
+				     			<spring:param name="twitterid" value="${twitterid}"/>
+				      	</c:when>
+				        <c:when test="${not empty publisher}">
+				     			<spring:param name="publisher" value="${publisher}"/>
+				      	</c:when>
+				        <c:otherwise>
+				      			<spring:param name="spaceOwner" value="${spaceOwner}"/>
+				      			<spring:param name="tagId" value="${tagId}"/>
+				        </c:otherwise>
+				    </c:choose>
+              		<spring:param name="size" value="${param.size}" />
+              	</spring:url>
+              	<a href="${sort__url}">
+              		<c:out value="${columnHeading}" />
+              	</a>
+            </th>
+          </c:forTokens>
+        </tr>
+      </thead>
       <c:forEach items="${data}" var="item">
       	<tr>
       		<td class="tWireless">

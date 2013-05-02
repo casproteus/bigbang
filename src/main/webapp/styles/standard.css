@@ -254,12 +254,12 @@ table th {
 	text-align: left;
 	font-weight: bold;
 	color: #FFF;
-	background: #aaaaaa;
+	background: #EEEEEE;
 }
 
 table thead {
 	font-weight: bold;
-	font-style: italic;
+	#font-style: italic;
 	background-color: #BBBBBB;
 }
 

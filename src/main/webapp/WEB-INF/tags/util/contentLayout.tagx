@@ -75,13 +75,13 @@
 	    
 	    <spring:message code="relayout_list_size" htmlEscape="false" />
 	    
-	    <input type='text' name='j_username' value="${list_size}" style="width:20px;height:12px" />
+	    <input type='text' name='list_size' value="${list_size}" style="width:20px;height:12px" />
 	    <!-- <spring:message code="security_login_form_name_message" var="name_msg" htmlEscape="false" />
 	    <script type="text/javascript">
 	          <c:set var="sec_name_msg">
 	            <spring:escapeBody javaScriptEscape="true">${name_msg}</spring:escapeBody>
 	          </c:set>
-	          Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_username", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_name_msg}", required : true}})); 
+	          Spring.addDecoration(new Spring.ElementDecoration({elementId : "list_size", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_name_msg}", required : true}})); 
 	      </script>
 	    <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
     	 -->

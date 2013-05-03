@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.MessageSource;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,16 +29,19 @@ public class BigTagController {
 	@Inject
 	private UserContextService userContextService;
 
-	void populateEditForm(Model uiModel, BigTag bigTag) {
+	@Inject
+	private MessageSource messageSource;
+	
+	void populateEditForm(Model uiModel, BigTag bigTag, HttpServletRequest httpServletRequest) {
 		uiModel.addAttribute("bigTag", bigTag);
-        uiModel.addAttribute("authorities",BigAuthority.getAllOptions());
+        uiModel.addAttribute("authorities",BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
         uiModel.addAttribute("types",BigType.getAllOptions(bigTag.getOwner()));
     }
 	
 	@RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(@Valid BigTag bigTag, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (StringUtils.isEmpty(bigTag.getTagName())) {
-            populateEditForm(uiModel, bigTag);
+            populateEditForm(uiModel, bigTag, httpServletRequest);
             return "bigtags/create";
         }
         
@@ -73,7 +77,7 @@ public class BigTagController {
 	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String update(@Valid BigTag bigTag, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
 		if (StringUtils.isEmpty(bigTag.getTagName())) {
-            populateEditForm(uiModel, bigTag);
+            populateEditForm(uiModel, bigTag, httpServletRequest);
             return "bigtags/update";
         }
         
@@ -338,10 +342,10 @@ public class BigTagController {
     }
 	
 	@RequestMapping(params = "form", produces = "text/html")
-    public String createForm(Model uiModel, @RequestParam(value = "type", required = false) String type) {
+    public String createForm(Model uiModel, @RequestParam(value = "type", required = false) String type, HttpServletRequest httpServletRequest) {
 		BigTag tBigTag = new BigTag();
 		tBigTag.setOwner(("0".equals(type) || "1".equals(type)) ? Integer.valueOf(type) : null);
-        populateEditForm(uiModel, tBigTag);
+        populateEditForm(uiModel, tBigTag, httpServletRequest);
         return "bigtags/create";
     }
 }

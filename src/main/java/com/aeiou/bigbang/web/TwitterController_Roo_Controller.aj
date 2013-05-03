@@ -24,7 +24,7 @@ privileged aspect TwitterController_Roo_Controller {
     
     @RequestMapping(params = "form", produces = "text/html")
     public String TwitterController.createForm(Model uiModel) {
-        populateEditForm(uiModel, new Twitter());
+        populateEditForm(uiModel, new Twitter(), null);
         List<String[]> dependencies = new ArrayList<String[]>();
         if (UserAccount.countUserAccounts() == 0) {
             dependencies.add(new String[] { "useraccount", "useraccounts" });
@@ -43,7 +43,7 @@ privileged aspect TwitterController_Roo_Controller {
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String TwitterController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, Twitter.findTwitter(id));
+        populateEditForm(uiModel, Twitter.findTwitter(id), null);
         return "twitters/update";
     }
     

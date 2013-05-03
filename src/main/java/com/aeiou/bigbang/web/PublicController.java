@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.LogFactory;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -33,6 +34,8 @@ public class PublicController{
 	
 	@Inject
 	private UserContextService userContextService;
+	@Inject
+	private MessageSource messageSource;
 	
     @RequestMapping(method = RequestMethod.POST, value = "{id}")
     public void post(@PathVariable Long id, ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
@@ -262,7 +265,7 @@ public class PublicController{
      */
     @RequestMapping(params = "twitterid", produces = "text/html")
     public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid,
-    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, HttpServletRequest request) {
         Twitter tTwitter = Twitter.findTwitter(twitterid);
     	UserAccount tOwner = tTwitter.getPublisher();
         int sizeNo = size == null ? 25 : size.intValue();
@@ -279,7 +282,7 @@ public class PublicController{
     	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
     	Remark tRemark = new Remark();
         uiModel.addAttribute("newremark", tRemark);
-        uiModel.addAttribute("authorities",BigAuthority.getRemarkOptions());
+        uiModel.addAttribute("authorities",BigAuthority.getRemarkOptions(messageSource, request.getLocale()));
         List<Twitter> remarktos = new ArrayList<Twitter>();
         remarktos.add(tTwitter);
         uiModel.addAttribute("remarktos", remarktos);

@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.context.MessageSource;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,8 +31,11 @@ public class TwitterController {
 
 	@Inject
 	private UserContextService userContextService;
+
+	@Inject
+	private MessageSource messageSource;
 	
-	void populateEditForm(Model uiModel, Twitter twitter) {
+	void populateEditForm(Model uiModel, Twitter twitter, HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("twitter", twitter);
         //addDateTimeFormatPatterns(uiModel);
         
@@ -44,7 +48,7 @@ public class TwitterController {
         List<UserAccount> tList = new ArrayList<UserAccount>();
         tList.add(UserAccount.findUserAccountByName(tCurName)); //Can not use CurrentUser directly, because it's not of UserAccount type.
         uiModel.addAttribute("useraccounts", tList);			//why must return a list?
-        uiModel.addAttribute("authorities",BigAuthority.getAllOptions());
+        uiModel.addAttribute("authorities",BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
     }
 
 	@RequestMapping(method = RequestMethod.POST, produces = "text/html")
@@ -76,7 +80,7 @@ public class TwitterController {
         	    	 twitter.setTwtitle(content);
         	     }
         	}else{
-                populateEditForm(uiModel, twitter);
+                populateEditForm(uiModel, twitter, httpServletRequest);
                 return "twitters/create";
         	}
         }
@@ -103,7 +107,7 @@ public class TwitterController {
         	    	 twitter.setTwtitle(content);
         	     }
         	}else{
-        		populateEditForm(uiModel, twitter);
+        		populateEditForm(uiModel, twitter, httpServletRequest);
         		return "twitters/update";
         	}
         }

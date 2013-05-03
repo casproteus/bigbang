@@ -27,7 +27,7 @@ privileged aspect CircleController_Roo_Controller {
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String CircleController.create(@Valid Circle circle, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, circle);
+            populateEditForm(uiModel, circle, null);
             return "circles/create";
         }
         uiModel.asMap().clear();
@@ -37,7 +37,7 @@ privileged aspect CircleController_Roo_Controller {
     
     @RequestMapping(params = "form", produces = "text/html")
     public String CircleController.createForm(Model uiModel) {
-        populateEditForm(uiModel, new Circle());
+        populateEditForm(uiModel, new Circle(), null);
         List<String[]> dependencies = new ArrayList<String[]>();
         if (UserAccount.countUserAccounts() == 0) {
             dependencies.add(new String[] { "useraccount", "useraccounts" });
@@ -72,7 +72,7 @@ privileged aspect CircleController_Roo_Controller {
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String CircleController.update(@Valid Circle circle, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, circle);
+            populateEditForm(uiModel, circle, null);
             return "circles/update";
         }
         uiModel.asMap().clear();
@@ -82,7 +82,7 @@ privileged aspect CircleController_Roo_Controller {
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String CircleController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, Circle.findCircle(id));
+        populateEditForm(uiModel, Circle.findCircle(id), null);
         return "circles/update";
     }
     

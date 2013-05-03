@@ -24,7 +24,7 @@ privileged aspect BigTagController_Roo_Controller {
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String BigTagController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, BigTag.findBigTag(id));
+        populateEditForm(uiModel, BigTag.findBigTag(id), null);
         return "bigtags/update";
     }
     

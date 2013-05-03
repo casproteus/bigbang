@@ -53,7 +53,7 @@ public class Content {
 
     public static List<com.aeiou.bigbang.domain.Content> findContentsByTag(BigTag pBigTag, int firstResult, int maxResults, String sortExpression) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Content> tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE o.commonBigTag = :pBigTag and o.authority = 0 ORDER BY " + (sortExpression == null ? "o.id DESC" : sortExpression), Content.class);
+        TypedQuery<Content> tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE o.commonBigTag = :pBigTag and o.authority = 0 ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class);
         return tQuery.setParameter("pBigTag", pBigTag).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 
@@ -68,7 +68,7 @@ public class Content {
     }
 
     public static List<com.aeiou.bigbang.domain.Content> findContentEntries(int firstResult, int maxResults, String sortExpression) {
-        return entityManager().createQuery("SELECT o FROM Content o ORDER BY " + (sortExpression == null ? "o.id DESC" : sortExpression), Content.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+        return entityManager().createQuery("SELECT o FROM Content o ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 
     public static List<com.aeiou.bigbang.domain.Content> findContentsByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults, String sortExpression) {

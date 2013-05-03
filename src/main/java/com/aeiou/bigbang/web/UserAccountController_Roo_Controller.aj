@@ -24,7 +24,7 @@ privileged aspect UserAccountController_Roo_Controller {
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String UserAccountController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, UserAccount.findUserAccount(id));
+        populateEditForm(uiModel, UserAccount.findUserAccount(id), null);
         return "useraccounts/update";
     }
     

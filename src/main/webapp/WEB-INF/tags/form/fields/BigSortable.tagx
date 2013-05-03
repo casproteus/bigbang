@@ -127,6 +127,11 @@
                     <fmt:formatDate value="${item[column].time}" pattern="${fn:escapeXml(columnDatePattern)}" var="colTxt"/>
                   </spring:escapeBody>
                 </c:when>
+                <c:when test="${columnType eq 'calendar'}">
+                  <spring:escapeBody>
+                    <fmt:formatDate value="${item[column].time}" pattern="${fn:escapeXml(columnDatePattern)}" var="colTxt"/>
+                  </spring:escapeBody>
+                </c:when>
                 <c:otherwise>
                   <c:set var="colTxt">
                   	<c:choose>

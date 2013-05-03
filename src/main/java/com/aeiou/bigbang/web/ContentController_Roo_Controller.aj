@@ -24,16 +24,7 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect ContentController_Roo_Controller {
     
-    @RequestMapping(params = "form", produces = "text/html")
-    public String ContentController.createForm(Model uiModel) {
-        populateEditForm(uiModel, new Content());
-        List<String[]> dependencies = new ArrayList<String[]>();
-        if (UserAccount.countUserAccounts() == 0) {
-            dependencies.add(new String[] { "useraccount", "useraccounts" });
-        }
-        uiModel.addAttribute("dependencies", dependencies);
-        return "contents/create";
-    }
+    
     
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String ContentController.show(@PathVariable("id") Long id, Model uiModel) {
@@ -43,20 +34,11 @@ privileged aspect ContentController_Roo_Controller {
         return "contents/show";
     }
     
-    @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
-    public String ContentController.update(@Valid Content content, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, content);
-            return "contents/update";
-        }
-        uiModel.asMap().clear();
-        content.merge();
-        return "redirect:/contents/" + encodeUrlPathSegment(content.getId().toString(), httpServletRequest);
-    }
+    
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String ContentController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, Content.findContent(id));
+        populateEditForm(uiModel, Content.findContent(id), null);
         return "contents/update";
     }
     

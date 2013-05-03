@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.context.MessageSource;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,12 +31,15 @@ public class RemarkController {
 	@Inject
 	private UserContextService userContextService;
 
+	@Inject
+	private MessageSource messageSource;
+	
 	void populateEditForm(Model uiModel, Remark remark) {
         uiModel.addAttribute("remark", remark);
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("twitters", Twitter.findAllTwitters());
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
-        uiModel.addAttribute("authorities",BigAuthority.getRemarkOptions());
+        uiModel.addAttribute("authorities",BigAuthority.getRemarkOptions(messageSource));
     }
 
 	@RequestMapping(params = "pTwitterId", method = RequestMethod.POST, produces = "text/html")

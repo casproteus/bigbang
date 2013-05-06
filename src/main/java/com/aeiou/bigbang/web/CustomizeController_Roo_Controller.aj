@@ -22,7 +22,7 @@ privileged aspect CustomizeController_Roo_Controller {
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String CustomizeController.create(@Valid Customize customize, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, customize, null);
+            populateEditForm(uiModel, customize);
             return "customizes/create";
         }
         uiModel.asMap().clear();
@@ -32,7 +32,7 @@ privileged aspect CustomizeController_Roo_Controller {
     
     @RequestMapping(params = "form", produces = "text/html")
     public String CustomizeController.createForm(Model uiModel) {
-        populateEditForm(uiModel, new Customize(), null);
+        populateEditForm(uiModel, new Customize());
         return "customizes/create";
     }
     
@@ -60,7 +60,7 @@ privileged aspect CustomizeController_Roo_Controller {
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String CustomizeController.update(@Valid Customize customize, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, customize, null);
+            populateEditForm(uiModel, customize);
             return "customizes/update";
         }
         uiModel.asMap().clear();
@@ -70,7 +70,7 @@ privileged aspect CustomizeController_Roo_Controller {
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String CustomizeController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, Customize.findCustomize(id), null);
+        populateEditForm(uiModel, Customize.findCustomize(id));
         return "customizes/update";
     }
     

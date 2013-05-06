@@ -14,6 +14,7 @@ import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -141,5 +142,22 @@ public class TwitterController {
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         addDateTimeFormatPatterns(uiModel);
         return "twitters/list";
+    }
+
+    @RequestMapping(params = "form", produces = "text/html")
+    public String createForm(Model uiModel, HttpServletRequest httpServletRequest) {
+        populateEditForm(uiModel, new Twitter(), httpServletRequest);
+        List<String[]> dependencies = new ArrayList<String[]>();
+        if (UserAccount.countUserAccounts() == 0) {
+            dependencies.add(new String[] { "useraccount", "useraccounts" });
+        }
+        uiModel.addAttribute("dependencies", dependencies);
+        return "twitters/create";
+    }
+	
+    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
+    public String updateForm(@PathVariable("id") Long id, Model uiModel, HttpServletRequest httpServletRequest) {
+        populateEditForm(uiModel, Twitter.findTwitter(id), httpServletRequest);
+        return "twitters/update";
     }
 }

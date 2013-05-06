@@ -1,5 +1,6 @@
 package com.aeiou.bigbang.web;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,12 +36,12 @@ public class RemarkController {
 	@Inject
 	private MessageSource messageSource;
 	
-	void populateEditForm(Model uiModel, Remark remark) {
+	void populateEditForm(Model uiModel, Remark remark, HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("remark", remark);
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("twitters", Twitter.findAllTwitters());
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
-        uiModel.addAttribute("authorities",BigAuthority.getRemarkOptions(messageSource));
+        uiModel.addAttribute("authorities",BigAuthority.getRemarkOptions(messageSource, httpServletRequest.getLocale()));
     }
 
 	@RequestMapping(params = "pTwitterId", method = RequestMethod.POST, produces = "text/html")
@@ -70,7 +72,7 @@ public class RemarkController {
 				remark.setRemarkto(Twitter.findTwitter(pTwitterId));
 				remark.setRemarkTime(new Date());//add remark time when it's submitted.
 			} else {
-				populateEditForm(uiModel, remark);
+				populateEditForm(uiModel, remark, httpServletRequest);
 		        return "public/list_detail_twitter";
 			}
         }
@@ -80,7 +82,7 @@ public class RemarkController {
         refreshULastUpdateTimeOfTwitter(remark);
         
         PublicController tController = SpringApplicationContext.getApplicationContext().getBean("publicController", PublicController.class);
-        return tController.showDetailTwitters(remark.getRemarkto().getId(), null, null, uiModel);
+        return tController.showDetailTwitters(remark.getRemarkto().getId(), null, null, uiModel, httpServletRequest);
     }
 	
 	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")
@@ -92,7 +94,7 @@ public class RemarkController {
 				remark.setPublisher(tUserAccount);
 				remark.setRemarkTime(new Date());//update remark time when it's modified.
 			} else {
-	            populateEditForm(uiModel, remark);
+	            populateEditForm(uiModel, remark, httpServletRequest);
 	            return "remarks/update";
 			}
         }
@@ -136,4 +138,21 @@ public class RemarkController {
         tTwitter.setLastupdate(remark.getRemarkTime());
         tTwitter.merge();
 	}
+
+	@RequestMapping(params = "form", produces = "text/html")
+    public String createForm(Model uiModel, HttpServletRequest httpServletRequest) {
+        populateEditForm(uiModel, new Remark(), httpServletRequest);
+        List<String[]> dependencies = new ArrayList<String[]>();
+        if (UserAccount.countUserAccounts() == 0) {
+            dependencies.add(new String[] { "useraccount", "useraccounts" });
+        }
+        uiModel.addAttribute("dependencies", dependencies);
+        return "remarks/create";
+    }
+
+	@RequestMapping(value = "/{id}", params = "form", produces = "text/html")
+    public String updateForm(@PathVariable("id") Long id, Model uiModel, HttpServletRequest httpServletRequest) {
+        populateEditForm(uiModel, Remark.findRemark(id), httpServletRequest);
+        return "remarks/update";
+    }
 }

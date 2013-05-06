@@ -22,16 +22,7 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect TwitterController_Roo_Controller {
     
-    @RequestMapping(params = "form", produces = "text/html")
-    public String TwitterController.createForm(Model uiModel) {
-        populateEditForm(uiModel, new Twitter(), null);
-        List<String[]> dependencies = new ArrayList<String[]>();
-        if (UserAccount.countUserAccounts() == 0) {
-            dependencies.add(new String[] { "useraccount", "useraccounts" });
-        }
-        uiModel.addAttribute("dependencies", dependencies);
-        return "twitters/create";
-    }
+    
     
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String TwitterController.show(@PathVariable("id") Long id, Model uiModel) {
@@ -41,11 +32,7 @@ privileged aspect TwitterController_Roo_Controller {
         return "twitters/show";
     }
     
-    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String TwitterController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, Twitter.findTwitter(id), null);
-        return "twitters/update";
-    }
+    
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String TwitterController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {

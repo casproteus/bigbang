@@ -36,11 +36,7 @@ privileged aspect ContentController_Roo_Controller {
     
     
     
-    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String ContentController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, Content.findContent(id), null);
-        return "contents/update";
-    }
+    
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String ContentController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {

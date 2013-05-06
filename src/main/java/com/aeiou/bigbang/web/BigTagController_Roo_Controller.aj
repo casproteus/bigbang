@@ -22,12 +22,7 @@ privileged aspect BigTagController_Roo_Controller {
         return "bigtags/show";
     }
     
-    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String BigTagController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, BigTag.findBigTag(id), null);
-        return "bigtags/update";
-    }
-    
+        
     String BigTagController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
         String enc = httpServletRequest.getCharacterEncoding();
         if (enc == null) {

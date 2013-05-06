@@ -348,4 +348,10 @@ public class BigTagController {
         populateEditForm(uiModel, tBigTag, httpServletRequest);
         return "bigtags/create";
     }
+
+	@RequestMapping(value = "/{id}", params = "form", produces = "text/html")
+    public String updateForm(@PathVariable("id") Long id, Model uiModel, HttpServletRequest httpServletRequest) {
+        populateEditForm(uiModel, BigTag.findBigTag(id), httpServletRequest);
+        return "bigtags/update";
+    }
 }

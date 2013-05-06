@@ -23,16 +23,7 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect RemarkController_Roo_Controller {
     
-    @RequestMapping(params = "form", produces = "text/html")
-    public String RemarkController.createForm(Model uiModel) {
-        populateEditForm(uiModel, new Remark(), null);
-        List<String[]> dependencies = new ArrayList<String[]>();
-        if (UserAccount.countUserAccounts() == 0) {
-            dependencies.add(new String[] { "useraccount", "useraccounts" });
-        }
-        uiModel.addAttribute("dependencies", dependencies);
-        return "remarks/create";
-    }
+    
     
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String RemarkController.show(@PathVariable("id") Long id, Model uiModel) {
@@ -42,11 +33,7 @@ privileged aspect RemarkController_Roo_Controller {
         return "remarks/show";
     }
     
-    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String RemarkController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, Remark.findRemark(id), null);
-        return "remarks/update";
-    }
+    
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String RemarkController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {

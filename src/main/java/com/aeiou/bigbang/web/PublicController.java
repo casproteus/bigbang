@@ -7,12 +7,14 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,7 +43,7 @@ public class PublicController{
     public void post(@PathVariable Long id, ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
     	LogFactory.getLog(PublicController.class).info("Called! PublicController.post is finally called from: " + Thread.getAllStackTraces().toString());
     }
-
+    
     @RequestMapping(produces = "text/html")
     public String index( Model uiModel){
     	
@@ -158,7 +160,7 @@ public class PublicController{
         
         return "public/index";
     }
-
+    
     /**
      * We have to use both tag's tagname and type to match out a single tag, because different user can create tags with same name. 
      * if we match content with only tag name, will cause mistake when clicking the "more" button from personal space. 
@@ -401,6 +403,26 @@ public class PublicController{
 
 		return(SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tCurName, page, size, uiModel));
     }
+    
+    /**
+     * used for specially matching the list_size type relayout. 
+     * while, maybe should combine this method with the relayout method after I know the root mechanism of spring mvc mapping.
+     * @param tagId
+     * @param request
+     * @param uiModel
+     * @return
+     @NOTE: we learned from this method that not only the @RequestMapping must be the unique one for the URLString, but also the
+      @RequestParam name and numbers must match the URLstring. what we still not clear is that is it OK if the URLString contains more
+      parameters than specified?
+      as I remember, we also learned that we must use Post to make sure the parameter defined in URLString can be delievered here. if we use GET, then doesn't work.
+      and the & in URLString must be &amp;
+    @RequestMapping(method = RequestMethod.POST, produces = "text/html")
+    public String relayoutSize(@RequestParam(value = "list_size", required = true) Long list_size, 
+    		@RequestParam(value = "tagId", required = true) Long tagId,
+    		HttpServletRequest request, Model uiModel) {
+    	String tViewStr = relayout("list_size", tagId, request, uiModel);
+    	return tViewStr;
+    }*/
     
     /**
      * adjust the layout

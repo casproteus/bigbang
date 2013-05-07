@@ -8,6 +8,7 @@
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
 
   <c:if test="${empty render or render}">
+     <!-- This is not an AJAX way: use a form to package the parameters, and use the submit to send request to server. we don't use XMLHTTPRequest because we want the page to refresh--> 
      <spring:url value="/public" var="listSize_url">
 		<spring:param name="relayouttype" value="list_size"/>
 		<spring:param name="tagId" value="${tagId}"/>
@@ -74,8 +75,7 @@
 	    <c:out value=" | " />
 	    
 	    <spring:message code="relayout_list_size" htmlEscape="false" />
-	    
-	    <input type='text' name='list_size' value="${list_size}" style="width:20px;height:12px" />
+	    <input type='text' name='list_size' value="${list_size}" style="width:20px;height:12px" /> <!-- onchange="sendRequest(value, ${tagId})" -->
 	    <!-- <spring:message code="security_login_form_name_message" var="name_msg" htmlEscape="false" />
 	    <script type="text/javascript">
 	          <c:set var="sec_name_msg">
@@ -94,3 +94,14 @@
 	</form>
   </c:if>
 </jsp:root>
+<!--  We tried to use XMLHttpRequest to send request to server. it works, while it will not cause a refresh even of the webpage.
+basically, XMLHttpRequest is the core of AJAX, it send parameters to server, with no causing any refresh event. when it get the return value, notmally we use JSONAry.
+it can use documnent.getElementById('xxx').value=yyy to modify the display of the page partially. we still select to use Form for now, because we need to trigger a refresh.
+<script type="text/javascript">
+  	function sendRequest(value, tagId) {
+  		var xmlhttp = new XMLHttpRequest();  		
+		var url = "/bigbang/public?list_size=" + value + "&amp;tagId=" + tagId;
+		xmlhttp.open("POST", url, true);
+		xmlhttp.send();
+  	}
+  </script> -->

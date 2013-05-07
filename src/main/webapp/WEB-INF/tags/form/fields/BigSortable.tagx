@@ -56,7 +56,7 @@
           <c:forTokens items="${columnLabels}" delims="${'&#9999;'}" var="columnHeading" varStatus="num">
             <th class="tWireless">
               	<spring:url value="" var="sort__url">
-              		<spring:param name="sortExpression" value="o.${properties[num.count-1]} ${param.sortExpression.endsWith('DESC') ? '' : 'DESC' }" />
+              		<spring:param name="sortExpression" value="o.${properties[num.count-1]} ${fn:endsWith(param.sortExpression, 'DESC') ? '' : 'DESC' }" />
               		<spring:param name="size" value="${param.size}" />
               	</spring:url>
               	<a href="${sort__url}">

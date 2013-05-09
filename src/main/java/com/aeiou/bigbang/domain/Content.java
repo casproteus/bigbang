@@ -71,9 +71,11 @@ public class Content {
         return entityManager().createQuery("SELECT o FROM Content o ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 
-    public static List<com.aeiou.bigbang.domain.Content> findContentsByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults, String sortExpression) {
+    public static List<com.aeiou.bigbang.domain.Content> findContentsByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet,
+    		int firstResult, int maxResults, String sortExpression) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Content> tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class);
+        TypedQuery<Content> tQuery = tEntityManager.createQuery(
+        		"SELECT o FROM Content AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
@@ -93,29 +95,30 @@ public class Content {
         }
     }
 
-    public static List<com.aeiou.bigbang.domain.Content> findContentsByTagAndSpaceOwner(BigTag pTag, UserAccount pOwner, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults) {
+    public static List<com.aeiou.bigbang.domain.Content> findContentsByTagAndSpaceOwner(BigTag pTag, UserAccount pOwner, Set<java.lang.Integer> pAuthSet, 
+    		int firstResult, int maxResults, String sortExpression) {
         EntityManager tEntityManager = entityManager();
         Set<UserAccount> tTeamSet = pOwner.getListento();
         TypedQuery<Content> tQuery = null;
         if ("admin".equals(pTag.getType()) || "administrator".equals(pTag.getType())) {
             if (tTeamSet.isEmpty()) {
-                tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner) and (o.authority in :pAuthSet) ORDER BY o.id DESC", Content.class);
+                tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner) and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class);
                 tQuery = tQuery.setParameter("pTag", pTag);
                 tQuery = tQuery.setParameter("pOwner", pOwner);
             } else {
-                tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag and o.publisher = :pOwner and o.authority in :pAuthSet) or " + "(o.commonBigTag = :pTag and o.publisher in :tTeamSet and o.authority = 0) ORDER BY o.id DESC", Content.class);
+                tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.commonBigTag = :pTag and o.publisher = :pOwner and o.authority in :pAuthSet) or " + "(o.commonBigTag = :pTag and o.publisher in :tTeamSet and o.authority = 0) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class);
                 tQuery = tQuery.setParameter("pTag", pTag);
                 tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tTeamSet", tTeamSet);
             }
         } else {
             if (tTeamSet.isEmpty()) {
                 String tTagName = pTag.getTagName();
-                tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner) and (o.authority in :pAuthSet) ORDER BY o.id DESC", Content.class);
+                tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner) and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class);
                 tQuery = tQuery.setParameter("tTagName", tTagName);
                 tQuery = tQuery.setParameter("pOwner", pOwner);
             } else {
                 String tTagName = pTag.getTagName();
-                tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName and o.publisher = :pOwner and o.authority in :pAuthSet) or " + "(o.uncommonBigTag.tagName = :tTagName and o.publisher in :tTeamSet and o.authority = 0) ORDER BY o.id DESC", Content.class);
+                tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName and o.publisher = :pOwner and o.authority in :pAuthSet) or " + "(o.uncommonBigTag.tagName = :tTagName and o.publisher in :tTeamSet and o.authority = 0) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class);
                 tQuery = tQuery.setParameter("tTagName", tTagName);
                 tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tTeamSet", tTeamSet);
             }

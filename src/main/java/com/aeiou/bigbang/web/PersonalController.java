@@ -186,12 +186,12 @@ public class PersonalController{
     	for(int i = 0; i < tBigTagsLeft.size(); i++){
     		tContentListsLeft.add(
     				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, tAuthSet,
-    				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue()));
+    				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue(), null));
     	}
     	for(int i = 0; i < tBigTagsRight.size(); i++){
     		tContentListsRight.add(
     				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, tAuthSet,
-    				0, Integer.valueOf(tAryNumStrsRight[i]).intValue()));
+    				0, Integer.valueOf(tAryNumStrsRight[i]).intValue(), null));
     	}
 
         uiModel.addAttribute("spaceOwner", spaceOwner);

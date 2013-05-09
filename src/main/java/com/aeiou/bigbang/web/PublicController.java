@@ -198,7 +198,7 @@ public class PublicController{
             	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
                 uiModel.addAttribute("spaceOwner", spaceOwner);
                 uiModel.addAttribute("spaceOwnerId", tOwner.getId());
-            	uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet, firstResult, sizeNo));
+            	uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet, firstResult, sizeNo, sortExpression));
             	float nrOfPages = (float) Content.countContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet) / sizeNo;
             	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
             }
@@ -753,12 +753,12 @@ public class PublicController{
     	for(int i = 0; i < tBigTagsLeft.size(); i++){
     		tContentListsLeft.add(
     				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tOwner, tOwner),
-    				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue()));
+    				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue(), null));
     	}
     	for(int i = 0; i < tBigTagsRight.size(); i++){
     		tContentListsRight.add(
     				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tOwner, tOwner),
-    				0, Integer.valueOf(tAryNumStrsRight[i]).intValue()));
+    				0, Integer.valueOf(tAryNumStrsRight[i]).intValue(), null));
     	}
     	
         uiModel.addAttribute("spaceOwner", tCurName);

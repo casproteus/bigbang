@@ -13,7 +13,7 @@
       <spring:message code="global_language_english" var="language_english" htmlEscape="false" />
       <a href="${url_language2}" title="${fn:escapeXml(language_english)}">${fn:escapeXml(language_english)}</a>
       <c:out value=" || " />
-      <spring:url var="url_language3" value="http://www.sharethegoodones.com"/>
+      <spring:url var="url_language3" value="http://cn.sharethegoodones.com"/>
       <spring:message code="global_language_chinese" var="language_chinese" htmlEscape="false" />
       <a href="${url_language3}" title="${fn:escapeXml(language_chinese)}">${fn:escapeXml(language_chinese)}</a>
     </span>

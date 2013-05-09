@@ -103,7 +103,7 @@
 	    		${sec_validation_regex} missingMessage : '${sec_field_required}' ,
 	    		onChange: function(newValue) {
 	    			newValue = newValue.trim();
-	            	if(!(newValue.indexOf('http://')==0 || newValue.indexOf('https://')==0)){
+	            	if(!(newValue.length == 0 || newValue.indexOf('http://')==0 || newValue.indexOf('https://')==0)){
 	            		document.getElementById('_title_id').value=newValue;
 	            		document.getElementById('_sourceURL_id').value="";
 	            	}

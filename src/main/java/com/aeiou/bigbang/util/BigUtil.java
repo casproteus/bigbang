@@ -11,6 +11,7 @@ import org.springframework.context.MessageSource;
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Message;
+import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.quartz.UpdatingBalanceJobProcessor;
@@ -140,6 +141,15 @@ public class BigUtil {
 		tMessage.persist();
 	}
 	
+	/**
+	 * update the lastupdate field of twitter.
+	 */
+	public static void refreshULastUpdateTimeOfTwitter(Remark remark){
+		remark = Remark.findRemark(remark.getId());	//this remark may got from webpage, and has no some field like "remarkto"
+        Twitter tTwitter = remark.getRemarkto();
+        tTwitter.setLastupdate(remark.getRemarkTime());
+        tTwitter.merge();
+	}
 	
 	public static void resetLayoutString(UserAccount pUser){
     	if(pUser == null) return;

@@ -1,6 +1,7 @@
 package com.aeiou.bigbang.web;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -292,6 +293,44 @@ public class PublicController{
         return "public/list_detail_twitter";
     }
     
+	@RequestMapping(params = "pTwitterId", method = RequestMethod.POST, produces = "text/html")
+    public String createRemark(@Valid Remark remark, BindingResult bindingResult,
+    		@RequestParam(value = "pTwitterId", required = false)Long pTwitterId,
+    		Model uiModel, HttpServletRequest httpServletRequest) {
+		//TODO: Should make the check before submit.
+		if(remark.getContent() == null || remark.getContent().length() < 1)
+            return "remarks/create";
+		
+		//get his last twitter in db compare with it.
+		String tCurName = userContextService.getCurrentUserName();
+	    UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
+		List<Remark> tList = Remark.findRemarkByPublisher(tUserAccount, 0, 1);
+		//This is good, but not good enough, because when user press F5 after modifying a remark, and press back->back
+		//will trick out the form to submit again, and then in this method, the content are different....
+		//TODO: add a hidden field in From and save a token in it.then verify, if the token not there, then stop saving
+		//http://stackoverflow.com/questions/2324931/duplicate-form-submission-in-spring
+		if(tList != null && tList.size() > 0){
+			Remark tTwitter = tList.get(0);
+			if(remark.getContent().equals(tTwitter.getContent()) && remark.getRemarkto().equals(tTwitter.getRemarkto()))
+				return "remarks/create";
+		}
+	
+		if (bindingResult.hasErrors()) {
+			if (bindingResult.getAllErrors().size() == 1 && remark.getPublisher() == null) {
+				remark.setPublisher(tUserAccount);
+				remark.setRemarkto(Twitter.findTwitter(pTwitterId));
+				remark.setRemarkTime(new Date());//add remark time when it's submitted.
+			} else {
+		        return "public/list_detail_twitter";
+			}
+        }
+        uiModel.asMap().clear();
+        remark.persist();
+        
+        BigUtil.refreshULastUpdateTimeOfTwitter(remark);
+        return showDetailTwitters(remark.getRemarkto().getId(), null, null, uiModel, httpServletRequest);
+    }
+	
     @RequestMapping(params = "publisher", produces = "text/html")
     public String listContentByPublisher(@RequestParam(value = "publisher", required = false) String pPublisher,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, String sortExpression) {
@@ -403,26 +442,6 @@ public class PublicController{
 
 		return(SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tCurName, page, size, uiModel));
     }
-    
-    /**
-     * used for specially matching the list_size type relayout. 
-     * while, maybe should combine this method with the relayout method after I know the root mechanism of spring mvc mapping.
-     * @param tagId
-     * @param request
-     * @param uiModel
-     * @return
-     @NOTE: we learned from this method that not only the @RequestMapping must be the unique one for the URLString, but also the
-      @RequestParam name and numbers must match the URLstring. what we still not clear is that is it OK if the URLString contains more
-      parameters than specified?
-      as I remember, we also learned that we must use Post to make sure the parameter defined in URLString can be delievered here. if we use GET, then doesn't work.
-      and the & in URLString must be &amp;
-    @RequestMapping(method = RequestMethod.POST, produces = "text/html")
-    public String relayoutSize(@RequestParam(value = "list_size", required = true) Long list_size, 
-    		@RequestParam(value = "tagId", required = true) Long tagId,
-    		HttpServletRequest request, Model uiModel) {
-    	String tViewStr = relayout("list_size", tagId, request, uiModel);
-    	return tViewStr;
-    }*/
     
     /**
      * adjust the layout
@@ -772,4 +791,5 @@ public class PublicController{
        
         return "public/index";
     }
+
 }

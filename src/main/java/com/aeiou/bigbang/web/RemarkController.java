@@ -23,6 +23,7 @@ import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.BigUtil;
 import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/remarks")
@@ -79,10 +80,9 @@ public class RemarkController {
         uiModel.asMap().clear();
         remark.persist();
 
-        refreshULastUpdateTimeOfTwitter(remark);
+        BigUtil.refreshULastUpdateTimeOfTwitter(remark);
         
-        PublicController tController = SpringApplicationContext.getApplicationContext().getBean("publicController", PublicController.class);
-        return tController.showDetailTwitters(remark.getRemarkto().getId(), null, null, uiModel, httpServletRequest);
+        return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
     }
 	
 	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")
@@ -100,7 +100,7 @@ public class RemarkController {
         }
         uiModel.asMap().clear();
         remark.merge();
-        refreshULastUpdateTimeOfTwitter(remark);
+        BigUtil.refreshULastUpdateTimeOfTwitter(remark);
         return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
     }
 
@@ -128,16 +128,6 @@ public class RemarkController {
         addDateTimeFormatPatterns(uiModel);
         return "remarks/list";
     }
-
-	/*
-	 * update the lastupdate field of twitter.
-	 */
-	private void refreshULastUpdateTimeOfTwitter(Remark remark){
-		remark = Remark.findRemark(remark.getId());	//this remark may got from webpage, and has no some field like "remarkto"
-        Twitter tTwitter = remark.getRemarkto();
-        tTwitter.setLastupdate(remark.getRemarkTime());
-        tTwitter.merge();
-	}
 
 	@RequestMapping(params = "form", produces = "text/html")
     public String createForm(Model uiModel, HttpServletRequest httpServletRequest) {

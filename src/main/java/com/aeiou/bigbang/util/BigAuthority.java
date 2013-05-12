@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.springframework.context.MessageSource;
 
 import com.aeiou.bigbang.domain.UserAccount;

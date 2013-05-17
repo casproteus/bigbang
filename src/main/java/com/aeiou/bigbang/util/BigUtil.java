@@ -70,76 +70,7 @@ public class BigUtil {
     	return tBigTags;
     }
 	
-	public static void addDefaultUserTags(MessageSource messageSource, String pType){
-		
-		BigTag tBigTag1 = new BigTag();
-	    tBigTag1.setTagName(messageSource.getMessage("admin_suggested_tag1", new Object[0], null));
-	    tBigTag1.setType(pType);
-	    tBigTag1.setAuthority(0);
-	    tBigTag1.setOwner(0);
-	    tBigTag1.persist();
-	    
-	    BigTag tBigTag2 = new BigTag();
-	    tBigTag2.setTagName(messageSource.getMessage("admin_suggested_tag2", new Object[0], null));
-	    tBigTag2.setType(pType);
-	    tBigTag2.setAuthority(0);
-	    tBigTag2.setOwner(0);
-	    tBigTag2.persist();
-	    
-	    BigTag tBigTag3 = new BigTag();
-	    tBigTag3.setTagName(messageSource.getMessage("admin_suggested_tag3", new Object[0], null));
-	    tBigTag3.setType(pType);
-	    tBigTag3.setAuthority(0);
-	    tBigTag3.setOwner(0);
-	    tBigTag3.persist();
-
-	    BigTag tBigTag4 = new BigTag();
-	    tBigTag4.setTagName(messageSource.getMessage("admin_suggested_tag4", new Object[0], null));
-	    tBigTag4.setType(pType);
-	    tBigTag4.setAuthority(0);
-	    tBigTag4.setOwner(0);
-	    tBigTag4.persist();
-	    
-	    //for twitter content----------------------------
-	    BigTag tBigTag5 = new BigTag();
-	    tBigTag5.setTagName(messageSource.getMessage("admin_suggested_tag5", new Object[0], null));
-	    tBigTag5.setType(pType);
-	    tBigTag5.setAuthority(0);
-	    tBigTag5.setOwner(1);
-	    tBigTag5.persist();
-	    
-	    BigTag tBigTag6 = new BigTag();
-	    tBigTag6.setTagName(messageSource.getMessage("admin_suggested_tag6", new Object[0], null));
-	    tBigTag6.setType(pType);
-	    tBigTag6.setAuthority(0);
-	    tBigTag6.setOwner(1);
-	    tBigTag6.persist();
-
-	    BigTag tBigTag7 = new BigTag();
-	    tBigTag7.setTagName(messageSource.getMessage("admin_suggested_tag7", new Object[0], null));
-	    tBigTag7.setType(pType);
-	    tBigTag7.setAuthority(0);
-	    tBigTag7.setOwner(1);
-	    tBigTag7.persist();
-	    
-	    BigTag tBigTag8 = new BigTag();
-	    tBigTag8.setTagName(messageSource.getMessage("admin_suggested_tag8", new Object[0], null));
-	    tBigTag8.setType(pType);
-	    tBigTag8.setAuthority(0);
-	    tBigTag8.setOwner(1);
-	    tBigTag8.persist();
-	}
 	
-
-	public static void addDefaultMessageTwitter(MessageSource messageSource, UserAccount pPublisher){
-		Message tMessage = new Message();
-		tMessage.setReceiver(pPublisher);
-		tMessage.setPublisher(UserAccount.findUserAccountByName("admin"));
-		tMessage.setPostTime(new Date());
-		Object[] tObjAry = new Object[]{pPublisher.getName()};
-		tMessage.setContent(messageSource.getMessage("default_welcome_message", tObjAry, null));
-		tMessage.persist();
-	}
 	
 	/**
 	 * update the lastupdate field of twitter.

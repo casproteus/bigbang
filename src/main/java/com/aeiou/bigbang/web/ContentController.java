@@ -114,8 +114,14 @@ public class ContentController {
 	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String update(@Valid Content content, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, content, httpServletRequest);
-            return "contents/update";
+        	if(bindingResult.getAllErrors().size() == 1 && content.getPublisher() == null){
+	       		 String tCurName = userContextService.getCurrentUserName();
+	       	     UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
+	       	     content.setPublisher(tUserAccount);
+	       	}else{
+	       		populateEditForm(uiModel, content, httpServletRequest);
+	       		return "contents/update";
+	       	}
         }
         uiModel.asMap().clear();
         content.merge();

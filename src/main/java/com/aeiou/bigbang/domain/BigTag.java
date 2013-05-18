@@ -19,7 +19,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class BigTag {
 
     @NotNull
-    @Column(unique = true)
     @Size(min = 2)
     private String tagName;
 

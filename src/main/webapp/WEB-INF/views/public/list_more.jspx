@@ -16,18 +16,6 @@
   	</c:otherwise>
   </c:choose>
   <util:panel id="title" title="${title}">
-    <!-- <span class="new">
-      <spring:url value="/contents" var="create_url">
-        <spring:param name="form" />
-      </spring:url>
-      <a href="${create_url}">
-        <spring:message code="contributeContent" htmlEscape="false" var="add_message"/>
-        ${add_message}
-        <spring:url value="/resources/images/add.png" var="create_img_url" />
-        <spring:message arguments="${typeName}" code="global_menu_new" var="add_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
-      </a>
-    </span> -->
     <span> <!-- class="new" this style make a right align, while make the line height too low.-->
       <spring:url value="/twitters" var="write_url">
         <spring:param name="form" />
@@ -49,6 +37,53 @@
         <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
       </a>
     </span>
+    <span class="new">
+    	Drag the quick tool to bookmarks toolbar:
+			<a href='javascript:(
+	  function(e,t){
+	    var%20n=e.document;
+	    setTimeout(
+	      function(){
+	        function%20a(e){
+	          if(e.data==="destroy_bookmarklet"){
+	            var%20r=n.getElementById(t);
+	            if(r){
+	              n.body.removeChild(r);
+	              r=null
+	            }
+	          }
+	        }
+	        var%20t="DELI_bookmarklet_iframe",r=n.getElementById(t);
+	        if(r){
+	          return
+	        }
+	        var%20i="http://localhost/bigbang/contents?form",s=n.createElement("iframe");
+	        s.id=t;
+	        s.src=i+"&amp;url="+encodeURIComponent(e.location.href)
+	        +"&amp;title="+encodeURIComponent(n.title)
+	        +"&amp;note="+encodeURIComponent(""+(e.getSelection?e.getSelection():n.getSelection?n.getSelection():n.selection.createRange().text))
+	        +"&amp;v=1.1";
+	        s.style.position="fixed";
+	        s.style.top="0";
+	        s.style.left="0";
+	        s.style.height="100%25";
+	        s.style.width="100%25";
+	        s.style.zIndex="16777270";
+	        s.style.border="none";
+	        s.style.visibility="hidden";
+	        s.onload=function(){
+	          this.style.visibility="visible"
+	        };
+	        n.body.appendChild(s);
+	        var%20o=e.addEventListener?"addEventListener":"attachEvent";
+	        var%20u=o=="attachEvent"?"onmessage":"message";
+	        e[o](u,a,false)
+	      },1
+	    )
+	  }
+	)(window)'>ShareTheGoodOnes!</a>
+    </span>
+    
   </util:panel>
   <br/>
   <c:set var="tagsize" value="${fn:length(bigTags)}" scope="request" />

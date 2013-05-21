@@ -21,7 +21,7 @@
   </c:choose>
   <div style="background: #efefef; padding: 5px; margin-bottom: 3px">
     <div style="text-align: center; padding-bottom: 5px"><b>${title}</b></div>
-    <span> <!-- class="new" this style make a right align, while make the line height too low.-->
+    <span> <!-- don't use "new" style here, because it make a right align, and will make the line height too low.-->
       <spring:url value="/twitters" var="write_url">
         <spring:param name="form" />
       </spring:url>
@@ -42,6 +42,53 @@
         <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
       </a>
     </span>
+    <span class="new">
+    	<spring:message code="AddOnNotice" htmlEscape="false"/>
+	   <a href='javascript:(
+	  function(e,t){
+	    var%20n=e.document;
+	    setTimeout(
+	      function(){
+	        function%20a(e){
+	          if(e.data==="destroy_bookmarklet"){
+	            var%20r=n.getElementById(t);
+	            if(r){
+	              n.body.removeChild(r);
+	              r=null
+	            }
+	          }
+	        }
+	        var%20t="DELI_bookmarklet_iframe",r=n.getElementById(t);
+	        if(r){
+	          return
+	        }
+	        var%20i="http://en.sharethegoodones.com/contents?form",s=n.createElement("iframe");
+	        s.id=t;
+	        s.src=i+"&amp;url="+encodeURIComponent(e.location.href)
+	        +"&amp;title="+encodeURIComponent(n.title)
+	        +"&amp;note="+encodeURIComponent(""+(e.getSelection?e.getSelection():n.getSelection?n.getSelection():n.selection.createRange().text))
+	        +"&amp;v=1.1";
+	        s.style.position="fixed";
+	        s.style.top="0";
+	        s.style.left="0";
+	        s.style.height="100%25";
+	        s.style.width="100%25";
+	        s.style.zIndex="16777270";
+	        s.style.border="none";
+	        s.style.visibility="hidden";
+	        s.onload=function(){
+	          this.style.visibility="visible"
+	        };
+	        n.body.appendChild(s);
+	        var%20o=e.addEventListener?"addEventListener":"attachEvent";
+	        var%20u=o=="attachEvent"?"onmessage":"message";
+	        e[o](u,a,false)
+	      },1
+	    )
+	  }
+	)(window)'><spring:message code="AddOnName" htmlEscape="false"/></a>
+    </span>
+    
     <c:if test="${empty maxPages and (not empty spaceOwner and fn:toLowerCase(spaceOwner) ne 'admin') and fn:toLowerCase(pageContext['request'].userPrincipal.name) ne fn:toLowerCase(spaceOwner)}">
 	   <span class="new">
 		  <spring:url value="/messages" var="create_message_url">

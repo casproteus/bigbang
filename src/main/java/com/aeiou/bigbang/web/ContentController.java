@@ -23,6 +23,7 @@ import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.BigUtil;
 
 @RequestMapping("/contents")
 @Controller
@@ -102,7 +103,14 @@ public class ContentController {
 
 	@RequestMapping(params = "form", produces = "text/html")
     public String createForm(Model uiModel, HttpServletRequest httpServletRequest) {
-        populateEditForm(uiModel, new Content(), httpServletRequest);
+		Content tContent = new Content();
+		tContent.setSourceURL(httpServletRequest.getParameter("url"));
+		String tTitle = httpServletRequest.getParameter("title");
+		if(tTitle != null){
+			tTitle = BigUtil.getUTFString(tTitle);
+		}
+		tContent.setTitle(tTitle);
+        populateEditForm(uiModel, tContent, httpServletRequest);
         List<String[]> dependencies = new ArrayList<String[]>();
         if (UserAccount.countUserAccounts() == 0) {
             dependencies.add(new String[] { "useraccount", "useraccounts" });

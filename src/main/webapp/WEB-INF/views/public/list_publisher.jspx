@@ -5,7 +5,8 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <spring:message code="allcontents" var="label" htmlEscape="false" />
-	<util:panel id="title" title="${publisher}">
+    <div style="background: #efefef; padding: 5px; margin-bottom: 3px">
+      <div style="text-align: center; padding-bottom: 5px"><b>${publisher}</b></div>
   		<spring:message code="label_public_balance" arguments="${balance}" htmlEscape="false"/>
 	    <span class="new">
 	      <c:if test="${empty nothireable}">
@@ -39,7 +40,7 @@
 			  </a>
 		  </c:if>
 	   </span>
-	</util:panel>
+	</div>
 	<br/>
 	<!-- display the diary of the user  @NOTE: might not a good idea to display diary together with bookmarks. because when you are navigation twitter,
 	 the bookmar will also be effected. or you have to use more parameters..

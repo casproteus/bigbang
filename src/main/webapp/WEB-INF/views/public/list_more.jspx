@@ -15,7 +15,9 @@
 		<spring:message code="label_public_index" arguments="${spaceOwner},${empty description ? publicDescription : description}" htmlEscape="false" var="title"/>
   	</c:otherwise>
   </c:choose>
-  <util:panel id="title" title="${title}">
+  
+  <div style="background: #efefef; padding: 5px; margin-bottom: 3px">
+    <div style="text-align: center; padding-bottom: 5px"><b>${title}</b></div>
     <span> <!-- class="new" this style make a right align, while make the line height too low.-->
       <spring:url value="/twitters" var="write_url">
         <spring:param name="form" />
@@ -83,8 +85,7 @@
 	  }
 	)(window)'>ShareTheGoodOnes!</a>
     </span>
-    
-  </util:panel>
+  </div>
   <br/>
   <c:set var="tagsize" value="${fn:length(bigTags)}" scope="request" />
   <spring:message code="label_com_aeiou_bigbang_publisher" var="sharerName" htmlEscape="false" />

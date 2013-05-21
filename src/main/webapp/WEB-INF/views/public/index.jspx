@@ -42,8 +42,22 @@
         <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
       </a>
     </span>
+    
     <span class="new">
-    	<spring:message code="AddOnNotice" htmlEscape="false"/>
+    <c:if test="${empty maxPages and (not empty spaceOwner and fn:toLowerCase(spaceOwner) ne 'admin') and fn:toLowerCase(pageContext['request'].userPrincipal.name) ne fn:toLowerCase(spaceOwner)}">
+	  
+		  <spring:url value="/messages" var="create_message_url">
+	        <spring:param name="pReceiverName" value="${spaceOwner}"/>
+	      </spring:url>
+	      <a href="${create_message_url}">
+	        <spring:message code="writeMessageToSpaceOwner" arguments="${spaceOwner}" htmlEscape="false"/>
+	        <spring:url value="/resources/images/addmessage.png" var="message_img_url" />
+	        <spring:message arguments="${typeName}" code="global_menu_newmessage" var="add_message" htmlEscape="false" />
+	        <img alt="${fn:escapeXml(add_message)}" src="${message_img_url}" title="${fn:escapeXml(add_message)}" />
+	      </a>
+	  	  <c:out value=" || "/>
+    </c:if>
+       <spring:message code="AddOnNotice" htmlEscape="false"/>
 	   <a href='javascript:(
 	  function(e,t){
 	    var%20n=e.document;
@@ -86,22 +100,11 @@
 	      },1
 	    )
 	  }
-	)(window)'><spring:message code="AddOnName" htmlEscape="false"/></a>
+	)(window)'><spring:message code="AddOnName" htmlEscape="false"/>
+	<spring:url value="/resources/images/addon.png" var="addon_img_url" />
+	<img src="${addon_img_url}"/></a>
     </span>
     
-    <c:if test="${empty maxPages and (not empty spaceOwner and fn:toLowerCase(spaceOwner) ne 'admin') and fn:toLowerCase(pageContext['request'].userPrincipal.name) ne fn:toLowerCase(spaceOwner)}">
-	   <span class="new">
-		  <spring:url value="/messages" var="create_message_url">
-	        <spring:param name="pReceiverName" value="${spaceOwner}"/>
-	      </spring:url>
-	      <a href="${create_message_url}">
-	        <spring:message code="writeMessageToSpaceOwner" arguments="${spaceOwner}" htmlEscape="false"/>
-	        <spring:url value="/resources/images/addmessage.png" var="message_img_url" />
-	        <spring:message arguments="${typeName}" code="global_menu_newmessage" var="add_message" htmlEscape="false" />
-	        <img alt="${fn:escapeXml(add_message)}" src="${message_img_url}" title="${fn:escapeXml(add_message)}" />
-	      </a>
-	    </span>
-    </c:if>
     <c:if test="${empty maxPages and fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(spaceOwner)}">
       <br/>
 	  <spring:url value="/public" var="reset_url">

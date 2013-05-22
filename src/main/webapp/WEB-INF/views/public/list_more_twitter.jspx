@@ -48,7 +48,7 @@
       </a>
     </span>
     <span class="new">
-    	Drag the quick tool to bookmarks toolbar:
+    	<spring:message code="AddOnNotice" htmlEscape="false"/>
 			<a href='javascript:(
 	  function(e,t){
 	    var%20n=e.document;
@@ -91,7 +91,9 @@
 	      },1
 	    )
 	  }
-	)(window)'>ShareTheGoodOnes!</a>
+	)(window)'><spring:message code="AddOnName" htmlEscape="false"/>
+	<spring:url value="/resources/images/addon.png" var="addon_img_url" />
+	<img src="${addon_img_url}"/></a>
     </span>
       
   </util:panel>

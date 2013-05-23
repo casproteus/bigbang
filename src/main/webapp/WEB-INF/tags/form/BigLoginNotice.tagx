@@ -25,7 +25,7 @@
     <spring:message arguments="${tArgument}" code="entity_create" var="title_msg" htmlEscape="false" />
     <util:panel id="${id}" title="${title_msg}" openPane="${openPane}">
       <spring:url value="${path}" var="form_url">
-        <spring:param name="twitterid" value="${twitterId}"/>
+        <spring:param name="pTwitterId" value="${twitterId}"/>
       </spring:url>
       <c:set var="jsCall" value=""/>
       <c:if test="${not empty compositePkField}">

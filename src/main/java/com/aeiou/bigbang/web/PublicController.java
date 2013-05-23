@@ -269,68 +269,10 @@ public class PublicController{
     @RequestMapping(params = "twitterid", produces = "text/html")
     public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, HttpServletRequest request) {
-        Twitter tTwitter = Twitter.findTwitter(twitterid);
-    	UserAccount tOwner = tTwitter.getPublisher();
-        int sizeNo = size == null ? 25 : size.intValue();
-        final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-       
-    	String tCurName = userContextService.getCurrentUserName();
-    	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
-    	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
-        uiModel.addAttribute("spaceOwner", tOwner);
-        float nrOfPages;
-        uiModel.addAttribute("twitter", tTwitter);
-        uiModel.addAttribute("remarks", Remark.findRemarkByTwitter(tTwitter, tAuthSet, firstResult, sizeNo));
-        nrOfPages = (float) Remark.countRemarksByTwitter(tTwitter, tAuthSet) / sizeNo;
-    	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-    	Remark tRemark = new Remark();
-        uiModel.addAttribute("newremark", tRemark);
-        uiModel.addAttribute("authorities",BigAuthority.getRemarkOptions(messageSource, request.getLocale()));
-        List<Twitter> remarktos = new ArrayList<Twitter>();
-        remarktos.add(tTwitter);
-        uiModel.addAttribute("remarktos", remarktos);
-        
-        return "public/list_detail_twitter";
+    	RemarkController tController = SpringApplicationContext.getApplicationContext().getBean("remarkController", RemarkController.class);
+		return(tController.showDetailTwitters(twitterid, page, size, uiModel, request));
     }
     
-	@RequestMapping(params = "pTwitterId", method = RequestMethod.POST, produces = "text/html")
-    public String createRemark(@Valid Remark remark, BindingResult bindingResult,
-    		@RequestParam(value = "pTwitterId", required = false)Long pTwitterId,
-    		Model uiModel, HttpServletRequest httpServletRequest) {
-		//TODO: Should make the check before submit.
-		if(remark.getContent() == null || remark.getContent().length() < 1)
-            return "remarks/create";
-		
-		//get his last twitter in db compare with it.
-		String tCurName = userContextService.getCurrentUserName();
-	    UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
-		List<Remark> tList = Remark.findRemarkByPublisher(tUserAccount, 0, 1);
-		//This is good, but not good enough, because when user press F5 after modifying a remark, and press back->back
-		//will trick out the form to submit again, and then in this method, the content are different....
-		//TODO: add a hidden field in From and save a token in it.then verify, if the token not there, then stop saving
-		//http://stackoverflow.com/questions/2324931/duplicate-form-submission-in-spring
-		if(tList != null && tList.size() > 0){
-			Remark tTwitter = tList.get(0);
-			if(remark.getContent().equals(tTwitter.getContent()) && remark.getRemarkto().equals(tTwitter.getRemarkto()))
-				return "remarks/create";
-		}
-	
-		if (bindingResult.hasErrors()) {
-			if (bindingResult.getAllErrors().size() == 1 && remark.getPublisher() == null) {
-				remark.setPublisher(tUserAccount);
-				remark.setRemarkto(Twitter.findTwitter(pTwitterId));
-				remark.setRemarkTime(new Date());//add remark time when it's submitted.
-			} else {
-		        return "public/list_detail_twitter";
-			}
-        }
-        uiModel.asMap().clear();
-        remark.persist();
-        
-        BigUtil.refreshULastUpdateTimeOfTwitter(remark);
-        return showDetailTwitters(remark.getRemarkto().getId(), null, null, uiModel, httpServletRequest);
-    }
-	
     @RequestMapping(params = "publisher", produces = "text/html")
     public String listContentByPublisher(@RequestParam(value = "publisher", required = false) String pPublisher,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, String sortExpression) {

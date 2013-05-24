@@ -15,16 +15,7 @@
 		<title><spring:message code="welcome_h3"/></title>
 	</head>
 	
-    <spring:url value="/resources/images/bg/0.png" var="bg_img_url" />
-    <!-- 
-    <spring:url value="/resources/images/bg/1.png" var="bg_img_url" />
-    <spring:url value="/resources/images/bg/2.png" var="bg_img_url" />
-    <spring:url value="/resources/images/bg/3.png" var="bg_img_url" />
-    <spring:url value="/resources/images/bg/4.gif" var="bg_img_url" />
-    <spring:url value="/resources/images/bg/5.gif" var="bg_img_url" />
-    <spring:url value="/resources/images/bg/6.jpg" var="bg_img_url" />
-    <spring:url value="/resources/images/bg/7.jpg" var="bg_img_url" />
-     -->
+    <spring:url value="/resources/images/bg/1.jpg" var="bg_img_url" />
   	<body class="tundra spring" background="${bg_img_url}">
    		<div id="wrapper">
 		    <tiles:insertAttribute name="header" ignore="true" />

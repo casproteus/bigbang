@@ -51,54 +51,28 @@ web mvc all --package com.aeiou.bigbang.web
 security setup
 email sender setup --hostServer smtp.gmail.com --username casproteus@gmail.com --password Ollwin_02 --port 587 --protocol SMTP
 perform eclipse
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-10 12:30:01
-quit
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-10 12:42:36
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-12 11:08:28
 field number --class ~.domain.BigTag --fieldName authority --type java.lang.Short
-// [failed] field boolean --fieldName Authority --class ~.domain.BigTag
 field number --class ~.domain.Content --fieldName authority --type java.lang.Short
 field reference --fieldName uncommonBigTag --type ~.domain.BigTag --class ~.domain.Content
-quit
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-12 15:55:09
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-12 20:14:55
-quit
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-12 21:40:16
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-12 22:37:48
-quit
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-13 00:15:50
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-15 10:35:54
 field number --fieldName price --type int --class ~.domain.UserAccount --min 0 --max 9
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-19 09:48:20
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-20 19:48:27
 field string --class ~.domain.UserAccount --fieldName layout
 field number --type java.lang.Integer --fieldName balance --notNull --class ~.domain.UserAccount
-quit
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-20 20:02:02
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-02-21 09:50:49
-field number --type int --class ~.domain.UserAccount --fieldName balance --notNull 
-quit
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-02-21 10:37:58
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-03-14 09:26:29
-help
+field number --type int --class ~.domain.UserAccount --fieldName balance --notNull
 field string --class ~.domain.Twitter --fieldName title --notNull
 field number --fieldName owner --type int --class ~.domain.BigTag
-// [failed] field reference --fieldName commontag --type ~.domain.BigTag --class  
 field reference --fieldName commontag --type ~.domain.BigTag --class ~.domain.Twitter
 field reference --fieldName uncommontag --type ~.domain.BigTag --class ~.domain.Twitter
 field reference --fieldName twittertag --type ~.domain.BigTag --class ~.domain.Twitter
 field number --fieldName authority --type int --class ~.domain.Twitter
-field number --fieldName owner --type java.lang.Integer --class ~.domain.BigTag --notNull 
+field number --fieldName owner --type java.lang.Integer --class ~.domain.BigTag --notNull
 field string --fieldName twtitle --class ~.domain.Twitter
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-04-09 14:12:36
 field date --class ~.domain.Twitter --fieldName lastupdate --type java.util.Date
 field date --class ~.domain.Content --fieldName markDate --type java.util.Date
-// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-04-23 21:55:25
-entity jpa --class ~.domain.Message --testAutomatically 
-field reference --fieldName receiver --type ~.domain.UserAccount --notNull 
-field reference --fieldName sender --type ~.domain.UserAccount --notNull 
-field string --fieldName content --notNull 
-field date --fieldName postTime --type java.util.Date --notNull 
+entity jpa --class ~.domain.Message --testAutomatically
+field reference --fieldName receiver --type ~.domain.UserAccount --notNull
+field reference --fieldName sender --type ~.domain.UserAccount --notNull
+field string --fieldName content --notNull
+field date --fieldName postTime --type java.util.Date --notNull
 field number --fieldName status --type int
 web mvc all --package com.aeiou.bigbang.web
 field date --class ~.domain.UserAccount --fieldName lastReadMessage --type java.util.Date

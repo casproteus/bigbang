@@ -1,0 +1,69 @@
+entity jpa --class ~.domain.Customize --testAutomatically
+field string --fieldName cusKey --notNull --unique
+field string --fieldName cusValue --notNull --unique
+
+entity jpa --class ~.domain.BigTag --testAutomatically
+field string --fieldName tagName --notNull --sizeMin 2
+field string --fieldName type --notNull --sizeMin 2
+field number --fieldName authority --type java.lang.Integer
+field number --fieldName owner --type java.lang.Integer
+
+entity jpa --class ~.domain.UserAccount --testAutomatically
+field string --fieldName name --notNull --sizeMin 2 --unique
+field string --fieldName email
+field string --fieldName password --sizeMin 4
+field string --fieldName description
+field set --fieldName listento --type ~.domain.UserAccount
+field number --fieldName price --type int --min 0 --max 9
+field string --fieldName layout
+field number --type int --fieldName balance --notNull
+field number --fieldName theme --type int
+field number --fieldName status --type int
+field number --fieldName newMessageAmount --type int
+
+entity jpa --class ~.domain.Content --testAutomatically
+field string --fieldName title --notNull true
+field string --fieldName sourceURL --notNull
+field string --fieldName conentCache
+field reference --type ~.domain.UserAccount --fieldName publisher --notNull
+field reference --fieldName commonBigTag --type ~.domain.BigTag
+field number --fieldName authority --type java.lang.Integer
+field reference --fieldName uncommonBigTag --type ~.domain.BigTag
+field date --fieldName markDate --type java.util.Date
+
+entity jpa --class ~.domain.Twitter --testAutomatically
+field string --fieldName twitent --notNull
+field date --type java.util.Date --fieldName twitDate --notNull
+field reference --fieldName publisher --type ~.domain.UserAccount --notNull
+field reference --fieldName twittertag --type ~.domain.BigTag
+field number --fieldName authority --type java.lang.Integer
+field string --fieldName twtitle
+field date --fieldName lastupdate --type java.util.Date
+
+entity jpa --class ~.domain.Remark --testAutomatically
+field string --fieldName content --notNull
+field reference --fieldName publisher --type ~.domain.UserAccount --notNull
+field date --fieldName remarkTime --notNull --type java.util.Date
+field number --fieldName authority --type java.lang.Integer
+field reference --fieldName remarkto --type ~.domain.Twitter
+
+entity jpa --class ~.domain.Circle --testAutomatically
+field string --fieldName circleName --notNull
+field string --fieldName description
+field reference --type ~.domain.UserAccount --fieldName owner --notNull
+field date --type java.util.Date --fieldName createdDate --notNull
+field set --type ~.domain.UserAccount --fieldName members
+
+entity jpa --class ~.domain.Message --testAutomatically
+field reference --fieldName receiver --type ~.domain.UserAccount --notNull
+field reference --fieldName publisher --type ~.domain.UserAccount --notNull
+field string --fieldName content --notNull
+field date --fieldName postTime --type java.util.Date --notNull
+field number --fieldName status --type int
+
+perform tests
+web mvc setup
+web mvc all --package com.aeiou.bigbang.web
+security setup
+email sender setup --hostServer smtp.gmail.com --username casproteus@gmail.com --password Ollwin_02 --port 587 --protocol SMTP
+perform eclipse

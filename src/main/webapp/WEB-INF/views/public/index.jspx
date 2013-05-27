@@ -1,4 +1,3 @@
-<!-- !!!!!If this file file changed, don't forget to change the three file under deploy folder!!!!! -->
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <div xmlns:jsp="http://java.sun.com/JSP/Page" 		xmlns:spring="http://www.springframework.org/tags"
 	 xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"  xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" 
@@ -9,6 +8,8 @@
   <spring:message code="public" htmlEscape="false" var="publicspace"/>
   <spring:message code="publicDescription" htmlEscape="false" var="publicDescription"/>
   <spring:message code="NotesAndPraysOfFriend" htmlEscape="false" arguments="${spaceOwner}" var="NotesAndPraysFromFriend"/>
+ 
+  <!-- If this file file changed in any line, don't forget to change the three file under deploy folder -->
   
   <!-- The Title Area, including owner info, butttons for adding blog, adding bookmark, leaving message and addon. -->
   <c:choose>

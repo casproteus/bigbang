@@ -1,3 +1,4 @@
+<!-- !!!!!If this file file changed, don't forget to change the three file under deploy folder!!!!! -->
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <div xmlns:jsp="http://java.sun.com/JSP/Page" 		xmlns:spring="http://www.springframework.org/tags"
 	 xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"  xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" 

@@ -9,6 +9,7 @@
   <spring:message code="publicDescription" htmlEscape="false" var="publicDescription"/>
   <spring:message code="NotesAndPraysOfFriend" htmlEscape="false" arguments="${spaceOwner}" var="NotesAndPraysFromFriend"/>
   
+  <!-- The Title Area, including owner info, butttons for adding blog, adding bookmark, leaving message and addon. -->
   <c:choose>
   	<c:when test="${empty spaceOwner or spaceOwner eq 'admin'}">
 		<spring:message code="publicDescription" htmlEscape="false" var="title"/>
@@ -161,13 +162,22 @@
   	  <util:theme/>  	  
     </c:if>    
   </div>
-  <!-- display the diary of the user -->
+
+  <!-- display the blog of the user -->
   <c:if test="${not empty twitterLeft}">
+	  <c:choose>
+	     <c:when test="${pageContext['request'].userPrincipal != null}">
+	  		<c:set value="/remarks" var="listDetailTargetController"/>
+	  	 </c:when>
+	  	 <c:otherwise>
+	  		<c:set value="/public" var="listDetailTargetController"/>
+	  	 </c:otherwise>
+	  </c:choose>
 	  <table class="tWireless" style="margin-bottom: 0px"><tr>
 	  	<c:if test="${not empty twitterLeft}">
 		  	<td class="tWireless nopaddingleft" valign="top">
 			  <page:contentPane id="twitterLeft" items="${twitterLeft}" label="${NotesAndPrays}" bottom="8">
-			    <table:twitterbox data="${twitterLeft}" id="l_com_aeiou_bigbang_domain_Content" type="self" path="/public" spaceOwner="${spaceOwner}">
+			    <table:twitterbox data="${twitterLeft}" id="l_com_aeiou_bigbang_domain_Content" type="self" path="${listDetailTargetController}" spaceOwner="${spaceOwner}">
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="type" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
@@ -188,6 +198,8 @@
 	  	</c:if>
 	  </tr></table>
   </c:if>
+  
+  <!-- display the bookmarks of the user. -->
   <!-- c:set var="tagsize" value="${bigTags.size()}" scope="request" /> -->
   <table class="tWireless"><tr>
   	<td class="tWireless nopaddingleft" valign="top">

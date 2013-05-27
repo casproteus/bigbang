@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <div xmlns:jsp="http://java.sun.com/JSP/Page" 		xmlns:spring="http://www.springframework.org/tags"
-	 xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"  xmlns:page="urn:jsptagdir:/WEB-INF/tags/form"
+	 xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"  xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" 
 	 xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:c="http://java.sun.com/jsp/jstl/core"
 	 xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
   <jsp:directive.page contentType="text/html;charset=UTF-8"/>
@@ -8,7 +8,8 @@
   <spring:message code="public" htmlEscape="false" var="publicspace"/>
   <spring:message code="publicDescription" htmlEscape="false" var="publicDescription"/>
   <spring:message code="NotesAndPraysOfFriend" htmlEscape="false" arguments="${spaceOwner}" var="NotesAndPraysFromFriend"/>
-
+  
+  <!-- The Title Area, including owner info, butttons for adding blog, adding bookmark, leaving message and addon. -->
   <c:choose>
   	<c:when test="${empty spaceOwner or spaceOwner eq 'admin'}">
 		<spring:message code="publicDescription" htmlEscape="false" var="title"/>
@@ -42,10 +43,10 @@
         <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
       </a>
     </span>
-
+    
     <span class="new">
     <c:if test="${empty maxPages and (not empty spaceOwner and fn:toLowerCase(spaceOwner) ne 'admin') and fn:toLowerCase(pageContext['request'].userPrincipal.name) ne fn:toLowerCase(spaceOwner)}">
-
+	  
 		  <spring:url value="/messages" var="create_message_url">
 	        <spring:param name="pReceiverName" value="${spaceOwner}"/>
 	      </spring:url>
@@ -104,7 +105,7 @@
 	<spring:url value="/resources/images/addon.png" var="addon_img_url" />
 	<img src="${addon_img_url}"/></a>
     </span>
-
+    
     <c:if test="${empty maxPages and fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(spaceOwner)}">
       <br/>
 	  <spring:url value="/public" var="reset_url">
@@ -116,7 +117,7 @@
         <spring:message code="global_menu_resetView" var="reset_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(reset_message)}" src="${reset_img_url}" title="${fn:escapeXml(reset_message)}" />
       </a>
-
+      
       <c:out value=" | " />
       <spring:url value="/contents" var="contents_url"/>
       <a href="${contents_url}">
@@ -124,7 +125,7 @@
         <spring:message code="global_menu_contentsManage" var="contentsManage_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(contentsManage_message)}" src="${content_img_url}" title="${fn:escapeXml(contentsManage_message)}" />
       </a>
-
+      
       <c:out value="  " />
       <spring:url value="/twitters" var="twitter_url"/>
       <a href="${twitter_url}">
@@ -132,7 +133,7 @@
         <spring:message code="global_menu_diaryManage" var="diaryManage_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(diaryManage_message)}" src="${diary_img_url}" title="${fn:escapeXml(diaryManage_message)}" />
       </a>
-
+      
       <c:out value="  " />
       <spring:url value="/bigtags" var="bigtags_url"/>
       <a href="${bigtags_url}">
@@ -140,7 +141,7 @@
         <spring:message code="global_menu_tagsManage" var="tagsManage_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(tagsManage_message)}" src="${tag_img_url}" title="${fn:escapeXml(tagsManage_message)}" />
       </a>
-
+      
       <c:out value=" | " />
       <spring:url value="/messages" var="messages_url"/>
       <a href="${messages_url}">
@@ -157,17 +158,26 @@
         <spring:message code="global_menu_accountsManage" var="accountsManage_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(accountsManage_message)}" src="${account_img_url}" title="${fn:escapeXml(accountsManage_message)}" />
       </a>
-
-  	  <util:theme/>
-    </c:if>
+      
+  	  <util:theme/>  	  
+    </c:if>    
   </div>
-  <!-- display the diary of the user -->
+
+  <!-- display the blog of the user -->
   <c:if test="${not empty twitterLeft}">
+	  <c:choose>
+	     <c:when test="${pageContext['request'].userPrincipal != null}">
+	  		<c:set value="/remarks" var="listDetailTargetController"/>
+	  	 </c:when>
+	  	 <c:otherwise>
+	  		<c:set value="/public" var="listDetailTargetController"/>
+	  	 </c:otherwise>
+	  </c:choose>
 	  <table class="tWireless" style="margin-bottom: 0px"><tr>
 	  	<c:if test="${not empty twitterLeft}">
 		  	<td class="tWireless nopaddingleft" valign="top">
 			  <page:contentPane id="twitterLeft" items="${twitterLeft}" label="${NotesAndPrays}" bottom="8">
-			    <table:twitterbox data="${twitterLeft}" id="l_com_aeiou_bigbang_domain_Content" type="self" path="/public" spaceOwner="${spaceOwner}">
+			    <table:twitterbox data="${twitterLeft}" id="l_com_aeiou_bigbang_domain_Content" type="self" path="${listDetailTargetController}" spaceOwner="${spaceOwner}">
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="type" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
@@ -188,6 +198,8 @@
 	  	</c:if>
 	  </tr></table>
   </c:if>
+  
+  <!-- display the bookmarks of the user. -->
   <!-- c:set var="tagsize" value="${bigTags.size()}" scope="request" /> -->
   <table class="tWireless"><tr>
   	<td class="tWireless nopaddingleft" valign="top">
@@ -213,5 +225,5 @@
 	  </c:forEach>
   	</td>
   </tr></table>
-
+  
 </div>

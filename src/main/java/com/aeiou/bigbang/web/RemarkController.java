@@ -51,9 +51,10 @@ public class RemarkController {
     		@RequestParam(value = "pTwitterId", required = false)Long pTwitterId,
     		Model uiModel, HttpServletRequest httpServletRequest) {
 		//TODO: Should make the check before submit.
-		if(remark.getContent() == null || remark.getContent().length() < 1)
+		if(remark.getContent() == null || remark.getContent().length() < 1){
+	        populateEditForm(uiModel, new Remark(), httpServletRequest);
             return "remarks/create";
-		
+		}
 		//get his last twitter in db compare with it.
 		String tCurName = userContextService.getCurrentUserName();
 	    UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
@@ -64,8 +65,10 @@ public class RemarkController {
 		//http://stackoverflow.com/questions/2324931/duplicate-form-submission-in-spring
 		if(tList != null && tList.size() > 0){
 			Remark tTwitter = tList.get(0);
-			if(remark.getContent().equals(tTwitter.getContent()) && remark.getRemarkto().equals(tTwitter.getRemarkto()))
+			if(remark.getContent().equals(tTwitter.getContent()) && remark.getRemarkto().equals(tTwitter.getRemarkto())){
+		        populateEditForm(uiModel, new Remark(), httpServletRequest);
 				return "remarks/create";
+			}
 		}
 	
 		if (bindingResult.hasErrors()) {
@@ -174,9 +177,10 @@ public class RemarkController {
     		@RequestParam(value = "twitterid", required = false)Long pTwitterId,
     		Model uiModel, HttpServletRequest httpServletRequest) {
 		//TODO: Should make the check before submit.
-		if(remark.getContent() == null || remark.getContent().length() < 1)
+		if(remark.getContent() == null || remark.getContent().length() < 1){
+	        populateEditForm(uiModel, new Remark(), httpServletRequest);
             return "remarks/create";
-		
+		}
 		//get his last twitter in db compare with it.
 		String tCurName = userContextService.getCurrentUserName();
 	    UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
@@ -187,8 +191,10 @@ public class RemarkController {
 		//http://stackoverflow.com/questions/2324931/duplicate-form-submission-in-spring
 		if(tList != null && tList.size() > 0){
 			Remark tTwitter = tList.get(0);
-			if(remark.getContent().equals(tTwitter.getContent()) && remark.getRemarkto().equals(tTwitter.getRemarkto()))
+			if(remark.getContent().equals(tTwitter.getContent()) && remark.getRemarkto().equals(tTwitter.getRemarkto())){
+		        populateEditForm(uiModel, new Remark(), httpServletRequest);
 				return "remarks/create";
+			}
 		}
 	
 		if (bindingResult.hasErrors()) {

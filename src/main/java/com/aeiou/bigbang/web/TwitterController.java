@@ -54,18 +54,21 @@ public class TwitterController {
 
 	@RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(@Valid Twitter twitter, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-		if(twitter.getTwitent() == null || twitter.getTwitent().length() < 1)
+		if(twitter.getTwitent() == null || twitter.getTwitent().length() < 1){
+            populateEditForm(uiModel, twitter, httpServletRequest);
             return "twitters/create";
-		
+		}
 		//get his last twitter in db compare with it.
 		String tCurName = userContextService.getCurrentUserName();
 	    UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
 		List<Twitter> tList = Twitter.findTwitterByPublisher(tUserAccount, BigAuthority.getAuthSet(tUserAccount, tUserAccount), 0, 1);
 		
 		if(tList != null && tList.size() > 0){
-			Twitter tTwitter = tList.get(0);
-			if(twitter.getTwitent().equals(tTwitter.getTwitent()))
-				 return "twitters/create";
+			Twitter tTwitter = tList.get(0); System.out.println("---" + twitter.getTwitent() + "---");
+			if(twitter.getTwitent().equals(tTwitter.getTwitent())){
+                populateEditForm(uiModel, twitter, httpServletRequest);
+				return "twitters/create";
+			}
 		}
 		
         if (bindingResult.hasErrors()) {

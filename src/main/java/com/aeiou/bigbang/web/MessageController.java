@@ -67,9 +67,10 @@ public class MessageController {
     	}
     	
 		//TODO: Should make the check before submit.
-		if(message.getContent() == null || message.getContent().length() < 1)
+		if(message.getContent() == null || message.getContent().length() < 1){
+			populateEditForm(uiModel, message);
             return "message/create";
-		
+		}
 		//get his last twitter in db compare with it.
 		String tCurName = userContextService.getCurrentUserName();
 	    UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
@@ -80,8 +81,10 @@ public class MessageController {
 		//http://stackoverflow.com/questions/2324931/duplicate-form-submission-in-spring
 		if(tList != null && tList.size() > 0){
 			Message tMsgInDB = tList.get(0);
-			if(message.getContent().equals(tMsgInDB.getContent()) && (tMsgInDB.getPostTime().getHours() == new Date().getHours()))
+			if(message.getContent().equals(tMsgInDB.getContent()) && (tMsgInDB.getPostTime().getHours() == new Date().getHours())){
+				populateEditForm(uiModel, message);
 				return "messages/create";
+			}
 		}
 	
 		if (bindingResult.hasErrors()) {

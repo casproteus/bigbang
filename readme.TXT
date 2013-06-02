@@ -12,6 +12,11 @@ dev:
 6/on Acer machine, add selenium test script with locale bibang, and test it with the all-thebest.rhcloud.com website.
 7/if the script passed on all-thebest website. run gitpush command for cn, en, and fr version.
 
+DB
+1/locale client use HSQL as DB.
+2/Server side use PostgresQL as DB. 
+3/when table of PostgresQL DB is first generated, DO REMEMBER to change the Message,Remark,Twitter tables to change type of content column from string(255) to text
+
 test:
 1/when run the selenium, set the speed, make it not the fastest, I use 2/3 speed .
 2/make sure tao:1234 admin:2ert are available, and tao has tag of "Simon&Nicholas"
@@ -23,6 +28,6 @@ test:
 4/set the firefox default display language as simple Chinese.
 
 know bugs:
-1/works better with the tomcat6 on rhcloud, when work with the tomcat7 on rhcloud, the select component will not pop up the options (when with my local tomcat7.0.27 everything's fine). 
+1/works better with the tomcat6 on rhcloud, when work with the tomcat7 on rhcloud, the select component will not pop up the options (when with my local tomcat7.0.27 everything's fine, so NOW I AM THINKING ABOUT IT MIGHT BE IE64/IE32 PROBLEM). 
 2/
 

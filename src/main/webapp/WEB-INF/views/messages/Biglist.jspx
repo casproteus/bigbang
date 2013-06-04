@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <c:if test="${not empty messages}">
+        <page:list id="pl_com_aeiou_bigbang_domain_Message" items="${messages}" z="user-managed">
+            <table:BigMessageTable data="${messages}" id="l_com_aeiou_bigbang_domain_Remark" path="/messages" z="adZ9QX5p0p5Qz2fIt8EVxJHpMH0=">
+                <table:column id="c_com_aeiou_bigbang_domain_Remark_publisher" property="publisher" z="/MCkBnq2SAbaEYDclJ/Zh3aPyIs="/>
+                <table:column date="true" id="c_com_aeiou_bigbang_domain_Remark_remarkTime" property="postTime" z="JcnWePBsDBs4KzGQzxe1ZsM+1PU="/>
+            </table:BigMessageTable>
+        </page:list>
+        <br/>
+    </c:if>
+</div>

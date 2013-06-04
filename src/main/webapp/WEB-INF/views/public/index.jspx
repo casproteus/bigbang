@@ -145,13 +145,6 @@
       </a>
       
       <c:out value=" | " />
-      <spring:url value="/messages" var="messages_url"/>
-      <a href="${messages_url}">
-        <spring:url value="/resources/images/inbox.png" var="inbox_img_url" />
-        <spring:message code="global_menu_inboxManage" var="inboxManage_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}" title="${fn:escapeXml(inboxManage_message)}" />
-      </a>
-      <c:out value="  " />
       <spring:url value="/useraccounts/${spaceOwnerId}" var="useraccounts_url">
 		<spring:param name="form"/>
       </spring:url>
@@ -161,7 +154,15 @@
         <img alt="${fn:escapeXml(accountsManage_message)}" src="${account_img_url}" title="${fn:escapeXml(accountsManage_message)}" />
       </a>
       
-  	  <util:theme/>  	  
+      <c:out value=" | " />
+      <spring:url value="/messages" var="messages_url"/>
+      <a href="${messages_url}">
+        <spring:url value="/resources/images/inbox.png" var="inbox_img_url" />
+        <spring:message code="global_menu_inboxManage" var="inboxManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}" title="${fn:escapeXml(inboxManage_message)}" />
+      </a>
+      
+  	  <!-- <util:theme/>  	   -->
     </c:if>    
   </div>
 

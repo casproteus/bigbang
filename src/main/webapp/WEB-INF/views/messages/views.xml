@@ -4,13 +4,16 @@
     <definition extends="default" name="messages/list">
         <put-attribute name="body" value="/WEB-INF/views/messages/list.jspx"/>
     </definition>
-<definition extends="default" name="messages/show">
+    <definition extends="default" name="messages/Biglist">
+        <put-attribute name="body" value="/WEB-INF/views/messages/Biglist.jspx"/>
+    </definition>
+	<definition extends="default" name="messages/show">
         <put-attribute name="body" value="/WEB-INF/views/messages/show.jspx"/>
     </definition>
-<definition extends="default" name="messages/create">
+	<definition extends="default" name="messages/create">
         <put-attribute name="body" value="/WEB-INF/views/messages/create.jspx"/>
     </definition>
-<definition extends="default" name="messages/update">
+	<definition extends="default" name="messages/update">
         <put-attribute name="body" value="/WEB-INF/views/messages/update.jspx"/>
     </definition>
 </tiles-definitions>

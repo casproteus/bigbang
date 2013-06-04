@@ -81,7 +81,7 @@ public class TwitterController {
         	    	 if (tIdx > 0)
         	    		 content = content.substring(0, tIdx);
         	    	 content = content.length() > 30 ? content.substring(0, 30) : content;
-        	    	 twitter.setTwtitle(content);
+        	    	 twitter.setTwtitle(content.trim());
         	     }
         	}else{
                 populateEditForm(uiModel, twitter, httpServletRequest);

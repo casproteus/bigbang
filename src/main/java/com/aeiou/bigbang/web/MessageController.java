@@ -115,22 +115,26 @@ public class MessageController {
         	return "login";
         tCurName = tUserAccount.getName();
 
-    	UserAccount tSender = UserAccount.findUserAccountByName(tCurName);
-    	tCurName = tSender.getName();
+    	UserAccount tReceiver = UserAccount.findUserAccountByName(tCurName);
+    	tCurName = tReceiver.getName();
         float nrOfPages;
     	if(tCurName.equals("admin")){
 	        uiModel.addAttribute("messages", Message.findMessageEntries(firstResult, sizeNo));
 	        nrOfPages = (float) Message.countMessages() / sizeNo;
+
 	        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+	        addDateTimeFormatPatterns(uiModel);
+	        return "messages/list";
     	}else{
 	        uiModel.addAttribute("messages", Message.findMessageByReceiver(tUserAccount, firstResult, sizeNo));
-	        nrOfPages = (float) Message.countMessagesByReceiver(tSender) / sizeNo;
+	        nrOfPages = (float) Message.countMessagesByReceiver(tReceiver) / sizeNo;
 	        //modifi the Account last check message time.
 	        tUserAccount.setNewMessageAmount(0);
 	        tUserAccount.persist();
+
+	        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+	        addDateTimeFormatPatterns(uiModel);
+	        return "messages/Biglist";
     	}
-        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        addDateTimeFormatPatterns(uiModel);
-        return "messages/list";
     }
 }

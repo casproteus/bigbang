@@ -13,6 +13,7 @@ dev:
 5/on Acer machine, open dropbox to get the latest version of tomcat/webapp/bigbang and the Root.war.run git commit and git push for all-thebest.
 6/on Acer machine, add selenium test script with locale bibang, and test it with the all-thebest.rhcloud.com website.
 7/if the script passed on all-thebest website. run gitpush command for cn, en, and fr version.
+8/if modified anything in index.jspx, modify the three index_xx.jspx file under deploy folder.
 
 DB
 1/locale client use HSQL as DB.

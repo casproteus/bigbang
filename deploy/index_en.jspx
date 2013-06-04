@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <div xmlns:jsp="http://java.sun.com/JSP/Page" 		xmlns:spring="http://www.springframework.org/tags"
-	 xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"  xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" 
+	 xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"  xmlns:page="urn:jsptagdir:/WEB-INF/tags/form"
 	 xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:c="http://java.sun.com/jsp/jstl/core"
 	 xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
   <jsp:directive.page contentType="text/html;charset=UTF-8"/>
@@ -8,7 +8,7 @@
   <spring:message code="public" htmlEscape="false" var="publicspace"/>
   <spring:message code="publicDescription" htmlEscape="false" var="publicDescription"/>
   <spring:message code="NotesAndPraysOfFriend" htmlEscape="false" arguments="${spaceOwner}" var="NotesAndPraysFromFriend"/>
-  
+
   <!-- The Title Area, including owner info, butttons for adding blog, adding bookmark, leaving message and addon. -->
   <c:choose>
   	<c:when test="${empty spaceOwner or spaceOwner eq 'admin'}">
@@ -43,10 +43,10 @@
         <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
       </a>
     </span>
-    
+
     <span class="new">
     <c:if test="${empty maxPages and (not empty spaceOwner and fn:toLowerCase(spaceOwner) ne 'admin') and fn:toLowerCase(pageContext['request'].userPrincipal.name) ne fn:toLowerCase(spaceOwner)}">
-	  
+
 		  <spring:url value="/messages" var="create_message_url">
 	        <spring:param name="pReceiverName" value="${spaceOwner}"/>
 	      </spring:url>
@@ -105,7 +105,7 @@
 	<spring:url value="/resources/images/addon.png" var="addon_img_url" />
 	<img src="${addon_img_url}"/></a>
     </span>
-    
+
     <c:if test="${empty maxPages and fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(spaceOwner)}">
       <br/>
 	  <spring:url value="/public" var="reset_url">
@@ -117,7 +117,7 @@
         <spring:message code="global_menu_resetView" var="reset_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(reset_message)}" src="${reset_img_url}" title="${fn:escapeXml(reset_message)}" />
       </a>
-      
+
       <c:out value=" | " />
       <spring:url value="/contents" var="contents_url"/>
       <a href="${contents_url}">
@@ -125,7 +125,7 @@
         <spring:message code="global_menu_contentsManage" var="contentsManage_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(contentsManage_message)}" src="${content_img_url}" title="${fn:escapeXml(contentsManage_message)}" />
       </a>
-      
+
       <c:out value="  " />
       <spring:url value="/twitters" var="twitter_url"/>
       <a href="${twitter_url}">
@@ -133,7 +133,7 @@
         <spring:message code="global_menu_diaryManage" var="diaryManage_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(diaryManage_message)}" src="${diary_img_url}" title="${fn:escapeXml(diaryManage_message)}" />
       </a>
-      
+
       <c:out value="  " />
       <spring:url value="/bigtags" var="bigtags_url"/>
       <a href="${bigtags_url}">
@@ -141,15 +141,8 @@
         <spring:message code="global_menu_tagsManage" var="tagsManage_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(tagsManage_message)}" src="${tag_img_url}" title="${fn:escapeXml(tagsManage_message)}" />
       </a>
-      
+
       <c:out value=" | " />
-      <spring:url value="/messages" var="messages_url"/>
-      <a href="${messages_url}">
-        <spring:url value="/resources/images/inbox.png" var="inbox_img_url" />
-        <spring:message code="global_menu_inboxManage" var="inboxManage_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}" title="${fn:escapeXml(inboxManage_message)}" />
-      </a>
-      <c:out value="  " />
       <spring:url value="/useraccounts/${spaceOwnerId}" var="useraccounts_url">
 		<spring:param name="form"/>
       </spring:url>
@@ -158,9 +151,17 @@
         <spring:message code="global_menu_accountsManage" var="accountsManage_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(accountsManage_message)}" src="${account_img_url}" title="${fn:escapeXml(accountsManage_message)}" />
       </a>
-      
-  	  <util:theme/>  	  
-    </c:if>    
+
+      <c:out value=" | " />
+      <spring:url value="/messages" var="messages_url"/>
+      <a href="${messages_url}">
+        <spring:url value="/resources/images/inbox.png" var="inbox_img_url" />
+        <spring:message code="global_menu_inboxManage" var="inboxManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}" title="${fn:escapeXml(inboxManage_message)}" />
+      </a>
+
+  	  <!-- <util:theme/>  	   -->
+    </c:if>
   </div>
 
   <!-- display the blog of the user -->
@@ -198,7 +199,7 @@
 	  	</c:if>
 	  </tr></table>
   </c:if>
-  
+
   <!-- display the bookmarks of the user. -->
   <!-- c:set var="tagsize" value="${bigTags.size()}" scope="request" /> -->
   <table class="tWireless"><tr>
@@ -225,5 +226,5 @@
 	  </c:forEach>
   	</td>
   </tr></table>
-  
+
 </div>

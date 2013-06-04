@@ -65,6 +65,7 @@ public class BigAuthority {
     		tAuthSetFR.add(Integer.valueOf(1));
     		tAuthSetFR.add(Integer.valueOf(2));
     		tAuthSetFR.add(Integer.valueOf(3));
+    		tAuthSetFR.add(Integer.valueOf(11));
     	}else if(pOwner.getListento().contains(pCurUser)){
     		tAuthSetFR.add(Integer.valueOf(2));
     	}else{//TODO: consider the case that visible to specific person.

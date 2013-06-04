@@ -9,6 +9,8 @@
   <spring:message code="publicDescription" htmlEscape="false" var="publicDescription"/>
   <spring:message code="NotesAndPraysOfFriend" htmlEscape="false" arguments="${spaceOwner}" var="NotesAndPraysFromFriend"/>
 
+  <!-- If this file file changed in any line, don't forget to change the three file under deploy folder -->
+
   <!-- The Title Area, including owner info, butttons for adding blog, adding bookmark, leaving message and addon. -->
   <c:choose>
   	<c:when test="${empty spaceOwner or spaceOwner eq 'admin'}">
@@ -189,7 +191,7 @@
 	  	<c:if test="${not empty twitterRight}">
 		   <td class="tWireless nopaddingright" valign="top" >
 			  <page:contentPane id="twitterRight" items="${twitterRight}" label="${NotesAndPraysFromFriend}" bottom="8">
-			    <table:twitterbox data="${twitterRight}" id="l_com_aeiou_bigbang_domain_Content" type="friend" path="/public" spaceOwner="${spaceOwner}">
+			    <table:twitterbox data="${twitterRight}" id="l_com_aeiou_bigbang_domain_Content" type="friend" path="${listDetailTargetController}" spaceOwner="${spaceOwner}">
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>

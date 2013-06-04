@@ -42,6 +42,7 @@ public class Message {
     
     /**
      * @called from MessageController->list when not admin as logged user.
+     * for checking if the new submitted message is a duplicated one.
      * @param pPublisher
      * @param firstResult
      * @param maxResults
@@ -63,7 +64,11 @@ public class Message {
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
-
+    
+	public static List<Message> findMessageEntries(int firstResult, int maxResults, String sortExpression) {
+        return entityManager().createQuery("SELECT o FROM Message o ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Message.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
     public static long countMessagesByReceiver(UserAccount pPublisher) {
         if (pPublisher == null) {
             LogFactory.getLog(Content.class).error("------received a null as param!(pPublisher is null)------Message.countMessagesByReceiver()");

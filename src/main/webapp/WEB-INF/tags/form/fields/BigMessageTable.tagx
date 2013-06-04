@@ -46,9 +46,34 @@ xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" xmlns:jsp="http://java.sun.com/JSP/
 				<c:set value="HH:mm dd/MM/yyyy" var="dateTimePattern" />
 			    <fmt:formatDate var="TimeStr" value="${item['postTime']}" pattern="${fn:escapeXml(dateTimePattern)}" />
 			    <c:set value="${(fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(item['publisher']))}" var="isPublisher" />
-	    		<page:BigRemarkShow id="ps_com_aeiou_bigbang_domain_Remark" object="${item}" update="${isPublisher}" path="/remarks" z="uLnVWzeo9CFWqAOLKukuqndR2CE=">
-			        <field:BigHTMLdisplay field="content" time="${TimeStr}" object="${item}" z="user-managed"/>
-			    </page:BigRemarkShow>
+			    <c:set value="${(fn:toLowerCase(pageContext['request'].userPrincipal.name) eq 'admin')}" var="isAdmin" />
+	    		<page:BigMessageShow id="ps_com_aeiou_bigbang_domain_Remark" object="${item}" update="${isPublisher}" delete="${isAdmin}" path="/remarks" z="uLnVWzeo9CFWqAOLKukuqndR2CE=">
+			        <c:choose>
+				        <c:when test="${empty item['content']}">
+				          <c:out value="no content to display!" />
+				        </c:when>
+				        <c:otherwise>
+				          	<spring:eval htmlEscape="false" expression="item['content'].toString()" />
+				      		<div style="text-align: right;">
+				      			-- 
+				      			<spring:url value="/${item['publisher']}" var="spaceOfPublisher">
+				      			</spring:url>
+				      			<a href="${spaceOfPublisher}">
+						            <c:out value="${item['publisher']}" />
+						        </a>
+						        <c:if test="${isAdmin}">
+						         to: 
+						        <spring:url value="/${item['receiver']}" var="spaceOfReceiver">
+				      			</spring:url>
+				      			<a href="${spaceOfReceiver}">
+						            <c:out value="${item['receiver']}" />
+						        </a>
+							    </c:if>
+				          		${TimeStr}
+				          	</div>
+				        </c:otherwise>
+				    </c:choose>
+			    </page:BigMessageShow>
 	    	
 	    	</td>
         </tr>

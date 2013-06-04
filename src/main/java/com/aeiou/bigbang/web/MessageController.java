@@ -105,7 +105,8 @@ public class MessageController {
     }
 	
 	@RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+    public String list(@RequestParam(value = "sortExpression", required = false) String sortExpression, 
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
         int sizeNo = size == null ? 10 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
         
@@ -119,7 +120,7 @@ public class MessageController {
     	tCurName = tReceiver.getName();
         float nrOfPages;
     	if(tCurName.equals("admin")){
-	        uiModel.addAttribute("messages", Message.findMessageEntries(firstResult, sizeNo));
+	        uiModel.addAttribute("messages", Message.findMessageEntries(firstResult, sizeNo, sortExpression));
 	        nrOfPages = (float) Message.countMessages() / sizeNo;
 
 	        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));

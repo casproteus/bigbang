@@ -61,7 +61,7 @@ privileged aspect MessageIntegrationTest_Roo_IntegrationTest {
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<Message> result = Message.findMessageEntries(firstResult, maxResults);
+        List<Message> result = Message.findMessageEntries(firstResult, maxResults, null);
         Assert.assertNotNull("Find entries method for 'Message' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'Message' returned an incorrect number of entries", count, result.size());
     }

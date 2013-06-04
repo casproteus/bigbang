@@ -29,7 +29,7 @@ public class BigAuthority {
 		}else if(id == 3){
 			return messageSource.getMessage("ONLY_FOR_SELECTED_PERSON", null, locale);
 		}else if(id == 11){
-			return messageSource.getMessage("ONLY_FOR_SELECTED_PERSON", null, locale);
+			return messageSource.getMessage("ONLY_FOR_RECEIVER", null, locale);
 		}else{
 			return null;
 		}

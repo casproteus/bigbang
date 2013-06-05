@@ -44,6 +44,64 @@
 	    </span>
      </c:otherwise>
   </c:choose>
+  
+  <c:if test="${pageContext['request'].userPrincipal != null}">
+      <c:out value=" || "/>
+      <spring:url value="/contents" var="contents_url"/>
+      <a href="${contents_url}">
+        <spring:url value="/resources/images/content.png" var="content_img_url" />
+        <spring:message code="global_menu_contentsManage" var="contentsManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(contentsManage_message)}" src="${content_img_url}" title="${fn:escapeXml(contentsManage_message)}" />
+      </a>
+      
+      <spring:message code="doublespace"/>
+      <spring:url value="/twitters" var="twitter_url"/>
+      <a href="${twitter_url}">
+        <spring:url value="/resources/images/diary.png" var="diary_img_url" />
+        <spring:message code="global_menu_diaryManage" var="diaryManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(diaryManage_message)}" src="${diary_img_url}" title="${fn:escapeXml(diaryManage_message)}" />
+      </a>
+      
+      <spring:message code="doublespace"/>
+      <spring:url value="/bigtags" var="bigtags_url"/>
+      <a href="${bigtags_url}">
+        <spring:url value="/resources/images/tag.png" var="tag_img_url" />
+        <spring:message code="global_menu_tagsManage" var="tagsManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(tagsManage_message)}" src="${tag_img_url}" title="${fn:escapeXml(tagsManage_message)}" />
+      </a>
+      
+      <spring:message code="doublespace"/>
+      <spring:url value="/useraccounts/${spaceOwnerId}" var="useraccounts_url">
+		<spring:param name="form"/>
+      </spring:url>
+      <a href="${useraccounts_url}">
+        <spring:url value="/resources/images/account.png" var="account_img_url" />
+        <spring:message code="global_menu_accountsManage" var="accountsManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(accountsManage_message)}" src="${account_img_url}" title="${fn:escapeXml(accountsManage_message)}" />
+      </a>
+
+      <spring:message code="doublespace"/>
+      <spring:url value="/public" var="reset_url">
+		<spring:param name="relayouttype" value="reset"/>
+		<spring:param name="tagId" value="-1"/>
+      </spring:url>
+      <a href="${reset_url}">
+        <spring:url value="/resources/images/reset.png" var="reset_img_url" />
+        <spring:message code="global_menu_resetView" var="reset_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(reset_message)}" src="${reset_img_url}" title="${fn:escapeXml(reset_message)}" />
+      </a>
+      
+      <c:out value=" || " />
+      <spring:url value="/messages" var="messages_url"/>
+      <a href="${messages_url}">
+        <spring:url value="/resources/images/inbox.png" var="inbox_img_url" />
+        <spring:message code="global_menu_inboxManage" var="inboxManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}" title="${fn:escapeXml(inboxManage_message)}" />
+      </a>
+      
+  	  <!-- <util:theme/>  	   -->
+    </c:if>    
+    
   <util:websiteSwitch/>
 
   <spring:url var="banner" value="/resources/images/banner-graphic.png" />

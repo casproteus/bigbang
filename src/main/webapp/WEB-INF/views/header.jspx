@@ -97,6 +97,9 @@
         <spring:url value="/resources/images/inbox.png" var="inbox_img_url" />
         <spring:message code="global_menu_inboxManage" var="inboxManage_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}" title="${fn:escapeXml(inboxManage_message)}" />
+        <c:if test="${newMessageAmount > 0}">
+        	[${newMessageAmount}]
+        </c:if> 
       </a>
       
   	  <!-- <util:theme/>  	   -->

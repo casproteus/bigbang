@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
@@ -58,11 +59,11 @@ public class MessageController {
     		@RequestParam(value = "pReceiverName", required = false)String pReceiverName,
     		Model uiModel, HttpServletRequest httpServletRequest) {
 		
-		UserAccount pReceiver = UserAccount.findUserAccountByName(pReceiverName);			//make sure the user exist
-    	if(pReceiver == null){
+		UserAccount tReceiver = UserAccount.findUserAccountByName(pReceiverName);			//make sure the user exist
+    	if(tReceiver == null){
     		pReceiverName = BigUtil.getUTFString(pReceiverName);
-    		pReceiver = UserAccount.findUserAccountByName(pReceiverName); //bet it might still not UTF8 encoded.
-    		if(pReceiver == null)
+    		tReceiver = UserAccount.findUserAccountByName(pReceiverName); //bet it might still not UTF8 encoded.
+    		if(tReceiver == null)
     			return null;
     	}
     	
@@ -74,7 +75,7 @@ public class MessageController {
 		//get his last twitter in db compare with it.
 		String tCurName = userContextService.getCurrentUserName();
 	    UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
-		List<Message> tList = Message.findMessageByPublisher(pReceiver, tUserAccount, 0, 1);
+		List<Message> tList = Message.findMessageByPublisher(tReceiver, tUserAccount, 0, 1);
 		//This is good, but not good enough, because when user press F5 after modifying a remark, and press back->back
 		//will trick out the form to submit again, and then in this method, the content are different....
 		//TODO: add a hidden field in From and save a token in it.then verify, if the token not there, then stop saving
@@ -90,7 +91,7 @@ public class MessageController {
 		if (bindingResult.hasErrors()) {
 			if (bindingResult.getAllErrors().size() == 3 && message.getReceiver() == null) {
 				message.setPublisher(tUserAccount);
-				message.setReceiver(pReceiver);
+				message.setReceiver(tReceiver);
 				message.setPostTime(new Date());//add remark time when it's submitted.
 			} else {
 				populateEditForm(uiModel, message);
@@ -99,13 +100,17 @@ public class MessageController {
         }
         uiModel.asMap().clear();
         message.persist();
+        //update the new message number of in user account.
+        int newMessageNumber = tReceiver.getNewMessageAmount();
+        tReceiver.setNewMessageAmount(newMessageNumber+1);
+        tReceiver.persist();
         
         PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
         return tController.index(pReceiverName, -1, -1, uiModel);
     }
 	
 	@RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "sortExpression", required = false) String sortExpression, 
+    public String list(HttpSession session, @RequestParam(value = "sortExpression", required = false) String sortExpression, 
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
         int sizeNo = size == null ? 10 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
@@ -129,10 +134,11 @@ public class MessageController {
     	}else{
 	        uiModel.addAttribute("messages", Message.findMessageByReceiver(tUserAccount, firstResult, sizeNo));
 	        nrOfPages = (float) Message.countMessagesByReceiver(tReceiver) / sizeNo;
-	        //modifi the Account last check message time.
+	        //clear the Account of new message both in user account and session.
 	        tUserAccount.setNewMessageAmount(0);
 	        tUserAccount.persist();
-
+	        session.setAttribute("newMessageAmount", 0);
+	        
 	        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
 	        addDateTimeFormatPatterns(uiModel);
 	        return "messages/Biglist";

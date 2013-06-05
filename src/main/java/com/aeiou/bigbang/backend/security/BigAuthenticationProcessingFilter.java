@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -16,6 +17,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+
+import com.aeiou.bigbang.domain.UserAccount;
 
 public class BigAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -73,6 +76,9 @@ public class BigAuthenticationProcessingFilter extends AbstractAuthenticationPro
 		    } catch (UnsupportedEncodingException e) {
 		    } 
 		}
+		
+		//update the new message amount infomation.
+		request.getSession().setAttribute("newMessageAmount", UserAccount.findUserAccountByName(login_name).getNewMessageAmount());
 		
 		return authentication;
 	}

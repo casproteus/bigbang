@@ -150,7 +150,7 @@ public class RemarkController {
     		Model uiModel, HttpServletRequest request) {
         Twitter tTwitter = Twitter.findTwitter(twitterid);
     	UserAccount tOwner = tTwitter.getPublisher();
-        int sizeNo = size == null ? 25 : size.intValue();
+        int sizeNo = size == null ? 20 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
        
     	String tCurName = userContextService.getCurrentUserName();

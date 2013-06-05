@@ -182,7 +182,7 @@ public class PublicController{
     		}
     	}
     	if (page != null || size != null) {
-            int sizeNo = size == null ? 25 : size.intValue();
+            int sizeNo = size == null ? 20 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
             if("admin".equals(spaceOwner) || "".equals(spaceOwner)){
                 uiModel.addAttribute("spaceOwner", "admin");
@@ -229,7 +229,7 @@ public class PublicController{
     			return null;
     		}
     	}
-        int sizeNo = size == null ? 25 : size.intValue();
+        int sizeNo = size == null ? 20 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
        
     	String tCurName = userContextService.getCurrentUserName();

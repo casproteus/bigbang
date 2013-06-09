@@ -60,9 +60,14 @@ public class BigAuthenticationProcessingFilter extends AbstractAuthenticationPro
 		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(login_name, login_password);
 		final Authentication authentication = this.getAuthenticationManager().authenticate(authRequest);
 
+		//update the new message amount infomation. @NOTE: have to do it before the login_name is transfered to UTF-8 code.
+		request.getSession().setAttribute("newMessageAmount", UserAccount.findUserAccountByName(login_name).getNewMessageAmount());
+		
 		if (rememberMe) {
 			try { 
 				login_name = URLEncoder.encode(login_name,"UTF-8");
+				login_name = login_name.replaceAll("\\+", "%20");	//this is because the URLEncoder.encode transfer all space to "+", we want it to be transfered to %20
+																	//so that it can be displayed as space again when it is displayed on login window.
 				final Cookie cookie = new Cookie("login_name", login_name);
 				cookie.setMaxAge(31536000); // One year
 				cookie.setPath("/");
@@ -76,9 +81,6 @@ public class BigAuthenticationProcessingFilter extends AbstractAuthenticationPro
 		    } catch (UnsupportedEncodingException e) {
 		    } 
 		}
-		
-		//update the new message amount infomation.
-		request.getSession().setAttribute("newMessageAmount", UserAccount.findUserAccountByName(login_name).getNewMessageAmount());
 		
 		return authentication;
 	}

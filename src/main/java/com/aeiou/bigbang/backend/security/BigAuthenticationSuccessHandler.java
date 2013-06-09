@@ -15,6 +15,7 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.util.StringUtils;
 
 import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigUtil;
 
 public class BigAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 	
@@ -26,10 +27,11 @@ public class BigAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
     @Override
 	public void onAuthenticationSuccess(HttpServletRequest request,	HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         SavedRequest savedRequest = requestCache.getRequest(request, response);
-        //looks like when clicking log out, the savedRequest will be updated with current page (if the current
-        //page need authentication) or with null. 
+        //looks like when clicking log out, the savedRequest will be updated with current page (if the current page need authentication) or with null. 
         if (savedRequest == null) {
-            String targetUrl = "/" + userContextService.getCurrentUserName();
+        	//when use Chinese name to login, the userContextService.getCurrentUserName() will be transfered into weird string 
+        	//by getRedirectStrategy().sendRedirect. so we dare not to use the personal space as default login success page.
+            String targetUrl = "/";				// + userContextService.getCurrentUserName();
             logger.debug("Redirecting to DefaultSavedRequest Url: " + targetUrl);
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
             return;

@@ -11,6 +11,7 @@
             <field:input field="price" id="c_com_aeiou_bigbang_domain_UserAccount_price" max="9" min="0" required="true" z="NNXWMQKTCd/lmw4Q/AvzmkSI5cs="/>
             <field:input field="layout" id="c_com_aeiou_bigbang_domain_UserAccount_layout" z="DZP4oppDs9iitXlz6zafXsQ860o="/>
             <field:input field="balance" id="c_com_aeiou_bigbang_domain_UserAccount_balance" required="true" z="iGBZ2hYbTCMyVVJ+abO7tKBIjIM="/>
+            <field:input field="newMessageAmount" id="c_com_aeiou_bigbang_domain_UserAccount_newMessageAmount" required="true" z=""/>
         </c:if>
     </form:update>
 </div>

@@ -24,6 +24,7 @@ import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/twitters")
 @Controller
@@ -91,7 +92,8 @@ public class TwitterController {
         uiModel.asMap().clear();
         twitter.setLastupdate(new Date());
         twitter.persist();
-        return "redirect:/twitters/" + encodeUrlPathSegment(twitter.getId().toString(), httpServletRequest);
+        PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
+        return tController.index(tUserAccount.getName(), -1, -1, uiModel);
     }
 
 	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")

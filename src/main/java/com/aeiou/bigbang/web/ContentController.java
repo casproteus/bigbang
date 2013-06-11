@@ -24,6 +24,7 @@ import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
 import com.aeiou.bigbang.util.BigUtil;
+import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/contents")
 @Controller
@@ -91,6 +92,10 @@ public class ContentController {
         		 String tCurName = userContextService.getCurrentUserName();
         	     UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
         	     content.setPublisher(tUserAccount);
+    	       	 uiModel.asMap().clear();
+    	         content.persist();
+    	         PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
+    	         return tController.index(tUserAccount.getName(), -1, -1, uiModel);
         	}else{
         		populateEditForm(uiModel, content, httpServletRequest);
         		return "contents/create";

@@ -29,6 +29,45 @@ public class BigTag {
     private Integer authority;
 
     private Integer owner;
+    
+	//@TODO: how to tell openjpa that these properties do not need to be saved into db?
+    private String twitterTitle;
+	private String twitterContent;
+    private String contentTitle;
+	private String contentURL;
+	private String commonTagName;
+	
+	public String getContentTitle() {
+		return contentTitle;
+	}
+
+	public void setContentTitle(String contentTitle) {
+		this.contentTitle = contentTitle;
+	}
+
+	public String getContentURL() {
+		return contentURL;
+	}
+
+	public void setContentURL(String contentURL) {
+		this.contentURL = contentURL;
+	}
+	
+    public String getTwitterTitle() {
+		return twitterTitle;
+	}
+
+	public void setTwitterTitle(String twitterTitle) {
+		this.twitterTitle = twitterTitle;
+	}
+	
+	public String getTwitterContent() {
+		return twitterContent;
+	}
+
+	public void setTwitterContent(String twitterContent) {
+		this.twitterContent = twitterContent;
+	}
 
     /**
      * called when listing all created tags from bigtagController.
@@ -145,4 +184,12 @@ public class BigTag {
     public static List<com.aeiou.bigbang.domain.BigTag> findBigTagEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM BigTag o ORDER BY o.id DESC", BigTag.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
+
+	public String getCommonTagName() {
+		return commonTagName;
+	}
+
+	public void setCommonTagName(String commonTagName) {
+		this.commonTagName = commonTagName;
+	}
 }

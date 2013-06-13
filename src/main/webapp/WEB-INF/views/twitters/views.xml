@@ -10,6 +10,9 @@
 <definition extends="default" name="twitters/create">
         <put-attribute name="body" value="/WEB-INF/views/twitters/create.jspx"/>
     </definition>
+<definition extends="default" name="twitters/create_tag">
+        <put-attribute name="body" value="/WEB-INF/views/twitters/create_tag.jspx"/>
+    </definition>
 <definition extends="default" name="twitters/update">
         <put-attribute name="body" value="/WEB-INF/views/twitters/update.jspx"/>
     </definition>

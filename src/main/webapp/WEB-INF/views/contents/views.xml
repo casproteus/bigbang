@@ -10,6 +10,9 @@
 <definition extends="default" name="contents/create">
         <put-attribute name="body" value="/WEB-INF/views/contents/create.jspx"/>
     </definition>
+<definition extends="default" name="contents/create_tag">
+        <put-attribute name="body" value="/WEB-INF/views/contents/create_tag.jspx"/>
+    </definition>
 <definition extends="default" name="contents/update">
         <put-attribute name="body" value="/WEB-INF/views/contents/update.jspx"/>
     </definition>

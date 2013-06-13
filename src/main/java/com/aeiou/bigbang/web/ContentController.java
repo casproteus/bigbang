@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
@@ -85,9 +87,70 @@ public class ContentController {
         return "contents/list";
     }
 
+	void populateEditForm_Tag(Model uiModel, BigTag bigTag, HttpServletRequest httpServletRequest) {
+        uiModel.addAttribute("bigTag", bigTag);
+        uiModel.addAttribute("authorities",BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
+	}
+	
+    public String createForm_Tag(Model uiModel, HttpServletRequest httpServletRequest, String contentTitle, String contentURL, String commonTagName) {
+    	BigTag bigTag = new BigTag();
+    	bigTag.setContentTitle(contentTitle);
+    	bigTag.setContentURL(contentURL);
+    	bigTag.setCommonTagName(commonTagName);
+    	populateEditForm_Tag(uiModel, bigTag, httpServletRequest);
+        return "contents/create_tag";
+    }
+
+    @RequestMapping(params = "twitle", produces = "text/html")
+    public String createTag(@Valid BigTag bigTag, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+    	bigTag.setOwner(0);
+    	String tCurName = userContextService.getCurrentUserName();
+        UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
+        tCurName = tUserAccount.getName();	//because we allow user to login with capital characters
+        bigTag.setType(tCurName);
+        	
+        uiModel.asMap().clear();
+        bigTag.persist();
+        
+        //update the layout string of useraccount
+        String tLayout = tUserAccount.getLayout();
+   		int p = tLayout == null ? -1 : tLayout.indexOf('™');
+   		if(p > -1){
+			String tTagStr = tLayout.substring(0, p);
+			String tSizeStr = tLayout.substring(p+1);
+			StringBuilder tStrB = new StringBuilder();
+			tStrB.append(tTagStr).append("¯");
+
+			tStrB.append(BigUtil.getTagInLayoutString(bigTag));
+		
+			tStrB.append("™").append(tSizeStr).append("¯").append("8");
+			tUserAccount.setLayout(tStrB.toString());
+			tUserAccount.persist();
+   		}else{
+   			BigUtil.resetLayoutString(tUserAccount);
+   		}
+   		
+        //go on with creating the content---------------
+		Content tContent = new Content();
+		tContent.setTitle(bigTag.getContentTitle());
+		tContent.setSourceURL(bigTag.getContentURL());
+        populateEditForm(uiModel, tContent, httpServletRequest);
+        List<String[]> dependencies = new ArrayList<String[]>();
+        if (UserAccount.countUserAccounts() == 0) {
+            dependencies.add(new String[] { "useraccount", "useraccounts" });
+        }
+        uiModel.addAttribute("dependencies", dependencies);
+        return "contents/create";
+    }
+    
 	@RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(@Valid Content content, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
+		//if this tAddingTagFlag was set, then we will go to the creating BigTag page.
+		//while we have to make it different than normal createForm request, because we need to remember the title and content user has input.
+		if(StringUtils.isNotBlank(content.getAddingTagFlag()))
+			return createForm_Tag(uiModel, httpServletRequest, content.getTitle(), content.getSourceURL(), content.getCommonBigTag().getTagName());
+
+		if (bindingResult.hasErrors()) {
         	if(bindingResult.getAllErrors().size() == 1 && content.getPublisher() == null){
         		 String tCurName = userContextService.getCurrentUserName();
         	     UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);

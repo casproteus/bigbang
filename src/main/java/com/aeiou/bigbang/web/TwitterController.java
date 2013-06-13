@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,8 @@ import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.BigType;
+import com.aeiou.bigbang.util.BigUtil;
 import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/twitters")
@@ -52,9 +55,53 @@ public class TwitterController {
         uiModel.addAttribute("useraccounts", tList);			//why must return a list?
         uiModel.addAttribute("authorities",BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
     }
+	
+	void populateEditForm_Tag(Model uiModel, BigTag bigTag, HttpServletRequest httpServletRequest) {
+    	//@NOTE if any attribute duplicated with the @RequestMapping(params = "???"), will cause trouble---if we add an "abc" into it, it will be something like "abe,".
+    	//uiModel.addAttribute("twitterTitle", bigTag.getTwitterTitle());
+        uiModel.addAttribute("bigTag", bigTag);
+        uiModel.addAttribute("authorities",BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
+	}
+	
+    public String createForm_Tag(Model uiModel, HttpServletRequest httpServletRequest, String twitterTitle, String twitterContent) {
+    	BigTag bigTag = new BigTag();
+    	bigTag.setTwitterTitle(twitterTitle);
+    	bigTag.setTwitterContent(twitterContent);
+    	populateEditForm_Tag(uiModel, bigTag, httpServletRequest);
+        return "twitters/create_tag";
+    }
 
-	@RequestMapping(method = RequestMethod.POST, produces = "text/html")
+    @RequestMapping(params = "twitle", produces = "text/html")
+    public String createTag(@Valid BigTag bigTag, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+    	bigTag.setOwner(1);
+    	String tCurName = userContextService.getCurrentUserName();
+        UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
+        tCurName = tUserAccount.getName();	//because we allow user to login with capital characters
+        bigTag.setType(tCurName);
+        	
+        uiModel.asMap().clear();
+        bigTag.persist();
+        
+        //go on with creating the twitter---------------
+        Twitter twitter = new Twitter();
+        twitter.setTwtitle(bigTag.getTwitterTitle());
+        twitter.setTwitent(bigTag.getTwitterContent());
+        populateEditForm(uiModel, twitter, httpServletRequest);
+        List<String[]> dependencies = new ArrayList<String[]>();
+        if (UserAccount.countUserAccounts() == 0) {
+            dependencies.add(new String[] { "useraccount", "useraccounts" });
+        }
+        uiModel.addAttribute("dependencies", dependencies);
+        return "twitters/create";
+    }
+    
+    @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(@Valid Twitter twitter, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+		//if this tAddingTagFlag was set, then we will go to the creating BigTag page.
+		//while we have to make it different than normal createForm request, because we need to remember the title and content user has input.
+		if(StringUtils.isNotBlank(twitter.getAddingTagFlag()))
+			return createForm_Tag(uiModel, httpServletRequest, twitter.getTwtitle(), twitter.getTwitent());
+		
 		if(twitter.getTwitent() == null || twitter.getTwitent().length() < 1){
             populateEditForm(uiModel, twitter, httpServletRequest);
             return "twitters/create";

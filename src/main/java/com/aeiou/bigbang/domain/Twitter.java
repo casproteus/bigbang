@@ -44,7 +44,9 @@ public class Twitter {
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date lastupdate;
-
+    
+    //@TODO:how to tell openJPA that this field do not need to save to db?
+    private String addingTagFlag;
     /** return the first twitter of the user, that means when we create a new account, we have to add a default twitter automatically.
      * @note: didn't use Id, because users who already created twitter, will have trouble. use twitDate, I can create a twitter and modify it's date easyly to be before every every other twitter:) 
      * @param pReceiver
@@ -102,7 +104,16 @@ public class Twitter {
         return tQuery.getSingleResult();
     }
 
+	public String getAddingTagFlag() {
+		return addingTagFlag;
+	}
+
+	public void setAddingTagFlag(String addingTagFlag) {
+		this.addingTagFlag = addingTagFlag;
+	}
+	
     public String toString() {
         return twtitle;
     }
+
 }

@@ -50,6 +50,9 @@ public class Content {
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date markDate;
+    
+    //@TODO:how to tell openJPA that this field do not need to save to db?
+    private String addingTagFlag;
 
     public static List<com.aeiou.bigbang.domain.Content> findContentsByTag(BigTag pBigTag, int firstResult, int maxResults, String sortExpression) {
         EntityManager tEntityManager = entityManager();
@@ -163,4 +166,12 @@ public class Content {
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
         return tQuery.getSingleResult();
     }
+
+	public String getAddingTagFlag() {
+		return addingTagFlag;
+	}
+
+	public void setAddingTagFlag(String addingTagFlag) {
+		this.addingTagFlag = addingTagFlag;
+	}
 }

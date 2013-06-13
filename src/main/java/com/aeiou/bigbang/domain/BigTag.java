@@ -5,10 +5,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.Column;
+
+import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -30,11 +32,15 @@ public class BigTag {
 
     private Integer owner;
     
-	//@TODO: how to tell openjpa that these properties do not need to be saved into db?
+    @Transient
     private String twitterTitle;
+    @Transient
 	private String twitterContent;
+    @Transient
     private String contentTitle;
+    @Transient
 	private String contentURL;
+    @Transient
 	private String commonTagName;
 	
 	public String getContentTitle() {

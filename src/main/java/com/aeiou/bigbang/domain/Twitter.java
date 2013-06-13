@@ -3,14 +3,15 @@ package com.aeiou.bigbang.domain;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -45,7 +46,7 @@ public class Twitter {
     @DateTimeFormat(style = "M-")
     private Date lastupdate;
     
-    //@TODO:how to tell openJPA that this field do not need to save to db?
+    @Transient
     private String addingTagFlag;
     /** return the first twitter of the user, that means when we create a new account, we have to add a default twitter automatically.
      * @note: didn't use Id, because users who already created twitter, will have trouble. use twitDate, I can create a twitter and modify it's date easyly to be before every every other twitter:) 

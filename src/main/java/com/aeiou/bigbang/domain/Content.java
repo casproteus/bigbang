@@ -1,18 +1,14 @@
 package com.aeiou.bigbang.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import javax.persistence.CascadeType;
+
 import javax.persistence.EntityManager;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
@@ -51,7 +47,7 @@ public class Content {
     @DateTimeFormat(style = "M-")
     private Date markDate;
     
-    //@TODO:how to tell openJPA that this field do not need to save to db?
+    @Transient
     private String addingTagFlag;
 
     public static List<com.aeiou.bigbang.domain.Content> findContentsByTag(BigTag pBigTag, int firstResult, int maxResults, String sortExpression) {

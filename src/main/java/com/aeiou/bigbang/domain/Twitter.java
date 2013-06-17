@@ -3,7 +3,6 @@ package com.aeiou.bigbang.domain;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -11,16 +10,17 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
-
 import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
+import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord
+@RooJson
 public class Twitter {
 
     @NotNull
@@ -45,21 +45,22 @@ public class Twitter {
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date lastupdate;
-    
+
     @Transient
     private String addingTagFlag;
+    
     /** return the first twitter of the user, that means when we create a new account, we have to add a default twitter automatically.
      * @note: didn't use Id, because users who already created twitter, will have trouble. use twitDate, I can create a twitter and modify it's date easyly to be before every every other twitter:) 
      * @param pReceiver
      * @return
      */
-    public static Twitter findMessageTwitter(UserAccount pReceiver) {
+    public static com.aeiou.bigbang.domain.Twitter findMessageTwitter(UserAccount pReceiver) {
         if (pReceiver == null) return null;
         TypedQuery<Twitter> tQuery = entityManager().createQuery("SELECT o FROM Twitter o WHERE o.publisher = :publisher ORDER BY o.twitDate", Twitter.class);
         tQuery = tQuery.setParameter("publisher", pReceiver);
         return tQuery.getSingleResult();
     }
-    
+
     public static List<com.aeiou.bigbang.domain.Twitter> findTwitterEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM Twitter o ORDER BY o.id DESC", Twitter.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
@@ -105,16 +106,15 @@ public class Twitter {
         return tQuery.getSingleResult();
     }
 
-	public String getAddingTagFlag() {
-		return addingTagFlag;
-	}
+    public String getAddingTagFlag() {
+        return addingTagFlag;
+    }
 
-	public void setAddingTagFlag(String addingTagFlag) {
-		this.addingTagFlag = addingTagFlag;
-	}
-	
+    public void setAddingTagFlag(String addingTagFlag) {
+        this.addingTagFlag = addingTagFlag;
+    }
+
     public String toString() {
         return twtitle;
     }
-
 }

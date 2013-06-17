@@ -3,23 +3,23 @@ package com.aeiou.bigbang.domain;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
-
 import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
+import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord
+@RooJson
 public class Message {
 
     @NotNull
@@ -54,7 +54,7 @@ public class Message {
         tQuery = tQuery.setParameter("pReceiver", pReceiver);
         tQuery = tQuery.setParameter("pPublisher", pSender);
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
-        return tQuery.getResultList(); 
+        return tQuery.getResultList();
     }
     
     public static List<com.aeiou.bigbang.domain.Message> findMessageByReceiver(UserAccount pReceiver, int firstResult, int maxResults) {
@@ -64,11 +64,11 @@ public class Message {
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
-    
-	public static List<Message> findMessageEntries(int firstResult, int maxResults, String sortExpression) {
+
+    public static List<com.aeiou.bigbang.domain.Message> findMessageEntries(int firstResult, int maxResults, String sortExpression) {
         return entityManager().createQuery("SELECT o FROM Message o ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Message.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
-    
+
     public static long countMessagesByReceiver(UserAccount pPublisher) {
         if (pPublisher == null) {
             LogFactory.getLog(Content.class).error("------received a null as param!(pPublisher is null)------Message.countMessagesByReceiver()");

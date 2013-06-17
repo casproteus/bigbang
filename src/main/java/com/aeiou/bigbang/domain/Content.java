@@ -3,7 +3,6 @@ package com.aeiou.bigbang.domain;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -11,16 +10,17 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
-
 import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
+import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord
+@RooJson
 public class Content {
 
     @NotNull
@@ -46,7 +46,7 @@ public class Content {
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date markDate;
-    
+
     @Transient
     private String addingTagFlag;
 
@@ -70,11 +70,9 @@ public class Content {
         return entityManager().createQuery("SELECT o FROM Content o ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 
-    public static List<com.aeiou.bigbang.domain.Content> findContentsByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet,
-    		int firstResult, int maxResults, String sortExpression) {
+    public static List<com.aeiou.bigbang.domain.Content> findContentsByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults, String sortExpression) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Content> tQuery = tEntityManager.createQuery(
-        		"SELECT o FROM Content AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class);
+        TypedQuery<Content> tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
@@ -94,8 +92,7 @@ public class Content {
         }
     }
 
-    public static List<com.aeiou.bigbang.domain.Content> findContentsByTagAndSpaceOwner(BigTag pTag, UserAccount pOwner, Set<java.lang.Integer> pAuthSet, 
-    		int firstResult, int maxResults, String sortExpression) {
+    public static List<com.aeiou.bigbang.domain.Content> findContentsByTagAndSpaceOwner(BigTag pTag, UserAccount pOwner, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults, String sortExpression) {
         EntityManager tEntityManager = entityManager();
         Set<UserAccount> tTeamSet = pOwner.getListento();
         TypedQuery<Content> tQuery = null;
@@ -163,11 +160,11 @@ public class Content {
         return tQuery.getSingleResult();
     }
 
-	public String getAddingTagFlag() {
-		return addingTagFlag;
-	}
+    public String getAddingTagFlag() {
+        return addingTagFlag;
+    }
 
-	public void setAddingTagFlag(String addingTagFlag) {
-		this.addingTagFlag = addingTagFlag;
-	}
+    public void setAddingTagFlag(String addingTagFlag) {
+        this.addingTagFlag = addingTagFlag;
+    }
 }

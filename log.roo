@@ -79,3 +79,5 @@ field date --class ~.domain.UserAccount --fieldName lastReadMessage --type java.
 field date --class ~.domain.UserAccount --fieldName lastLoginTime --type java.util.Date
 field number --fieldName status --type int
 field number --fieldName newMessageAmount --type int --class ~.domain.UserAccount
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-06-17 10:27:05
+json all 

@@ -15,11 +15,13 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
+import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord
+@RooJson
 public class Remark {
 
     @NotNull
@@ -66,7 +68,7 @@ public class Remark {
         TypedQuery<Remark> tQuery = tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.publisher = :publisher ORDER BY o.id DESC", Remark.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
-        return tQuery.getResultList(); 
+        return tQuery.getResultList();
     }
 
     public static long countRemarkByPublisher(UserAccount pPublisher) {
@@ -75,20 +77,13 @@ public class Remark {
             Thread.dumpStack();
             return 0;
         } else {
-        	TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM Remark AS o WHERE o.publisher = :pPublisher", Long.class);
-        	tQuery = tQuery.setParameter("pPublisher", pPublisher);
-        	return tQuery.getSingleResult();
+            TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM Remark AS o WHERE o.publisher = :pPublisher", Long.class);
+            tQuery = tQuery.setParameter("pPublisher", pPublisher);
+            return tQuery.getSingleResult();
         }
     }
-    
-	public String toString() {
-        //return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-		return content;
-//		String tContent = content;
-//    	 int tIdx = tContent.indexOf("<br />");
-//    	 if (tIdx > 0)
-//    		 tContent = tContent.substring(0, tIdx);
-//    	 tContent = tContent.length() > 30 ? tContent.substring(0, 30) : tContent;
-//    	 return tContent;
+
+    public String toString() {
+        return content;
     }
 }

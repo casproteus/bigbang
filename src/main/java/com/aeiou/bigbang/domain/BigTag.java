@@ -5,19 +5,19 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
+import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord
+@RooJson
 public class BigTag {
 
     @NotNull
@@ -31,50 +31,54 @@ public class BigTag {
     private Integer authority;
 
     private Integer owner;
-    
+
     @Transient
     private String twitterTitle;
+
     @Transient
-	private String twitterContent;
+    private String twitterContent;
+
     @Transient
     private String contentTitle;
+
     @Transient
-	private String contentURL;
+    private String contentURL;
+
     @Transient
-	private String commonTagName;
-	
-	public String getContentTitle() {
-		return contentTitle;
-	}
+    private String commonTagName;
 
-	public void setContentTitle(String contentTitle) {
-		this.contentTitle = contentTitle;
-	}
+    public String getContentTitle() {
+        return contentTitle;
+    }
 
-	public String getContentURL() {
-		return contentURL;
-	}
+    public void setContentTitle(String contentTitle) {
+        this.contentTitle = contentTitle;
+    }
 
-	public void setContentURL(String contentURL) {
-		this.contentURL = contentURL;
-	}
-	
+    public String getContentURL() {
+        return contentURL;
+    }
+
+    public void setContentURL(String contentURL) {
+        this.contentURL = contentURL;
+    }
+
     public String getTwitterTitle() {
-		return twitterTitle;
-	}
+        return twitterTitle;
+    }
 
-	public void setTwitterTitle(String twitterTitle) {
-		this.twitterTitle = twitterTitle;
-	}
-	
-	public String getTwitterContent() {
-		return twitterContent;
-	}
+    public void setTwitterTitle(String twitterTitle) {
+        this.twitterTitle = twitterTitle;
+    }
 
-	public void setTwitterContent(String twitterContent) {
-		this.twitterContent = twitterContent;
-	}
+    public String getTwitterContent() {
+        return twitterContent;
+    }
 
+    public void setTwitterContent(String twitterContent) {
+        this.twitterContent = twitterContent;
+    }
+    
     /**
      * called when listing all created tags from bigtagController.
      * called when the userlogin name changes from UserAccountController.
@@ -89,7 +93,7 @@ public class BigTag {
         tQuery = tQuery.setParameter("type", pUserAccount).setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
-
+    
     /**
      * called when listing all created tags from bigtagController.
      * @param pPublisher
@@ -100,7 +104,7 @@ public class BigTag {
         tQuery = tQuery.setParameter("pPublisher", pPublisher);
         return tQuery.getSingleResult();
     }
-
+    
     /**
      * called only by contentController.populateEditForm().
      * @param pUserAccount
@@ -113,7 +117,7 @@ public class BigTag {
         tQuery = tQuery.setParameter("type", pUserAccount).setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
-
+    
     /**
      * called only by twitterController.populateEditForm().
      * @param pUserAccount
@@ -180,7 +184,7 @@ public class BigTag {
     public String toString() {
         return tagName;
     }
-
+    
     /**
      * called only from list function, so return both BM tags and TW tags
      * @param firstResult
@@ -191,11 +195,11 @@ public class BigTag {
         return entityManager().createQuery("SELECT o FROM BigTag o ORDER BY o.id DESC", BigTag.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 
-	public String getCommonTagName() {
-		return commonTagName;
-	}
+    public String getCommonTagName() {
+        return commonTagName;
+    }
 
-	public void setCommonTagName(String commonTagName) {
-		this.commonTagName = commonTagName;
-	}
+    public void setCommonTagName(String commonTagName) {
+        this.commonTagName = commonTagName;
+    }
 }

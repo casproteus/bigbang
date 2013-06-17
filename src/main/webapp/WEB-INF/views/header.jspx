@@ -46,6 +46,17 @@
   </c:choose>
   
   <c:if test="${pageContext['request'].userPrincipal != null}">
+    <span class="new">
+      <spring:url value="/messages" var="messages_url"/>
+      <a href="${messages_url}">
+        <spring:url value="/resources/images/inbox.png" var="inbox_img_url" />
+        <spring:message code="global_menu_inboxManage" var="inboxManage_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}" title="${fn:escapeXml(inboxManage_message)}" />
+        <c:if test="${newMessageAmount > 0}">
+        	[${newMessageAmount}]
+        </c:if> 
+      </a>
+    
       <c:out value=" || "/>
       <spring:url value="/contents" var="contents_url"/>
       <a href="${contents_url}">
@@ -85,27 +96,17 @@
 		<spring:param name="relayouttype" value="reset"/>
 		<spring:param name="tagId" value="-1"/>
       </spring:url>
+      <c:out value=" || " />
       <a href="${reset_url}">
         <spring:url value="/resources/images/reset.png" var="reset_img_url" />
         <spring:message code="global_menu_resetView" var="reset_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(reset_message)}" src="${reset_img_url}" title="${fn:escapeXml(reset_message)}" />
       </a>
-      
-      <c:out value=" || " />
-      <spring:url value="/messages" var="messages_url"/>
-      <a href="${messages_url}">
-        <spring:url value="/resources/images/inbox.png" var="inbox_img_url" />
-        <spring:message code="global_menu_inboxManage" var="inboxManage_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}" title="${fn:escapeXml(inboxManage_message)}" />
-        <c:if test="${newMessageAmount > 0}">
-        	[${newMessageAmount}]
-        </c:if> 
-      </a>
-      
+     </span>
   	  <!-- <util:theme/>  	   -->
     </c:if>    
     
-  <util:websiteSwitch/>
+  <!-- Don't think this is meaningful to real user. <util:websiteSwitch/> -->
 
   <spring:url var="banner" value="/resources/images/banner-graphic.png" />
   <spring:url var="home" value="/" />

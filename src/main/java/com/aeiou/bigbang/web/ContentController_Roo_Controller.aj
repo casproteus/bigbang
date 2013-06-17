@@ -3,18 +3,15 @@
 
 package com.aeiou.bigbang.web;
 
+import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
-import com.aeiou.bigbang.web.ContentController;
 import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.web.ContentController;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,8 +21,6 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect ContentController_Roo_Controller {
     
-    
-    
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String ContentController.show(@PathVariable("id") Long id, Model uiModel) {
         addDateTimeFormatPatterns(uiModel);
@@ -33,10 +28,6 @@ privileged aspect ContentController_Roo_Controller {
         uiModel.addAttribute("itemId", id);
         return "contents/show";
     }
-    
-    
-    
-    
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String ContentController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
@@ -50,6 +41,13 @@ privileged aspect ContentController_Roo_Controller {
     
     void ContentController.addDateTimeFormatPatterns(Model uiModel) {
         uiModel.addAttribute("content_markdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+    }
+    
+    void ContentController.populateEditForm(Model uiModel, Content content) {
+        uiModel.addAttribute("content", content);
+        addDateTimeFormatPatterns(uiModel);
+        uiModel.addAttribute("bigtags", BigTag.findAllBigTags());
+        uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
     }
     
     String ContentController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

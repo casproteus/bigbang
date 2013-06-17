@@ -33,7 +33,10 @@ privileged aspect Message_Roo_Jpa_ActiveRecord {
         return entityManager().find(Message.class, id);
     }
     
-        
+    public static List<Message> Message.findMessageEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Message o", Message.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
     @Transactional
     public void Message.persist() {
         if (this.entityManager == null) this.entityManager = entityManager();

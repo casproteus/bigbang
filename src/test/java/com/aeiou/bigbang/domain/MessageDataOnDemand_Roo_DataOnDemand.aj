@@ -93,7 +93,7 @@ privileged aspect MessageDataOnDemand_Roo_DataOnDemand {
     public void MessageDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = Message.findMessageEntries(from, to, null);
+        data = Message.findMessageEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Message' illegally returned null");
         }

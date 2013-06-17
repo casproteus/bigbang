@@ -33,6 +33,10 @@ privileged aspect Content_Roo_Jpa_ActiveRecord {
         return entityManager().find(Content.class, id);
     }
     
+    public static List<Content> Content.findContentEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Content o", Content.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
     @Transactional
     public void Content.persist() {
         if (this.entityManager == null) this.entityManager = entityManager();

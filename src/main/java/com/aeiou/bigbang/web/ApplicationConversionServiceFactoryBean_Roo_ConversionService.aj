@@ -23,7 +23,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<BigTag, String> ApplicationConversionServiceFactoryBean.getBigTagToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.BigTag, java.lang.String>() {
             public String convert(BigTag bigTag) {
-                return new StringBuilder().append(bigTag.getTagName()).append(' ').append(bigTag.getType()).append(' ').append(bigTag.getAuthority()).append(' ').append(bigTag.getOwner()).toString();
+                return new StringBuilder().append(bigTag.getContentTitle()).append(' ').append(bigTag.getContentURL()).append(' ').append(bigTag.getTwitterTitle()).append(' ').append(bigTag.getTwitterContent()).toString();
             }
         };
     }
@@ -71,7 +71,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Content, String> ApplicationConversionServiceFactoryBean.getContentToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.Content, java.lang.String>() {
             public String convert(Content content) {
-                return new StringBuilder().append(content.getTitle()).append(' ').append(content.getSourceURL()).append(' ').append(content.getConentCache()).append(' ').append(content.getAuthority()).toString();
+                return new StringBuilder().append(content.getAddingTagFlag()).append(' ').append(content.getTitle()).append(' ').append(content.getSourceURL()).append(' ').append(content.getConentCache()).toString();
             }
         };
     }
@@ -167,7 +167,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Twitter, String> ApplicationConversionServiceFactoryBean.getTwitterToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.Twitter, java.lang.String>() {
             public String convert(Twitter twitter) {
-                return new StringBuilder().append(twitter.getTwitent()).append(' ').append(twitter.getTwitDate()).append(' ').append(twitter.getAuthority()).append(' ').append(twitter.getTwtitle()).toString();
+                return new StringBuilder().append(twitter.getAddingTagFlag()).append(' ').append(twitter.getTwitent()).append(' ').append(twitter.getTwitDate()).append(' ').append(twitter.getAuthority()).toString();
             }
         };
     }

@@ -3,12 +3,11 @@
 
 package com.aeiou.bigbang.web;
 
+import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Twitter;
-import com.aeiou.bigbang.web.TwitterController;
 import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.web.TwitterController;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -22,8 +21,6 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect TwitterController_Roo_Controller {
     
-    
-    
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String TwitterController.show(@PathVariable("id") Long id, Model uiModel) {
         addDateTimeFormatPatterns(uiModel);
@@ -31,8 +28,6 @@ privileged aspect TwitterController_Roo_Controller {
         uiModel.addAttribute("itemId", id);
         return "twitters/show";
     }
-    
-    
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String TwitterController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
@@ -47,6 +42,13 @@ privileged aspect TwitterController_Roo_Controller {
     void TwitterController.addDateTimeFormatPatterns(Model uiModel) {
         uiModel.addAttribute("twitter_twitdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
         uiModel.addAttribute("twitter_lastupdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+    }
+    
+    void TwitterController.populateEditForm(Model uiModel, Twitter twitter) {
+        uiModel.addAttribute("twitter", twitter);
+        addDateTimeFormatPatterns(uiModel);
+        uiModel.addAttribute("bigtags", BigTag.findAllBigTags());
+        uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
     }
     
     String TwitterController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

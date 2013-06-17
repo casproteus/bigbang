@@ -8,8 +8,6 @@ import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.web.RemarkController;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -23,8 +21,6 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect RemarkController_Roo_Controller {
     
-    
-    
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String RemarkController.show(@PathVariable("id") Long id, Model uiModel) {
         addDateTimeFormatPatterns(uiModel);
@@ -32,8 +28,6 @@ privileged aspect RemarkController_Roo_Controller {
         uiModel.addAttribute("itemId", id);
         return "remarks/show";
     }
-    
-    
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String RemarkController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
@@ -49,7 +43,13 @@ privileged aspect RemarkController_Roo_Controller {
         uiModel.addAttribute("remark_remarktime_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
     
-        
+    void RemarkController.populateEditForm(Model uiModel, Remark remark) {
+        uiModel.addAttribute("remark", remark);
+        addDateTimeFormatPatterns(uiModel);
+        uiModel.addAttribute("twitters", Twitter.findAllTwitters());
+        uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
+    }
+    
     String RemarkController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
         String enc = httpServletRequest.getCharacterEncoding();
         if (enc == null) {

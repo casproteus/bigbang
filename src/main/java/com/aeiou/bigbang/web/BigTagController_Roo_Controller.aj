@@ -22,7 +22,10 @@ privileged aspect BigTagController_Roo_Controller {
         return "bigtags/show";
     }
     
-        
+    void BigTagController.populateEditForm(Model uiModel, BigTag bigTag) {
+        uiModel.addAttribute("bigTag", bigTag);
+    }
+    
     String BigTagController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
         String enc = httpServletRequest.getCharacterEncoding();
         if (enc == null) {

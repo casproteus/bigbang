@@ -12,7 +12,7 @@
                 <menu:item id="i_content_new" messageCode="global_menu_new" url="/contents?form" z="7bS0K311+IKUT6Z62akUNLDTibs="/>
                 <menu:item id="i_content_list" messageCode="global_menu_list" url="/contents?page=1&amp;size=${empty param.size ? 10 : param.size}" z="gKZ2YsscPT2dXDDTQRe1GnpFV10="/>
             </menu:category>
-           <menu:category id="c_twitter" z="gBCPAd3TjZZ49NPLQ7Wo6ZVAcx0=">
+            <menu:category id="c_twitter" z="gBCPAd3TjZZ49NPLQ7Wo6ZVAcx0=">
                 <menu:item id="i_twitter_new" messageCode="global_menu_new" url="/twitters?form" z="vhDKOXMZzSBBHW/jXP7SJRYyrUY="/>
                 <menu:item id="i_twitter_list" messageCode="global_menu_list" url="/twitters?page=1&amp;size=${empty param.size ? 10 : param.size}" z="bfWvHMvW7v54wYQFmieWnjkNyhM="/>
             </menu:category>
@@ -20,15 +20,15 @@
                 <menu:item id="i_remark_new" messageCode="global_menu_new" url="/remarks?form" z="gN6qo6t6YZMoWDJefKbp0QwQfmc="/>
                 <menu:item id="i_remark_list" messageCode="global_menu_list" url="/remarks?page=1&amp;size=${empty param.size ? 10 : param.size}" z="0j7937lQBJnBN0O+r2JrNhbzvvo="/>
             </menu:category>
-	        <menu:category id="c_message" z="2mg8OfqheWP/rnVu0slpEU516Yk=">
-	            <menu:item id="i_message_new" messageCode="global_menu_new" url="/messages?form" z="6ME+t1wCXxIe0ueapV28lZ5YUi0="/>
-	            <menu:item id="i_message_list" messageCode="global_menu_list" url="/messages?page=1&amp;size=${empty param.size ? 10 : param.size}" z="eGv0nXC/JpwInH30nZdjM2e3PxE="/>
-	        </menu:category>
+            <menu:category id="c_message" z="2mg8OfqheWP/rnVu0slpEU516Yk=">
+                <menu:item id="i_message_new" messageCode="global_menu_new" url="/messages?form" z="6ME+t1wCXxIe0ueapV28lZ5YUi0="/>
+                <menu:item id="i_message_list" messageCode="global_menu_list" url="/messages?page=1&amp;size=${empty param.size ? 10 : param.size}" z="eGv0nXC/JpwInH30nZdjM2e3PxE="/>
+            </menu:category>
             <menu:category id="c_bigtag" z="8cUVa1ilSPqtlvwhW4GjycP6YWc=">
                 <menu:item id="i_bigtag_new" messageCode="global_menu_new" url="/bigtags?form" z="nkarmwJlWEfYGz5sPeyIjGCw2m0="/>
                 <menu:item id="i_bigtag_list" messageCode="global_menu_list" url="/bigtags?page=1&amp;size=${empty param.size ? 10 : param.size}" z="/7CNFc+T1WrT0i9iL3ABh+tIBHs="/>
             </menu:category>
-             <menu:category id="c_customize" z="d5dRFjWLmf/Meh0T8E7c82SoRjE=">
+            <menu:category id="c_customize" z="d5dRFjWLmf/Meh0T8E7c82SoRjE=">
                 <menu:item id="i_customize_new" messageCode="global_menu_new" url="/customizes?form" z="oAoMLHN1McEd/aulC0IE5SF7+qo="/>
                 <menu:item id="i_customize_list" messageCode="global_menu_list" url="/customizes?page=1&amp;size=${empty param.size ? 10 : param.size}" z="ztsSQZJp4hYH1myGi8T51fljuGI="/>
             </menu:category>

@@ -49,12 +49,18 @@ privileged aspect UserAccountController_Roo_Controller_Json {
     
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> UserAccountController.createFromJsonArray(@RequestBody String json) {
-        for (UserAccount userAccount: UserAccount.fromJsonArrayToUserAccounts(json)) {
-            userAccount.persist();
-        }
+//        for (UserAccount userAccount: UserAccount.fromJsonArrayToUserAccounts(json)) {
+//            userAccount.persist();
+//        }
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Content-Type", "application/json");
+//        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        
+        
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        List<UserAccount> result = UserAccount.findAllUserAccounts();
+        return new ResponseEntity<String>(UserAccount.toJsonArray(result), headers, HttpStatus.OK);
     }
     
     @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")

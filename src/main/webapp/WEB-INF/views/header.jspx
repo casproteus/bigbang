@@ -12,10 +12,20 @@
   		<spring:url value="/useraccounts?form" var="home"/>
   	 </c:otherwise>
   </c:choose>
+  <!-- a little confusing, here didn't use logged in or not as condition, it seperate tow field first, then check the conditions. -->
   <span>
     <a href="${home}">
 	  <c:choose>
 	     <c:when test="${pageContext['request'].userPrincipal != null}">
+	     	<!-- TODO: if now is in personal space, then display a link to public space, if it's displaying public space, then a link to personal space 
+	     	<c:choose>
+			     <c:when>
+			     
+				 </c:when>
+			  	 <c:otherwise>
+			  	 
+			  	 </c:otherwise>
+			  </c:choose>-->  
       		<spring:message code="button_myhome" arguments="${pageContext['request'].userPrincipal.name}"/>
 	  	 </c:when>
 	  	 <c:otherwise>
@@ -106,7 +116,7 @@
   	  <!-- <util:theme/>  	   -->
     </c:if>    
     
-  <!-- Don't think this is meaningful to real user. <util:websiteSwitch/> -->
+  <!-- Don't think this is meaningful to real user. so we leave it only in footer. <util:websiteSwitch/> -->
 
   <spring:url var="banner" value="/resources/images/banner-graphic.png" />
   <spring:url var="home" value="/" />

@@ -27,7 +27,9 @@
   <script type="text/javascript">
 	function setValues(create_url) {
 		document.getElementById('addingTagFlag').value=create_url;
-		var form = document.forms[0];
+		var form = document.getElementById('content');
+		if(form == null)
+			form = document.getElementById('twitter');
 		form.submit();
 	}
   </script>

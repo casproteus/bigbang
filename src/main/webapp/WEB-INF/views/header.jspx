@@ -12,6 +12,9 @@
   		<spring:url value="/useraccounts?form" var="home"/>
   	 </c:otherwise>
   </c:choose>
+  
+<spring:url value="/resources/j_spring_security_check" var="form_url" />
+<form id="headloginform" name="f" modelAttribute="${login}" action="${fn:escapeXml(form_url)}" method="POST" style="height:20px; color: #AAAAAA">
   <!-- a little confusing, here didn't use logged in or not as condition, it seperate tow field first, then check the conditions. -->
   <span>
     <a href="${home}">
@@ -46,15 +49,75 @@
      </c:when>
      <c:otherwise>
        	<c:out value=" || "/>
+     	<!-- we decided to display a login form directly here.
 	    <span>
 	      <spring:url value="/login" var="login"/>
 	      <a href="${login}">
 	        <spring:message code="security_login"/>
 	      </a>
 	    </span>
+	  -->
+	      <span>
+	        <spring:message code="security_login_form_name" />
+	        <input id="j_username" type='text' name='j_username' style="width:60px; height:16px;" />
+	        <spring:message code="security_login_form_name_message" var="name_msg" htmlEscape="false" />
+	        <script type="text/javascript">
+	          <c:set var="sec_name_msg">
+	            <spring:escapeBody javaScriptEscape="true">${name_msg}</spring:escapeBody>
+	          </c:set>
+	          Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_username", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_name_msg}", required : true}})); 
+	        </script>
+	      </span>
+
+       	  <c:out value=" "/>
+       	
+	      <span>
+	        <spring:message code="security_login_form_password" />
+	        <input id="j_password" type='password' name='j_password' style="width:60px; height:16px" />
+	        <spring:message code="security_login_form_password_message" var="pwd_msg" htmlEscape="false" />
+	        <script type="text/javascript">
+	          <c:set var="sec_pwd_msg">
+	            <spring:escapeBody javaScriptEscape="true">${pwd_msg}</spring:escapeBody>
+	          </c:set>
+	          Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_password", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_pwd_msg}", required : true}})); 
+	        </script>	      
+	        
+       	  <c:out value=" | "/>
+	      <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
+	      <a onclick="setValues()" href="#" style="height:18px; vertical-align: top;">
+	        <spring:message code="button_submit" htmlEscape="false" />
+	      </a>
+		  <script type="text/javascript">
+			function setValues() {
+				var form = document.getElementById("headloginform");
+				form.submit();
+			}
+		  </script>
+  
+  
+       	  <c:out value=" | "/>
+	       <input id="j_rememberme" name="j_rememberme" type="checkbox" style="vertical-align:top; height:14px;">
+	      	<spring:message code="label_rememberme" htmlEscape="false" />
+	      </input>
+ 
+	      </span>
+          
+          <script type="text/javascript">
+			dojo.addOnLoad(function() {
+			  dojo.require("dojo.cookie");
+			  var rememberedName = dojo.cookie('login_name');
+			  var rememberedPassword = dojo.cookie('login_password');
+			  //alert("name is: " + rememberedName + "  password: " + rememberedPassword);
+			  if (rememberedName != null) {
+			    dojo.byId('j_rememberme').setAttribute('checked', 'true');
+			    dijit.byId('j_username').set("value", rememberedName);
+			    dijit.byId('j_password').set("value", rememberedPassword);
+			  }
+			})
+          </script>
      </c:otherwise>
   </c:choose>
-  
+	    
   <c:if test="${pageContext['request'].userPrincipal != null}">
     <span class="new">
       <spring:url value="/messages" var="messages_url"/>
@@ -116,6 +179,7 @@
   	  <!-- <util:theme/>  	   -->
     </c:if>    
     
+  </form>
   <!-- Don't think this is meaningful to real user. so we leave it only in footer. <util:websiteSwitch/> -->
 
   <spring:url var="banner" value="/resources/images/banner-graphic.png" />

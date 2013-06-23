@@ -62,6 +62,7 @@ public class BigAuthenticationProcessingFilter extends AbstractAuthenticationPro
 
 		//update the new message amount infomation. @NOTE: have to do it before the login_name is transfered to UTF-8 code.
 		request.getSession().setAttribute("newMessageAmount", UserAccount.findUserAccountByName(login_name).getNewMessageAmount());
+		request.getSession().setAttribute("currentUserID", UserAccount.findUserAccountByName(login_name).getId());
 		
 		if (rememberMe) {
 			try { 

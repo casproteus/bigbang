@@ -3,106 +3,79 @@
  xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" version="2.0">
   <jsp:directive.page contentType="text/html;charset=UTF-8" />
   <jsp:output omit-xml-declaration="yes" />
-	
-  <c:choose>
-     <c:when test="${pageContext['request'].userPrincipal != null}">
-  		<spring:url value="/${pageContext['request'].userPrincipal.name}" var="home"/>
-  	 </c:when>
-  	 <c:otherwise>
-  		<spring:url value="/useraccounts?form" var="home"/>
-  	 </c:otherwise>
-  </c:choose>
-  
+
+  <!-- if user has logged in, home page point to personal space, if not logged in, then point to public space -->
 <spring:url value="/resources/j_spring_security_check" var="form_url" />
 <form id="headloginform" name="f" modelAttribute="${login}" action="${fn:escapeXml(form_url)}" method="POST" style="height:20px; color: #AAAAAA">
-  <!-- a little confusing, here didn't use logged in or not as condition, it seperate tow field first, then check the conditions. -->
-  <span>
-    <a href="${home}">
-	  <c:choose>
-	     <c:when test="${pageContext['request'].userPrincipal != null}">
-	     	<!-- TODO: if now is in personal space, then display a link to public space, if it's displaying public space, then a link to personal space 
-	     	<c:choose>
-			     <c:when>
-			     
-				 </c:when>
-			  	 <c:otherwise>
-			  	 
-			  	 </c:otherwise>
-			  </c:choose>-->  
-      		<spring:message code="button_myhome" arguments="${pageContext['request'].userPrincipal.name}"/>
-	  	 </c:when>
-	  	 <c:otherwise>
-      		<spring:message code="button_signup"/>
-	  	 </c:otherwise>
-	  </c:choose>
-    </a>
-  </span>
   <c:choose>
      <c:when test="${pageContext['request'].userPrincipal != null}">
-     	<c:out value=" || "/>
+     	<c:choose>
+     		<c:when test="${spaceOwnerId eq currentUserID}"> <!-- on user's own space -->
+     		  <spring:url value="/" var="home"/>
+		  	  <a href="${home}">
+		  		<spring:message code="button_home"/>
+		  	  </a>
+     		</c:when>
+     		<c:otherwise>
+     		  <spring:url value="/${pageContext['request'].userPrincipal.name}" var="home"/>
+		  	  <a href="${home}">
+		  		<spring:message code="button_myhome" arguments="${pageContext['request'].userPrincipal.name}"/>
+		  	  </a>
+     		</c:otherwise>
+     	</c:choose>
+  		
+  		
+  		<c:out value=" || "/>
 	    <span>
 	      <spring:url value="/resources/j_spring_security_logout" var="logout"/>
 	      <a href="${logout}">
 	        <spring:message code="security_logout"/>
 	      </a>
 	    </span>
-     </c:when>
-     <c:otherwise>
-       	<c:out value=" || "/>
-     	<!-- we decided to display a login form directly here.
-	    <span>
-	      <spring:url value="/login" var="login"/>
-	      <a href="${login}">
-	        <spring:message code="security_login"/>
-	      </a>
-	    </span>
-	  -->
-	      <span>
-	        <spring:message code="security_login_form_name" />
-	        <input id="j_username" type='text' name='j_username' style="width:60px; height:16px;" />
-	        <spring:message code="security_login_form_name_message" var="name_msg" htmlEscape="false" />
-	        <script type="text/javascript">
-	          <c:set var="sec_name_msg">
-	            <spring:escapeBody javaScriptEscape="true">${name_msg}</spring:escapeBody>
-	          </c:set>
-	          Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_username", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_name_msg}", required : true}})); 
-	        </script>
-	      </span>
+  	 </c:when>
+  	 <c:otherwise>
+        <spring:message code="security_login_form_name" />
+        <input id="j_username" type='text' name='j_username' style="width:60px; height:16px;" />
+        <spring:message code="security_login_form_name_message" var="name_msg" htmlEscape="false" />
+        <script type="text/javascript">
+          <c:set var="sec_name_msg">
+            <spring:escapeBody javaScriptEscape="true">${name_msg}</spring:escapeBody>
+          </c:set>
+          Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_username", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_name_msg}", required : true}})); 
+        </script>
 
-       	  <c:out value=" "/>
-       	
-	      <span>
-	        <spring:message code="security_login_form_password" />
-	        <input id="j_password" type='password' name='j_password' style="width:60px; height:16px" />
-	        <spring:message code="security_login_form_password_message" var="pwd_msg" htmlEscape="false" />
-	        <script type="text/javascript">
-	          <c:set var="sec_pwd_msg">
-	            <spring:escapeBody javaScriptEscape="true">${pwd_msg}</spring:escapeBody>
-	          </c:set>
-	          Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_password", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_pwd_msg}", required : true}})); 
-	        </script>	      
-	        
-       	  <c:out value=" | "/>
-	      <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
-	      <a onclick="setValues()" href="#" style="height:18px; vertical-align: top;">
-	        <spring:message code="button_submit" htmlEscape="false" />
-	      </a>
-		  <script type="text/javascript">
-			function setValues() {
-				var form = document.getElementById("headloginform");
-				form.submit();
-			}
-		  </script>
-  
-  
-       	  <c:out value=" | "/>
-	       <input id="j_rememberme" name="j_rememberme" type="checkbox" style="vertical-align:top; height:14px;">
-	      	<spring:message code="label_rememberme" htmlEscape="false" />
-	      </input>
- 
-	      </span>
+       	<c:out value=" "/>
+	    
+	    <spring:message code="security_login_form_password" />
+        <input id="j_password" type='password' name='j_password' style="width:60px; height:16px" onsubmit="setValues()"/>
+        <spring:message code="security_login_form_password_message" var="pwd_msg" htmlEscape="false" />
+        <script type="text/javascript">
+          <c:set var="sec_pwd_msg">
+            <spring:escapeBody javaScriptEscape="true">${pwd_msg}</spring:escapeBody>
+          </c:set>
+          Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_password", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_pwd_msg}", required : true}})); 
+        </script>	      
+        
+      	<c:out value=" | "/>
+        <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
+        <a onclick="setValues()" href="#" style="height:18px; vertical-align: top;">
+          <spring:message code="button_submit" htmlEscape="false" />
+        </a>
+	    <script type="text/javascript">
+		  function setValues() {
+			var form = document.getElementById("headloginform");
+			form.submit();
+		  }
+	    </script>
+	    
+      	<c:out value=" | "/>
+        <input id="j_rememberme" name="j_rememberme" type="checkbox" style="vertical-align:top; height:14px;">
+      	  <spring:message code="label_rememberme" htmlEscape="false" />
+        </input>
           
-          <script type="text/javascript">
+        <input id="proceed" type="submit" value="${fn:escapeXml(submit_label)}" style="vertical-align:bottom; width: 0px; height: 0px; border-bottom: 0px; border-top: 0px"/>
+        
+        <script type="text/javascript">
 			dojo.addOnLoad(function() {
 			  dojo.require("dojo.cookie");
 			  var rememberedName = dojo.cookie('login_name');
@@ -114,9 +87,17 @@
 			    dijit.byId('j_password').set("value", rememberedPassword);
 			  }
 			})
-          </script>
-     </c:otherwise>
+        </script>
+         
+        <span class="new">
+			<spring:url value="/useraccounts?form" var="signupURL"/>
+			<a href="${signupURL}">
+        		<spring:message code="button_signup"/>
+			</a>
+        </span>
+  	 </c:otherwise>
   </c:choose>
+  
 	    
   <c:if test="${pageContext['request'].userPrincipal != null}">
     <span class="new">
@@ -155,7 +136,7 @@
       </a>
       
       <spring:message code="doublespace"/>
-      <spring:url value="/useraccounts/${spaceOwnerId}" var="useraccounts_url">
+      <spring:url value="/useraccounts/${currentUserID}" var="useraccounts_url">
 		<spring:param name="form"/>
       </spring:url>
       <a href="${useraccounts_url}">

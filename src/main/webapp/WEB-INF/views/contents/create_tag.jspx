@@ -5,6 +5,7 @@ xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframewor
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:BigTagCreate id="fc_com_aeiou_bigbang_domain_BigTag" modelAttribute="bigTag" path="/contents" render="${empty dependencies}" z="WgNMXxxUskORGvT8KaDenSDrbDI=">
+		<springform:hidden path="contentID" value="${bigTag['contentID']}"/> 
 		<springform:hidden path="contentTitle" value="${bigTag['contentTitle']}"/> 
 		<springform:hidden path="contentURL" value="${bigTag['contentURL']}"/>
 		<springform:hidden path="commonTagName" value="${bigTag['commonTagName']}"/>

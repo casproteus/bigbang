@@ -121,16 +121,20 @@ public class ContentController {
         } else {
             BigUtil.resetLayoutString(tUserAccount);
         }
-        Content tContent = new Content();
+        
+        Long tContentID = bigTag.getContentID();
+        Content tContent = tContentID == null ? new Content() : Content.findContent(tContentID);
         tContent.setTitle(bigTag.getContentTitle());
         tContent.setSourceURL(bigTag.getContentURL());
+        if(tContentID != null)
+        	tContent.setUncommonBigTag(null);
         populateEditForm(uiModel, tContent, httpServletRequest);
         List<String[]> dependencies = new ArrayList<String[]>();
         if (UserAccount.countUserAccounts() == 0) {
             dependencies.add(new String[] { "useraccount", "useraccounts" });
         }
         uiModel.addAttribute("dependencies", dependencies);
-        return "contents/create";
+        return tContentID == null ? "contents/create" : "contents/update";
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")

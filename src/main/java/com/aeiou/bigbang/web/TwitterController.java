@@ -1,6 +1,8 @@
 package com.aeiou.bigbang.web;
 
 import com.aeiou.bigbang.domain.BigTag;
+import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
@@ -56,8 +58,12 @@ public class TwitterController {
         uiModel.addAttribute("authorities", BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
     }
 
-    public String createForm_Tag(Model uiModel, HttpServletRequest httpServletRequest, String twitterTitle, String twitterContent) {
+    /**if the hidden flag is set, then when create or update page submitted, go to this method.
+     * will create a special page for creating tag. when this page committed, will back to the createTag method.
+     */
+    public String createForm_Tag(Model uiModel, HttpServletRequest httpServletRequest, Long twitterID, String twitterTitle, String twitterContent) {
         BigTag bigTag = new BigTag();
+        bigTag.setTwitterID(twitterID);
         bigTag.setTwitterTitle(twitterTitle);
         bigTag.setTwitterContent(twitterContent);
         populateEditForm_Tag(uiModel, bigTag, httpServletRequest);
@@ -73,21 +79,25 @@ public class TwitterController {
         bigTag.setType(tCurName);
         uiModel.asMap().clear();
         bigTag.persist();
-        Twitter twitter = new Twitter();
+
+        Long tWitterID = bigTag.getTwitterID();
+        Twitter twitter = tWitterID == null ? new Twitter() : Twitter.findTwitter(tWitterID);
         twitter.setTwtitle(bigTag.getTwitterTitle());
         twitter.setTwitent(bigTag.getTwitterContent());
+        if(tWitterID != null)
+        	twitter.setTwittertag(null);
         populateEditForm(uiModel, twitter, httpServletRequest);
         List<String[]> dependencies = new ArrayList<String[]>();
         if (UserAccount.countUserAccounts() == 0) {
             dependencies.add(new String[] { "useraccount", "useraccounts" });
         }
         uiModel.addAttribute("dependencies", dependencies);
-        return "twitters/create";
+        return bigTag.getTwitterID() == null ? "twitters/create" : "twitters/update";
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(@Valid Twitter twitter, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (StringUtils.isNotBlank(twitter.getAddingTagFlag())) return createForm_Tag(uiModel, httpServletRequest, twitter.getTwtitle(), twitter.getTwitent());
+        if (StringUtils.isNotBlank(twitter.getAddingTagFlag())) return createForm_Tag(uiModel, httpServletRequest, null, twitter.getTwtitle(), twitter.getTwitent());
         if (twitter.getTwitent() == null || twitter.getTwitent().length() < 1) {
             populateEditForm(uiModel, twitter, httpServletRequest);
             return "twitters/create";
@@ -123,11 +133,13 @@ public class TwitterController {
         twitter.setLastupdate(new Date());
         twitter.persist();
         PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
-        return tController.index(tUserAccount.getName(), -1, -1, uiModel);
+        //return tController.index(tUserAccount.getName(), -1, -1, uiModel);
+        return showDetailTwitters(twitter.getId(), null, null, uiModel, httpServletRequest);
     }
 
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String update(@Valid Twitter twitter, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+        if (StringUtils.isNotBlank(twitter.getAddingTagFlag())) return createForm_Tag(uiModel, httpServletRequest, twitter.getId(), twitter.getTwtitle(), twitter.getTwitent());
         if (bindingResult.hasErrors()) {
             if (bindingResult.getAllErrors().size() == 2 && twitter.getPublisher() == null && twitter.getTwitDate() == null) {
                 String tCurName = userContextService.getCurrentUserName();
@@ -149,7 +161,8 @@ public class TwitterController {
         uiModel.asMap().clear();
         twitter.setLastupdate(new Date());
         twitter.merge();
-        return "redirect:/twitters/" + encodeUrlPathSegment(twitter.getId().toString(), httpServletRequest);
+        //return "redirect:/twitters/" + encodeUrlPathSegment(twitter.getId().toString(), httpServletRequest);
+        return showDetailTwitters(twitter.getId(), null, null, uiModel, httpServletRequest);
     }
 
     @RequestMapping(produces = "text/html")
@@ -190,5 +203,29 @@ public class TwitterController {
     public String updateForm(@PathVariable("id") Long id, Model uiModel, HttpServletRequest httpServletRequest) {
         populateEditForm(uiModel, Twitter.findTwitter(id), httpServletRequest);
         return "twitters/update";
+    }
+    
+    @RequestMapping(params = "twitterid", produces = "text/html")
+    public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel, HttpServletRequest request) {
+        Twitter tTwitter = Twitter.findTwitter(twitterid);
+        UserAccount tOwner = tTwitter.getPublisher();
+        int sizeNo = size == null ? 20 : size.intValue();
+        final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
+        String tCurName = userContextService.getCurrentUserName();
+        UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+        Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
+        uiModel.addAttribute("spaceOwner", tOwner);
+        float nrOfPages;
+        uiModel.addAttribute("twitter", tTwitter);
+        uiModel.addAttribute("remarks", Remark.findRemarkByTwitter(tTwitter, tAuthSet, firstResult, sizeNo));
+        nrOfPages = (float) Remark.countRemarksByTwitter(tTwitter, tAuthSet) / sizeNo;
+        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+        Remark tRemark = new Remark();
+        uiModel.addAttribute("newremark", tRemark);
+        uiModel.addAttribute("authorities", BigAuthority.getRemarkOptions(messageSource, request.getLocale()));
+        List<Twitter> remarktos = new ArrayList<Twitter>();
+        remarktos.add(tTwitter);
+        uiModel.addAttribute("remarktos", remarktos);
+        return "public/list_detail_twitter";
     }
 }

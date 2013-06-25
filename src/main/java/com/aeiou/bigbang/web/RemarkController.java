@@ -84,6 +84,7 @@ public class RemarkController {
                 String tCurName = userContextService.getCurrentUserName();
                 UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
                 remark.setPublisher(tUserAccount);
+                remark.setRemarkto(Remark.findRemark(remark.getId()).getRemarkto());
                 remark.setRemarkTime(new Date());
             } else {
                 populateEditForm(uiModel, remark, httpServletRequest);
@@ -93,7 +94,8 @@ public class RemarkController {
         uiModel.asMap().clear();
         remark.merge();
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
-        return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
+        //return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
+        return showDetailTwitters(remark.getRemarkto().getId(), null, null, uiModel, httpServletRequest);
     }
 
     @RequestMapping(produces = "text/html")
@@ -175,7 +177,7 @@ public class RemarkController {
                 remark.setRemarkto(Twitter.findTwitter(pTwitterId));
                 remark.setRemarkTime(new Date());
             } else {
-                return "public/list_detail_twitter";
+                return "remarks/create";
             }
         }
         uiModel.asMap().clear();

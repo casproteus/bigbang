@@ -31,14 +31,20 @@ public class BigTag {
     private Integer authority;
 
     private Integer owner;
-
+    
     @Transient
+    private Long twitterID;
+
+	@Transient
     private String twitterTitle;
 
     @Transient
     private String twitterContent;
 
     @Transient
+    private Long contentID;
+    
+	@Transient
     private String contentTitle;
 
     @Transient
@@ -46,6 +52,14 @@ public class BigTag {
 
     @Transient
     private String commonTagName;
+
+    public Long getContentID() {
+		return contentID;
+	}
+
+	public void setContentID(Long contentID) {
+		this.contentID = contentID;
+	}
 
     public String getContentTitle() {
         return contentTitle;
@@ -63,6 +77,14 @@ public class BigTag {
         this.contentURL = contentURL;
     }
 
+    public Long getTwitterID() {
+		return twitterID;
+	}
+
+	public void setTwitterID(Long twitterID) {
+		this.twitterID = twitterID;
+	}
+	
     public String getTwitterTitle() {
         return twitterTitle;
     }

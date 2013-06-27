@@ -36,26 +36,23 @@
   	 <c:otherwise>
         <spring:message code="security_login_form_name" />
         <input id="j_username" type='text' name='j_username' style="width:60px; height:16px;" />
-        <spring:message code="security_login_form_name_message" var="name_msg" htmlEscape="false" />
         <script type="text/javascript">
           <c:set var="sec_name_msg">
             <spring:escapeBody javaScriptEscape="true">${name_msg}</spring:escapeBody>
           </c:set>
           Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_username", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_name_msg}", required : true}})); 
         </script>
-
+        
        	<c:out value=" "/>
-	    
 	    <spring:message code="security_login_form_password" />
         <input id="j_password" type='password' name='j_password' style="width:60px; height:16px" onsubmit="setValues()"/>
-        <spring:message code="security_login_form_password_message" var="pwd_msg" htmlEscape="false" />
         <script type="text/javascript">
           <c:set var="sec_pwd_msg">
             <spring:escapeBody javaScriptEscape="true">${pwd_msg}</spring:escapeBody>
           </c:set>
           Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_password", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_pwd_msg}", required : true}})); 
-        </script>	      
-        
+        </script>
+	        
       	<c:out value=" | "/>
         <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
         <a onclick="setValues()" href="#" style="height:18px; vertical-align: top;">

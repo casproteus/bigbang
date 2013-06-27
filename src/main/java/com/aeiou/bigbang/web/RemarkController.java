@@ -165,10 +165,11 @@ public class RemarkController {
         UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
         List<Remark> tList = Remark.findRemarkByPublisher(tUserAccount, 0, 1);
         if (tList != null && tList.size() > 0) {
-            Remark tTwitter = tList.get(0);
-            if (remark.getContent().equals(tTwitter.getContent()) && remark.getRemarkto().equals(tTwitter.getRemarkto())) {
+            Remark tRemark = tList.get(0);
+            //@note: remark.getRemarkto() can be null, don't call it's equals method.
+            if (tRemark.getContent().equals(remark.getContent()) && tRemark.getRemarkto().getId().equals(pTwitterId)) {
                 populateEditForm(uiModel, new Remark(), httpServletRequest);
-                return "remarks/create";
+                return showDetailTwitters(tRemark.getRemarkto().getId(), null, null, uiModel, httpServletRequest);
             }
         }
         if (bindingResult.hasErrors()) {

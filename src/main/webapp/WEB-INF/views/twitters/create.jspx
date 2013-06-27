@@ -7,7 +7,7 @@ xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframewor
     <form:create id="fc_com_aeiou_bigbang_domain_Twitter" modelAttribute="twitter" path="/twitters" render="${empty dependencies}" z="C8PXUylrKuANxmZEPg1IxGp6i7c=">
 		<springform:hidden path="addingTagFlag" id="addingTagFlag" name="addingTagFlag"/> 
         <field:input field="twtitle" id="c_com_aeiou_bigbang_domain_Twitter_twtitle" z="/V/4pAH3rrkLN/hSaWVYngTahFk="/>
-        <field:editor field="twitent" id="c_com_aeiou_bigbang_domain_Twitter_twitent" required="true" height="300" z="user-managed"/>
+        <field:editor field="twitent" id="c_com_aeiou_bigbang_domain_Twitter_twitent" required="true" height="250" z="user-managed"/>
         <!-- <field:datetime dateTimePattern="${twitter_twitdate_date_format}" field="twitDate" id="c_com_aeiou_bigbang_domain_Twitter_twitDate" required="true" z="RtLPo9UnRiHc0ybqItC4AqnRkw4="/>
         <field:select field="publisher" id="c_com_aeiou_bigbang_domain_Twitter_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="X87ZwFVlxa5uM0I8SRgxWxXqjLI="/>-->
         <field:selectPriTag field="twittertag" id="c_com_aeiou_bigbang_domain_Twitter_twittertag" itemValue="id" items="${mytags}" path="/bigtags" type="1" z="user-managed"/>

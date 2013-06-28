@@ -153,9 +153,11 @@ public class BigTag {
 
     public static List<com.aeiou.bigbang.domain.BigTag> findBMTagsByOwner(String pOwnerName) {
         List<BigTag> tListFR = new ArrayList<BigTag>();
-        tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0", BigTag.class).setParameter("type", "admin").getResultList());
-        tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0", BigTag.class).setParameter("type", "administrator").getResultList());
-        if (pOwnerName == null || "admin".equals(pOwnerName)) return tListFR; else {
+       if (pOwnerName == null || "admin".equals(pOwnerName)){
+           tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0", BigTag.class).setParameter("type", "admin").getResultList());
+           tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0", BigTag.class).setParameter("type", "administrator").getResultList());
+           return tListFR; 
+        }else {
             List<BigTag> tTagListOfPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0", BigTag.class).setParameter("type", pOwnerName).getResultList();
             List<String> tListOfTagNames = new ArrayList<String>();
             for (int i = 0; i < tTagListOfPublisher.size(); i++) {

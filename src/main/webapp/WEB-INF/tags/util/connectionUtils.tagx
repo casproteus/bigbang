@@ -1,0 +1,47 @@
+<jsp:root xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:spring="http://www.springframework.org/tags" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+  <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
+  <jsp:directive.attribute name="nothireable" type="java.lang.String" required="true" rtexprvalue="true" description="if it's set, then don't display the add as friend link" />
+  <jsp:directive.attribute name="notfireable" type="java.lang.String" required="true" rtexprvalue="true" description="if it's set, then don't display the unfollow link" />
+  <jsp:directive.attribute name="sharerName" type="java.lang.String" required="true" rtexprvalue="true" description="This name indicates hire who? fire who? to whom leave a message to?" />
+
+  <c:if test="${(empty render or render) and not empty sharerName and fn:toLowerCase(sharerName) ne 'admin' and fn:toLowerCase(pageContext['request'].userPrincipal.name) ne fn:toLowerCase(sharerName)}">
+    <span class="new">
+      <c:if test="${empty nothireable or nothireable ne 'true'}">
+	      <spring:url value="/public" var="hire_url">
+	        <spring:param name="hire" value="${sharerName}" />
+	      </spring:url>
+	      <spring:message code="label_public_hiresomeone_explain" htmlEscape="false" var="hiresomeone_explain" />
+	      <a href="${hire_url}" title="${hiresomeone_explain}">
+	        <spring:message code="label_public_hiresomeone" htmlEscape="false"/>
+	        <spring:url value="/resources/images/add.png" var="add_img_url" />
+	        <img alt="add this guy to my employee list" src="${add_img_url}" title="click this button to add this guy to my employee list." />
+	      </a>
+ 	  	      <c:out value=" || "/>
+      </c:if>
+      <c:if test="${empty notfireable or notfireable ne 'true'}">
+	      <spring:url value="/public" var="fire_url">
+	        <spring:param name="fire" value="${sharerName}"/>
+	      </spring:url>
+	      <spring:message code="label_public_firesomeone_explain" htmlEscape="false" var="firesomeone_explain" />
+	      <a href="${fire_url}" title="${firesomeone_explain}">
+	        <spring:message code="label_public_firesomeone" htmlEscape="false"/>
+	        <spring:url value="/resources/images/delete.png" var="delete_img_url" />
+	        <img alt="remove this guy from my employee list" src="${delete_img_url}" title="click this button to remove this guy from my employee list." />
+	      </a>
+	      ${" || "}
+	  </c:if>
+
+	  <spring:url value="/messages" var="create_message_url">
+        <spring:param name="pReceiverName" value="${sharerName}"/>
+      </spring:url>
+      <a href="${create_message_url}">
+        <spring:message code="writeMessageToSpaceOwner" arguments="${sharerName}" htmlEscape="false"/>
+        <spring:url value="/resources/images/addmessage.png" var="message_img_url" />
+        <spring:message arguments="${typeName}" code="global_menu_newmessage" var="add_message" htmlEscape="false" />
+        <img alt="${fn:escapeXml(add_message)}" src="${message_img_url}" title="${fn:escapeXml(add_message)}" />
+      </a>
+    </span>
+  </c:if>
+</jsp:root>

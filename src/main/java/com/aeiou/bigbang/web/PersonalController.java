@@ -177,6 +177,13 @@ public class PersonalController{
 						}
 					}
 				}
+				
+				//Determine if the add_as_friend/unfollow links should be displayed.
+            	if(tCurUser.getListento().contains(tOwner)){
+        			uiModel.addAttribute("nothireable", "true");
+        		}else{
+        			uiModel.addAttribute("notfireable", "true");
+        		}
 			}
 		}
 		

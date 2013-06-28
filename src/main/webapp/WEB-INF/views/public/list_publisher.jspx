@@ -7,39 +7,17 @@
     <spring:message code="allcontents" var="label" htmlEscape="false" />
     <div style="background: #efefef; padding: 5px; margin-bottom: 3px">
       <div style="text-align: center; padding-bottom: 5px"><b>${publisher}</b></div>
-  		<spring:message code="label_public_balance" arguments="${balance}" htmlEscape="false"/>
-	    <span class="new">
-	      <c:if test="${empty nothireable}">
-		      <spring:url value="/public" var="hire_url">
-		        <spring:param name="hire" value="${publisher}" />
-		      </spring:url>
-		      <a href="${hire_url}">
-		        <spring:message code="label_public_hiresomeone" htmlEscape="false"/>
-		        <spring:url value="/resources/images/add.png" var="add_img_url" />
-		        <img alt="add this guy to my employee list" src="${add_img_url}" title="click this button to add this guy to my employee list." />
-		      </a>
-		      ${" | "}
-	      </c:if>
-	      <c:if test="${empty notfireable}">
-		      <spring:url value="/public" var="fire_url">
-		        <spring:param name="fire" value="${publisher}"/>
-		      </spring:url>
-		      <a href="${fire_url}">
-		        <spring:message code="label_public_firesomeone" htmlEscape="false"/>
-		        <spring:url value="/resources/images/delete.png" var="delete_img_url" />
-		        <img alt="remove this guy from my employee list" src="${delete_img_url}" title="click this button to remove this guy from my employee list." />
-		      </a>
-		      ${" | "}
-		  </c:if>
-		  <c:if test="${empty notfireable or empty nothireable}">
+  		<!-- To make the function easier, we don't display this function for now.
+  		<spring:message code="label_public_balance" arguments="${balance}" htmlEscape="false"/> -->
+  		<c:if test="${empty notfireable or empty nothireable}">
 		  	  <spring:url value="/${publisher}" var="home"/>
 	    	  <a href="${home}">
 			    <spring:message code="button_gotohome" arguments="${publisher}" htmlEscape="false"/>
 			    <spring:url value="/resources/images/home.png" var="home_img_url" />
 			    <img alt="go visit space" src="${home_img_url}" title="click this button to visit the space." />
 			  </a>
-		  </c:if>
-	   </span>
+		</c:if>
+		<util:connectionUtils sharerName="${publisher}" nothireable="${nothireable}" notfireable="${notfireable}"/>
 	</div>
 	<br/>
 	<!-- display the diary of the user  @NOTE: might not a good idea to display diary together with bookmarks. because when you are navigation twitter,

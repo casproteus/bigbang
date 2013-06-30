@@ -108,6 +108,7 @@ public class Twitter {
         EntityManager tEntityManager = entityManager();
         TypedQuery<Long> tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Twitter AS o WHERE (o.publisher in :tTeamSet) and (o.authority in :pAuthSet)", Long.class);
         tQuery = tQuery.setParameter("tTeamSet", tTeamSet);
+        tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
         return tQuery.getSingleResult();
     }
 

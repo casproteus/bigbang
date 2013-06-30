@@ -74,7 +74,14 @@ public class BigAuthority {
     	return tAuthSetFR;
 	}
 	
-
+	public static Set<Integer> getAuthSetForTwitterOfFriends(UserAccount pCurUser, UserAccount pOwner){
+		Set<Integer> tAuthSetFR = new HashSet<Integer>();
+    	tAuthSetFR.add(Integer.valueOf(0));
+    	if(pOwner.equals(pCurUser))
+    		tAuthSetFR.add(Integer.valueOf(2));
+    	return tAuthSetFR;
+	}
+	
 	private Short id;
 	private MessageSource messageSource;
 	private Locale locale;

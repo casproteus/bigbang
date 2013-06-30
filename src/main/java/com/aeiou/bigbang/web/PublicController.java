@@ -234,15 +234,16 @@ public class PublicController{
        
     	String tCurName = userContextService.getCurrentUserName();
     	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
-    	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
         uiModel.addAttribute("spaceOwner", spaceOwner);
         uiModel.addAttribute("spaceOwnerId", tOwner.getId());
         float nrOfPages;
         if("friend".equals(twittertype)){
+        	Set<Integer> tAuthSet = BigAuthority.getAuthSetForTwitterOfFriends(tCurUser, tOwner);
         	uiModel.addAttribute("twittertype", "friend");
         	uiModel.addAttribute("contents", Twitter.findTwitterByOwner(tOwner, tAuthSet, firstResult, sizeNo));
         	nrOfPages = (float) Twitter.countTwittersByOwner(tOwner, tAuthSet) / sizeNo;
         }else{
+        	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
         	uiModel.addAttribute("twittertype", "self");
         	uiModel.addAttribute("contents", Twitter.findTwitterByPublisher(tOwner, tAuthSet, firstResult, sizeNo));
         	nrOfPages = (float) Twitter.countTwitterByPublisher(tOwner, tAuthSet) / sizeNo;

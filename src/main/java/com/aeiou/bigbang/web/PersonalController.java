@@ -213,6 +213,11 @@ public class PersonalController{
         
         //====================prepare content for twitter area ============================
     	List<Twitter> twitterLeft = Twitter.findTwitterByPublisher(tOwner, tAuthSet, 0, 8);
+    	//for this part it's alittle complex: it's about to display the twitters of the owner's friends. not the owner's, so it's not
+    	//like if the logged in user is owner, then display all, if it's owner's friend friends display more, if it's stranger, then display only public ones.
+    	//so, can not use the tauthset directly. the logic should be:
+    	//if current user is owner, then display public and visible to friend ones, otherwise, display only public ones
+    	tAuthSet = BigAuthority.getAuthSetForTwitterOfFriends(tCurUser, tOwner);
     	List<Twitter> twitterRight = Twitter.findTwitterByOwner(tOwner, tAuthSet, 0, 8);
         uiModel.addAttribute("twitterLeft", twitterLeft);
         uiModel.addAttribute("twitterRight", twitterRight);

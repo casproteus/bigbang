@@ -245,7 +245,7 @@ public class PublicController{
         }else{
         	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
         	uiModel.addAttribute("twittertype", "self");
-        	uiModel.addAttribute("contents", Twitter.findTwitterByPublisher(tOwner, tAuthSet, firstResult, sizeNo));
+        	uiModel.addAttribute("contents", Twitter.findTwitterByPublisher(tOwner, tAuthSet, firstResult, sizeNo, null));
         	nrOfPages = (float) Twitter.countTwitterByPublisher(tOwner, tAuthSet) / sizeNo;
         }
     	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
@@ -305,6 +305,43 @@ public class PublicController{
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         }
         return "public/list_publisher";
+    }
+    
+    @RequestMapping(params = "blogPublisher", produces = "text/html")
+    public String listBlogsByPublisher(@RequestParam(value = "blogPublisher", required = false) String pPublisher,
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, String sortExpression) {
+		UserAccount tPublisher = UserAccount.findUserAccountByName(pPublisher);
+		if(tPublisher == null){
+			pPublisher = BigUtil.getUTFString(pPublisher);
+			tPublisher = UserAccount.findUserAccountByName(pPublisher);
+			if(tPublisher == null)
+				return "";
+		}
+    	if (page != null || size != null) {
+            int sizeNo = size == null ? 20 : size.intValue();
+            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
+
+            String tCurName = userContextService.getCurrentUserName();
+        	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+            Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tPublisher);
+            uiModel.addAttribute("blogs", Twitter.findTwitterByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, sortExpression));
+            uiModel.addAttribute("publisher", pPublisher);
+            uiModel.addAttribute("balance",tPublisher.getBalance());
+            if(tCurName != null){
+            	tCurName = tCurUser.getName();
+            	if(pPublisher.equals(tCurName)){
+        			uiModel.addAttribute("nothireable", "true");
+        			uiModel.addAttribute("notfireable", "true");
+            	}else if(tCurUser.getListento().contains(tPublisher)){
+        			uiModel.addAttribute("nothireable", "true");
+        		}else{
+        			uiModel.addAttribute("notfireable", "true");
+        		}
+            }
+            float nrOfPages = (float) Twitter.countTwitterByPublisher(tPublisher, tAuthSet) / sizeNo;
+            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+        }
+        return "public/list_publisher_blog";
     }
     
     /**

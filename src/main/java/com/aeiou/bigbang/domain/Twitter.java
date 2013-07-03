@@ -65,15 +65,15 @@ public class Twitter {
         return entityManager().createQuery("SELECT o FROM Twitter o ORDER BY o.id DESC", Twitter.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 
-    public static List<com.aeiou.bigbang.domain.Twitter> findTwitterByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults) {
+    public static List<com.aeiou.bigbang.domain.Twitter> findTwitterByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults, String sortExpression) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Twitter> tQuery = tEntityManager.createQuery("SELECT o FROM Twitter AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY o.lastupdate DESC", Twitter.class);
+        TypedQuery<Twitter> tQuery = tEntityManager.createQuery("SELECT o FROM Twitter AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.lastupdate DESC" : sortExpression), Twitter.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
         tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
-
+    
     public static long countTwitterByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet) {
         if (pPublisher == null) {
             LogFactory.getLog(Content.class).error("------received a null as param!(pPublisher is null)------Twitter.countTwitterByPublisher()");
@@ -86,7 +86,7 @@ public class Twitter {
             return tQuery.getSingleResult();
         }
     }
-
+    
     /**
      * these twitter list will appear on personal space on the top right. it will display the twitter from owner's friend which are setted as public.
      * (while, I hope if the current user is logged in, and is friends of the author of some twitter, the twitter should be displayed? is that possible? )

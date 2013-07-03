@@ -104,7 +104,7 @@ public class TwitterController {
         }
         String tCurName = userContextService.getCurrentUserName();
         UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
-        List<Twitter> tList = Twitter.findTwitterByPublisher(tUserAccount, BigAuthority.getAuthSet(tUserAccount, tUserAccount), 0, 1);
+        List<Twitter> tList = Twitter.findTwitterByPublisher(tUserAccount, BigAuthority.getAuthSet(tUserAccount, tUserAccount), 0, 1, null);
         if (tList != null && tList.size() > 0) {
             Twitter tTwitter = tList.get(0);
             System.out.println("---" + twitter.getTwitent() + "---");
@@ -180,7 +180,7 @@ public class TwitterController {
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
             Set<Integer> tAuthSet = BigAuthority.getAuthSet(tPublisher, tPublisher);
-            uiModel.addAttribute("twitters", Twitter.findTwitterByPublisher(tPublisher, tAuthSet, firstResult, sizeNo));
+            uiModel.addAttribute("twitters", Twitter.findTwitterByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, null));
             nrOfPages = (float) Twitter.countTwitterByPublisher(tPublisher, tAuthSet) / sizeNo;
         }
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));

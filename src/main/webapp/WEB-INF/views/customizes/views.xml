@@ -13,4 +13,7 @@
 <definition extends="default" name="customizes/update">
         <put-attribute name="body" value="/WEB-INF/views/customizes/update.jspx"/>
     </definition>
+<definition extends="default" name="customizes/tagsDisplay">
+        <put-attribute name="body" value="/WEB-INF/views/customizes/tagsDisplay.jspx"/>
+    </definition>
 </tiles-definitions>

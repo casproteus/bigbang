@@ -7,6 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.springframework.context.MessageSource;
+import org.springframework.util.StringUtils;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
@@ -73,8 +74,6 @@ public class BigUtil {
     	return tBigTags;
     }
 	
-	
-	
 	/**
 	 * update the lastupdate field of twitter.
 	 */
@@ -85,10 +84,12 @@ public class BigUtil {
         tTwitter.merge();
 	}
 	
+	//reset the columns to be displayed on personal space, by default, we display only user's own and his friends tags.
+	//if user want to display more tags, he can customize it later easily.
 	public static void resetLayoutString(UserAccount pUser){
     	if(pUser == null) return;
     	
-		List<BigTag> tBigTags = BigTag.findBMTagsByOwner(pUser.getName()); 	//fetch out all tags of admin's, owner's and his team's, 
+		List<BigTag> tBigTags = BigTag.findBMTagsByOwner(pUser.getName()); 	//fetch out all tags of admin's or owner's and his team's, 
     	int tSize = tBigTags.size();									//Separate tags and IDs into 2 columns and prepare the Layout String.
     	
     	StringBuilder tStrB = new StringBuilder();
@@ -149,6 +150,19 @@ public class BigUtil {
     	return tStrB.toString();
 	}
 	
+	//transfer string form "in layout string" format to normal format (clean tag name format).
+	public static String getTagNameFromLayoutStr(String pLayoutString){
+		StringBuilder tStrB = new StringBuilder(pLayoutString);
+		if(tStrB.charAt(0) == '¶')
+			tStrB = tStrB.deleteCharAt(0);
+		
+		char tEndChar = tStrB.charAt(tStrB.length() - 1);
+		if(tEndChar == '¶' || tEndChar == '' || tEndChar == '†')
+			tStrB = tStrB.deleteCharAt(tStrB.length() - 1);
+		
+		return tStrB.toString();
+	}
+	
     public static boolean notCorrect(String[] tAryTagStrsLeft, String[] tAryTagStrsRight, String[] tAryNumStrsLeft, String[] tAryNumStrsRight){
     	if((tAryTagStrsLeft == null || tAryTagStrsLeft.length == 0) && (tAryTagStrsRight == null || tAryTagStrsRight.length == 0))
     		return true;
@@ -157,10 +171,14 @@ public class BigUtil {
 		if(tAryTagStrsLeft.length != tAryNumStrsLeft.length || tAryTagStrsRight.length != tAryNumStrsRight.length)
 			return true;
 		try{
-			for(int i = tAryNumStrsLeft.length - 1; i >= 0; i--)
-				Integer.parseInt(tAryNumStrsLeft[i]);			
-			for(int i = tAryNumStrsRight.length - 1; i >= 0; i--)
-				Integer.parseInt(tAryNumStrsRight[i]);			
+			if(!(tAryNumStrsLeft.length ==1 && tAryNumStrsLeft[0].length() == 0))		//in case that when the left column or right column have no tag to show, the string will be ""
+				for(int i = tAryNumStrsLeft.length - 1; i >= 0; i--){
+					Integer.parseInt(tAryNumStrsLeft[i]);
+				}
+			if(!(tAryNumStrsRight.length == 1 && tAryNumStrsRight[0].length() == 0))	//and when a "" is splid, the array returned will have one element, and it's "".so we allow "".
+				for(int i = tAryNumStrsRight.length - 1; i >= 0; i--){
+					Integer.parseInt(tAryNumStrsRight[i]);	
+				}
 		}catch(Exception e){
 			return true;
 		}

@@ -44,10 +44,10 @@ public class PersonalController{
 		String tCurName = userContextService.getCurrentUserName();				//the current user.
 		UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
 		
-    	String[] tAryTagStrsLeft = null;
-    	String[] tAryTagStrsRight = null;
-    	String[] tAryNumStrsLeft = null;
-    	String[] tAryNumStrsRight = null;
+    	String[] tBigTagStrsLeft = null;
+    	String[] tBigTagStrsRight = null;
+    	String[] tNumStrsLeft = null;
+    	String[] tNumStrsRight = null;
     	List<BigTag> tBigTagsLeft = new ArrayList<BigTag>();
     	List<BigTag> tBigTagsRight = new ArrayList<BigTag>();
     	List<Long> tTagIdsLeft = new ArrayList<Long>();
@@ -61,26 +61,26 @@ public class PersonalController{
     		
     		p = tTagStr.indexOf('¬');
     		if(p >= 0){
-	    		tAryTagStrsLeft = tTagStr.substring(0, p).split("¯");
-	    		tAryTagStrsRight = tTagStr.substring(p+1).split("¯");
+	    		tBigTagStrsLeft = tTagStr.substring(0, p).split("¯");
+	    		tBigTagStrsRight = tTagStr.substring(p+1).split("¯");
     		}
     		p = tSizeStr.indexOf('¬');
     		if(p >= 0){
-	    		tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
-	    		tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
+	    		tNumStrsLeft = tSizeStr.substring(0, p).split("¯");
+	    		tNumStrsRight = tSizeStr.substring(p+1).split("¯");
     		}
 		}
     																				//if the layout info in DB is not good, create it from beginning.
-    	if(BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)){
+    	if(BigUtil.notCorrect(tBigTagStrsLeft, tBigTagStrsRight, tNumStrsLeft, tNumStrsRight)){
     		
-    		List<BigTag> tBigTags = BigTag.findBMTagsByOwner(spaceOwner); 	//fetch out all tags of admin's, owner's and his team's, 
+    		List<BigTag> tBigTags = BigTag.findBMTagsByOwner(spaceOwner); 	//fetch out all tags owner's and his team's, 
     		List<Long> tTagIds = new ArrayList<Long>();						//then adjust it. @note: don't know if we can use AthenSet to move this into JPQL, because 
 	    	for(int i = 0; i < tBigTags.size(); i++){						//here, we need to compare the tag names, to avoid duplication.
 	    		tTagIds.add(tBigTags.get(i).getId());
 	    	}					
 	    	int tSize = tBigTags.size();									//Separate tags and IDs into 2 columns and prepare the Layout String.
-	    	tAryNumStrsLeft = new String[tSize/2];
-	    	tAryNumStrsRight = new String[tSize - tSize/2] ;
+	    	tNumStrsLeft = new String[tSize/2];
+	    	tNumStrsRight = new String[tSize - tSize/2] ;
 	    	
 	    	StringBuilder tStrB = new StringBuilder();
 	    	StringBuilder tStrB_Num = new StringBuilder();
@@ -91,8 +91,8 @@ public class PersonalController{
     	    	
     	    	tStrB.append(BigUtil.getTagInLayoutString(tTag));
 
-    	    	tAryNumStrsLeft[j] = "8";
-    	    	tStrB_Num.append(tAryNumStrsLeft[j]);
+    	    	tNumStrsLeft[j] = "8";
+    	    	tStrB_Num.append(tNumStrsLeft[j]);
     	    	
     	    	if(j + 1 < tSize/2){
     	    		tStrB.append('¯');
@@ -110,8 +110,8 @@ public class PersonalController{
 
     	    	tStrB.append(BigUtil.getTagInLayoutString(tTag));
 
-    	    	tAryNumStrsRight[j - tSize/2] = "8";
-    	    	tStrB_Num.append(tAryNumStrsRight[j - tSize/2]);
+    	    	tNumStrsRight[j - tSize/2] = "8";
+    	    	tStrB_Num.append(tNumStrsRight[j - tSize/2]);
     	    	
     	    	if(j + 1 < tSize){
     	    		tStrB.append('¯');
@@ -123,12 +123,12 @@ public class PersonalController{
     		tOwner.setLayout(tStrB.toString());	    						//save the correct layout string back to DB
     		tOwner.persist();
     	}else{																			//prepare the info for view base on the string in db:
-    		tBigTagsLeft = BigUtil.transferToTags(tAryTagStrsLeft, spaceOwner);
+    		tBigTagsLeft = BigUtil.transferToTags(tBigTagStrsLeft, spaceOwner);
     		for(int i = 0; i < tBigTagsLeft.size(); i++){
     				tTagIdsLeft.add(tBigTagsLeft.get(i).getId());   //it can not be null, even if admin changed the name of the tags, cause it's handled in BigtUtil
     		}
     		
-    		tBigTagsRight = BigUtil.transferToTags(tAryTagStrsRight, spaceOwner);
+    		tBigTagsRight = BigUtil.transferToTags(tBigTagStrsRight, spaceOwner);
     		for(int i = 0; i < tBigTagsRight.size(); i++){
     				tTagIdsRight.add(tBigTagsRight.get(i).getId()); //it can not be null, even if admin changed the name of the tags, cause it's handled in BigtUtil
     		}
@@ -193,12 +193,12 @@ public class PersonalController{
     	for(int i = 0; i < tBigTagsLeft.size(); i++){
     		tContentListsLeft.add(
     				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, tAuthSet,
-    				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue(), null));
+    				0, Integer.valueOf(tNumStrsLeft[i]).intValue(), null));
     	}
     	for(int i = 0; i < tBigTagsRight.size(); i++){
     		tContentListsRight.add(
     				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, tAuthSet,
-    				0, Integer.valueOf(tAryNumStrsRight[i]).intValue(), null));
+    				0, Integer.valueOf(tNumStrsRight[i]).intValue(), null));
     	}
 
         uiModel.addAttribute("spaceOwner", spaceOwner);

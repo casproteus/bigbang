@@ -190,9 +190,8 @@
       </a>
 
       <spring:message code="doublespace"/>
-      <spring:url value="/public" var="reset_url">
+      <spring:url value="/customizes" var="reset_url">
 		<spring:param name="relayouttype" value="reset"/>
-		<spring:param name="tagId" value="-1"/>
       </spring:url>
       <c:out value=" || " />
       <a href="${reset_url}">

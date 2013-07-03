@@ -75,7 +75,7 @@ public class PublicController{
 		//if the layout info in DB is not good, create it from beginning.
 		if(BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)){
 			
-	    	List<BigTag> tBigTags = BigTag.findBMTagsByOwner("admin"); 	//fetch out all tags of admin's, owner's and his team's, 
+	    	List<BigTag> tBigTags = BigTag.findBMTagsByOwner("admin"); 	//fetch out all tags of admin's, 
     		List<Long> tTagIds = new ArrayList<Long>();						//then adjust it. @note: don't know if we can use AthenSet to move this into JPQL, because 
 	    	for(int i = 0; i < tBigTags.size(); i++){						//here, we need to compare the tag names, to avoid duplication.
 	    		tTagIds.add(tBigTags.get(i).getId());
@@ -400,10 +400,17 @@ public class PublicController{
     	}
 		UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);
 		tCurName = tOwner.getName();
+		
 		if("reset".equals(relayouttype)){
-			tOwner.setLayout(null);
-			tOwner.persist();
-			return (SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tCurName, 0, 8, uiModel));
+			//this command is not used for now, because we are using the icon for another function which display an interface for add/remve tags on screen.
+			//tOwner.setLayout(null);
+			//tOwner.persist();
+			//return (SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tCurName, 0, 8, uiModel));
+//			uiModel.addAttribute("commonTags", commonTags);
+//			uiModel.addAttribute("commonTags_selected", commonTags_selected);
+//			uiModel.addAttribute("unCommonTags", unCommonTags);
+//			uiModel.addAttribute("unCommonTags_selected", unCommonTags_selected);
+	        return "customizes/tagsDisplay";
 		}
 		
 		BigTag tBigTag = BigTag.findBigTag(tagId);

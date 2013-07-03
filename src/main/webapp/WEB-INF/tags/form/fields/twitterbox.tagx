@@ -59,7 +59,7 @@
 	        			<spring:param name="size" value="${empty param.size ? 20 : param.size}"/>
 	      			</spring:url>
 		        	<a href="${listAllContentOfPublisher}">
-			            <c:out value="${item['twittertag']}" />
+			            <c:out value="${item['publisher']}" />
 			        </a>
 	      		</td>
       		</c:if>

@@ -398,19 +398,16 @@ public class PublicController{
     	if(tCurName ==  null){
     		return(index(uiModel));
     	}
+    	
+		PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
 		UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);
 		tCurName = tOwner.getName();
-		
+
+		//this command is not used for now, because we are using the icon for another function which display an interface for add/remve tags on screen.
 		if("reset".equals(relayouttype)){
-			//this command is not used for now, because we are using the icon for another function which display an interface for add/remve tags on screen.
-			//tOwner.setLayout(null);
-			//tOwner.persist();
-			//return (SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tCurName, 0, 8, uiModel));
-//			uiModel.addAttribute("commonTags", commonTags);
-//			uiModel.addAttribute("commonTags_selected", commonTags_selected);
-//			uiModel.addAttribute("unCommonTags", unCommonTags);
-//			uiModel.addAttribute("unCommonTags_selected", unCommonTags_selected);
-	        return "customizes/tagsDisplay";
+			tOwner.setLayout(null);
+			tOwner.persist();
+			return tController.index(tCurName, 0, 8, uiModel);
 		}
 		
 		BigTag tBigTag = BigTag.findBigTag(tagId);
@@ -434,6 +431,17 @@ public class PublicController{
     		tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
     		tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
 		}
+		//for the case that when empty string split, it return a string[] which one element. which will the treated as has meaningful element later.
+		if(tAryTagStrsLeft.length == 1 && tAryTagStrsLeft[0].length() == 0)
+			tAryTagStrsLeft = new String[0];
+		if(tAryTagStrsRight.length == 1 && tAryTagStrsRight[0].length() == 0)
+			tAryTagStrsRight = new String[0];
+		if(tAryNumStrsLeft.length == 1 && tAryNumStrsLeft[0].length() == 0)
+			tAryNumStrsLeft = new String[0];
+		if(tAryNumStrsRight.length == 1 && tAryNumStrsRight[0].length() == 0)
+			tAryNumStrsRight = new String[0];
+
+		
 		//---------adjusting the Sting Arys-------------
 		//to find out the column and position
 		tTagStr = BigUtil.getTagInLayoutString(tBigTag);
@@ -701,41 +709,6 @@ public class PublicController{
    		tOwner.persist();
    		
    		//----------------prepare for show-------------------
-	   	List<BigTag> tBigTagsLeft = BigUtil.transferToTags(tAryTagStrsLeft, tCurName);
-	   	List<Long> tTagIdsLeft = new ArrayList<Long>();					//prepare the info for view base on the string in db:
-   		for(int i = 0; i < tBigTagsLeft.size(); i++){
-   			tTagIdsLeft.add(tBigTagsLeft.get(i).getId());
-   		}
-   		
-   		List<BigTag> tBigTagsRight = BigUtil.transferToTags(tAryTagStrsRight, tCurName);
-	   	List<Long> tTagIdsRight = new ArrayList<Long>();
-   		for(int i = 0; i < tBigTagsRight.size(); i++){
-   			tTagIdsRight.add(tBigTagsRight.get(i).getId());
-   		}
-   		
-        List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
-        List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
-    	for(int i = 0; i < tBigTagsLeft.size(); i++){
-    		tContentListsLeft.add(
-    				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, BigAuthority.getAuthSet(tOwner, tOwner),
-    				0, Integer.valueOf(tAryNumStrsLeft[i]).intValue(), null));
-    	}
-    	for(int i = 0; i < tBigTagsRight.size(); i++){
-    		tContentListsRight.add(
-    				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, BigAuthority.getAuthSet(tOwner, tOwner),
-    				0, Integer.valueOf(tAryNumStrsRight[i]).intValue(), null));
-    	}
-    	
-        uiModel.addAttribute("spaceOwner", tCurName);
-        uiModel.addAttribute("description", tOwner.getDescription());
-        uiModel.addAttribute("bigTagsLeft", tBigTagsLeft);
-        uiModel.addAttribute("bigTagsRight", tBigTagsRight);
-        uiModel.addAttribute("tagIdsLeft", tTagIdsLeft);
-        uiModel.addAttribute("tagIdsRight", tTagIdsRight);
-        uiModel.addAttribute("contentsLeft", tContentListsLeft);
-        uiModel.addAttribute("contentsRight", tContentListsRight);
-       
-        return "public/index";
+		return(tController.index(tCurName, 0, 8, uiModel));
     }
-
 }

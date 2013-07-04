@@ -6,9 +6,11 @@
   <jsp:directive.attribute name="data" type="java.util.Collection" required="true" rtexprvalue="true" description="The collection to be displayed in the table" />
   <jsp:directive.attribute name="path" type="java.lang.String" required="true" rtexprvalue="true" description="Specify the URL path" />
   <jsp:directive.attribute name="publisher" type="java.lang.String" required="false" rtexprvalue="true" description="Indicate if the publisher should be hide, and the tags should be shown" />
+  <jsp:directive.attribute name="type" type="java.lang.String" required="true" rtexprvalue="true" description="for Indicating the URL of the 'read more' button." />
   <jsp:directive.attribute name="tag" type="java.lang.String" required="false" rtexprvalue="true" description="for Indicating the URL of the 'read more' button." />
   <jsp:directive.attribute name="tagId" type="java.lang.Long" required="false" rtexprvalue="true" description="for Indicating the URL of the 'read more' button." />
   <jsp:directive.attribute name="spaceOwner" type="java.lang.String" required="false" rtexprvalue="true" description="used for contributing the URL of the 'read more' button." />
+  <jsp:directive.attribute name="dateTimePattern" type="java.lang.String" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
   <jsp:directive.attribute name="z" type="java.lang.String" required="false" description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
 
@@ -29,7 +31,15 @@
     <c:set var="patterns" value="${fn:split(columnDatePatterns, '&#9999;')}" scope="request" />
 
     <spring:eval var="colCounter" expression="1" />
-
+    
+ 	<c:choose>
+	   <c:when test="${pageContext['request'].userPrincipal != null}">
+	  	  <c:set value="/remarks" var="listDetailTargetController"/>
+	   </c:when>
+	   <c:otherwise>
+	  	  <c:set value="/public" var="listDetailTargetController"/>
+	   </c:otherwise>
+	</c:choose>
     <table class="tWireless">
       <thead>
         <tr>
@@ -37,7 +47,8 @@
             <th class="tWireless">
               	<spring:url value="" var="sort__url">
               		<spring:param name="sortExpression" value="o.${properties[num.count-1]} ${fn:endsWith(param.sortExpression, 'DESC') ? '' : 'DESC' }" />
-				    <spring:param name="blogPublisher" value="${publisher}"/>
+				    <spring:param name="listmoreblog" value="${publisher}"/>
+				    <spring:param name="twittertype" value="${type}"/>
               		<spring:param name="page" value="${1}" />
               		<spring:param name="size" value="${param.size}" />
               	</spring:url>
@@ -52,7 +63,7 @@
       <c:forEach items="${data}" var="item">
       	 <tr>
       		<td class="tWireless">
-      			<spring:url value="${path}" var="readDetail_url">
+      			<spring:url value="${listDetailTargetController}" var="readDetail_url">
         			<spring:param name="owner" value="${spaceOwner}"/>
         			<spring:param name="twitterid" value="${item['id']}"/>
         			<spring:param name="page" value="1"/>
@@ -64,6 +75,16 @@
       		</td>
 	      	<td class="tWireless namebox">
 			    <c:out value="${item['twittertag']}" />
+	      	</td>
+	      	<c:if test="${fn:containsIgnoreCase(type, 'friend')}">
+	      		<td class="tWireless namebox">
+              		<c:out value="${item['publisher']}" />
+              	</td>
+          	</c:if>
+	      	<td class="tWireless namebox">
+				<spring:escapeBody>
+	              <fmt:formatDate value="${item['twitDate']}" pattern="${fn:escapeXml(dateTimePattern)}" />
+	            </spring:escapeBody>
 	      	</td>
       	</tr>
       </c:forEach>
@@ -84,6 +105,7 @@
         <c:if test="${not empty publisher}">
         	<td class="tWireless namebox"/>
         </c:if>
+        <td class="tWireless namebox"/>
       </tr>
     </table>
   </c:if>

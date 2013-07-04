@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -207,62 +209,6 @@ public class PublicController{
         return "public/list_more";
     }
     
-    /**
-     * We have to use both tag's tagname and type to match out a single tag, because different user can create tags with same name. 
-     * if we match content with only tag name, will cause mistake when clicking the "more" button from personal space. 
-     * so we have to use tag's ID to match content.
-     * @note we have to use "owner" instead of "spaceowner", to avoid spring can not matching the request to the other method.
-     * @param tag
-     * @param page
-     * @param size
-     * @param uiModel
-     * @return
-     */
-    @RequestMapping(params = "twittertype", produces = "text/html")
-    public String showMoreTwitters(@RequestParam(value = "twittertype", required = false) String twittertype, @RequestParam(value = "owner", required = false) String spaceOwner,
-    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
-    	UserAccount tOwner = UserAccount.findUserAccountByName(spaceOwner);
-    	if(tOwner == null){
-    		spaceOwner = BigUtil.getUTFString(spaceOwner);
-    		tOwner = UserAccount.findUserAccountByName(spaceOwner);
-    		if(tOwner == null){
-    			return null;
-    		}
-    	}
-        int sizeNo = size == null ? 20 : size.intValue();
-        final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-       
-    	String tCurName = userContextService.getCurrentUserName();
-    	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
-        uiModel.addAttribute("spaceOwner", spaceOwner);
-        uiModel.addAttribute("spaceOwnerId", tOwner.getId());
-        float nrOfPages;
-        if("friend".equals(twittertype)){
-        	Set<Integer> tAuthSet = BigAuthority.getAuthSetForTwitterOfFriends(tCurUser, tOwner);
-        	uiModel.addAttribute("twittertype", "friend");
-        	uiModel.addAttribute("contents", Twitter.findTwitterByOwner(tOwner, tAuthSet, firstResult, sizeNo));
-        	nrOfPages = (float) Twitter.countTwittersByOwner(tOwner, tAuthSet) / sizeNo;
-        }else{
-        	Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
-        	uiModel.addAttribute("twittertype", "self");
-        	uiModel.addAttribute("contents", Twitter.findTwitterByPublisher(tOwner, tAuthSet, firstResult, sizeNo, null));
-        	nrOfPages = (float) Twitter.countTwitterByPublisher(tOwner, tAuthSet) / sizeNo;
-        }
-    	uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-
-        return "public/list_more_twitter";
-    }
-
-    /**
-     * We have to use both tag's tagname and type to match out a single tag, because different user can create tags with same name. 
-     * if we match content with only tag name, will cause mistake when clicking the "more" button from personal space. 
-     * so we have to use tag's ID to match content.
-     * @param tag
-     * @param page
-     * @param size
-     * @param uiModel
-     * @return
-     */
     @RequestMapping(params = "twitterid", produces = "text/html")
     public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, HttpServletRequest request) {
@@ -307,8 +253,8 @@ public class PublicController{
         return "public/list_publisher";
     }
     
-    @RequestMapping(params = "blogPublisher", produces = "text/html")
-    public String listBlogsByPublisher(@RequestParam(value = "blogPublisher", required = false) String pPublisher,
+    @RequestMapping(params = "listmoreblog", produces = "text/html")
+    public String listMoreBlogs(@RequestParam(value = "listmoreblog", required = false) String pPublisher, @RequestParam(value = "twittertype", required = false) String twittertype,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, String sortExpression) {
 		UserAccount tPublisher = UserAccount.findUserAccountByName(pPublisher);
 		if(tPublisher == null){
@@ -317,31 +263,40 @@ public class PublicController{
 			if(tPublisher == null)
 				return "";
 		}
-    	if (page != null || size != null) {
-            int sizeNo = size == null ? 20 : size.intValue();
-            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
 
-            String tCurName = userContextService.getCurrentUserName();
-        	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
-            Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tPublisher);
-            uiModel.addAttribute("blogs", Twitter.findTwitterByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, sortExpression));
-            uiModel.addAttribute("publisher", pPublisher);
-            uiModel.addAttribute("balance",tPublisher.getBalance());
-            if(tCurName != null){
-            	tCurName = tCurUser.getName();
-            	if(pPublisher.equals(tCurName)){
-        			uiModel.addAttribute("nothireable", "true");
-        			uiModel.addAttribute("notfireable", "true");
-            	}else if(tCurUser.getListento().contains(tPublisher)){
-        			uiModel.addAttribute("nothireable", "true");
-        		}else{
-        			uiModel.addAttribute("notfireable", "true");
-        		}
-            }
-            float nrOfPages = (float) Twitter.countTwitterByPublisher(tPublisher, tAuthSet) / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+        float nrOfPages;
+        
+        int sizeNo = size == null ? 20 : size.intValue();
+        final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
+
+        String tCurName = userContextService.getCurrentUserName();
+    	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+        Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tPublisher);
+        if("friend".equals(twittertype)){
+        	uiModel.addAttribute("blogs", Twitter.findTwitterByOwner(tPublisher, tAuthSet, firstResult, sizeNo, sortExpression));
+        	nrOfPages = (float) Twitter.countTwittersByOwner(tPublisher, tAuthSet) / sizeNo;
+        }else{
+        	uiModel.addAttribute("blogs", Twitter.findTwitterByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, sortExpression));
+        	nrOfPages = (float) Twitter.countTwitterByPublisher(tPublisher, tAuthSet) / sizeNo;
         }
-        return "public/list_publisher_blog";
+        uiModel.addAttribute("publisher", pPublisher);
+        uiModel.addAttribute("balance",tPublisher.getBalance());
+        if(tCurName != null){
+        	tCurName = tCurUser.getName();
+        	if(pPublisher.equals(tCurName)){
+    			uiModel.addAttribute("nothireable", "true");
+    			uiModel.addAttribute("notfireable", "true");
+        	}else if(tCurUser.getListento().contains(tPublisher)){
+    			uiModel.addAttribute("nothireable", "true");
+    		}else{
+    			uiModel.addAttribute("notfireable", "true");
+    		}
+        }
+        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+        uiModel.addAttribute("type", twittertype);
+        uiModel.addAttribute("twitter_twitdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+            
+        return "public/list_more_blog";
     }
     
     /**

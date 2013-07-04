@@ -51,19 +51,11 @@
 
   <!-- display the blog of the user -->
   <c:if test="${not empty twitterLeft}">
-	  <c:choose>
-	     <c:when test="${pageContext['request'].userPrincipal != null}">
-	  		<c:set value="/remarks" var="listDetailTargetController"/>
-	  	 </c:when>
-	  	 <c:otherwise>
-	  		<c:set value="/public" var="listDetailTargetController"/>
-	  	 </c:otherwise>
-	  </c:choose>
 	  <table class="tWireless" style="margin-bottom: 0px"><tr>
 	  	<c:if test="${not empty twitterLeft}">
 		  	<td class="tWireless nopaddingleft" valign="top">
 			  <page:contentPane id="twitterLeft" items="${twitterLeft}" label="${NotesAndPrays}" bottom="8">
-			    <table:twitterbox data="${twitterLeft}" id="l_com_aeiou_bigbang_domain_Content" type="self" path="${listDetailTargetController}" spaceOwner="${spaceOwner}">
+			    <table:twitterbox data="${twitterLeft}" id="l_com_aeiou_bigbang_domain_Content" type="self" path="/public" spaceOwner="${spaceOwner}">
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="type" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
@@ -74,7 +66,7 @@
 	  	<c:if test="${not empty twitterRight}">
 		   <td class="tWireless nopaddingright" valign="top" >
 			  <page:contentPane id="twitterRight" items="${twitterRight}" label="${NotesAndPraysFromFriend}" bottom="8">
-			    <table:twitterbox data="${twitterRight}" id="l_com_aeiou_bigbang_domain_Content" type="friend" path="${listDetailTargetController}" spaceOwner="${spaceOwner}">
+			    <table:twitterbox data="${twitterRight}" id="l_com_aeiou_bigbang_domain_Content" type="friend" path="/public" spaceOwner="${spaceOwner}">
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
 			        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>

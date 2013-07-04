@@ -1,13 +1,13 @@
 /* main elements */
 
 body,div,td {
-	font-family: Arial, Helvetica, sans-serif, SimSun;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	color: #666;
 }
 
 body {
-	background-image: url(../images/bg/1.jpg);
+	background-color: #fff;
 	text-align: center;
 }
 
@@ -84,16 +84,17 @@ body {
 }
 
 #footer {
+	background:#fff;
 	border:none;
-	margin-top:0px;
-	border-top:0px solid #999999;
+	margin-top:15px;
+	border-top:1px solid #999999;
 }
 
 .new {
 	float:right;
 }
 
-#footer a:link {color: #aaaaaa;}
+#footer a:link {color: #7db223;}
 
 .quicklinks {
 	clear:both;
@@ -181,7 +182,7 @@ h4 {
 }
 
 a {
-	text-decoration: none;
+	text-decoration: underline;
 	font-size: 12px;
 }
 
@@ -191,6 +192,7 @@ a img {
 }
 
 tr:nth-child(odd) {
+	background-color: #FFFFFF;
 }
 
 tr:nth-child(even) {
@@ -198,12 +200,11 @@ tr:nth-child(even) {
 }
 
 a:link {
-	color: #aaaaaa;
+	color: #7db223;
 }
 
 a:hover {
-	color: #888888;
-	text-decoration: underline;
+	color: #456314;
 }
 
 a:active {
@@ -226,6 +227,7 @@ ul li {
 /* table elements */
 
 table {
+	background: #EEEEEE;
 	margin: 2px 0 0 0;
 	border: 1px solid #BBBBBB;
 	border-collapse: collapse;
@@ -239,7 +241,7 @@ table table {
 }
 
 table td,table th {
-	padding: 0px;
+	padding: 2px;
 	border: 1px solid #CCCCCC;
 }
 
@@ -254,24 +256,20 @@ table th {
 	text-align: left;
 	font-weight: bold;
 	color: #FFF;
-	background: #EEEEEE;
+	background: #999;
 }
 
 table thead {
 	font-weight: bold;
-	#font-style: italic;
+	font-style: italic;
 	background-color: #BBBBBB;
 }
 
 table a:link {color: #303030;}
-table a:hover {
-	color: #741717;
-	text-decoration: underline;
-}
 
 .utilbox {width: 18px;}
 .namebox {
-	width: 80px;
+	width: 50px;
 	text-align: right;
 }
 
@@ -385,14 +383,8 @@ fieldset th {
 	border: 0px;
 }
 .nopaddingleft{
-	padding-top: 0px;
 	padding-left: 0px;
-	padding-right: 1px;
-	padding-buttom: 0px;
 }
 .nopaddingright{
-	padding-top: 0px;
-	padding-left: 1px;
 	padding-right: 0px;
-	padding-buttom: 0px;
 }

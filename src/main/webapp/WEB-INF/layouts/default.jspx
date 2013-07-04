@@ -16,7 +16,7 @@
 	</head>
 	
     <spring:url value="/resources/images/bg/1.jpg" var="bg_img_url" />
-  	<body class="tundra spring" background="${bg_img_url}">
+  	<body class="tundra spring" >
    		<div id="wrapper">
 		    <tiles:insertAttribute name="header" ignore="true" />
 		    <tiles:insertAttribute name="menu" ignore="true" />   

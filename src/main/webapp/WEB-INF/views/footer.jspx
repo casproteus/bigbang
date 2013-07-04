@@ -5,45 +5,6 @@
   <jsp:directive.page contentType="text/html;charset=UTF-8"/>
   <jsp:output omit-xml-declaration="yes"/>
 
-<c:choose>
-     <c:when test="${pageContext['request'].userPrincipal != null}">
-  		<spring:url value="/${pageContext['request'].userPrincipal.name}" var="home"/>
-  	 </c:when>
-  	 <c:otherwise>
-  		<spring:url value="/useraccounts?form" var="home"/>
-  	 </c:otherwise>
-  </c:choose>
-  <span>
-    <a href="${home}">
-	  <c:choose>
-	     <c:when test="${pageContext['request'].userPrincipal != null}">
-      		<spring:message code="button_myhome" arguments="${pageContext['request'].userPrincipal.name}"/>
-	  	 </c:when>
-	  	 <c:otherwise>
-      		<spring:message code="button_signup"/>
-	  	 </c:otherwise>
-	  </c:choose>
-    </a>
-  </span>
-  <c:choose>
-     <c:when test="${pageContext['request'].userPrincipal != null}">
-     	<c:out value=" | "/>
-	    <span>
-	      <spring:url value="/resources/j_spring_security_logout" var="logout"/>
-	      <a href="${logout}">
-	        <spring:message code="security_logout"/>
-	      </a>
-	    </span>
-     </c:when>
-     <c:otherwise>
-       	<c:out value=" | "/>
-	    <span>
-	      <spring:url value="/login" var="login"/>
-	      <a href="${login}">
-	        <spring:message code="security_login"/>
-	      </a>
-	    </span>
-     </c:otherwise>
-  </c:choose>
+  <util:theme/>
   <util:websiteSwitch/>
 </div>

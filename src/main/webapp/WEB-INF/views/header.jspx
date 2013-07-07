@@ -151,7 +151,7 @@
         <spring:message code="global_menu_inboxManage" var="inboxManage_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}" title="${fn:escapeXml(inboxManage_message)}" />
         <c:if test="${newMessageAmount > 0}">
-        	[${newMessageAmount}]
+        	[<span style="color: red;">${newMessageAmount}</span>]
         </c:if> 
       </a>
     
@@ -199,7 +199,6 @@
         <spring:message code="global_menu_resetView" var="reset_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(reset_message)}" src="${reset_img_url}" title="${fn:escapeXml(reset_message)}" />
       </a>
-  	  <!-- <util:theme/>  	   -->
     </c:if>    
     </span>
   </form>

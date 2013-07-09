@@ -1,19 +1,14 @@
 package com.aeiou.bigbang.web;
 
-import com.aeiou.bigbang.domain.Remark;
-import com.aeiou.bigbang.domain.Twitter;
-import com.aeiou.bigbang.domain.UserAccount;
-import com.aeiou.bigbang.services.secutiry.UserContextService;
-import com.aeiou.bigbang.util.BigAuthority;
-import com.aeiou.bigbang.util.BigUtil;
-import com.aeiou.bigbang.util.SpringApplicationContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.springframework.context.MessageSource;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
@@ -24,6 +19,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.aeiou.bigbang.domain.Remark;
+import com.aeiou.bigbang.domain.Twitter;
+import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.BigUtil;
 
 @RequestMapping("/remarks")
 @Controller
@@ -36,7 +39,17 @@ public class RemarkController {
 
     @Inject
     private MessageSource messageSource;
-
+    
+    @RequestMapping(value="/refreshRemarks", method=RequestMethod.GET)
+    public @ResponseBody List<Remark> refreshRemarks(@RequestParam String twitterid) {
+        Twitter tTwitter = Twitter.findTwitter(Long.valueOf(twitterid));
+        UserAccount tOwner = tTwitter.getPublisher();
+        String tCurName = userContextService.getCurrentUserName();
+        UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+        Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
+        return Remark.findRemarkByTwitter(tTwitter, tAuthSet, 0, 20);
+    }
+    
     void populateEditForm(Model uiModel, Remark remark, HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("remark", remark);
         addDateTimeFormatPatterns(uiModel);
@@ -192,4 +205,5 @@ public class RemarkController {
         populateEditForm(uiModel, Remark.findRemark(id), httpServletRequest);
         return "remarks/update";
     }
+
 }

@@ -47,4 +47,46 @@
 		    </form:BigLoginNotice>
 	  	 </c:otherwise>
 	</c:choose>
+	
+	<script language="JavaScript"> 
+		function myrefresh(){ 
+			if(hasNoValue()){
+		       location.replace(location.href) 		//window.location.reload();  @NOTE:difference is that reload cause the notice dialog(data will be supply again.)
+			}
+		} 
+		setTimeout('myrefresh()',20000);
+	</script>
+		
+	<script type="text/javascript">
+	function hasNoValue(){
+		var ofrm1 = document.getElementById("_content_id__iframe").document;  
+		
+	    if (ofrm1==undefined){		//for ff and chrome.
+	        ofrm1 = document.getElementById("_content_id__iframe").contentWindow.document;
+	        var ff = ofrm1.getElementById("dijitEditorBody").textContent;
+	        if(ff.length == 0)
+	        	return true;
+	        if(ff.length == 1)
+	        	return true;
+	        return false;
+	    }else{						//for ie.
+			return false;  //var ie = document.frames["_content_id__iframe"].document.getElementById("dijitEditorBody").??;
+	    } 
+	}
+	</script>
+	
+	
+	<!--  script language="JavaScript"> 
+		function myrefresh(){ 
+			refreshRemarks();
+		}
+		
+		setTimeout('myrefresh()',12000);
+		
+		function refreshRemarks() {
+		    $.getJSON("remarks/refreshRemarks", { twitterid: ${twitter['id']} }, function(remarks) {
+		        $("pl_com_aeiou_bigbang_domain_Remark").items=remarks;
+		    });
+		}
+	</script> -->
 </div> 

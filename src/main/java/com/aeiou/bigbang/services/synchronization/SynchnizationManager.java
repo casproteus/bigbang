@@ -9,8 +9,9 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 
-public class MainApplication {
-	public static void main(String[] args){
+public class SynchnizationManager {
+	
+	public void startToSynch(){
 		ClientConfig config = new DefaultClientConfig();
 //		SSLContext ctx = SSLContext.getInstance("SSL");
 //		ctx.init(null, myTrustManager, null);

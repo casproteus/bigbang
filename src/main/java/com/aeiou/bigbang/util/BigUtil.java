@@ -1,21 +1,15 @@
 package com.aeiou.bigbang.util;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import javax.inject.Inject;
-
-import org.springframework.context.MessageSource;
-import org.springframework.util.StringUtils;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
-import com.aeiou.bigbang.domain.Message;
 import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.quartz.UpdatingBalanceJobProcessor;
+import com.aeiou.bigbang.services.synchronization.SynchnizationManager;
 
 public class BigUtil {
 
@@ -41,7 +35,7 @@ public class BigUtil {
 			SpringApplicationContext.getApplicationContext().getBean("updatingBalanceJobProcessor", UpdatingBalanceJobProcessor.class).updateBalance();
 			return true;
 		} else if("1210_syncdb".equals(pCommand)){
-			
+			new SynchnizationManager().startToSynch();
 			return true;
 		}
 		

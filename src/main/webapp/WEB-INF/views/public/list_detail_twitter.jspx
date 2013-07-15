@@ -55,24 +55,21 @@
 			}
 		} 
 		setTimeout('myrefresh()',20000);
-	</script>
-		
-	<script type="text/javascript">
-	function hasNoValue(){
-		var ofrm1 = document.getElementById("_content_id__iframe").document;  
-		
-	    if (ofrm1==undefined){		//for ff and chrome.
-	        ofrm1 = document.getElementById("_content_id__iframe").contentWindow.document;
-	        var ff = ofrm1.getElementById("dijitEditorBody").textContent;
-	        if(ff.length == 0)
-	        	return true;
-	        if(ff.length == 1)
-	        	return true;
-	        return false;
-	    }else{						//for ie.
-			return false;  //var ie = document.frames["_content_id__iframe"].document.getElementById("dijitEditorBody").??;
-	    } 
-	}
+
+		function hasNoValue(){
+			var ofrm1 = document.getElementById("_content_id__iframe").document;
+		    if (ofrm1==undefined){		//for ff and chrome.
+		        ofrm1 = document.getElementById("_content_id__iframe").contentWindow.document;
+		        var ff = ofrm1.getElementById("dijitEditorBody").textContent;
+		        if(ff.length == 0)
+		        	return true;
+		        if(ff.length == 1)
+		        	return true;
+		        return false;
+		    }else{						//for ie.
+				return false;  //var ie = document.frames["_content_id__iframe"].document.getElementById("dijitEditorBody").??;
+		    } 
+		}
 	</script>
 	
 	

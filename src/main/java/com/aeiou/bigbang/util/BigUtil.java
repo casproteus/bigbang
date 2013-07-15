@@ -35,8 +35,8 @@ public class BigUtil {
 			SpringApplicationContext.getApplicationContext().getBean("updatingBalanceJobProcessor", UpdatingBalanceJobProcessor.class).updateBalance();
 			return true;
 		} else if("1210_syncdb".equals(pCommand)){
-			new SynchnizationManager().startToSynch();
-			return true;
+			if(new SynchnizationManager().startToSynch() == 0)
+				return true;
 		}
 		
 		return false;

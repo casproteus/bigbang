@@ -107,8 +107,7 @@ public class RemarkController {
         uiModel.asMap().clear();
         remark.merge();
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
-        //return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
-        return showDetailTwitters(remark.getRemarkto().getId(), null, null, uiModel, httpServletRequest);
+        return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest);
     }
 
     @RequestMapping(produces = "text/html")
@@ -197,7 +196,7 @@ public class RemarkController {
         uiModel.asMap().clear();
         remark.persist();
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
-        return showDetailTwitters(remark.getRemarkto().getId(), null, null, uiModel, httpServletRequest);
+        return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest);
     }
 
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")

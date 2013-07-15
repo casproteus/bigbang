@@ -1,5 +1,7 @@
 package com.aeiou.bigbang.domain;
 
+import flexjson.JSONSerializer;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -69,5 +71,9 @@ public class UserAccount {
 
     public static List<com.aeiou.bigbang.domain.UserAccount> findUserAccountEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM UserAccount o ORDER BY o.id DESC", UserAccount.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public static String toJsonArray(Collection<UserAccount> collection) {
+        return new JSONSerializer().include("listento").exclude("*.class").serialize(collection);
     }
 }

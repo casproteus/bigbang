@@ -280,15 +280,17 @@ public class BigTag {
     	   	 	}catch(Exception eee){
 	    	   	 	Set<String> tOwnerNameSet = new HashSet<String>();
 	                UserAccount tOwner = UserAccount.findUserAccountByName(pOwnerName);
-	                Iterator<UserAccount> tList = tOwner.getListento().iterator();
-	                while (tList.hasNext()) 
-	                	tOwnerNameSet.add(tList.next().getName());
-	                tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and o.owner = 0 and o.type in :tOwnerNameSet", BigTag.class);
-	                tQuery = tQuery.setParameter("pTagName", pTagName).setParameter("tOwnerNameSet", tOwnerNameSet);
-	                try{
-	                	tBigTag = tQuery.getSingleResult();
-	                }catch(Exception eeee){
-	                	//do nothing.
+	                if(tOwner.getListento() != null){
+		                Iterator<UserAccount> tList = tOwner.getListento().iterator();
+		                while (tList.hasNext()) 
+		                	tOwnerNameSet.add(tList.next().getName());
+		                tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and o.owner = 0 and o.type in :tOwnerNameSet", BigTag.class);
+		                tQuery = tQuery.setParameter("pTagName", pTagName).setParameter("tOwnerNameSet", tOwnerNameSet);
+		                try{
+		                	tBigTag = tQuery.getSingleResult();
+		                }catch(Exception eeee){
+		                	//do nothing.
+		                }
 	                }
     	   	 	}
         	}

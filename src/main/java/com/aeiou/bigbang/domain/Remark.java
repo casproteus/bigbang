@@ -45,7 +45,8 @@ public class Remark {
         TypedQuery<Remark> tQuery = tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet) ORDER BY o.id DESC", Remark.class);
         tQuery = tQuery.setParameter("pTwitter", pTwitter);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
-        tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        if(firstResult > -1 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
 
@@ -67,7 +68,8 @@ public class Remark {
         EntityManager tEntityManager = entityManager();
         TypedQuery<Remark> tQuery = tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.publisher = :publisher ORDER BY o.id DESC", Remark.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
-        tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        if(firstResult > -1 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
 

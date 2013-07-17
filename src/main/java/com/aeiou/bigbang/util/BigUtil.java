@@ -34,7 +34,7 @@ public class BigUtil {
 		} else if("1214_updateUserBalances".equals(pCommand)){
 			SpringApplicationContext.getApplicationContext().getBean("updatingBalanceJobProcessor", UpdatingBalanceJobProcessor.class).updateBalance();
 			return true;
-		} else if("1210_syncdb".equals(pCommand)){
+		} else if("1210_syncdb".equals(pCommand)){				//Looks like first run will see exception of line 137, SynchizationManager(persistant rool back). will be OK when run it the second time or the third time.
 			if(new SynchnizationManager().startToSynch() == 0)
 				return true;
 		}
@@ -217,5 +217,4 @@ public class BigUtil {
 			}
 		}
 	}
-
 }

@@ -3,19 +3,11 @@
 
 package com.aeiou.bigbang.web;
 
-import com.aeiou.bigbang.domain.BigTag;
-import com.aeiou.bigbang.domain.Content;
-import com.aeiou.bigbang.domain.Message;
-import com.aeiou.bigbang.domain.Remark;
-import com.aeiou.bigbang.domain.Twitter;
-import com.aeiou.bigbang.domain.UserAccount;
-import com.aeiou.bigbang.web.UserAccountController;
-
-import flexjson.JSONSerializer;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+
+import javax.transaction.Synchronization;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.services.synchronization.SynchnizationManager;
+
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
 
 privileged aspect UserAccountController_Roo_Controller_Json {
     
@@ -59,41 +57,22 @@ privileged aspect UserAccountController_Roo_Controller_Json {
     
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> UserAccountController.createFromJsonArray(@RequestBody String json) {
+    	SynchnizationManager tSyncManager = new SynchnizationManager();
     	if(json != null && json.length() > 0){
 	        for (UserAccount userAccount: UserAccount.fromJsonArrayToUserAccounts(json)) {
 	            userAccount.persist();
 	        }
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("Content-Type", "application/json");
-	        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+	        List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
+			if(tList.size() == 6)
+				tSyncManager.saveContentIntoLocalDB(tList);
     	}
         
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        Collection<String> collection =  new ArrayList<String>();
-        //useraccount
-        String tUserAccountJsonAryStr = UserAccount.toJsonArray(UserAccount.findAllUserAccounts());
-        collection.add(tUserAccountJsonAryStr);
-        //bigtag
-        String tBigTagJsonAryStr = BigTag.toJsonArray(BigTag.findAllBigTags());
-        collection.add(tBigTagJsonAryStr);
-        //message
-        String tMessageJsonAryStr = Message.toJsonArray(Message.findAllMessages());
-        collection.add(tMessageJsonAryStr);
-        //bookmark
-        String tBookMarkJsonAryStr = Content.toJsonArray(Content.findAllContents());
-        collection.add(tBookMarkJsonAryStr);
-        //blog
-        String tBlogJsonAryStr = Twitter.toJsonArray(Twitter.findAllTwitters());
-        collection.add(tBlogJsonAryStr);
-        //remark
-        String tRemarkJsonAryStr = Remark.toJsonArray(Remark.findAllRemarks());
-        collection.add(tRemarkJsonAryStr);
-        
-        String tJsonAryStrFR = new JSONSerializer().exclude("*.class").serialize(collection);
-        return new ResponseEntity<String>(tJsonAryStrFR, headers, HttpStatus.OK);
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent(), headers, HttpStatus.OK);
     }
     
+
     @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
     public ResponseEntity<String> UserAccountController.updateFromJson(@RequestBody String json) {
         HttpHeaders headers = new HttpHeaders();

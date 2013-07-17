@@ -75,7 +75,8 @@ public class Content {
         TypedQuery<Content> tQuery = tEntityManager.createQuery("SELECT o FROM Content AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Content.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
-        tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        if(firstResult > -1 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
 
@@ -120,7 +121,8 @@ public class Content {
             }
         }
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
-        tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        if(firstResult > -1 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
 

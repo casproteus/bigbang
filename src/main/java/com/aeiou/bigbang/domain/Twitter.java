@@ -70,7 +70,8 @@ public class Twitter {
         TypedQuery<Twitter> tQuery = tEntityManager.createQuery("SELECT o FROM Twitter AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.lastupdate DESC" : sortExpression), Twitter.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
-        tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        if(firstResult > -1 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
     
@@ -98,7 +99,8 @@ public class Twitter {
         TypedQuery<Twitter> tQuery = tEntityManager.createQuery("SELECT o FROM Twitter AS o WHERE (o.publisher in :tTeamSet) and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.lastupdate DESC" : sortExpression), Twitter.class);
         tQuery = tQuery.setParameter("tTeamSet", tTeamSet);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
-        tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        if(firstResult > -1 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
 

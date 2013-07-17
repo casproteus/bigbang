@@ -53,7 +53,8 @@ public class Message {
         TypedQuery<Message> tQuery = tEntityManager.createQuery("SELECT o FROM Message AS o WHERE o.receiver = :pReceiver and o.publisher = :pPublisher ORDER BY o.id DESC", Message.class);
         tQuery = tQuery.setParameter("pReceiver", pReceiver);
         tQuery = tQuery.setParameter("pPublisher", pSender);
-        tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        if(firstResult > -1 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
     
@@ -61,7 +62,8 @@ public class Message {
         EntityManager tEntityManager = entityManager();
         TypedQuery<Message> tQuery = tEntityManager.createQuery("SELECT o FROM Message AS o WHERE o.receiver = :pReceiver ORDER BY o.id DESC", Message.class);
         tQuery = tQuery.setParameter("pReceiver", pReceiver);
-        tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        if(firstResult > -1 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
 

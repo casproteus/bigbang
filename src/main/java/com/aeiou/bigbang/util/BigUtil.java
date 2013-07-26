@@ -9,6 +9,7 @@ import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.quartz.UpdatingBalanceJobProcessor;
+import com.aeiou.bigbang.services.synchronization.ClientSyncTool;
 import com.aeiou.bigbang.services.synchronization.SynchnizationManager;
 
 public class BigUtil {
@@ -24,7 +25,7 @@ public class BigUtil {
 		return pString;
 	}
 
-	public static boolean isSystemCommand(String pCommand){
+	public static boolean isSystemCommand(String pCommand, UserAccount pCurUser){
 		if("5203_setDefaultValueForContents".equals(pCommand)){
 			setDefaultValueForContents();
 			return true;
@@ -34,8 +35,8 @@ public class BigUtil {
 		} else if("1214_updateUserBalances".equals(pCommand)){
 			SpringApplicationContext.getApplicationContext().getBean("updatingBalanceJobProcessor", UpdatingBalanceJobProcessor.class).updateBalance();
 			return true;
-		} else if("1210_syncdb".equals(pCommand)){				//Looks like first run will see exception of line 137, SynchizationManager(persistant rool back). will be OK when run it the second time or the third time.
-			if(new SynchnizationManager().startToSynch() == 0)
+		} else if("1210_syncdb".equals(pCommand) && pCurUser != null){				//Looks like first run will see exception of line 137, SynchizationManager(persistant rool back). will be OK when run it the second time or the third time.
+			if(new ClientSyncTool().startToSynch(pCurUser) == 0)
 				return true;
 		}
 		

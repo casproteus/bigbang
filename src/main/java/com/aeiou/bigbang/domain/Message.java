@@ -68,7 +68,10 @@ public class Message {
     }
 
     public static List<com.aeiou.bigbang.domain.Message> findMessageEntries(int firstResult, int maxResults, String sortExpression) {
-        return entityManager().createQuery("SELECT o FROM Message o ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Message.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    	TypedQuery<Message> tQuery = entityManager().createQuery("SELECT o FROM Message o ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Message.class);
+        if(firstResult > -1 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        return tQuery.getResultList();
     }
 
     public static long countMessagesByReceiver(UserAccount pPublisher) {

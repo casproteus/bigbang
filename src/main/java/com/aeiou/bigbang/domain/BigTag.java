@@ -114,7 +114,9 @@ public class BigTag {
      */
     public static List<com.aeiou.bigbang.domain.BigTag> findTagsByPublisher(String pUserAccount, int firstResult, int maxResults) {
         TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type ORDER BY o.id DESC", BigTag.class);
-        tQuery = tQuery.setParameter("type", pUserAccount).setFirstResult(firstResult).setMaxResults(maxResults);
+        tQuery = tQuery.setParameter("type", pUserAccount);
+        if(firstResult >= 0 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
     
@@ -138,7 +140,9 @@ public class BigTag {
      */
     public static List<com.aeiou.bigbang.domain.BigTag> findBMTagsByPublisher(String pUserAccount, int firstResult, int maxResults) {
         TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0 ORDER BY o.id DESC", BigTag.class);
-        tQuery = tQuery.setParameter("type", pUserAccount).setFirstResult(firstResult).setMaxResults(maxResults);
+        tQuery = tQuery.setParameter("type", pUserAccount);
+        if(firstResult >= 0 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
     
@@ -263,7 +267,7 @@ public class BigTag {
     		return null;
     	
         BigTag tBigTag = null;
-        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and o.type = :pOwnerName and o.owner = 0", BigTag.class);
+        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and o.type = :pOwnerName", BigTag.class);
         tQuery = tQuery.setParameter("pTagName", pTagName);
         
         tQuery = tQuery.setParameter("pOwnerName", "admin");
@@ -309,7 +313,10 @@ public class BigTag {
      * @return
      */
     public static List<com.aeiou.bigbang.domain.BigTag> findBigTagEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM BigTag o ORDER BY o.id DESC", BigTag.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    	TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag o ORDER BY o.id DESC", BigTag.class);
+        if(firstResult >= 0 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        return tQuery.getResultList();
     }
 
     public String getCommonTagName() {

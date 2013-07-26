@@ -15,7 +15,6 @@
 		<title><spring:message code="welcome_h3"/></title>
 	</head>
 	
-    <spring:url value="/resources/images/bg/1.jpg" var="bg_img_url" />
   	<body class="tundra spring" >
    		<div id="wrapper">
 		    <tiles:insertAttribute name="header" ignore="true" />

@@ -6,7 +6,7 @@ package com.aeiou.bigbang.web;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Synchronization;
+import javax.ws.rs.core.MultivaluedMap;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,6 @@ import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.synchronization.SynchnizationManager;
 
 import flexjson.JSONDeserializer;
-import flexjson.JSONSerializer;
 
 privileged aspect UserAccountController_Roo_Controller_Json {
     
@@ -59,17 +58,14 @@ privileged aspect UserAccountController_Roo_Controller_Json {
     public ResponseEntity<String> UserAccountController.createFromJsonArray(@RequestBody String json) {
     	SynchnizationManager tSyncManager = new SynchnizationManager();
     	if(json != null && json.length() > 0){
-	        for (UserAccount userAccount: UserAccount.fromJsonArrayToUserAccounts(json)) {
-	            userAccount.persist();
-	        }
-	        List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
+    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
 			if(tList.size() == 6)
 				tSyncManager.saveContentIntoLocalDB(tList);
     	}
         
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent(""), headers, HttpStatus.OK);
     }
     
 

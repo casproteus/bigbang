@@ -29,7 +29,10 @@ public class PersonalController{
 
 	@RequestMapping(value = "/{spaceOwner}", produces = "text/html")
     public String index(@PathVariable("spaceOwner") String spaceOwner, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
-    	if(BigUtil.isSystemCommand(spaceOwner))										//secrete commands goes here.
+		String tCurName = userContextService.getCurrentUserName();				//the current user.
+		UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+
+		if(BigUtil.isSystemCommand(spaceOwner, tCurUser))										//secrete commands goes here.
     		 return "public/index";
 
     	UserAccount tOwner = UserAccount.findUserAccountByName(spaceOwner);			//make sure the owner exist, and set the name on title
@@ -41,9 +44,6 @@ public class PersonalController{
     	}
     	spaceOwner = tOwner.getName();
 
-		String tCurName = userContextService.getCurrentUserName();				//the current user.
-		UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
-		
     	String[] tBigTagStrsLeft = null;
     	String[] tBigTagStrsRight = null;
     	String[] tNumStrsLeft = null;

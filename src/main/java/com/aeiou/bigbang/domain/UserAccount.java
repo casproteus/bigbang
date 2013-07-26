@@ -70,7 +70,10 @@ public class UserAccount {
     }
 
     public static List<com.aeiou.bigbang.domain.UserAccount> findUserAccountEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM UserAccount o ORDER BY o.id DESC", UserAccount.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    	TypedQuery<UserAccount> tQuery =  entityManager().createQuery("SELECT o FROM UserAccount o ORDER BY o.id DESC", UserAccount.class);
+    	if(firstResult >= 0 && maxResults > 0)
+    		tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+    	return tQuery.getResultList();
     }
 
 	public static String toJsonArray(Collection<UserAccount> collection) {

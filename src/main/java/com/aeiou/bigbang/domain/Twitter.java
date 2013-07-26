@@ -62,7 +62,10 @@ public class Twitter {
     }
 
     public static List<com.aeiou.bigbang.domain.Twitter> findTwitterEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM Twitter o ORDER BY o.id DESC", Twitter.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    	TypedQuery<Twitter> tQuery =  entityManager().createQuery("SELECT o FROM Twitter o ORDER BY o.id DESC", Twitter.class);
+        if(firstResult > -1 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        return tQuery.getResultList();
     }
 
     public static List<com.aeiou.bigbang.domain.Twitter> findTwitterByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults, String sortExpression) {

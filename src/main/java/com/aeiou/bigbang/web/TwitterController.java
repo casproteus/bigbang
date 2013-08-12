@@ -226,6 +226,7 @@ public class TwitterController {
         List<Twitter> remarktos = new ArrayList<Twitter>();
         remarktos.add(tTwitter);
         uiModel.addAttribute("remarktos", remarktos);
+        uiModel.addAttribute("refresh_time", 0);
         return "public/list_detail_twitter";
     }
 }

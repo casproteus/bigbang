@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -40,7 +41,18 @@ public class Remark {
     @ManyToOne
     private Twitter remarkto;
 
-    public static List<com.aeiou.bigbang.domain.Remark> findRemarkByTwitter(Twitter pTwitter, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults) {
+    @Transient
+    private int refresh_time;
+    
+    public int getRefresh_time() {
+		return refresh_time;
+	}
+
+	public void setRefresh_time(int refresh_time) {
+		this.refresh_time = refresh_time;
+	}
+
+	public static List<com.aeiou.bigbang.domain.Remark> findRemarkByTwitter(Twitter pTwitter, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults) {
         EntityManager tEntityManager = entityManager();
         TypedQuery<Remark> tQuery = tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet) ORDER BY o.id DESC", Remark.class);
         tQuery = tQuery.setParameter("pTwitter", pTwitter);

@@ -213,7 +213,7 @@ public class PublicController{
     public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid,
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, HttpServletRequest request) {
     	RemarkController tController = SpringApplicationContext.getApplicationContext().getBean("remarkController", RemarkController.class);
-		return(tController.showDetailTwitters(twitterid, page, size, uiModel, request));
+		return(tController.showDetailTwitters(twitterid, 0, page, size, uiModel, request));
     }
     
     @RequestMapping(params = "publisher", produces = "text/html")
@@ -374,7 +374,7 @@ public class PublicController{
 		return(SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tCurName, page, size, uiModel));
     }
     
-    /**
+   /**
      * adjust the layout
      * @param publisher
      * @param page

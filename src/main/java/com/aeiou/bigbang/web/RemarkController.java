@@ -56,6 +56,7 @@ public class RemarkController {
         uiModel.addAttribute("twitters", Twitter.findAllTwitters());
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
         uiModel.addAttribute("authorities", BigAuthority.getRemarkOptions(messageSource, httpServletRequest.getLocale()));
+        uiModel.addAttribute("refresh_time", remark.getRefresh_time());
     }
 
     @RequestMapping(params = "pTwitterId", method = RequestMethod.POST, produces = "text/html")
@@ -71,7 +72,7 @@ public class RemarkController {
             Remark tTwitter = tList.get(0);
             if (remark.getContent().equals(tTwitter.getContent()) && remark.getRemarkto().equals(tTwitter.getRemarkto())) {
                 populateEditForm(uiModel, new Remark(), httpServletRequest);
-                return "remarks/create";
+                return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
             }
         }
         if (bindingResult.hasErrors()) {
@@ -81,7 +82,7 @@ public class RemarkController {
                 remark.setRemarkTime(new Date());
             } else {
                 populateEditForm(uiModel, remark, httpServletRequest);
-                return "public/list_detail_twitter";
+                return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
             }
         }
         uiModel.asMap().clear();
@@ -144,7 +145,8 @@ public class RemarkController {
     }
 
     @RequestMapping(params = "twitterid", produces = "text/html")
-    public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel, HttpServletRequest request) {
+    public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, @RequestParam(value = "refresh_time", required = false) Integer refresh_time, 
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel, HttpServletRequest request) {
         Twitter tTwitter = Twitter.findTwitter(twitterid);
         UserAccount tOwner = tTwitter.getPublisher();
         int sizeNo = size == null ? 20 : size.intValue();
@@ -164,14 +166,14 @@ public class RemarkController {
         List<Twitter> remarktos = new ArrayList<Twitter>();
         remarktos.add(tTwitter);
         uiModel.addAttribute("remarktos", remarktos);
+        uiModel.addAttribute("refresh_time", (refresh_time == null || refresh_time == 0) ? 0 : (refresh_time > 15 ? refresh_time : 15));
         return "public/list_detail_twitter";
     }
 
     @RequestMapping(params = "twitterid", method = RequestMethod.POST, produces = "text/html")
     public String createRemark(@Valid Remark remark, BindingResult bindingResult, @RequestParam(value = "twitterid", required = false) Long pTwitterId, Model uiModel, HttpServletRequest httpServletRequest) {
         if (remark.getContent() == null || remark.getContent().length() < 1) {
-            populateEditForm(uiModel, new Remark(), httpServletRequest);
-            return "remarks/create";
+            return showDetailTwitters(pTwitterId, remark.getRefresh_time(), null, null, uiModel, httpServletRequest);
         }
         String tCurName = userContextService.getCurrentUserName();
         UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
@@ -180,8 +182,8 @@ public class RemarkController {
             Remark tRemark = tList.get(0);
             //@note: remark.getRemarkto() can be null, don't call it's equals method.
             if (tRemark.getContent().equals(remark.getContent()) && tRemark.getRemarkto().getId().equals(pTwitterId)) {
-                populateEditForm(uiModel, new Remark(), httpServletRequest);
-                return showDetailTwitters(tRemark.getRemarkto().getId(), null, null, uiModel, httpServletRequest);
+                populateEditForm(uiModel, remark, httpServletRequest);
+                return showDetailTwitters(pTwitterId, remark.getRefresh_time(), null, null, uiModel, httpServletRequest);
             }
         }
         if (bindingResult.hasErrors()) {
@@ -190,19 +192,26 @@ public class RemarkController {
                 remark.setRemarkto(Twitter.findTwitter(pTwitterId));
                 remark.setRemarkTime(new Date());
             } else {
-                return "remarks/create";
+            	populateEditForm(uiModel, remark, httpServletRequest);
+                return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest) + "&refresh_time="+remark.getRefresh_time();
             }
         }
         uiModel.asMap().clear();
         remark.persist();
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
-        return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest);
+        return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest) + "&refresh_time="+remark.getRefresh_time();
     }
-
+    
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String updateForm(@PathVariable("id") Long id, Model uiModel, HttpServletRequest httpServletRequest) {
         populateEditForm(uiModel, Remark.findRemark(id), httpServletRequest);
         return "remarks/update";
     }
-
+   
+    @RequestMapping(params = "refresh_time", produces = "text/html")
+    public String setRefreshTime2(@RequestParam(value = "refresh_time", required = true) Integer refresh_time, 
+    		@RequestParam(value = "pTwitterid", required = true) Long pTwitterId, 
+    		Model uiModel, HttpServletRequest httpServletRequest) {
+    	return showDetailTwitters(pTwitterId, refresh_time, null, null, uiModel, httpServletRequest);
+    }
 }

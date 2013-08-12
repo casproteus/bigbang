@@ -4,6 +4,7 @@
  xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" 
  xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" 
  xmlns:spring="http://www.springframework.org/tags" version="2.0">
+   
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <c:set value="${not empty spaceOwner and (fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(twitter['publisher']))}" var="isloggedInUser" />
@@ -48,13 +49,28 @@
 	  	 </c:otherwise>
 	</c:choose>
 	
+	<spring:url value="/remarks" var="RefreshTimeSettingForm_url">
+        <spring:param name="refresh_time" value="${refresh_time}"/>
+        <spring:param name="pTwitterid" value="${twitter['id']}"/>
+    </spring:url>
+	<form id="RefreshTimeSettingForm" action="${RefreshTimeSettingForm_url}"  method="POST" style="text-align: left">
+	    <spring:message code="refresh_time" htmlEscape="false" />
+	    <input type='text' name='refresh_time' value="${refresh_time}" style="width:20px;height:12px" />
+	    <spring:message code="second" htmlEscape="false" />
+    	<spring:message code="relayout_submit" var="submit" htmlEscape="false" />
+    	<button id="proceed" type="submit" value="submit" title="${fn:escapeXml(submit)}" style="width:22px;height:16px;vertical-align: top; cursor:pointer; border: 0px; ">
+    		<spring:url value="/resources/images/submit.png" var="direction_img_submit" />
+	        <img alt="${fn:escapeXml(submit)}" src="${direction_img_submit}" title="${fn:escapeXml(submit)}" />
+    	</button>
+    </form>
 	<script language="JavaScript"> 
-		function myrefresh(){ 
+		function myrefresh(){
 			if(hasNoValue()){
-		       location.replace(location.href) 		//window.location.reload();  @NOTE:difference is that reload cause the notice dialog(data will be supply again.)
+				if(${refresh_time} > 0)
+					document.getElementById("RefreshTimeSettingForm").submit();//location.replace(location.href) 		//window.location.reload();  @NOTE:difference is that reload cause the notice dialog(data will be supply again.)
 			}
 		} 
-		setTimeout('myrefresh()',20000);
+		setTimeout('myrefresh()', ${refresh_time * 1000});
 
 		function hasNoValue(){
 			var ofrm1 = document.getElementById("_content_id__iframe").document;
@@ -71,15 +87,7 @@
 		    } 
 		}
 	</script>
-	
-	
 	<!--  script language="JavaScript"> 
-		function myrefresh(){ 
-			refreshRemarks();
-		}
-		
-		setTimeout('myrefresh()',12000);
-		
 		function refreshRemarks() {
 		    $.getJSON("remarks/refreshRemarks", { twitterid: ${twitter['id']} }, function(remarks) {
 		        $("pl_com_aeiou_bigbang_domain_Remark").items=remarks;

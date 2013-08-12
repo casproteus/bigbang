@@ -145,7 +145,7 @@ public class RemarkController {
     }
 
     @RequestMapping(params = "twitterid", produces = "text/html")
-    public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, @RequestParam(value = "refresh_time", required = false) Integer refresh_time, 
+    public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, Integer refresh_time, 
     		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel, HttpServletRequest request) {
         Twitter tTwitter = Twitter.findTwitter(twitterid);
         UserAccount tOwner = tTwitter.getPublisher();
@@ -208,10 +208,10 @@ public class RemarkController {
         return "remarks/update";
     }
    
-    @RequestMapping(params = "refresh_time", produces = "text/html")
-    public String setRefreshTime2(@RequestParam(value = "refresh_time", required = true) Integer refresh_time, 
-    		@RequestParam(value = "pTwitterid", required = true) Long pTwitterId, 
+    @RequestMapping(params = "refreshTime", produces = "text/html")
+    public String setRefreshTime(@RequestParam(value = "refreshTime", required = true) Integer pRefreshTime, 
+    		@RequestParam(value = "refreshTwitterid", required = true) Long pTwitterId, 
     		Model uiModel, HttpServletRequest httpServletRequest) {
-    	return showDetailTwitters(pTwitterId, refresh_time, null, null, uiModel, httpServletRequest);
+    	return showDetailTwitters(pTwitterId, pRefreshTime, null, null, uiModel, httpServletRequest);
     }
 }

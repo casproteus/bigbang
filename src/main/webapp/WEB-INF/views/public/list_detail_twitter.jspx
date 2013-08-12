@@ -50,12 +50,12 @@
 	</c:choose>
 	
 	<spring:url value="/remarks" var="RefreshTimeSettingForm_url">
-        <spring:param name="refresh_time" value="${refresh_time}"/>
-        <spring:param name="pTwitterid" value="${twitter['id']}"/>
+        <spring:param name="refreshTime" value="${refreshTime}"/>
+        <spring:param name="refreshTwitterid" value="${twitter['id']}"/>
     </spring:url>
 	<form id="RefreshTimeSettingForm" action="${RefreshTimeSettingForm_url}"  method="POST" style="text-align: left">
 	    <spring:message code="refresh_time" htmlEscape="false" />
-	    <input type='text' name='refresh_time' value="${refresh_time}" style="width:20px;height:12px" />
+	    <input type='text' name='refreshTime' value="${refresh_time}" style="width:20px;height:12px" />
 	    <spring:message code="second" htmlEscape="false" />
     	<spring:message code="relayout_submit" var="submit" htmlEscape="false" />
     	<button id="proceed" type="submit" value="submit" title="${fn:escapeXml(submit)}" style="width:22px;height:16px;vertical-align: top; cursor:pointer; border: 0px; ">

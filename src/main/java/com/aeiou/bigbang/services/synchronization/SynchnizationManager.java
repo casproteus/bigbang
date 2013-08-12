@@ -25,61 +25,87 @@ public class SynchnizationManager {
 	
 	private List<UserAccount> userAccountList;
 
-    public String getRecentlyAddedContent(String tUserName){
+    public String getRecentlyAddedContent(String tUserName, String pCommand){
     	Collection<String> collection =  new ArrayList<String>();
-        //useraccount
-        String tUserAccountJsonAryStr = UserAccount.toJsonArray(UserAccount.findAllUserAccounts());
-        collection.add(tUserAccountJsonAryStr);
-        //bigtag
-        String tBigTagJsonAryStr = BigTag.toJsonArray(BigTag.findAllBigTags());
-        collection.add(tBigTagJsonAryStr);
-        //message
-        String tMessageJsonAryStr = Message.toJsonArray(Message.findAllMessages());
-        collection.add(tMessageJsonAryStr);
-        //blog
-        String tBlogJsonAryStr = Twitter.toJsonArray(Twitter.findAllTwitters());
-        collection.add(tBlogJsonAryStr);
-        //remark
-        String tRemarkJsonAryStr = Remark.toJsonArray(Remark.findAllRemarks());
-        collection.add(tRemarkJsonAryStr); 
-        //bookmark
-        String tBookMarkJsonAryStr = Content.toJsonArray(Content.findAllContents());
-        collection.add(tBookMarkJsonAryStr);
-        
+    	if("1210_syncdb".equals(pCommand) || "1210_syncdb_ua".equals(pCommand)){
+	        //useraccount
+	        String tUserAccountJsonAryStr = UserAccount.toJsonArray(UserAccount.findAllUserAccounts());
+	        collection.add(tUserAccountJsonAryStr);
+    	}
+    	if("1210_syncdb".equals(pCommand) || "1210_syncdb_tg".equals(pCommand)){
+	        //bigtag
+	        String tBigTagJsonAryStr = BigTag.toJsonArray(BigTag.findAllBigTags());
+	        collection.add(tBigTagJsonAryStr);
+    	}
+	    if("1210_syncdb".equals(pCommand) || "1210_syncdb_ms".equals(pCommand)){
+	        //message
+	        String tMessageJsonAryStr = Message.toJsonArray(Message.findAllMessages());
+	        collection.add(tMessageJsonAryStr);
+	    }
+	    if("1210_syncdb".equals(pCommand) || "1210_syncdb_bg".equals(pCommand)){
+	        //blog
+	        String tBlogJsonAryStr = Twitter.toJsonArray(Twitter.findAllTwitters());
+	        collection.add(tBlogJsonAryStr);
+	    }
+	    if("1210_syncdb".equals(pCommand) || "1210_syncdb_rm".equals(pCommand)){
+	        //remark
+	        String tRemarkJsonAryStr = Remark.toJsonArray(Remark.findAllRemarks());
+	        collection.add(tRemarkJsonAryStr); 
+	    }
+	    if("1210_syncdb".equals(pCommand) || "1210_syncdb_bm".equals(pCommand)){
+	        //bookmark
+	        String tBookMarkJsonAryStr = Content.toJsonArray(Content.findAllContents());
+	        collection.add(tBookMarkJsonAryStr);
+	    }
         return new JSONSerializer().exclude("*.class").serialize(collection);
     }
     
-	public int saveContentIntoLocalDB(List<String> tList){
-		//useraccount
-	    userAccountList =  new JSONDeserializer<List<UserAccount>>().use(null, ArrayList.class).use("values", UserAccount.class).deserialize(tList.get(0));
-	    if(!startToBackUpUserAccountsToLocal(userAccountList))
-	    	return 0;
-	    //biglist
-	    List<BigTag> tBigTagList =  new JSONDeserializer<List<BigTag>>().use(null, ArrayList.class).use("values", BigTag.class).deserialize(tList.get(1));
-	    if(!startToBackUpTagsToLocal(tBigTagList))
-	    	return 1;
-		//message
-	    List<Message> tMessageList =  new JSONDeserializer<List<Message>>().use(null, ArrayList.class).use("values", Message.class).deserialize(tList.get(2));
-	    if(!startToBackUpMessagesToLocal(tMessageList))
-	    	return 2;
-	    //blogs
-	    List<Twitter> tBlogList =  new JSONDeserializer<List<Twitter>>().use(null, ArrayList.class).use("values", Twitter.class).deserialize(tList.get(3));
-	    if(!startToBackUpBlogsToLocal(tBlogList))
-	    	return 4;
-	    //remarks
-	    List<Remark> tRemarkList =  new JSONDeserializer<List<Remark>>().use(null, ArrayList.class).use("values", Remark.class).deserialize(tList.get(4));
-	    if(!startToBackUpRemarksToLocal(tRemarkList))
-	    	return 5;
-		//bookmarks
-	    List<Content> tBookMarkList =  new JSONDeserializer<List<Content>>().use(null, ArrayList.class).use("values", Content.class).deserialize(tList.get(5));
-	    if(!startToBackUpBookmarksToLocal(tBookMarkList))
-	    	return 3;
+	public int saveContentIntoLocalDB(List<String> tList, String pCommand){
+    	if("1210_syncdb".equals(pCommand)){
+			if(!saveUserAccountToLocalDB(tList.get(0)))		//useraccount
+		    	return 0;
+		    if(!saveTagsToLocalDB(tList.get(1)))		    //biglist
+		    	return 1;
+		    if(!saveMessagesToLocalDB(tList.get(2)))		//message
+		    	return 2;
+		    if(!saveBlogsToLocalDB(tList.get(3)))		    //blogs
+		    	return 3;
+		    if(!saveRemarksToLocalDB(tList.get(4)))		    //remarks
+		    	return 4;
+		    if(!saveBookmarksToLocalDB(tList.get(5)))		//bookmarks
+		    	return 5;
+    	}else if("1210_syncdb_ua".equals(pCommand)){	        //useraccount
+    		if(!saveUserAccountToLocalDB(tList.get(0)))
+		    	return 0;
+    	}else if("1210_syncdb_tg".equals(pCommand)){	        //bigtag
+    		if(!saveTagsToLocalDB(tList.get(0)))
+		    	return 1;
+    	}else if("1210_syncdb_ms".equals(pCommand)){	        //message
+		    if(!saveMessagesToLocalDB(tList.get(0)))
+		    	return 2;
+	    }else if("1210_syncdb_bg".equals(pCommand)){	        //blog
+		    if(!saveBlogsToLocalDB(tList.get(0)))
+		    	return 3;
+	    }else if("1210_syncdb_rm".equals(pCommand)){	        //remark
+		    if(!saveRemarksToLocalDB(tList.get(0)))
+		    	return 4;
+	    }else if("1210_syncdb_bm".equals(pCommand)){	        //bookmark
+		    if(!saveBookmarksToLocalDB(tList.get(0)))
+		    	return 5;
+	    }
 		return 200;
 	}
-	
+
 	private ArrayList<String> stackUAprocessing = new ArrayList<String>();
 	private ArrayList<String> stackUAprocessed = new ArrayList<String>();
-	public boolean startToBackUpUserAccountsToLocal(List<UserAccount> pList){
+	
+	public boolean saveUserAccountToLocalDB(String pJsonStr){
+		//@NOTE, have to get the uaList out side of the method, because the method will be called recurrencely
+	    userAccountList =  new JSONDeserializer<List<UserAccount>>().use(null, ArrayList.class).use("values", UserAccount.class).deserialize(pJsonStr);
+	    return startToSaveUAIntoDB(userAccountList);
+	}
+	
+	private boolean startToSaveUAIntoDB(List<UserAccount> pList){
 		System.out.println("start to save UserAccount! there are [" + pList.size() + "] items to save---------------------");
 		
 		for(int i = 0; i < pList.size(); i++){
@@ -103,7 +129,7 @@ public class SynchnizationManager {
 					Set<UserAccount> tSet = pUA.getListento();
 					ArrayList<UserAccount> tList = new ArrayList<UserAccount>();
 					if(tList.addAll(tSet)){
-						startToBackUpUserAccountsToLocal(tList);
+						startToSaveUAIntoDB(tList);
 					}
 					localizeListenTo(tUA, tList);	//to make the listened to users localized
 				}else
@@ -126,7 +152,7 @@ public class SynchnizationManager {
 					Set<UserAccount> tSet = pUA.getListento();
 					ArrayList<UserAccount> tList = new ArrayList<UserAccount>();
 					if(tList.addAll(tSet))
-						startToBackUpUserAccountsToLocal(tList);
+						startToSaveUAIntoDB(tList);
 					localizeListenTo(pUA, tList);	//to make the listened to users localized
 				}
 				pUA.persist();
@@ -138,16 +164,17 @@ public class SynchnizationManager {
 	}
 	
 	HashMap<String, List<BigTag>> tagMap = new HashMap<String, List<BigTag>>();
-	public boolean startToBackUpTagsToLocal(List<BigTag> pList){
+	public boolean saveTagsToLocalDB(String pJsonStr){
+	    List<BigTag> tBigTagList =  new JSONDeserializer<List<BigTag>>().use(null, ArrayList.class).use("values", BigTag.class).deserialize(pJsonStr);
 		stackUAprocessing.clear(); 
 		stackUAprocessed.clear();	//can not be cleared in it's own method, cause the method can be iterated several times.
 		
 		tagMap.clear();
-		System.out.println("start to save BigTags! there are [" + pList.size() + "] items to save---------------------");
+		System.out.println("start to save BigTags! there are [" + tBigTagList.size() + "] items to save---------------------");
 		
-		for(int i = 0; i < pList.size(); i++){
+		for(int i = 0; i < tBigTagList.size(); i++){
 			System.out.println(i);
-			BigTag pTag = pList.get(i);
+			BigTag pTag = tBigTagList.get(i);
 			if("admin".equals(pTag.getType())){
 				System.out.println(pTag);
 			}
@@ -186,13 +213,14 @@ public class SynchnizationManager {
 	}
 
 	HashMap<UserAccount, List<Message>> messageMap = new HashMap<UserAccount, List<Message>>();
-	public boolean startToBackUpMessagesToLocal(List<Message> pList){
+	public boolean saveMessagesToLocalDB(String pJsonStr){
+	    List<Message> tMessageList =  new JSONDeserializer<List<Message>>().use(null, ArrayList.class).use("values", Message.class).deserialize(pJsonStr);
 		messageMap.clear();
-		System.out.println("start to save Messages! there are [" + pList.size() + "] items to save---------------------");
+		System.out.println("start to save Messages! there are [" + tMessageList.size() + "] items to save---------------------");
 		
-		for(int i = 0; i < pList.size(); i++){
+		for(int i = 0; i < tMessageList.size(); i++){
 			System.out.println(i);
-			Message pMessage = pList.get(i);
+			Message pMessage = tMessageList.get(i);
 			UserAccount tUA = findUserInLocalDB(pMessage.getReceiver());
 			List<Message> tList = messageMap.get(tUA);
 			if(tList == null){
@@ -229,13 +257,119 @@ public class SynchnizationManager {
 		return true;
 	}
 
-	HashMap<UserAccount, List<Content>> bookmarkMap = new HashMap<UserAccount, List<Content>>();
-	public boolean startToBackUpBookmarksToLocal(List<Content> pList){
-		bookmarkMap.clear();
-		System.out.println("start to save contents! there are [" + pList.size() + "] items to save---------------------");
+	HashMap<UserAccount, List<Twitter>> twitterMap = new HashMap<UserAccount, List<Twitter>>();
+	public boolean saveBlogsToLocalDB(String pJsonStr){
+	    List<Twitter> tBlogList =  new JSONDeserializer<List<Twitter>>().use(null, ArrayList.class).use("values", Twitter.class).deserialize(pJsonStr);
+		twitterMap.clear();
+		System.out.println("start to save Blogs! there are [" + tBlogList.size() + "] items to save---------------------");
 		
-		for(int i = 0; i < pList.size(); i++){
-			Content pContent = pList.get(i);
+		for(int i = 0; i < tBlogList.size(); i++){
+			System.out.println(i);
+			Twitter pTwitter = tBlogList.get(i);
+			System.out.println("item content:" + pTwitter);
+			UserAccount tUA = findUserInLocalDB(pTwitter.getPublisher());
+			List<Twitter> tList = twitterMap.get(tUA);
+			if(tList == null){
+				System.out.println("not in map yet, finding by publisher "+tUA.getName());
+				tList = Twitter.findTwitterByPublisher(tUA, BigAuthority.getAuthSet(tUA, tUA), 0, 0, null);
+				twitterMap.put(tUA, tList);
+			}
+			
+			if(tList != null && tList.size() > 0){ //already exist, then update it's properties.
+				System.out.println("this guy has "+ tList.size() +" blogs.");
+				boolean noMatch = true;
+				for (int j = 0; j < tList.size(); j++){
+					Twitter tTwitter = tList.get(j);
+					if(tTwitter.getTwtitle().equals(pTwitter.getTwtitle()) && tTwitter.getTwitDate().equals(pTwitter.getTwitDate())){  //already exist, then update it's properties.
+						System.out.println("and find one match!");
+						noMatch = false;
+						tTwitter.setAuthority(pTwitter.getAuthority());
+						tTwitter.setTwittertag(findTagInLocalDB(pTwitter.getTwittertag()));
+						tTwitter.setLastupdate(pTwitter.getLastupdate());
+						tTwitter.setTwitent(pTwitter.getTwitent());
+						System.out.println("now to persist the matched one!");
+						tTwitter.persist();
+						break;
+					}
+				}
+				if(noMatch){
+					System.out.println("while no one match :(");
+					pTwitter.setId(null);
+					pTwitter.setPublisher(tUA);
+					pTwitter.setTwittertag(findTagInLocalDB(pTwitter.getTwittertag()));
+					System.out.println("so save as a new one!");
+					pTwitter.persist();
+				}
+			}else{
+				System.out.println("This guy dosen't have any blog yet.");
+				pTwitter.setId(null);
+				pTwitter.setPublisher(tUA);
+				pTwitter.setTwittertag(findTagInLocalDB(pTwitter.getTwittertag()));
+				System.out.println("save as a new one.");
+				pTwitter.persist();
+			}
+		}
+		//twitterMap.clear(); we don't clear it here, because the coming startToBackUpRemarksToLocal will need this cache.
+		return true;
+	}
+
+	HashMap<Twitter, List<Remark>> remarkMap = new HashMap<Twitter, List<Remark>>();
+	public boolean saveRemarksToLocalDB(String pJsonStr){
+	    List<Remark> tRemarkList =  new JSONDeserializer<List<Remark>>().use(null, ArrayList.class).use("values", Remark.class).deserialize(pJsonStr);
+		remarkMap.clear();
+		System.out.println("start to save Remarks! there are [" + tRemarkList.size() + "] items to save---------------------");
+		
+		for(int i = 0; i < tRemarkList.size(); i++){
+			System.out.println(i);
+			Remark pRemark = tRemarkList.get(i);
+			System.out.println("item content:" + pRemark);
+			Twitter tBlog = findBlogInLocalDB(pRemark);	//because we sync blog first, so the blog must have exist in local db
+			List<Remark> tList = remarkMap.get(tBlog);
+			if(tList == null){
+				System.out.println("not in map yet, finding by tBlog "+tBlog);
+				tList = Remark.findRemarkByTwitter(tBlog, BigAuthority.getAuthSet(pRemark.getPublisher(), pRemark.getPublisher()), 0, 0);
+				remarkMap.put(tBlog, tList);
+			}
+			
+			if(tList != null && tList.size() > 0){ //already exist, then update it's properties.
+				boolean noMatch = true;
+				for (int j = 0; j < tList.size(); j++){
+					Remark tRemark = tList.get(j);
+					if(tRemark.getPublisher().getName().equals(pRemark.getPublisher().getName()) && tRemark.getRemarkTime().equals(pRemark.getRemarkTime())){  //already exist, then update it's properties.
+						noMatch = false;
+						tRemark.setContent(pRemark.getContent());
+						tRemark.setAuthority(pRemark.getAuthority());
+						tRemark.setRemarkTime(pRemark.getRemarkTime());
+						tRemark.persist();
+						break;
+					}
+				}
+				if(noMatch){
+					pRemark.setId(null);
+					pRemark.setRemarkto(tBlog);
+					pRemark.setPublisher(findUserInLocalDB(pRemark.getPublisher()));
+					pRemark.persist();
+				}
+			}else{
+				pRemark.setId(null);
+				pRemark.setRemarkto(tBlog);
+				pRemark.setPublisher(findUserInLocalDB(pRemark.getPublisher()));
+				pRemark.persist();
+			}
+		}
+		twitterMap.clear();
+		remarkMap.clear();
+		return true;
+	}
+
+	HashMap<UserAccount, List<Content>> bookmarkMap = new HashMap<UserAccount, List<Content>>();
+	public boolean saveBookmarksToLocalDB(String pJsonStr){
+	    List<Content> tBookMarkList =  new JSONDeserializer<List<Content>>().use(null, ArrayList.class).use("values", Content.class).deserialize(pJsonStr);
+		bookmarkMap.clear();
+		System.out.println("start to save contents! there are [" + tBookMarkList.size() + "] items to save---------------------");
+		
+		for(int i = 0; i < tBookMarkList.size(); i++){
+			Content pContent = tBookMarkList.get(i);
 			System.out.println(i + pContent.getTitle() + pContent.getCommonBigTag());
 			UserAccount tUA = findUserInLocalDB(pContent.getPublisher());
 			if(tUA == null){
@@ -285,98 +419,6 @@ public class SynchnizationManager {
 		return true;
 	}
 
-	HashMap<UserAccount, List<Twitter>> twitterMap = new HashMap<UserAccount, List<Twitter>>();
-	public boolean startToBackUpBlogsToLocal(List<Twitter> pList){
-		twitterMap.clear();
-		System.out.println("start to save Blogs! there are [" + pList.size() + "] items to save---------------------");
-		
-		for(int i = 0; i < pList.size(); i++){
-			System.out.println(i);
-			Twitter pTwitter = pList.get(i);
-			UserAccount tUA = findUserInLocalDB(pTwitter.getPublisher());
-			List<Twitter> tList = twitterMap.get(tUA);
-			if(tList == null){
-				tList = Twitter.findTwitterByPublisher(tUA, BigAuthority.getAuthSet(tUA, tUA), 0, 0, null);
-				twitterMap.put(tUA, tList);
-			}
-			
-			if(tList != null && tList.size() > 0){ //already exist, then update it's properties.
-				boolean noMatch = true;
-				for (int j = 0; j < tList.size(); j++){
-					Twitter tTwitter = tList.get(j);
-					if(tTwitter.getTwtitle().equals(pTwitter.getTwtitle()) && tTwitter.getTwitDate().equals(pTwitter.getTwitDate())){  //already exist, then update it's properties.
-						noMatch = false;
-						tTwitter.setAuthority(pTwitter.getAuthority());
-						tTwitter.setTwittertag(findTagInLocalDB(pTwitter.getTwittertag()));
-						tTwitter.setLastupdate(pTwitter.getLastupdate());
-						tTwitter.setTwitent(pTwitter.getTwitent());
-						tTwitter.persist();
-						break;
-					}
-				}
-				if(noMatch){
-					pTwitter.setId(null);
-					pTwitter.setPublisher(tUA);
-					pTwitter.setTwittertag(findTagInLocalDB(pTwitter.getTwittertag()));
-					pTwitter.persist();
-				}
-			}else{
-				pTwitter.setId(null);
-				pTwitter.setPublisher(tUA);
-				pTwitter.setTwittertag(findTagInLocalDB(pTwitter.getTwittertag()));
-				pTwitter.persist();
-			}
-		}
-		//twitterMap.clear(); we don't clear it here, because the coming startToBackUpRemarksToLocal will need this cache.
-		return true;
-	}
-
-	HashMap<Twitter, List<Remark>> remarkMap = new HashMap<Twitter, List<Remark>>();
-	public boolean startToBackUpRemarksToLocal(List<Remark> pList){
-		remarkMap.clear();
-		System.out.println("start to save Remarks! there are [" + pList.size() + "] items to save---------------------");
-		
-		for(int i = 75; i < pList.size(); i++){
-			System.out.println(i);
-			Remark pRemark = pList.get(i);
-			Twitter tBlog = findBlogInLocalDB(pRemark);	//because we sync blog first, so the blog must have exist in local db
-			List<Remark> tList = remarkMap.get(tBlog);
-			if(tList == null){
-				tList = Remark.findRemarkByTwitter(tBlog, BigAuthority.getAuthSet(pRemark.getPublisher(), pRemark.getPublisher()), 0, 0);
-				remarkMap.put(tBlog, tList);
-			}
-			
-			if(tList != null && tList.size() > 0){ //already exist, then update it's properties.
-				boolean noMatch = true;
-				for (int j = 0; j < tList.size(); j++){
-					Remark tRemark = tList.get(j);
-					if(tRemark.getPublisher().getName().equals(pRemark.getPublisher().getName()) && tRemark.getRemarkTime().equals(pRemark.getRemarkTime())){  //already exist, then update it's properties.
-						noMatch = false;
-						tRemark.setContent(pRemark.getContent());
-						tRemark.setAuthority(pRemark.getAuthority());
-						tRemark.setRemarkTime(pRemark.getRemarkTime());
-						tRemark.persist();
-						break;
-					}
-				}
-				if(noMatch){
-					pRemark.setId(null);
-					pRemark.setRemarkto(tBlog);
-					pRemark.setPublisher(findUserInLocalDB(pRemark.getPublisher()));
-					pRemark.persist();
-				}
-			}else{
-				pRemark.setId(null);
-				pRemark.setRemarkto(tBlog);
-				pRemark.setPublisher(findUserInLocalDB(pRemark.getPublisher()));
-				pRemark.persist();
-			}
-		}
-		twitterMap.clear();
-		remarkMap.clear();
-		return true;
-	}
-	
 	private UserAccount localizeListenTo(UserAccount tUA, ArrayList<UserAccount> pList){
 		Set<UserAccount> tSet = tUA.getListento();
 		if(tSet == null){

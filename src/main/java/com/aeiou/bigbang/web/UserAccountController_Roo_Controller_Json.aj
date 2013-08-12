@@ -54,20 +54,97 @@ privileged aspect UserAccountController_Roo_Controller_Json {
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
     
-    @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
+    @RequestMapping(value = "/1210_syncdb", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> UserAccountController.createFromJsonArray(@RequestBody String json) {
     	SynchnizationManager tSyncManager = new SynchnizationManager();
     	if(json != null && json.length() > 0){
     		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
 			if(tList.size() == 6)
-				tSyncManager.saveContentIntoLocalDB(tList);
+				tSyncManager.saveContentIntoLocalDB(tList, "1210_syncdb");
     	}
         
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent(""), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", null), headers, HttpStatus.OK);
     }
     
+    @RequestMapping(value = "/1210_syncdb_ua", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> UserAccountController.createFromUAJsonArray(@RequestBody String json) {
+    	SynchnizationManager tSyncManager = new SynchnizationManager();
+    	if(json != null && json.length() > 0){
+    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
+			tSyncManager.saveUserAccountToLocalDB(tList.get(0));
+    	}
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_ua"), headers, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/1210_syncdb_tg", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> UserAccountController.createFromTGJsonArray(@RequestBody String json) {
+    	SynchnizationManager tSyncManager = new SynchnizationManager();
+    	if(json != null && json.length() > 0){
+    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
+			tSyncManager.saveTagsToLocalDB(tList.get(0));
+    	}
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_tg"), headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/1210_syncdb_ms", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> UserAccountController.createFromMSJsonArray(@RequestBody String json) {
+    	SynchnizationManager tSyncManager = new SynchnizationManager();
+    	if(json != null && json.length() > 0){
+    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
+			tSyncManager.saveMessagesToLocalDB(tList.get(0));
+    	}
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_ms"), headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/1210_syncdb_bg", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> UserAccountController.createFromBGJsonArray(@RequestBody String json) {
+    	SynchnizationManager tSyncManager = new SynchnizationManager();
+    	if(json != null && json.length() > 0){
+    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
+			tSyncManager.saveBlogsToLocalDB(tList.get(0));
+    	}
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_bg"), headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/1210_syncdb_rm", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> UserAccountController.createFromRMJsonArray(@RequestBody String json) {
+    	SynchnizationManager tSyncManager = new SynchnizationManager();
+    	if(json != null && json.length() > 0){
+    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
+			tSyncManager.saveRemarksToLocalDB(tList.get(0));
+    	}
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_rm"), headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/1210_syncdb_bm", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> UserAccountController.createFromBMJsonArray(@RequestBody String json) {
+    	SynchnizationManager tSyncManager = new SynchnizationManager();
+    	if(json != null && json.length() > 0){
+    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
+			tSyncManager.saveBookmarksToLocalDB(tList.get(0));
+    	}
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_bm"), headers, HttpStatus.OK);
+    }
 
     @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
     public ResponseEntity<String> UserAccountController.updateFromJson(@RequestBody String json) {

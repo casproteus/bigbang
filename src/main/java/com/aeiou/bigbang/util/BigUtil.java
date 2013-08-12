@@ -3,6 +3,8 @@ package com.aeiou.bigbang.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.servlet.theme.CookieThemeResolver;
+
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Remark;
@@ -10,7 +12,6 @@ import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.quartz.UpdatingBalanceJobProcessor;
 import com.aeiou.bigbang.services.synchronization.ClientSyncTool;
-import com.aeiou.bigbang.services.synchronization.SynchnizationManager;
 
 public class BigUtil {
 
@@ -35,9 +36,14 @@ public class BigUtil {
 		} else if("1214_updateUserBalances".equals(pCommand)){
 			SpringApplicationContext.getApplicationContext().getBean("updatingBalanceJobProcessor", UpdatingBalanceJobProcessor.class).updateBalance();
 			return true;
-		} else if("1210_syncdb".equals(pCommand) && pCurUser != null){				//Looks like first run will see exception of line 137, SynchizationManager(persistant rool back). will be OK when run it the second time or the third time.
-			if(new ClientSyncTool().startToSynch(pCurUser) == 0)
-				return true;
+		} else if(("1210_syncdb".equals(pCommand) || "1210_syncdb_ua".equals(pCommand) || "1210_syncdb_tg".equals(pCommand)
+				 || "1210_syncdb_ms".equals(pCommand)  || "1210_syncdb_bg".equals(pCommand) || "1210_syncdb_rm".equals(pCommand)  || "1210_syncdb_bm".equals(pCommand))
+				 && pCurUser != null){	//Looks like first run will see exception of line 137, SynchizationManager(persistant rool back). will be OK when run it the second time or the third time.
+			new ClientSyncTool().startToSynch(pCurUser, pCommand);
+			return true;
+		} else if("0801_niuyao".equals(pCommand) && pCurUser != null){
+			//SpringApplicationContext.getApplicationContext().getBean("themeResolver", CookieThemeResolver.class).setDefaultThemeName("2");
+			new CookieThemeResolver().setThemeName(null, null, "2");//DefaultThemeName("2");
 		}
 		
 		return false;

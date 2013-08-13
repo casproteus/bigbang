@@ -27,6 +27,7 @@ import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
 import com.aeiou.bigbang.util.BigUtil;
+import com.aeiou.bigbang.web.beans.RefreshBean;
 
 @RequestMapping("/remarks")
 @Controller
@@ -166,7 +167,7 @@ public class RemarkController {
         List<Twitter> remarktos = new ArrayList<Twitter>();
         remarktos.add(tTwitter);
         uiModel.addAttribute("remarktos", remarktos);
-        uiModel.addAttribute("refresh_time", (refresh_time == null || refresh_time == 0) ? 0 : (refresh_time > 15 ? refresh_time : 15));
+        uiModel.addAttribute("refresh_time", refresh_time);
         return "public/list_detail_twitter";
     }
 
@@ -209,9 +210,19 @@ public class RemarkController {
     }
    
     @RequestMapping(params = "refreshTime", produces = "text/html")
-    public String setRefreshTime(@RequestParam(value = "refreshTime", required = true) Integer pRefreshTime, 
-    		@RequestParam(value = "refreshTwitterid", required = true) Long pTwitterId, 
+    public String setRefreshTime(RefreshBean refreshBean, @RequestParam(value = "refreshTwitterid", required = true) Long refreshTwitterid, 
     		Model uiModel, HttpServletRequest httpServletRequest) {
-    	return showDetailTwitters(pTwitterId, pRefreshTime, null, null, uiModel, httpServletRequest);
+    	int tTime = 15;
+    	String tTimeStr = refreshBean.getRefreshTime();
+    	if (tTimeStr != null && tTimeStr.startsWith(","))
+    		tTimeStr = tTimeStr.substring(1);
+    	
+    	try{
+    		tTime = Integer.valueOf(tTimeStr);
+    	}catch(Exception e){
+    	}
+    	
+    	tTime = (tTime == 0) ? 0 : (tTime > 15 ? tTime : 15);
+    	return showDetailTwitters(refreshTwitterid, tTime, null, null, uiModel, httpServletRequest);
     }
 }

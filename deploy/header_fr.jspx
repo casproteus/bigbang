@@ -196,7 +196,7 @@
       <c:out value=" || " />
       <a href="${reset_url}">
         <spring:url value="/resources/images/reset.png" var="reset_img_url" />
-        <spring:message code="global_menu_resetView" var="reset_message" htmlEscape="false" />
+        <spring:message code="global_menu_setView" var="reset_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(reset_message)}" src="${reset_img_url}" title="${fn:escapeXml(reset_message)}" />
       </a>
   	  <!-- <util:theme/>  	   -->

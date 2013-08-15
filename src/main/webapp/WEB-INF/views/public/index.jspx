@@ -18,12 +18,13 @@
   		<!-- Admin has only one right column <spring:message code="NotesAndPrays" arguments="${spaceOwner}" htmlEscape="false" var="NotesAndPrays"/> -->
     </c:when>
   	<c:otherwise>
-		<spring:message code="label_public_index" arguments="${spaceOwner},${empty description ? publicDescription : description}" htmlEscape="false" var="title"/>
+		<spring:message code="label_public_index" arguments="${spaceOwner}" htmlEscape="false" var="title"/>
+		<c:set value="${empty description ? publicDescription : description}" var="motto" />
   		<spring:message code="NotesAndPrays" arguments="${spaceOwner}" htmlEscape="false" var="NotesAndPrays"/>
   	</c:otherwise>
   </c:choose>
   <div style="background: #efefef; padding: 5px; margin-bottom: 3px">
-    <div style="text-align: center; padding-bottom: 5px"><b>${title}</b></div>
+    <div style="text-align: center; padding-bottom: 5px"><b>${title}${motto}</b></div>
     <span> <!-- don't use "new" style here, because it make a right align, and will make the line height too low.-->
       <spring:url value="/twitters" var="write_url">
         <spring:param name="form" />

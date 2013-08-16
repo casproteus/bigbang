@@ -32,7 +32,6 @@
 	<td>link=Login</td>
 	<td></td>
 </tr>
-<!--delete all new MGs-->
 <!--delete all new BGs and RMs RM shoud be deleted automatically when BM is deleted.-->
 <tr>
 	<td>clickAndWait</td>
@@ -106,11 +105,33 @@
 	<td></td>
 </tr>
 <!--delete all new TGs-->
+<!---start to remove the tag created for blog.-->
 <tr>
 	<td>clickAndWait</td>
 	<td>css=img[alt=&quot;Manage Tags&quot;]</td>
 	<td></td>
 </tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_BigTag_id_pane']/table/tbody/tr/td[4]</td>
+	<td>new created tag for blog, will be removed after test</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=input.image</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Are you sure to delete this item?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>new created tag for blog, will be removed after test</td>
+	<td></td>
+</tr>
+<!---start to remove the tag created for bookmark.-->
 <tr>
 	<td>verifyText</td>
 	<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_BigTag_id_pane']/table/tbody/tr/td[4]</td>
@@ -208,6 +229,7 @@
 	<td>css=p</td>
 	<td>Your Login Was Not Successful. Please Try Again. Reason: The user dose not exist. Please check the input and try again. .</td>
 </tr>
+<!--delete all new MGs-->
 </tbody></table>
 </body>
 </html>

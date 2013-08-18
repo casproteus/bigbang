@@ -175,6 +175,6 @@ public class CustomizeController {
     	
     	//go to personal page;
     	 PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
-         return tController.index(tCurName, -1, -1, uiModel);
+         return tController.index(tCurName, -1, -1, uiModel, request);
     }
 }

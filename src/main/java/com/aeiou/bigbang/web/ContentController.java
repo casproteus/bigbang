@@ -148,7 +148,7 @@ public class ContentController {
                 uiModel.asMap().clear();
                 content.persist();
                 PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
-                return tController.index(tUserAccount.getName(), -1, -1, uiModel);
+                return tController.index(tUserAccount.getName(), -1, -1, uiModel, httpServletRequest);
             } else {
                 populateEditForm(uiModel, content, httpServletRequest);
                 return "contents/create";

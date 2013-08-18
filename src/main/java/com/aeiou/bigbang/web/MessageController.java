@@ -89,7 +89,7 @@ public class MessageController {
         tReceiver.setNewMessageAmount(newMessageNumber + 1);
         tReceiver.persist();
         PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
-        return tController.index(pReceiverName, -1, -1, uiModel);
+        return tController.index(pReceiverName, -1, -1, uiModel, httpServletRequest);
     }
 
     @RequestMapping(produces = "text/html")

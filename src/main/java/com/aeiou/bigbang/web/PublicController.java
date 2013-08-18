@@ -309,7 +309,7 @@ public class PublicController{
      */
     @RequestMapping(params = "hire", produces = "text/html")
     public String hirePublisher(@RequestParam(value = "hire", required = false) String publisher,
-    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, HttpServletRequest request) {
     	
     	String tCurName = userContextService.getCurrentUserName();				// not logged in? to login page.
 		if(tCurName == null)
@@ -334,7 +334,7 @@ public class PublicController{
 		tPublisher.persist();
 		
 		PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
-		return(tController.index(tCurName, page, size, uiModel));
+		return(tController.index(tCurName, page, size, uiModel, request));
     }
     
     /**
@@ -347,7 +347,7 @@ public class PublicController{
      */
     @RequestMapping(params = "fire", produces = "text/html")
     public String firePublisher(@RequestParam(value = "fire", required = false) String publisher,
-    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel) {
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, HttpServletRequest request) {
     	
     	String tCurName = userContextService.getCurrentUserName();
 		if(tCurName == null)
@@ -371,7 +371,7 @@ public class PublicController{
 		tOwner.persist();
 		tPublisher.persist();
 
-		return(SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tCurName, page, size, uiModel));
+		return(SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class).index(tCurName, page, size, uiModel, request));
     }
     
    /**
@@ -399,7 +399,7 @@ public class PublicController{
 		if("reset".equals(relayouttype)){
 			tOwner.setLayout(null);
 			tOwner.persist();
-			return tController.index(tCurName, 0, 8, uiModel);
+			return tController.index(tCurName, 0, 8, uiModel, request);
 		}
 		
 		BigTag tBigTag = BigTag.findBigTag(tagId);
@@ -701,6 +701,6 @@ public class PublicController{
    		tOwner.persist();
    		
    		//----------------prepare for show-------------------
-		return(tController.index(tCurName, 0, 8, uiModel));
+		return(tController.index(tCurName, 0, 8, uiModel, request));
     }
 }

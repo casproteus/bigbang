@@ -3,8 +3,6 @@ package com.aeiou.bigbang.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.web.servlet.theme.CookieThemeResolver;
-
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Remark;
@@ -41,9 +39,25 @@ public class BigUtil {
 				 && pCurUser != null){	//Looks like first run will see exception of line 137, SynchizationManager(persistant rool back). will be OK when run it the second time or the third time.
 			new ClientSyncTool().startToSynch(pCurUser, pCommand);
 			return true;
-		} else if("0801_niuyao".equals(pCommand) && pCurUser != null){
-			//SpringApplicationContext.getApplicationContext().getBean("themeResolver", CookieThemeResolver.class).setDefaultThemeName("2");
-			new CookieThemeResolver().setThemeName(null, null, "2");//DefaultThemeName("2");
+		} else if(pCommand != null && pCommand.startsWith("20130818_shufful") && pCurUser != null){
+			String tName = pCommand.substring("0818_shufful".length()).trim();
+			UserAccount tUA = UserAccount.findUserAccountByName(tName);
+			if(tUA != null){
+				List<Content> tList = Content.findContentsByPublisher(tUA, BigAuthority.getAuthSet(tUA,tUA), 0, 0, null);
+				if(tList != null){
+					for (int i = 0; i < tList.size(); i++){
+						Content tBM = tList.get(i);
+						UserAccount tGhostUA = getGhostUA();
+						tBM.setPublisher(tGhostUA);
+						if(tBM.getUncommonBigTag() != null){
+							BigTag tTag = BigTag.findBMTagByNameAndOwner(tBM.getUncommonBigTag().getTagName(), tGhostUA.getName());
+							if(tTag != null)
+								tBM.setUncommonBigTag(tTag);
+						}
+						tBM.persist();
+					}
+				}
+			}
 		}
 		
 		return false;
@@ -224,4 +238,55 @@ public class BigUtil {
 			}
 		}
 	}
+	
+	private static List<UserAccount> tGhostUAList;
+	private static UserAccount getGhostUA(){
+		if(tGhostUAList == null){
+			tGhostUAList = new ArrayList<UserAccount>();
+			UserAccount tU0 = UserAccount.findUserAccountByName("mwang");
+			UserAccount tU1 = UserAccount.findUserAccountByName("gchen");
+			UserAccount tU2 = UserAccount.findUserAccountByName("sha");
+			UserAccount tU3 = UserAccount.findUserAccountByName("xJin");
+			UserAccount tU4 = UserAccount.findUserAccountByName("gZhou");
+			UserAccount tU5 = UserAccount.findUserAccountByName("AustinL");
+			UserAccount tU6 = UserAccount.findUserAccountByName("James");
+			UserAccount tU7 = UserAccount.findUserAccountByName("Gustsao");
+			UserAccount tU8 = UserAccount.findUserAccountByName("SYLi");
+			UserAccount tU9 = UserAccount.findUserAccountByName("Bobchu");
+			UserAccount tU10 = UserAccount.findUserAccountByName("JackM");
+			UserAccount tU11 = UserAccount.findUserAccountByName("HQ.J");
+			UserAccount tU12 = UserAccount.findUserAccountByName("NancyS");
+			UserAccount tU13 = UserAccount.findUserAccountByName("JaneH");
+			UserAccount tU14 = UserAccount.findUserAccountByName("HerryY");
+			UserAccount tU15 = UserAccount.findUserAccountByName("MarryLi");
+			UserAccount tU16 = UserAccount.findUserAccountByName("MichaelM");
+			UserAccount tU17 = UserAccount.findUserAccountByName("Jack99");
+			UserAccount tU18 = UserAccount.findUserAccountByName("Sam2013");
+			UserAccount tU19 = UserAccount.findUserAccountByName("David8");
+			tGhostUAList.add(tU0);
+			tGhostUAList.add(tU1);
+			tGhostUAList.add(tU2);
+			tGhostUAList.add(tU3);
+			tGhostUAList.add(tU4);
+			tGhostUAList.add(tU5);
+			tGhostUAList.add(tU6);
+			tGhostUAList.add(tU7);
+			tGhostUAList.add(tU8);
+			tGhostUAList.add(tU9);
+			tGhostUAList.add(tU10);
+			tGhostUAList.add(tU11);
+			tGhostUAList.add(tU12);
+			tGhostUAList.add(tU13);
+			tGhostUAList.add(tU14);
+			tGhostUAList.add(tU15);
+			tGhostUAList.add(tU16);
+			tGhostUAList.add(tU17);
+			tGhostUAList.add(tU18);
+			tGhostUAList.add(tU19);
+		}
+		int randomIdx = (int) ((19 - 0) * Math.random() + 0);
+		return tGhostUAList.get(randomIdx);
+	}
+	//SpringApplicationContext.getApplicationContext().getBean("themeResolver", CookieThemeResolver.class).setDefaultThemeName("2");
+
 }

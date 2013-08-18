@@ -11,22 +11,36 @@
       <spring:url var="url_theme1" value="">
         <spring:param name="theme" value="1" />
       </spring:url>
-      <spring:message code="global_theme_default" var="theme_standard" htmlEscape="false" />
-      <a href="${url_theme1}" title="${fn:escapeXml(theme_standard)}">${fn:escapeXml(theme_standard)}</a>
+      <spring:message code="global_theme_default" var="theme_1" htmlEscape="false" />
+      <a href="${url_theme1}" title="${fn:escapeXml(theme_1)}">${fn:escapeXml(theme_1)}</a>
       
       <c:out value=" | " />
       <spring:url var="url_theme2" value="">
         <spring:param name="theme" value="2" />
       </spring:url>
-      <spring:message code="global_theme_sky" var="theme_alt" htmlEscape="false" />
-      <a href="${url_theme2}" title="${fn:escapeXml(theme_alt)}">${fn:escapeXml(theme_alt)}</a>
+      <spring:message code="global_theme_sky" var="theme_2" htmlEscape="false" />
+      <a href="${url_theme2}" title="${fn:escapeXml(theme_2)}">${fn:escapeXml(theme_2)}</a>
       
       <c:out value=" | " />
       <spring:url var="url_theme3" value="">
         <spring:param name="theme" value="3" />
       </spring:url>
-      <spring:message code="global_theme_spidman" var="theme_3" htmlEscape="false" />
+      <spring:message code="global_theme_spot" var="theme_3" htmlEscape="false" />
       <a href="${url_theme3}" title="${fn:escapeXml(theme_3)}">${fn:escapeXml(theme_3)}</a>
+      
+       <c:out value=" | " />
+      <spring:url var="url_theme4" value="">
+        <spring:param name="theme" value="4" />
+      </spring:url>
+      <spring:message code="global_theme_circle" var="theme_4" htmlEscape="false" />
+      <a href="${url_theme4}" title="${fn:escapeXml(theme_4)}">${fn:escapeXml(theme_4)}</a>
+      
+       <c:out value=" | " />
+      <spring:url var="url_theme5" value="">
+        <spring:param name="theme" value="5" />
+      </spring:url>
+      <spring:message code="global_theme_line" var="theme_5" htmlEscape="false" />
+      <a href="${url_theme5}" title="${fn:escapeXml(theme_5)}">${fn:escapeXml(theme_5)}</a>
       
     </span>
   </c:if>

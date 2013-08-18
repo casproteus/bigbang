@@ -23,16 +23,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>css=span.dijitTitlePaneTextNode</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>css=span.dijitTitlePaneTextNode</td>
-	<td></td>
-</tr>
-<tr>
 	<td>verifyText</td>
 	<td>css=span.dijitTitlePaneTextNode</td>
 	<td>Create new User Account</td>
@@ -80,9 +70,9 @@
 	<td>exact:Name * :</td>
 </tr>
 <tr>
-	<td>verifyText</td>
-	<td>css=#_s_com_aeiou_bigbang_domain_UserAccount_password_id &gt; label</td>
-	<td>exact:Password * :</td>
+	<td>verifyTextPresent</td>
+	<td>Password * :</td>
+	<td></td>
 </tr>
 <tr>
 	<td>verifyText</td>
@@ -116,9 +106,14 @@
 	<td></td>
 </tr>
 <tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyText</td>
 	<td>css=b</td>
-	<td>Welcome to the space of 用户abc 001----I am a test user, I am supposed to disppear myself after test.</td>
+	<td>Welcome to the space of abc 用户 01230----Read, Share and Follow ! Online community to find the&quot;Good Ones&quot; !</td>
 </tr>
 <!--add email and description text.-->
 <tr>
@@ -165,7 +160,7 @@
 <tr>
 	<td>verifyText</td>
 	<td>css=b</td>
-	<td>Welcome to the space of 用户abc 001----I am a test user</td>
+	<td>Welcome to the space of abc 用户 01230----I am a test user, I'll disppear myself after test.</td>
 </tr>
 <tr>
 	<td>verifyText</td>
@@ -307,6 +302,11 @@
 <tr>
 	<td>verifyText</td>
 	<td>//div[@id='_title_contentlistright1_id']/div/div/span[2]</td>
+	<td>OTHER</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='_title_contentlistright2_id']/div/div/span[2]</td>
 	<td>Info For Team Members</td>
 </tr>
 <!--logout-->

@@ -13,9 +13,10 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/messages</td>
+	<td>/abc%20%E7%94%A8%E6%88%B7%2001230</td>
 	<td></td>
 </tr>
+<!--open existing account info to verify.-->
 <tr>
 	<td>clickAndWait</td>
 	<td>css=img[alt=&quot;Manage Account Info&quot;]</td>
@@ -46,13 +47,14 @@
 	<td>id=_description_id</td>
 	<td>I am a test user, I'll disppear myself after test.</td>
 </tr>
+<!--start to modify the infos-->
 <tr>
 	<td>click</td>
 	<td>id=_name_id</td>
 	<td></td>
 </tr>
 <tr>
-	<td>sendKeys</td>
+	<td>type</td>
 	<td>id=_name_id</td>
 	<td>用户abc 01230</td>
 </tr>
@@ -62,7 +64,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>sendKeys</td>
+	<td>type</td>
 	<td>id=_password_id</td>
 	<td>4321</td>
 </tr>
@@ -72,12 +74,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>sendKeys</td>
+	<td>type</td>
 	<td>id=_email_id</td>
 	<td>tao@ShareTheGoodOnes.com</td>
 </tr>
 <tr>
-	<td>sendKeys</td>
+	<td>type</td>
 	<td>id=_description_id</td>
 	<td>in God, we trust!</td>
 </tr>
@@ -86,7 +88,7 @@
 	<td>id=proceed</td>
 	<td></td>
 </tr>
-<!--verify-->
+<!--verify the commit is successful-->
 <tr>
 	<td>verifyText</td>
 	<td>id=_s_com_aeiou_bigbang_domain_UserAccount_name_name_id</td>
@@ -104,12 +106,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>sendKeys</td>
+	<td>type</td>
 	<td>id=j_username</td>
 	<td>用户abc 01230</td>
 </tr>
 <tr>
-	<td>sendKeys</td>
+	<td>type</td>
 	<td>id=j_password</td>
 	<td>4321</td>
 </tr>
@@ -123,26 +125,16 @@
 	<td>css=b</td>
 	<td>Welcome to the space of 用户abc 01230----in God, we trust!</td>
 </tr>
-<!--change back-->
+<!--change all the info back, so the login test case can work-->
 <tr>
 	<td>clickAndWait</td>
 	<td>css=img[alt=&quot;Manage Account Info&quot;]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>sendKeys</td>
+	<td>type</td>
 	<td>id=_name_id</td>
-	<td>用户 01230</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=widget__name_id</td>
-	<td></td>
-</tr>
-<tr>
-	<td>sendKeys</td>
-	<td>id=_name_id</td>
-	<td>abc用户 01230</td>
+	<td>abc 用户 01230</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -150,16 +142,25 @@
 	<td></td>
 </tr>
 <tr>
-	<td>sendKeys</td>
+	<td>type</td>
 	<td>id=_password_id</td>
 	<td>1234</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=_email_id</td>
+	<td>tester@ShareTheGoodOnes.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=_description_id</td>
+	<td>I am a test user, I'll disppear myself after test.</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>id=proceed</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

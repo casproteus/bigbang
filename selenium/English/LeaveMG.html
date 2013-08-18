@@ -11,15 +11,15 @@
 <thead>
 <tr><td rowspan="1" colspan="3">LeaveMG</td></tr>
 </thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
 <!--log out first-->
 <tr>
 	<td>clickAndWait</td>
 	<td>link=Logout</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img</td>
 	<td></td>
 </tr>
 <!--login with an other user-->
@@ -58,6 +58,11 @@
 	<td>clickAndWait</td>
 	<td>link=Leave abc 用户 01230 a Message</td>
 	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=dijitEditorBody</td>
+	<td>This is a test message and should be removed after test</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -107,16 +112,15 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyText</td>
-	<td>css=td.tWireless</td>
-	<td>This is a test message and should be removed after test<br /> -- tao 23:34 15/08/2013</td>
+	<td>verifyTextPresent</td>
+	<td>This is a test message and should be removed after test</td>
+	<td></td>
 </tr>
 <tr>
 	<td>verifyTextNotPresent</td>
 	<td>[1]</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

@@ -40,13 +40,22 @@ public class BigUtil {
 			new ClientSyncTool().startToSynch(pCurUser, pCommand);
 			return true;
 		} else if(pCommand != null && pCommand.startsWith("20130818_shufful") && pCurUser != null){
-			String tName = pCommand.substring("0818_shufful".length()).trim();
+			String tName = pCommand.substring("20130818_shufful".length()).trim();
+			String tTagName = null;				//if there's a space in param, means, user specify not only a username but also a tag.
+			int tPos = tName.indexOf(' ');		//that also means if the username contains a space, then his bookmark can not be shuttled.
+			if(tPos > 0){
+				tName = tName.substring(0, tPos);
+				tTagName = tName.substring(tPos + 1);
+			}
 			UserAccount tUA = UserAccount.findUserAccountByName(tName);
 			if(tUA != null){
 				List<Content> tList = Content.findContentsByPublisher(tUA, BigAuthority.getAuthSet(tUA,tUA), 0, 0, null);
 				if(tList != null){
 					for (int i = 0; i < tList.size(); i++){
 						Content tBM = tList.get(i);
+						if(tTagName != null && !tTagName.equals(tBM.getCommonBigTag().getTagName()))
+							continue;	//if the content is not in the categray defined in parameter, then don't change.
+						
 						UserAccount tGhostUA = getGhostUA();
 						tBM.setPublisher(tGhostUA);
 						if(tBM.getUncommonBigTag() != null){

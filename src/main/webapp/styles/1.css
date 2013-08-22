@@ -1,4 +1,23 @@
 /* main elements */
+.headImgArea {
+	background-image: url(../images/bg/head1.png);
+	background-repeat: no-repeat;
+	background-position: 0px 0px;
+	top: 0px;
+	left: 0px;
+	height: 129px;
+	width: 800px;
+	margin: 0px auto;
+}
+
+.emptySpan{
+  position:absolute; 
+  height: 129px;
+  width: 800px;
+  top: 50%-64;
+  left: 50%-400;
+  z-index: 1;
+}
 
 body,div,td {
 	font-family: Arial, Helvetica, sans-serif, SimSun;

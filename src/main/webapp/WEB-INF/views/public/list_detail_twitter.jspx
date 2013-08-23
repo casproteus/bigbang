@@ -68,6 +68,11 @@
 			if(hasNoValue()){
 				if(${refresh_time} > 0)
 					document.getElementById("RefreshTimeSettingForm").submit();//location.replace(location.href) 		//window.location.reload();  @NOTE:difference is that reload cause the notice dialog(data will be supply again.)
+										
+					//omvc = window.open("http://localhost/bigbang/","boxDetail","width=550,height=350,resizable=1,scrollbars=0,status=no,toolbar=no,location=no,menu=no");
+					//omvc.focus();
+						     
+						     
 			}
 		} 
 		setTimeout('myrefresh()', ${refresh_time * 1000});

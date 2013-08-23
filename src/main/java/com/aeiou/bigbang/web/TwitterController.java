@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.theme.CookieThemeResolver;
 
 @RequestMapping("/twitters")
 @Controller
@@ -209,6 +210,11 @@ public class TwitterController {
     public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel, HttpServletRequest request) {
         Twitter tTwitter = Twitter.findTwitter(twitterid);
         UserAccount tOwner = tTwitter.getPublisher();
+        //if the owner has setted theme, then use the theme! (will effect only on this request)
+    	int tTheme = tOwner.getTheme();
+    	if(tTheme != 0)
+    		request.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME, String.valueOf(tTheme));
+    	
         int sizeNo = size == null ? 20 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
         String tCurName = userContextService.getCurrentUserName();

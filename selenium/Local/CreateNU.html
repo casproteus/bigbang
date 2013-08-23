@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://www.sharethegoodones.com/" />
+<title>CreateNU</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">CreateNU</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/bigbang/</td>
+	<td></td>
+</tr>
+<!--open sign up page.-->
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Sign Up</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=span.dijitTitlePaneTextNode</td>
+	<td>Create new User Account</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=label</td>
+	<td>exact:Name * :</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#_c_com_aeiou_bigbang_domain_UserAccount_password_id &gt; label</td>
+	<td>exact:Password * :</td>
+</tr>
+<!--input username an password.-->
+<tr>
+	<td>click</td>
+	<td>id=_name_id</td>
+	<td></td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>id=_name_id</td>
+	<td>abc 用户 01230</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_password_id</td>
+	<td></td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>id=_password_id</td>
+	<td>1234</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=#fc_com_aeiou_bigbang_domain_UserAccount_submit &gt; #proceed</td>
+	<td></td>
+</tr>
+<!--verify succes message.-->
+<tr>
+	<td>verifyText</td>
+	<td>css=label</td>
+	<td>exact:Name * :</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Password * :</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=_s_com_aeiou_bigbang_domain_UserAccount_name_name_id</td>
+	<td>abc 用户 01230</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=_s_com_aeiou_bigbang_domain_UserAccount_password_password_id</td>
+	<td>1234</td>
+</tr>
+<!--log in with new created account.  make sure the remember me is not clicked.-->
+<tr>
+	<td>sendKeys</td>
+	<td>id=j_username</td>
+	<td>abc 用户 01230</td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>id=j_password</td>
+	<td>1234</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=b</td>
+	<td>Welcome to the space of abc 用户 01230----Read, Share and Follow ! Online community to find the&quot;Good Ones&quot; !</td>
+</tr>
+<!--add email and description text.-->
+<tr>
+	<td>clickAndWait</td>
+	<td>css=img[alt=&quot;Manage Account Info&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_description_id</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=_description_id</td>
+	<td>I am a test user, I'll disppear myself after test.</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=widget__email_id</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=_email_id</td>
+	<td>tester@ShareTheGoodOnes.com</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=proceed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=_s_com_aeiou_bigbang_domain_UserAccount_description_description_id</td>
+	<td>I am a test user, I'll disppear myself after test.</td>
+</tr>
+<!--switch to personal space to adjust the display.-->
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Home Page of abc 用户 01230</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=b</td>
+	<td>Welcome to the space of abc 用户 01230----I am a test user, I'll disppear myself after test.</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='_title_contentlistleft1_id']/div/div/span[2]</td>
+	<td>Useful Websites</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='_title_contentlistright0_id']/div/div/span[2]</td>
+	<td>Photos</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='_title_contentlistright1_id']/div/div/span[2]</td>
+	<td>Info For Team Members</td>
+</tr>
+<!----to adjust the display-->
+<tr>
+	<td>clickAndWait</td>
+	<td>css=img[alt=&quot;Customize Page Layout&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=国内新闻</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=科技</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=未分类内容</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=Photos</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=input[name=&quot;Good Recipes&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=proceed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=span.dijitTitlePaneTextNode</td>
+	<td>Useful Websites</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='_title_contentlistright0_id']/div/div/span[2]</td>
+	<td>Info For Team Members</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=span.dijitTitlePaneTextNode</td>
+	<td>国内新闻</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='_title_contentlistleft2_id']/div/div/span[2]</td>
+	<td>科技</td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Photos</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Good Recipes</td>
+	<td></td>
+</tr>
+<!--adjust the positions, can only make sure there's no exception.-->
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//img[@alt='Move Left'])[5]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//img[@alt='Move Left'])[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//img[@alt='Move Up'])[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//img[@alt='Move Down'])[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//img[@alt='Move Down'])[4]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//img[@alt='Move Left'])[8]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=span.dijitTitlePaneTextNode</td>
+	<td>国内新闻</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='_title_contentlistleft2_id']/div/div/span[2]</td>
+	<td>科技</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='_title_contentlistleft1_id']/div/div/span[2]</td>
+	<td>Useful Websites</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='_title_contentlistright1_id']/div/div/span[2]</td>
+	<td>未分类内容</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='_title_contentlistright2_id']/div/div/span[2]</td>
+	<td>Info For Team Members</td>
+</tr>
+<!--logout-->
+<tr>
+	<td>verifyText</td>
+	<td>link=Logout</td>
+	<td>Logout</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Logout</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=span.emptySpan</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=headloginform</td>
+	<td>Name<br /><br /><br /> Password<br /><br /><br /> | Login | Remember Me || Sign UpSave&amp;Share</td>
+</tr>
+</tbody></table>
+</body>
+</html>

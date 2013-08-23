@@ -83,6 +83,12 @@
 			    dijit.byId('j_username').set("value", rememberedName);
 			    dijit.byId('j_password').set("value", rememberedPassword);
 			  }
+			  
+		      var Sys = {};
+		      var ua = navigator.userAgent.toLowerCase();
+		      if(ua.indexOf('firefox') > 0)
+		       	document.getElementById('proceed').type='submit';
+		        
 			})
         </script>
 

@@ -42,6 +42,13 @@
       <spring:message code="global_theme_line" var="theme_5" htmlEscape="false" />
       <a href="${url_theme5}" title="${fn:escapeXml(theme_5)}">${fn:escapeXml(theme_5)}</a>
       
+       <c:out value=" | " />
+      <spring:url var="url_theme6" value="">
+        <spring:param name="theme" value="6" />
+      </spring:url>
+      <spring:message code="global_theme_stone" var="theme_6" htmlEscape="false" />
+      <a href="${url_theme6}" title="${fn:escapeXml(theme_6)}">${fn:escapeXml(theme_6)}</a>
+      
     </span>
   </c:if>
 </jsp:root>

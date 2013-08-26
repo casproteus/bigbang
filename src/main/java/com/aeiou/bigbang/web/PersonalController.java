@@ -226,7 +226,7 @@ public class PersonalController{
     	//so, can not use the tauthset directly. the logic should be:
     	//if current user is owner, then display public and visible to friend ones, otherwise, display only public ones
     	tAuthSet = BigAuthority.getAuthSetForTwitterOfFriends(tCurUser, tOwner);
-    	List<Twitter> twitterRight = Twitter.findTwitterByOwner(tOwner, tAuthSet, 0, 8, null);
+    	List<Twitter> twitterRight = Twitter.findTwitterByOwner(tOwner, tAuthSet, 0, twitterLeft == null ? 8 : twitterLeft.size(), null);
         uiModel.addAttribute("twitterLeft", twitterLeft);
         uiModel.addAttribute("twitterRight", twitterRight);
         //---------------------------------------------------------------------------------

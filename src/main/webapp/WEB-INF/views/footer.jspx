@@ -7,4 +7,8 @@
 
   <util:theme/>
   <util:websiteSwitch/>
+  <br/>
+  <div style="color: #AAAAAA; text-align: right;">
+   ©Copyright 2012 - 2013 | info@sharethegoodones.com
+  </div>
 </div>

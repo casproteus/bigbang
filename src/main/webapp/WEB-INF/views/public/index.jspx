@@ -64,6 +64,17 @@
 			  </page:contentPane>
 		  	</td>
 		</c:if>
+		<c:if test="${not empty twitterRightFix}">
+		   <td class="tWireless nopaddingleft" valign="top" >
+			  <page:contentPane id="twitterRightFix" items="${twitterRightFix}" label="${NotesAndPraysFromFriend}" bottom="8">
+			    <table:twitterbox data="${twitterRightFix}" id="l_com_aeiou_bigbang_domain_Content" type="friendFix" path="/public" spaceOwner="${spaceOwner}">
+			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
+			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
+			        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
+			    </table:twitterbox>
+			  </page:contentPane>
+		   </td>
+	  	</c:if>
 	  	<c:if test="${not empty twitterRight}">
 		   <td class="tWireless nopaddingright" valign="top" >
 			  <page:contentPane id="twitterRight" items="${twitterRight}" label="${NotesAndPraysFromFriend}" bottom="8">
@@ -74,7 +85,7 @@
 			    </table:twitterbox>
 			  </page:contentPane>
 		   </td>
-	  	</c:if>
+	  	</c:if>	  	
 	  </tr></table>
   </c:if>
   

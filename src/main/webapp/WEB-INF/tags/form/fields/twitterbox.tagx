@@ -56,7 +56,7 @@
 			    	<c:out value="${item['twittertag']}" />
 	      		</td>
       		</c:if>
-      		<c:if test="${type eq 'friend'}">
+      		<c:if test="${type eq 'friend' or type eq 'friendFix'}">
       			<td class="tWireless namebox">
 		            <c:set var="columnType" value="${types[num.count-1]}" />
 		            <c:set var="columnMaxLength" value="${lengths[num.count-1]}" />
@@ -84,7 +84,7 @@
           </c:if> -->
         </td>
         <td class="tWireless namebox">
-        	<c:if test="${empty maxPages}">
+        	<c:if test="${empty maxPages and type ne 'friendFix'}">
 	        	<spring:url value="${path}" var="readMore_url">
         			<spring:param name="listmoreblog" value="${spaceOwner}"/>
         			<spring:param name="twittertype" value="${type}"/>

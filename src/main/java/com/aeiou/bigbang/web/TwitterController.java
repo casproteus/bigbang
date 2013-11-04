@@ -62,7 +62,7 @@ public class TwitterController {
     /**if the hidden flag is set, then when create or update page submitted, go to this method.
      * will create a special page for creating tag. when this page committed, will back to the createTag method.
      */
-    public String createForm_Tag(Model uiModel, HttpServletRequest httpServletRequest, Long twitterID, String twitterTitle, String twitterContent) {
+    private String createForm_Tag(Model uiModel, HttpServletRequest httpServletRequest, Long twitterID, String twitterTitle, String twitterContent) {
         BigTag bigTag = new BigTag();
         bigTag.setTwitterID(twitterID);
         bigTag.setTwitterTitle(twitterTitle);
@@ -233,6 +233,8 @@ public class TwitterController {
         remarktos.add(tTwitter);
         uiModel.addAttribute("remarktos", remarktos);
         uiModel.addAttribute("refresh_time", 0);
+        //not need to check how many new remarks. because when not logged in, user can not set the refresh time. 
+        //so the new item number make no use to them.
         return "public/list_detail_twitter";
     }
 }

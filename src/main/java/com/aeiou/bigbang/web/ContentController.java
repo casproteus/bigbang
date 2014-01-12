@@ -142,7 +142,8 @@ public class ContentController {
 
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(@Valid Content content, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (StringUtils.isNotBlank(content.getAddingTagFlag())) return createForm_Tag(uiModel, httpServletRequest, content.getTitle(), content.getSourceURL(), content.getCommonBigTag().getTagName());
+        if (StringUtils.isNotBlank(content.getAddingTagFlag())) 
+        	return createForm_Tag(uiModel, httpServletRequest, content.getTitle(), content.getSourceURL(), content.getCommonBigTag().getTagName());
         if (bindingResult.hasErrors()) {
             if (bindingResult.getAllErrors().size() == 1 && content.getPublisher() == null) {
                 String tCurName = userContextService.getCurrentUserName();

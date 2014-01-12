@@ -164,7 +164,8 @@ public class RemarkController {
         uiModel.addAttribute("spaceOwner", tOwner);
         float nrOfPages;
         uiModel.addAttribute("twitter", tTwitter);
-        uiModel.addAttribute("remarks", Remark.findRemarkByTwitter(tTwitter, tAuthSet, firstResult, sizeNo));
+        List<Remark> tRemarksList = Remark.findRemarkByTwitter(tTwitter, tAuthSet, firstResult, sizeNo);
+        uiModel.addAttribute("remarks", tRemarksList);
         nrOfPages = (float) Remark.countRemarksByTwitter(tTwitter, tAuthSet) / sizeNo;
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         Remark tRemark = new Remark();
@@ -174,6 +175,18 @@ public class RemarkController {
         remarktos.add(tTwitter);
         uiModel.addAttribute("remarktos", remarktos);
         uiModel.addAttribute("refresh_time", refresh_time);
+        
+        //check how many new remark since last remark.
+        //if it's not displaying the lastest ones, it's pagging up to previous page, then don't show new message account.
+        if(page == null || page.intValue() == 0){
+        	int i = 0;
+        	for(; i < tRemarksList.size(); i++){
+        		if(tRemarksList.get(i).getPublisher().getId() == tCurUser.getId())
+        			break;
+        	}
+        	uiModel.addAttribute("newMessageNumber", i);
+        }
+        		
         return "public/list_detail_twitter";
     }
 

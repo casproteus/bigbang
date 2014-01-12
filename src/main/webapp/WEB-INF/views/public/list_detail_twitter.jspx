@@ -68,11 +68,8 @@
 			if(hasNoValue()){
 				if(${refresh_time} > 0)
 					document.getElementById("RefreshTimeSettingForm").submit();//location.replace(location.href) 		//window.location.reload();  @NOTE:difference is that reload cause the notice dialog(data will be supply again.)
-										
 					//omvc = window.open("http://localhost/bigbang/","boxDetail","width=550,height=350,resizable=1,scrollbars=0,status=no,toolbar=no,location=no,menu=no");
 					//omvc.focus();
-						     
-						     
 			}
 		} 
 		setTimeout('myrefresh()', ${refresh_time * 1000});
@@ -91,6 +88,43 @@
 				return false;  //var ie = document.frames["_content_id__iframe"].document.getElementById("dijitEditorBody").??;
 		    } 
 		}
+		
+		
+		//to make the title bar shining if there's new messages coming.
+		var message={
+			time: 0,
+			title: document.title,
+			timer: null,
+			// to display new message.
+			show:function(){
+				var title = message.title.replace("[]", "").replace("[new mesage]", "");
+				// timer. set the frequency of witching the message which have the effect of shinning.
+				message.timer = setTimeout(
+					function() {
+						message.time++;
+						message.show();
+						if (message.time % 2 == 0) {
+							document.title = ${newMessageNumber} + " NEW! ";
+						}else{
+							document.title = title;
+						};
+					}, 600);
+				return [message.timer, message.title];
+			},
+			clear: function(){	// cancel the notification of new message.
+				clearTimeout(message.timer);
+				document.title = message.title;
+			}
+		};
+		
+		if(${newMessageNumber} > 0){
+			message.show();		
+			document.onclick = function() {
+				message.clear();
+			};
+		}
+		
+		
 	</script>
 	<!--  script language="JavaScript"> 
 		function refreshRemarks() {

@@ -3,7 +3,7 @@
  xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"  xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" 
  xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" 
  xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" 
- xmlns:spring="http://www.springframework.org/tags" version="2.0">
+ xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:spring="http://www.springframework.org/tags" version="2.0">
    
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
@@ -29,40 +29,75 @@
     
     <c:choose>
 		<c:when test="${pageContext['request'].userPrincipal != null}">
-		    <form:BigRemarkCreate twitterId="${twitter.id}" id="fc_com_aeiou_bigbang_domain_Remark" modelAttribute="newremark" path="/remarks" render="${empty dependencies}" z="sWlU6AsGIe2//4XQNOSFZm9xQRQ=">
+		    <form:BigRemarkCreate twitterId="${twitter.id}" id="fc_com_aeiou_bigbang_domain_Remark" refreshTime="${#refreshTime}" modelAttribute="newremark" path="/remarks" render="${empty dependencies}" z="sWlU6AsGIe2//4XQNOSFZm9xQRQ=">
 		        <field:editor field="content" id="c_com_aeiou_bigbang_domain_Remark_content" required="true" z="user-managed"/>
 		        <field:select field="authority" id="c_com_aeiou_bigbang_domain_Remark_authority" itemValue="id" items="${authorities}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/>
 		    </form:BigRemarkCreate>
-	  	 </c:when>
-	  	 <c:otherwise>
-	  	 	<form:BigLoginNotice twitterId="${twitter.id}" id="fc_com_aeiou_bigbang_domain_Remark" modelAttribute="newremark" path="/public" render="${empty dependencies}" z="sWlU6AsGIe2//4XQNOSFZm9xQRQ=">
-				<spring:url value="/remarks" var="addRemark_url">
-        			<spring:param name="owner" value="${spaceOwner}"/>
-        			<spring:param name="twitterid" value="${twitter.id}"/>
-        			<spring:param name="page" value="1"/>
-        			<spring:param name="size" value="${empty param.size ? 25 : param.size}"/>
+		    
+		    <!-- set automatically refresh! -->
+			<spring:url value="/remarks" var="RefreshTimeSettingForm_url">
+		        <spring:param name="refreshTime" value="${#refreshTime}"/>
+		        <spring:param name="refreshTwitterid" value="${twitter['id']}"/>
+		    </spring:url>
+			<form id="RefreshTimeSettingForm" action="${RefreshTimeSettingForm_url}"  method="POST" style="text-align: left">
+			    <!-- Rss function -->
+		    	<spring:url value="/remarks" var="addRemark_url">
+	       			<spring:param name="owner" value="${spaceOwner}"/>
+	       			<spring:param name="twitterid" value="${twitter.id}"/>
+	       			<spring:param name="page" value="1"/>
+	       			<spring:param name="size" value="${empty param.size ? 25 : param.size}"/>
 	        	</spring:url>
 		      	<a href="${addRemark_url}">
-		        	<spring:message code="global_login_notice"/>
+		        	<spring:message code="twitter_rss_link"/>
 		      	</a>
-		    </form:BigLoginNotice>
+		      	
+			    <c:out value=" || "></c:out>
+			    
+			    <spring:message code="refresh_time" htmlEscape="false" />
+			    <input type='text' id="refreshTime" name="refreshTime" value="${refresh_time}" style="width:20px;height:12px" />
+			    <spring:message code="second" htmlEscape="false" />
+		    	<spring:message code="relayout_submit" var="submit" htmlEscape="false" />
+		    	<button id="proceed" type="submit" value="submit" title="${fn:escapeXml(submit)}" style="width:22px;height:16px;vertical-align: top; cursor:pointer; border: 0px; ">
+		    		<spring:url value="/resources/images/submit.png" var="direction_img_submit" />
+			        <img alt="${fn:escapeXml(submit)}" src="${direction_img_submit}" title="${fn:escapeXml(submit)}" />
+		    	</button>
+		    </form>
+	  	 </c:when>
+	  	 <c:otherwise>
+	  	 	<util:BigLoginNotice id="fc_com_aeiou_bigbang_domain_Remark">
+		      	<!-- set automatically refresh! -->
+				<spring:url value="/remarks" var="RefreshTimeSettingForm_url">
+			        <spring:param name="refreshTime" value="${#refreshTime}"/>
+			        <spring:param name="refreshTwitterid" value="${twitter['id']}"/>
+			    </spring:url>
+				<form id="RefreshTimeSettingForm" action="${RefreshTimeSettingForm_url}"  method="POST" style="text-align: left">
+			    	<!-- link to login -->
+					<spring:url value="/remarks" var="addRemark_url">
+	        			<spring:param name="owner" value="${spaceOwner}"/>
+	        			<spring:param name="twitterid" value="${twitter.id}"/>
+	        			<spring:param name="page" value="1"/>
+	        			<spring:param name="size" value="${empty param.size ? 25 : param.size}"/>
+		        	</spring:url>
+			      	<a href="${addRemark_url}">
+			        	<spring:message code="global_login_notice"/>
+			      	</a>
+			      	
+			    	<c:out value=" || "></c:out>
+			    	
+			    	<spring:message code="refresh_time" htmlEscape="false" />
+				    <input type='text' id="refreshTime" name="refreshTime" value="${refresh_time}" style="width:20px;height:12px" />
+				    <spring:message code="second" htmlEscape="false" />
+			    	<spring:message code="relayout_submit" var="submit" htmlEscape="false" />
+			    	<button id="proceed" type="submit" value="submit" title="${fn:escapeXml(submit)}" style="width:22px;height:16px;vertical-align: top; cursor:pointer; border: 0px; ">
+			    		<spring:url value="/resources/images/submit.png" var="direction_img_submit" />
+				        <img alt="${fn:escapeXml(submit)}" src="${direction_img_submit}" title="${fn:escapeXml(submit)}" />
+			    	</button>
+			    </form>
+		    </util:BigLoginNotice>
 	  	 </c:otherwise>
 	</c:choose>
 
-	<spring:url value="/remarks" var="RefreshTimeSettingForm_url">
-        <spring:param name="refreshTime" value="${#refreshTime}"/>
-        <spring:param name="refreshTwitterid" value="${twitter['id']}"/>
-    </spring:url>
-	<form id="RefreshTimeSettingForm" action="${RefreshTimeSettingForm_url}"  method="POST" style="text-align: left">
-	    <spring:message code="refresh_time" htmlEscape="false" />
-	    <input type='text' id="refreshTime" name="refreshTime" value="${refresh_time}" style="width:20px;height:12px" />
-	    <spring:message code="second" htmlEscape="false" />
-    	<spring:message code="relayout_submit" var="submit" htmlEscape="false" />
-    	<button id="proceed" type="submit" value="submit" title="${fn:escapeXml(submit)}" style="width:22px;height:16px;vertical-align: top; cursor:pointer; border: 0px; ">
-    		<spring:url value="/resources/images/submit.png" var="direction_img_submit" />
-	        <img alt="${fn:escapeXml(submit)}" src="${direction_img_submit}" title="${fn:escapeXml(submit)}" />
-    	</button>
-    </form>
+
 	<script language="JavaScript"> 
 		function myrefresh(){
 			if(hasNoValue()){
@@ -133,4 +168,26 @@
 		    });
 		}
 	</script> -->
+	
+	<!-- automatically sending out email content every  
+    <c:choose>
+	  <c:when test="${pageContext['request'].userPrincipal != null}">
+		<spring:url value="/remarks" var="RefreshTimeSettingForm_url">
+	        <spring:param name="RssTwitterid" value="${twitter['id']}"/>
+	    </spring:url>
+		<form id="RefreshTimeSettingForm" action="${RefreshTimeSettingForm_url}"  method="POST" style="text-align: left">
+		    <spring:message code="refresh_time" htmlEscape="false" />
+		    <input type='text' id="refreshTime" name="refreshTime" value="${refresh_time}" style="width:20px;height:12px" />
+		    <spring:message code="second" htmlEscape="false" />
+	    	<spring:message code="relayout_submit" var="submit" htmlEscape="false" />
+	    	<button id="proceed" type="submit" value="submit" title="${fn:escapeXml(submit)}" style="width:22px;height:16px;vertical-align: top; cursor:pointer; border: 0px; ">
+	    		<spring:url value="/resources/images/submit.png" var="direction_img_submit" />
+		        <img alt="${fn:escapeXml(submit)}" src="${direction_img_submit}" title="${fn:escapeXml(submit)}" />
+	    	</button>
+	    </form>
+	  </c:when>
+	  <c:otherwise>
+	  </c:otherwise>
+	</c:choose>
+	-->
 </div> 

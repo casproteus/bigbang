@@ -45,16 +45,14 @@
 			<form id="RefreshTimeSettingForm" action="${RefreshTimeSettingForm_url}"  method="POST" style="text-align: left">
 			    
 			    <!-- Rss function -->
-		    	<spring:url value="/remarks" var="addRemark_url">
-	       			<spring:param name="owner" value="${spaceOwner}"/>
-	       			<spring:param name="twitterid" value="${twitter.id}"/>
-	       			<spring:param name="page" value="1"/>
-	       			<spring:param name="size" value="${empty param.size ? 25 : param.size}"/>
+		    	<spring:url value="/remarks" var="rss_url">
+	       			<spring:param name="rss" value="${refresh_time}"/>
+	       			<spring:param name="rsstwitterid" value="${twitter.id}"/>
 	        	</spring:url>
-		      	<a href="${addRemark_url}">
+		      	<a href="${rss_url}">
 		        	<spring:message code="twitter_rss_link"/>
 		      	</a>
-		      	
+
 			    <!-- form of refresh time -->
 			    <c:out value=" || "></c:out>
 			    <spring:message code="refresh_time" htmlEscape="false" />
@@ -76,7 +74,7 @@
 			    </spring:url>
 				<form id="RefreshTimeSettingForm_Anonymous" action="${RefreshTimeSettingForm_url}"  method="POST" style="text-align: left">
 			    	
-			    	<!-- Rss function -->
+			    	<!-- link to login -->
 					<spring:url value="/remarks" var="addRemark_url">
 	        			<spring:param name="owner" value="${spaceOwner}"/>
 	        			<spring:param name="twitterid" value="${twitter.id}"/>

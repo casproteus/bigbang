@@ -250,23 +250,16 @@ public class RemarkController {
     	return showDetailTwitters(refreshTwitterid, tTime, null, null, uiModel, httpServletRequest);
     }
     
-    @RequestMapping(params = "RssTwitterid", produces = "text/html")
-    public String setRssOrder( @RequestParam(value = "isCancelRss", required = true) boolean isCancelRss , RefreshBean refreshBean, @RequestParam(value = "RssTwitterid", required = true) Long refreshTwitterid, 
+    @RequestMapping(params = "rss", produces = "text/html")
+    public String setRssOrder(@RequestParam(value = "rss", required = true) int refresh_time, @RequestParam(value = "rsstwitterid", required = false) Long pTwitterId,
 		Model uiModel, HttpServletRequest httpServletRequest) {
-    	int tTime = 15;
-    	String tTimeStr = refreshBean.getRefreshTime();
-    	if (tTimeStr != null && tTimeStr.startsWith(","))
-    		tTimeStr = tTimeStr.substring(1);
-    	try{
-    		tTime = Integer.valueOf(tTimeStr);
-    	}catch(Exception e){
-    	}
-    	tTime = (tTime == 0) ? 0 : (tTime > 15 ? tTime : 15);
-
-    	if (isCancelRss){
-    	}else{
+    	
+    	String tCurName = userContextService.getCurrentUserName();
+        UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName); 
+    	if(tCurUser != null){
+    		//TODO:add a line into the RSSRemarkTable.
     	}
     	
-    	return showDetailTwitters(refreshTwitterid, tTime, null, null, uiModel, httpServletRequest);
+    	return showDetailTwitters(pTwitterId, refresh_time, null, null, uiModel, httpServletRequest);
 	}
 }

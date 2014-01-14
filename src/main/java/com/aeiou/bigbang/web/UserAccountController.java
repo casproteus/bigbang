@@ -81,7 +81,12 @@ public class UserAccountController {
             }
         }
         uiModel.asMap().clear();
-        userAccount.merge();
+        
+        tUserAccount.setName(userAccount.getName());
+        tUserAccount.setPassword(userAccount.getPassword());
+        tUserAccount.setEmail(userAccount.getEmail());
+        tUserAccount.setDescription(userAccount.getDescription());
+        tUserAccount.persist();
         return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
     }
 

@@ -35,6 +35,13 @@ public class RssTwitter {
         return tList != null && tList.size() > 0;
     }
     
+    public static List<RssTwitter> findAllListenersByTwitter(Twitter pTwitter){
+    	EntityManager tEntityManager = entityManager();
+    	TypedQuery<RssTwitter> tQuery = tEntityManager.createQuery("SELECT o FROM RssTwitter AS o WHERE o.twitter = :pTwitter", RssTwitter.class);
+        tQuery = tQuery.setParameter("pTwitter", pTwitter);
+        return tQuery.getResultList();
+    }
+    
     public static boolean deleteRssTwitterByTwitterAndUserAcount(Twitter pTwitter, UserAccount pUserAccount){
     	EntityManager tEntityManager = entityManager();
     	TypedQuery<RssTwitter> tQuery = tEntityManager.createQuery("SELECT o FROM RssTwitter AS o WHERE o.useraccount = :pUserAccount and o.twitter = :pTwitter", RssTwitter.class);

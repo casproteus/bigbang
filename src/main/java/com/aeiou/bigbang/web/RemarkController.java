@@ -1,5 +1,6 @@
 package com.aeiou.bigbang.web;
 
+import com.aeiou.bigbang.domain.Customize;
 import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.RssTwitter;
 import com.aeiou.bigbang.domain.Twitter;
@@ -94,7 +95,10 @@ public class RemarkController {
         }
         uiModel.asMap().clear();
         remark.persist();
+        
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
+        checkRss(remark);	//to check if need to send out notice email.
+        
         return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
     }
 
@@ -219,7 +223,10 @@ public class RemarkController {
         }
         uiModel.asMap().clear();
         remark.persist();
+        
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
+        checkRss(remark);	//to check if need to send out notice email.
+        
         return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest) + "&refresh_time=" + remark.getRefresh_time();
     }
 
@@ -257,6 +264,27 @@ public class RemarkController {
         return showDetailTwitters(pTwitterId, refresh_time, null, null, uiModel, httpServletRequest);
     }
 
+    private void checkRss(Remark remark){
+    	Twitter tTwitter = remark.getRemarkto();
+    	List<RssTwitter> tList = RssTwitter.findAllListenersByTwitter(tTwitter);
+    	String linkStr = "----http://www.ShareTheGoodOnes.com/public?twitterid=";
+    	Customize tCustomize = Customize.findCustomizeByKey("RemarkSourceLinkStr");
+    	if(tCustomize != null)
+    		linkStr = tCustomize.getCusValue();
+    	for(int i = 0; i < tList.size(); i++){
+    		RssTwitter tRT = tList.get(i);
+    		String email = tRT.getUseraccount().getEmail();
+    		if(email != null && email.indexOf("@") > 0 && email.indexOf(".", email.indexOf("@")) > 0){	//if it's valid.
+    			if(!email.equals(remark.getPublisher().getEmail()))										//if it's not the author himself.
+    				sendMessage("www.ShareTheGoodOnes.com", 
+    						"STGO:<<"+ tTwitter.getTwtitle() + ">>", 
+    						email, 
+    						remark.getContent() + "---" + remark.getPublisher().getName() + linkStr + tTwitter.getId());
+    		}
+    	}
+    }
+    
+    //TODO:have issues when sending out email, because hotmail could not display it well?
     public void sendMessage(String mailFrom, String subject, String mailTo, String message) {
         org.springframework.mail.SimpleMailMessage mailMessage = new org.springframework.mail.SimpleMailMessage();
         mailMessage.setFrom(mailFrom);

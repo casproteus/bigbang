@@ -5,6 +5,10 @@ package com.aeiou.bigbang.domain;
 
 import com.aeiou.bigbang.domain.RssTwitter;
 import com.aeiou.bigbang.domain.RssTwitterDataOnDemand;
+import com.aeiou.bigbang.domain.Twitter;
+import com.aeiou.bigbang.domain.TwitterDataOnDemand;
+import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.domain.UserAccountDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect RssTwitterDataOnDemand_Roo_DataOnDemand {
@@ -22,9 +27,27 @@ privileged aspect RssTwitterDataOnDemand_Roo_DataOnDemand {
     
     private List<RssTwitter> RssTwitterDataOnDemand.data;
     
+    @Autowired
+    private TwitterDataOnDemand RssTwitterDataOnDemand.twitterDataOnDemand;
+    
+    @Autowired
+    private UserAccountDataOnDemand RssTwitterDataOnDemand.userAccountDataOnDemand;
+    
     public RssTwitter RssTwitterDataOnDemand.getNewTransientRssTwitter(int index) {
         RssTwitter obj = new RssTwitter();
+        setTwitter(obj, index);
+        setUseraccount(obj, index);
         return obj;
+    }
+    
+    public void RssTwitterDataOnDemand.setTwitter(RssTwitter obj, int index) {
+        Twitter twitter = twitterDataOnDemand.getRandomTwitter();
+        obj.setTwitter(twitter);
+    }
+    
+    public void RssTwitterDataOnDemand.setUseraccount(RssTwitter obj, int index) {
+        UserAccount useraccount = userAccountDataOnDemand.getRandomUserAccount();
+        obj.setUseraccount(useraccount);
     }
     
     public RssTwitter RssTwitterDataOnDemand.getSpecificRssTwitter(int index) {

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -15,10 +16,10 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class RssTwitter {
 
     @NotNull
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<UserAccount> useraccount = new HashSet<UserAccount>();
+    @ManyToOne
+    private UserAccount useraccount = new UserAccount();
 
     @NotNull
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<Twitter> twitter = new HashSet<Twitter>();
+    @ManyToOne
+    private Twitter twitter = new Twitter();
 }

@@ -2,6 +2,8 @@ package com.aeiou.bigbang.web;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Message;
+import com.aeiou.bigbang.domain.RssTwitter;
+import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigUtil;
@@ -115,7 +117,20 @@ public class UserAccountController {
         }
         return "useraccounts/list";
     }
-
+    
+    @RequestMapping(params = "removerss", produces = "text/html")
+    public String removeRssOrder(@RequestParam(value = "removerss", required = true) String username, @RequestParam(value = "removersstwitterid", required = true) Long pTwitterId,
+		Model uiModel, HttpServletRequest httpServletRequest) {
+    	
+        Twitter twitter = Twitter.findTwitter(pTwitterId);
+        UserAccount tCurUser = UserAccount.findUserAccountByName(username);
+        if(tCurUser != null){
+        	RssTwitter.deleteRssTwitterByTwitterAndUserAcount(twitter, tCurUser);
+        }
+    	
+    	return null;
+	}
+    
     private void addDefaultUserTags(String pType, Locale pLocale) {
         BigTag tBigTag1 = new BigTag();
         tBigTag1.setTagName(messageSource.getMessage("admin_suggested_tag1", new Object[0], pLocale));

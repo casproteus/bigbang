@@ -80,11 +80,11 @@ field date --class ~.domain.UserAccount --fieldName lastLoginTime --type java.ut
 field number --fieldName status --type int
 field number --fieldName newMessageAmount --type int --class ~.domain.UserAccount
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-06-17 10:27:05
-json all 
+json all
 web mvc json all
+
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2014-01-13 22:51:15
 entity jpa --class ~.domain.RssTwitter --testAutomatically
-field set --type ~.domain.UserAccount --fieldName useraccount --notNull 
-field set --type ~.domain.Twitter --fieldName twitter --notNull 
-perform test
-perform test
+field reference --type ~.domain.UserAccount --fieldName useraccount --notNull
+field reference --type ~.domain.Twitter --fieldName twitter --notNull
+email sender setup --hostServer smtp.gmail.com --username sharethegoodones@gmail.com --password stgostgo --port 587 --protocol SMTP

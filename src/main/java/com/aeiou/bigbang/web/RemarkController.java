@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.theme.CookieThemeResolver;
 
 import com.aeiou.bigbang.domain.Remark;
+import com.aeiou.bigbang.domain.RssTwitter;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
@@ -255,9 +256,14 @@ public class RemarkController {
 		Model uiModel, HttpServletRequest httpServletRequest) {
     	
     	String tCurName = userContextService.getCurrentUserName();
+		Twitter twitter = Twitter.findTwitter(pTwitterId);
         UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName); 
-    	if(tCurUser != null){
-    		//TODO:add a line into the RSSRemarkTable.
+    	if(tCurUser != null && !RssTwitter.isAllreadyExist(tCurUser, twitter)){
+    		//add a line into the RSSRemarkTable.
+    		RssTwitter tRssTwitter = new RssTwitter();
+    		tRssTwitter.setUseraccount(tCurUser);
+    		tRssTwitter.setTwitter(twitter);    		
+    		tRssTwitter.persist();
     	}
     	
     	return showDetailTwitters(pTwitterId, refresh_time, null, null, uiModel, httpServletRequest);

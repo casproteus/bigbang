@@ -23,7 +23,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<BigTag, String> ApplicationConversionServiceFactoryBean.getBigTagToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.BigTag, java.lang.String>() {
             public String convert(BigTag bigTag) {
-                return new StringBuilder().append(bigTag.getContentTitle()).append(' ').append(bigTag.getContentURL()).append(' ').append(bigTag.getTwitterTitle()).append(' ').append(bigTag.getTwitterContent()).toString();
+                return new StringBuilder().append(bigTag.getContentID()).append(' ').append(bigTag.getContentTitle()).append(' ').append(bigTag.getContentURL()).append(' ').append(bigTag.getTwitterID()).toString();
             }
         };
     }
@@ -143,7 +143,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Remark, String> ApplicationConversionServiceFactoryBean.getRemarkToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.Remark, java.lang.String>() {
             public String convert(Remark remark) {
-                return new StringBuilder().append(remark.getContent()).append(' ').append(remark.getRemarkTime()).append(' ').append(remark.getAuthority()).toString();
+                return new StringBuilder().append(remark.getRefresh_time()).append(' ').append(remark.getContent()).append(' ').append(remark.getRemarkTime()).append(' ').append(remark.getAuthority()).toString();
             }
         };
     }

@@ -28,6 +28,7 @@ import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
 import com.aeiou.bigbang.util.BigUtil;
+import com.aeiou.bigbang.util.SpringApplicationContext;
 import com.aeiou.bigbang.web.beans.RefreshBean;
 
 @RequestMapping("/remarks")
@@ -159,7 +160,7 @@ public class RemarkController {
         int sizeNo = size == null ? 20 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
         String tCurName = userContextService.getCurrentUserName();
-        UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+        UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName); 
         Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
         uiModel.addAttribute("spaceOwner", tOwner);
         float nrOfPages;
@@ -168,7 +169,10 @@ public class RemarkController {
         uiModel.addAttribute("remarks", tRemarksList);
         nrOfPages = (float) Remark.countRemarksByTwitter(tTwitter, tAuthSet) / sizeNo;
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        Remark tRemark = new Remark();
+        Remark tRemark = new Remark(); 
+        if(refresh_time == null)	//default refresh time. @NOTE: can not be null, or the webpage will report error. like" if (  >0){"
+        	refresh_time = Integer.valueOf(0);
+        tRemark.setRefresh_time(refresh_time.intValue());
         uiModel.addAttribute("newremark", tRemark);
         uiModel.addAttribute("authorities", BigAuthority.getRemarkOptions(messageSource, request.getLocale()));
         List<Twitter> remarktos = new ArrayList<Twitter>();
@@ -178,14 +182,15 @@ public class RemarkController {
         
         //check how many new remark since last remark.
         //if it's not displaying the lastest ones, it's pagging up to previous page, then don't show new message account.
-        if(page == null || page.intValue() == 0){
+        if(tCurUser != null && (page == null || page.intValue() == 0)){
         	int i = 0;
         	for(; i < tRemarksList.size(); i++){
         		if(tRemarksList.get(i).getPublisher().getId() == tCurUser.getId())
         			break;
         	}
         	uiModel.addAttribute("newMessageNumber", i);
-        }
+        }else
+        	uiModel.addAttribute("newMessageNumber", 0);
         		
         return "public/list_detail_twitter";
     }
@@ -227,11 +232,10 @@ public class RemarkController {
         populateEditForm(uiModel, Remark.findRemark(id), httpServletRequest);
         return "remarks/update";
     }
-   
+    
     @RequestMapping(params = "refreshTime", produces = "text/html")
-    public String setRefreshTime(RefreshBean refreshBean, @RequestParam(value = "refreshTwitterid", required = true) Long refreshTwitterid, 
-    		Model uiModel, HttpServletRequest httpServletRequest) {
-    	int tTime = 15;
+    public String setRefreshTime(RefreshBean refreshBean, @RequestParam(value = "refreshTwitterid", required = true) Long refreshTwitterid, Model uiModel, HttpServletRequest httpServletRequest) {
+    	int tTime;
     	String tTimeStr = refreshBean.getRefreshTime();
     	if (tTimeStr != null && tTimeStr.startsWith(","))
     		tTimeStr = tTimeStr.substring(1);
@@ -239,9 +243,30 @@ public class RemarkController {
     	try{
     		tTime = Integer.valueOf(tTimeStr);
     	}catch(Exception e){
+    		tTime = 0;
     	}
     	
     	tTime = (tTime == 0) ? 0 : (tTime > 15 ? tTime : 15);
     	return showDetailTwitters(refreshTwitterid, tTime, null, null, uiModel, httpServletRequest);
     }
+    
+    @RequestMapping(params = "RssTwitterid", produces = "text/html")
+    public String setRssOrder( @RequestParam(value = "isCancelRss", required = true) boolean isCancelRss , RefreshBean refreshBean, @RequestParam(value = "RssTwitterid", required = true) Long refreshTwitterid, 
+		Model uiModel, HttpServletRequest httpServletRequest) {
+    	int tTime = 15;
+    	String tTimeStr = refreshBean.getRefreshTime();
+    	if (tTimeStr != null && tTimeStr.startsWith(","))
+    		tTimeStr = tTimeStr.substring(1);
+    	try{
+    		tTime = Integer.valueOf(tTimeStr);
+    	}catch(Exception e){
+    	}
+    	tTime = (tTime == 0) ? 0 : (tTime > 15 ? tTime : 15);
+
+    	if (isCancelRss){
+    	}else{
+    	}
+    	
+    	return showDetailTwitters(refreshTwitterid, tTime, null, null, uiModel, httpServletRequest);
+	}
 }

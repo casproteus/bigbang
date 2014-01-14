@@ -28,6 +28,7 @@ import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
 import com.aeiou.bigbang.util.BigUtil;
 import com.aeiou.bigbang.util.SpringApplicationContext;
+import com.aeiou.bigbang.web.beans.RefreshBean;
 
 @RequestMapping("/public")
 @Controller
@@ -215,6 +216,25 @@ public class PublicController{
     	RemarkController tController = SpringApplicationContext.getApplicationContext().getBean("remarkController", RemarkController.class);
 		return(tController.showDetailTwitters(twitterid, 0, page, size, uiModel, request));
     }
+    
+    @RequestMapping(params = "refreshTime", produces = "text/html")
+    public String setRefreshTime(RefreshBean refreshBean, @RequestParam(value = "refreshTwitterid", required = true) Long refreshTwitterid, Model uiModel, HttpServletRequest httpServletRequest) {
+    	int tTime = 120;
+    	String tTimeStr = refreshBean.getRefreshTime();
+    	if (tTimeStr != null && tTimeStr.startsWith(","))
+    		tTimeStr = tTimeStr.substring(1);
+    	
+    	try{
+    		tTime = Integer.valueOf(tTimeStr);
+    	}catch(Exception e){
+    		tTime = 0;
+    	}
+    	
+    	tTime = (tTime == 0) ? 0 : (tTime > 15 ? tTime : 15);
+    	RemarkController tController = SpringApplicationContext.getApplicationContext().getBean("remarkController", RemarkController.class);
+    	return tController.showDetailTwitters(refreshTwitterid, tTime, null, null, uiModel, httpServletRequest);
+    }
+
     
     @RequestMapping(params = "publisher", produces = "text/html")
     public String listContentByPublisher(@RequestParam(value = "publisher", required = false) String pPublisher,

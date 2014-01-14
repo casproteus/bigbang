@@ -88,3 +88,5 @@ entity jpa --class ~.domain.RssTwitter --testAutomatically
 field reference --type ~.domain.UserAccount --fieldName useraccount --notNull
 field reference --type ~.domain.Twitter --fieldName twitter --notNull
 email sender setup --hostServer smtp.gmail.com --username sharethegoodones@gmail.com --password stgostgo --port 587 --protocol SMTP
+field email template --class ~.web.RemarkController
+field email template --class ~.web.RemarkController

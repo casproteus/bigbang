@@ -1,15 +1,24 @@
 package com.aeiou.bigbang.web;
 
+import com.aeiou.bigbang.domain.Remark;
+import com.aeiou.bigbang.domain.RssTwitter;
+import com.aeiou.bigbang.domain.Twitter;
+import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.BigUtil;
+import com.aeiou.bigbang.util.SpringApplicationContext;
+import com.aeiou.bigbang.web.beans.RefreshBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.mail.MailSender;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
@@ -22,16 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.theme.CookieThemeResolver;
 
-import com.aeiou.bigbang.domain.Remark;
-import com.aeiou.bigbang.domain.RssTwitter;
-import com.aeiou.bigbang.domain.Twitter;
-import com.aeiou.bigbang.domain.UserAccount;
-import com.aeiou.bigbang.services.secutiry.UserContextService;
-import com.aeiou.bigbang.util.BigAuthority;
-import com.aeiou.bigbang.util.BigUtil;
-import com.aeiou.bigbang.util.SpringApplicationContext;
-import com.aeiou.bigbang.web.beans.RefreshBean;
-
 @RequestMapping("/remarks")
 @Controller
 @RooWebScaffold(path = "remarks", formBackingObject = Remark.class)
@@ -43,9 +42,13 @@ public class RemarkController {
 
     @Inject
     private MessageSource messageSource;
-    
-    @RequestMapping(value="/refreshRemarks", method=RequestMethod.GET)
-    public @ResponseBody List<Remark> refreshRemarks(@RequestParam String twitterid) {
+
+    @Autowired
+    private transient MailSender mailTemplate;
+
+    @RequestMapping(value = "/refreshRemarks", method = RequestMethod.GET)
+    @ResponseBody
+    public List<com.aeiou.bigbang.domain.Remark> refreshRemarks(@RequestParam String twitterid) {
         Twitter tTwitter = Twitter.findTwitter(Long.valueOf(twitterid));
         UserAccount tOwner = tTwitter.getPublisher();
         String tCurName = userContextService.getCurrentUserName();
@@ -53,7 +56,7 @@ public class RemarkController {
         Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
         return Remark.findRemarkByTwitter(tTwitter, tAuthSet, 0, 20);
     }
-    
+
     void populateEditForm(Model uiModel, Remark remark, HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("remark", remark);
         addDateTimeFormatPatterns(uiModel);
@@ -149,19 +152,15 @@ public class RemarkController {
     }
 
     @RequestMapping(params = "twitterid", produces = "text/html")
-    public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, Integer refresh_time, 
-    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel, HttpServletRequest request) {
+    public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, Integer refresh_time, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel, HttpServletRequest request) {
         Twitter tTwitter = Twitter.findTwitter(twitterid);
         UserAccount tOwner = tTwitter.getPublisher();
-        //if the owner has setted theme, then use the theme! (will effect only on this request)
-    	int tTheme = tOwner.getTheme();
-    	if(tTheme != 0)
-    		request.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME, String.valueOf(tTheme));
-    	
+        int tTheme = tOwner.getTheme();		//if the owner has setted theme, then use the theme! (will effect only on this request)
+        if (tTheme != 0) request.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME, String.valueOf(tTheme));
         int sizeNo = size == null ? 20 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
         String tCurName = userContextService.getCurrentUserName();
-        UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName); 
+        UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
         Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
         uiModel.addAttribute("spaceOwner", tOwner);
         float nrOfPages;
@@ -170,8 +169,8 @@ public class RemarkController {
         uiModel.addAttribute("remarks", tRemarksList);
         nrOfPages = (float) Remark.countRemarksByTwitter(tTwitter, tAuthSet) / sizeNo;
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        Remark tRemark = new Remark(); 
-        if(refresh_time == null)	//default refresh time. @NOTE: can not be null, or the webpage will report error. like" if (  >0){"
+        Remark tRemark = new Remark();
+        if (refresh_time == null) 	//default refresh time. @NOTE: can not be null, or the webpage will report error. like" if (  >0){"
         	refresh_time = Integer.valueOf(0);
         tRemark.setRefresh_time(refresh_time.intValue());
         uiModel.addAttribute("newremark", tRemark);
@@ -183,16 +182,13 @@ public class RemarkController {
         
         //check how many new remark since last remark.
         //if it's not displaying the lastest ones, it's pagging up to previous page, then don't show new message account.
-        if(tCurUser != null && (page == null || page.intValue() == 0)){
-        	int i = 0;
-        	for(; i < tRemarksList.size(); i++){
-        		if(tRemarksList.get(i).getPublisher().getId() == tCurUser.getId())
-        			break;
-        	}
-        	uiModel.addAttribute("newMessageNumber", i);
-        }else
-        	uiModel.addAttribute("newMessageNumber", 0);
-        		
+        if (tCurUser != null && (page == null || page.intValue() == 0)) {
+            int i = 0;
+            for (; i < tRemarksList.size(); i++) {
+                if (tRemarksList.get(i).getPublisher().getId() == tCurUser.getId()) break;
+            }
+            uiModel.addAttribute("newMessageNumber", i);
+        } else uiModel.addAttribute("newMessageNumber", 0);
         return "public/list_detail_twitter";
     }
 
@@ -206,7 +202,6 @@ public class RemarkController {
         List<Remark> tList = Remark.findRemarkByPublisher(tUserAccount, 0, 1);
         if (tList != null && tList.size() > 0) {
             Remark tRemark = tList.get(0);
-            //@note: remark.getRemarkto() can be null, don't call it's equals method.
             if (tRemark.getContent().equals(remark.getContent()) && tRemark.getRemarkto().getId().equals(pTwitterId)) {
                 populateEditForm(uiModel, remark, httpServletRequest);
                 return showDetailTwitters(pTwitterId, remark.getRefresh_time(), null, null, uiModel, httpServletRequest);
@@ -218,54 +213,56 @@ public class RemarkController {
                 remark.setRemarkto(Twitter.findTwitter(pTwitterId));
                 remark.setRemarkTime(new Date());
             } else {
-            	populateEditForm(uiModel, remark, httpServletRequest);
-                return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest) + "&refresh_time="+remark.getRefresh_time();
+                populateEditForm(uiModel, remark, httpServletRequest);
+                return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest) + "&refresh_time=" + remark.getRefresh_time();
             }
         }
         uiModel.asMap().clear();
         remark.persist();
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
-        return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest) + "&refresh_time="+remark.getRefresh_time();
+        return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest) + "&refresh_time=" + remark.getRefresh_time();
     }
-    
+
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String updateForm(@PathVariable("id") Long id, Model uiModel, HttpServletRequest httpServletRequest) {
         populateEditForm(uiModel, Remark.findRemark(id), httpServletRequest);
         return "remarks/update";
     }
-    
+
     @RequestMapping(params = "refreshTime", produces = "text/html")
     public String setRefreshTime(RefreshBean refreshBean, @RequestParam(value = "refreshTwitterid", required = true) Long refreshTwitterid, Model uiModel, HttpServletRequest httpServletRequest) {
-    	int tTime;
-    	String tTimeStr = refreshBean.getRefreshTime();
-    	if (tTimeStr != null && tTimeStr.startsWith(","))
-    		tTimeStr = tTimeStr.substring(1);
-    	
-    	try{
-    		tTime = Integer.valueOf(tTimeStr);
-    	}catch(Exception e){
-    		tTime = 0;
-    	}
-    	
-    	tTime = (tTime == 0) ? 0 : (tTime > 15 ? tTime : 15);
-    	return showDetailTwitters(refreshTwitterid, tTime, null, null, uiModel, httpServletRequest);
+        int tTime;
+        String tTimeStr = refreshBean.getRefreshTime();
+        if (tTimeStr != null && tTimeStr.startsWith(",")) tTimeStr = tTimeStr.substring(1);
+        try {
+            tTime = Integer.valueOf(tTimeStr);
+        } catch (Exception e) {
+            tTime = 0;
+        }
+        tTime = (tTime == 0) ? 0 : (tTime > 15 ? tTime : 15);
+        return showDetailTwitters(refreshTwitterid, tTime, null, null, uiModel, httpServletRequest);
     }
-    
+
     @RequestMapping(params = "rss", produces = "text/html")
-    public String setRssOrder(@RequestParam(value = "rss", required = true) int refresh_time, @RequestParam(value = "rsstwitterid", required = false) Long pTwitterId,
-		Model uiModel, HttpServletRequest httpServletRequest) {
-    	
-    	String tCurName = userContextService.getCurrentUserName();
-		Twitter twitter = Twitter.findTwitter(pTwitterId);
-        UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName); 
-    	if(tCurUser != null && !RssTwitter.isAllreadyExist(tCurUser, twitter)){
-    		//add a line into the RSSRemarkTable.
-    		RssTwitter tRssTwitter = new RssTwitter();
-    		tRssTwitter.setUseraccount(tCurUser);
-    		tRssTwitter.setTwitter(twitter);    		
-    		tRssTwitter.persist();
-    	}
-    	
-    	return showDetailTwitters(pTwitterId, refresh_time, null, null, uiModel, httpServletRequest);
-	}
+    public String setRssOrder(@RequestParam(value = "rss", required = true) int refresh_time, @RequestParam(value = "rsstwitterid", required = false) Long pTwitterId, Model uiModel, HttpServletRequest httpServletRequest) {
+        String tCurName = userContextService.getCurrentUserName();
+        Twitter twitter = Twitter.findTwitter(pTwitterId);
+        UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+        if (tCurUser != null && !RssTwitter.isAllreadyExist(tCurUser, twitter)) {
+            RssTwitter tRssTwitter = new RssTwitter();
+            tRssTwitter.setUseraccount(tCurUser);
+            tRssTwitter.setTwitter(twitter);
+            tRssTwitter.persist();
+        }
+        return showDetailTwitters(pTwitterId, refresh_time, null, null, uiModel, httpServletRequest);
+    }
+
+    public void sendMessage(String mailFrom, String subject, String mailTo, String message) {
+        org.springframework.mail.SimpleMailMessage mailMessage = new org.springframework.mail.SimpleMailMessage();
+        mailMessage.setFrom(mailFrom);
+        mailMessage.setSubject(subject);
+        mailMessage.setTo(mailTo);
+        mailMessage.setText(message);
+        mailTemplate.send(mailMessage);
+    }
 }

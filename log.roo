@@ -90,3 +90,5 @@ field reference --type ~.domain.Twitter --fieldName twitter --notNull
 email sender setup --hostServer smtp.gmail.com --username sharethegoodones@gmail.com --password stgostgo --port 587 --protocol SMTP
 field email template --class ~.web.RemarkController
 field email template --class ~.web.RemarkController
+quit
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2014-01-14 13:34:32

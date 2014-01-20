@@ -47,8 +47,12 @@ public class RssTwitter {
     	TypedQuery<RssTwitter> tQuery = tEntityManager.createQuery("SELECT o FROM RssTwitter AS o WHERE o.useraccount = :pUserAccount and o.twitter = :pTwitter", RssTwitter.class);
         tQuery = tQuery.setParameter("pUserAccount", pUserAccount);
         tQuery = tQuery.setParameter("pTwitter", pTwitter);
-        RssTwitter tRssTwitter = tQuery.getSingleResult();
-        tRssTwitter.remove();
+        try{
+        	RssTwitter tRssTwitter = tQuery.getSingleResult();
+            tRssTwitter.remove();
+        }catch(Exception e){
+        	//do nothing.
+        }
         
     	return true;
     }

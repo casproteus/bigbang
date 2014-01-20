@@ -1,25 +1,21 @@
 package com.aeiou.bigbang.web;
 
-import com.aeiou.bigbang.domain.Customize;
-import com.aeiou.bigbang.domain.Remark;
-import com.aeiou.bigbang.domain.RssTwitter;
-import com.aeiou.bigbang.domain.Twitter;
-import com.aeiou.bigbang.domain.UserAccount;
-import com.aeiou.bigbang.services.secutiry.UserContextService;
-import com.aeiou.bigbang.util.BigAuthority;
-import com.aeiou.bigbang.util.BigUtil;
-import com.aeiou.bigbang.util.SpringApplicationContext;
-import com.aeiou.bigbang.web.beans.RefreshBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
 import javax.inject.Inject;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
@@ -31,6 +27,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.theme.CookieThemeResolver;
+
+import com.aeiou.bigbang.domain.Customize;
+import com.aeiou.bigbang.domain.Remark;
+import com.aeiou.bigbang.domain.RssTwitter;
+import com.aeiou.bigbang.domain.Twitter;
+import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.BigUtil;
+import com.aeiou.bigbang.web.beans.RefreshBean;
 
 @RequestMapping("/remarks")
 @Controller
@@ -97,6 +103,7 @@ public class RemarkController {
         remark.persist();
         
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
+        
         checkRss(remark);	//to check if need to send out notice email.
         
         return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
@@ -263,34 +270,67 @@ public class RemarkController {
         }
         return showDetailTwitters(pTwitterId, refresh_time, null, null, uiModel, httpServletRequest);
     }
+    
+    @RequestMapping(params = "removerss", produces = "text/html")
+    public String removeRssOrder(@RequestParam(value = "removerss", required = true) String username, @RequestParam(value = "removersstwitterid", required = true) Long pTwitterId,
+		Model uiModel, HttpServletRequest httpServletRequest) {
+    	
+        Twitter twitter = Twitter.findTwitter(pTwitterId);
+        UserAccount tCurUser = UserAccount.findUserAccountByName(username);
+        if(tCurUser != null){
+        	RssTwitter.deleteRssTwitterByTwitterAndUserAcount(twitter, tCurUser);
+        }
 
+        return showDetailTwitters(pTwitterId, 0, null, null, uiModel, httpServletRequest);
+	}
     private void checkRss(Remark remark){
     	Twitter tTwitter = remark.getRemarkto();
     	List<RssTwitter> tList = RssTwitter.findAllListenersByTwitter(tTwitter);
-    	String linkStr = "----http://www.ShareTheGoodOnes.com/public?twitterid=";
-    	Customize tCustomize = Customize.findCustomizeByKey("RemarkSourceLinkStr");
-    	if(tCustomize != null)
-    		linkStr = tCustomize.getCusValue();
+    	Customize tCustomizeLink = Customize.findCustomizeByKey("RemarkSourceLinkStr");
+    	Customize tCustomizeReplay = Customize.findCustomizeByKey("i18n_Replay");
+    	Customize tCustomizeUnsubscribe = Customize.findCustomizeByKey("i18n_Unsubscribe");
+    	Customize tCustomizeNewRemarkString = Customize.findCustomizeByKey("i18n_NewRemark");
+
+    	String linkStr = tCustomizeLink != null ? tCustomizeLink.getCusValue() : "http://www.sharethegoodones.com";
+    	String tReply = tCustomizeReplay != null ? tCustomizeReplay.getCusValue() : "Reply";
+    	String tUnsubscribe = tCustomizeUnsubscribe != null ? tCustomizeUnsubscribe.getCusValue() : "Unsubscribe";
+    	String tNewRemark = tCustomizeNewRemarkString != null ? tCustomizeNewRemarkString.getCusValue() : "New remark: ";
+    	
     	for(int i = 0; i < tList.size(); i++){
     		RssTwitter tRT = tList.get(i);
+    		String tUserName = tRT.getUseraccount().getName();
+    		if(remark.getAuthority() != 0 && !tUserName.equals(tTwitter.getPublisher().getName())) //if only visible to publisher, don't sent do others.
+    			continue;
     		String email = tRT.getUseraccount().getEmail();
+    		String content = 
+    				"<p align='right'>---" + remark.getPublisher().getName() +" </p>" +
+    				"<p align='center'><a href='" + linkStr + "/remarks?twitterid=" + tTwitter.getId() + "'>" + tReply + "</a> | " +
+    				   				  "<a href='" + linkStr + "/remarks?removerss=" + tUserName + "&removersstwitterid=" + tTwitter.getId() + "'>" + tUnsubscribe + "</a></p>" +
+    				"<p align='center'><a href='" + linkStr + "'>" + linkStr + "</a></p>";
+    				
     		if(email != null && email.indexOf("@") > 0 && email.indexOf(".", email.indexOf("@")) > 0){	//if it's valid.
     			if(!email.equals(remark.getPublisher().getEmail()))										//if it's not the author himself.
     				sendMessage("www.ShareTheGoodOnes.com", 
-    						"STGO:<<"+ tTwitter.getTwtitle() + ">>", 
+    						tNewRemark + tTwitter.getTwtitle(), 
     						email, 
-    						remark.getContent() + "---" + remark.getPublisher().getName() + linkStr + tTwitter.getId());
+    						remark.getContent() + content);
     		}
     	}
     }
     
-    //TODO:have issues when sending out email, because hotmail could not display it well?
-    public void sendMessage(String mailFrom, String subject, String mailTo, String message) {
-        org.springframework.mail.SimpleMailMessage mailMessage = new org.springframework.mail.SimpleMailMessage();
-        mailMessage.setFrom(mailFrom);
-        mailMessage.setSubject(subject);
-        mailMessage.setTo(mailTo);
-        mailMessage.setText(message);
-        mailTemplate.send(mailMessage);
+    private void sendMessage(String mailFrom, String subject, String mailTo, String message) {
+        MimeMessage mimeMessage = ((JavaMailSender)mailTemplate).createMimeMessage();
+        MimeMessageHelper helper = null;
+        try{
+        	helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
+	        mimeMessage.setContent(message, "text/html");
+	        helper.setTo(mailTo);
+	        helper.setSubject(subject);
+	        helper.setFrom(mailFrom);
+        }catch(Exception e){
+        	System.out.println("Sending email failed!" + mailTo + "|" + subject + "|" + message);
+        }
+        ((JavaMailSender)mailTemplate).send(mimeMessage);
     }
+    
 }

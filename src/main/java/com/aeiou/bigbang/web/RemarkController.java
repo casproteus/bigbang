@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -310,7 +311,7 @@ public class RemarkController {
     				
     		if(email != null && email.indexOf("@") > 0 && email.indexOf(".", email.indexOf("@")) > 0){	//if it's valid.
     			if(!email.equals(remark.getPublisher().getEmail()))										//if it's not the author himself.
-    				sendMessage("www.ShareTheGoodOnes.com", 
+    				sendMessage("info@sharethegoodones.com", 
     						tNewRemark + tTwitter.getTwtitle(), 
     						email, 
     						remark.getContent() + content);
@@ -322,7 +323,7 @@ public class RemarkController {
         MimeMessage mimeMessage = ((JavaMailSender)mailTemplate).createMimeMessage();
         MimeMessageHelper helper = null;
         try{
-        	helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
+        	helper = new MimeMessageHelper(mimeMessage, false, "GB2312");
 	        mimeMessage.setContent(message, "text/html");
 	        helper.setTo(mailTo);
 	        helper.setSubject(subject);

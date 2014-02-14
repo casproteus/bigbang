@@ -10,7 +10,18 @@
     	key: i18n_NewRemark		value:New remark:			新的评论
 6/when Admin modifys a user's layout string, don't use the null, because if layout string is null, then the layout string will be egnored.(have no choice, because when user modify his useraccount, the layoutstring field doesn't show, so controller always get a null as layout string, and controller
  have to ignore it.
-
+------------------------
+public static final String SEP_TAG_NUMBER = "¿";
+	public static final String SEP_LEFT_RIGHT = "¬";
+	public static final String SEP_ITEM = "¯";
+	public static final String MARK_PUBLIC_TAG = "¶";
+	public static final String MARK_PRIVATE_TAG = "";
+	public static final String MARK_MEMBERONLY_TAG = "®";
+	public static final String MARK_TBD_TAG = "©";
+------------------------
+7/add a customize with key:stgo, value:
+http://www.transhing.com,http://www.tuyistudio.com,http://test-rightnow.rhcloud.com,http://spa-rightnow.rhcloud.com
+========================
 dev:
 1/get the source code, unzip it, then import it as eclipse project.
 2/the code is using hsql db under the folder where eclipse.exe is.

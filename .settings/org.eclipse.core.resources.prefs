@@ -1,4 +1,2 @@
 eclipse.preferences.version=1
-encoding//src/main/java/com/aeiou/bigbang/util/BigUtil.java=ISO-8859-1
-encoding//src/main/java/com/aeiou/bigbang/web/ContentController.java=ISO-8859-1
-encoding//src/main/java/com/aeiou/bigbang/web/PublicController.java=ISO-8859-1
+encoding//src/main/java/com/aeiou/bigbang/util/BigUtil.java=UTF-8

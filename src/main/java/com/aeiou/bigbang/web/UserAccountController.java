@@ -14,6 +14,8 @@ import java.util.Locale;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
@@ -86,6 +88,8 @@ public class UserAccountController {
         tUserAccount.setPassword(userAccount.getPassword());
         tUserAccount.setEmail(userAccount.getEmail());
         tUserAccount.setDescription(userAccount.getDescription());
+        if(StringUtils.isNotBlank(userAccount.getLayout())) //because when user modify his useraccount info, the layout field doesn't display,
+        	tUserAccount.setLayout(userAccount.getLayout());//then the layout will be null. and we don't want it be save into db.
         tUserAccount.persist();
         return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
     }

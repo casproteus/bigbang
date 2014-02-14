@@ -89,20 +89,20 @@ public class CustomizeController {
     	String[] tNumStrsLeft = null;
     	String[] tNumStrsRight = null;
     	String tLayout = tOwner.getLayout();										
-    	int p = tLayout == null ? -1 : tLayout.indexOf('™');
+    	int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
 		if(p > -1){
     		String tTagStr = tLayout.substring(0, p);
     		String tSizeStr = tLayout.substring(p+1);
     		
-    		p = tTagStr.indexOf('¬');
+    		p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
     		if(p >= 0){
-	    		tBigTagStrsLeft = tTagStr.substring(0, p).split("¯"); //when an empty string is splited, the returned ary will be have one element(which is empty).
-	    		tBigTagStrsRight = tTagStr.substring(p+1).split("¯");
+	    		tBigTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM); //when an empty string is splited, the returned ary will be have one element(which is empty).
+	    		tBigTagStrsRight = tTagStr.substring(p+1).split(BigUtil.SEP_ITEM);
     		}
-    		p = tSizeStr.indexOf('¬');
+    		p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
     		if(p >= 0){
-	    		tNumStrsLeft = tSizeStr.substring(0, p).split("¯");
-	    		tNumStrsRight = tSizeStr.substring(p+1).split("¯");
+	    		tNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
+	    		tNumStrsRight = tSizeStr.substring(p+1).split(BigUtil.SEP_ITEM);
     		}
 		}//----------------------------------------
     	
@@ -117,13 +117,13 @@ public class CustomizeController {
 		tMap.putAll(request.getParameterMap());		//this way to make the tMap writable, and it contains all the checked item from page.
 		StringBuilder tLayoutStrBuilder = new StringBuilder();
 		StringBuilder tNumStrBuilder = new StringBuilder();
-		boolean tmpFlag = false;					//use this flag to make the first time don't add "¯".
+		boolean tmpFlag = false;					//use this flag to make the first time don't add BigUtil.SEP_ITEM.
     	for(int i = 0; i < tBigTagStrsLeft.length; i++){
     		if(tBigTagStrsLeft[i].length() > 0 && tMap.get(BigUtil.getTagNameFromLayoutStr(tBigTagStrsLeft[i])) != null){
     			if(tmpFlag == true){
-    				tLayoutStrBuilder.append("¯");
+    				tLayoutStrBuilder.append(BigUtil.SEP_ITEM);
         			tLayoutStrBuilder.append(tBigTagStrsLeft[i]);
-    				tNumStrBuilder.append("¯");
+    				tNumStrBuilder.append(BigUtil.SEP_ITEM);
         			tNumStrBuilder.append(tNumStrsLeft[i]);
     			}else{
         			tLayoutStrBuilder.append(tBigTagStrsLeft[i]);
@@ -134,14 +134,14 @@ public class CustomizeController {
     		}
     	}
     	tmpFlag = false;
-    	tLayoutStrBuilder.append("¬");
-    	tNumStrBuilder.append("¬");
+    	tLayoutStrBuilder.append(BigUtil.SEP_LEFT_RIGHT);
+    	tNumStrBuilder.append(BigUtil.SEP_LEFT_RIGHT);
     	for(int i = 0; i < tBigTagStrsRight.length; i++){
     		if(tBigTagStrsRight[i].length() > 0 && tMap.get(BigUtil.getTagNameFromLayoutStr(tBigTagStrsRight[i])) != null){
     			if(tmpFlag == true){
-    				tLayoutStrBuilder.append("¯");
+    				tLayoutStrBuilder.append(BigUtil.SEP_ITEM);
         			tLayoutStrBuilder.append(tBigTagStrsRight[i]);
-    				tNumStrBuilder.append("¯");
+    				tNumStrBuilder.append(BigUtil.SEP_ITEM);
         			tNumStrBuilder.append(tNumStrsRight[i]);
     			}else{
         			tLayoutStrBuilder.append(tBigTagStrsRight[i]);
@@ -157,9 +157,9 @@ public class CustomizeController {
     	for (int i = 0; i < tKeys.length; i++){
     		if("on".equals(((String[])tMap.get(tKeys[i]))[0])){
     			if(tmpFlag == true){
-	    			tLayoutStrBuilder.append("¯");
+	    			tLayoutStrBuilder.append(BigUtil.SEP_ITEM);
 	    			tLayoutStrBuilder.append(BigUtil.getTagInLayoutString(BigTag.findBMTagByNameAndOwner((String)tKeys[i], tCurName)));
-					tNumStrBuilder.append("¯");
+					tNumStrBuilder.append(BigUtil.SEP_ITEM);
 	    			tNumStrBuilder.append("8");
     			}else{
         			tLayoutStrBuilder.append(BigUtil.getTagInLayoutString(BigTag.findBMTagByNameAndOwner((String)tKeys[i], tCurName)));

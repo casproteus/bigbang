@@ -58,20 +58,20 @@ public class PublicController{
     	
     	UserAccount tOwner = UserAccount.findUserAccountByName("admin");
     	String tLayout = tOwner.getLayout();										//get the layout info from DB.
-    	int p = tLayout == null ? -1 : tLayout.indexOf('™');
+    	int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
 		if(p > -1){
 			String tTagStr = tLayout.substring(0, p);
 			String tSizeStr = tLayout.substring(p+1);
 			
-    		p = tTagStr.indexOf('¬');
+    		p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
     		if(p >=0 ){
-    			tAryTagStrsLeft = tTagStr.substring(0, p).split("¯");
-    			tAryTagStrsRight = tTagStr.substring(p+1).split("¯");
+    			tAryTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
+    			tAryTagStrsRight = tTagStr.substring(p+1).split(BigUtil.SEP_ITEM);
     		}
-    		p = tSizeStr.indexOf('¬');
+    		p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
     		if(p >=0 ){
-    			tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
-    			tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
+    			tAryNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
+    			tAryNumStrsRight = tSizeStr.substring(p+1).split(BigUtil.SEP_ITEM);
     		}
 		}
     	
@@ -101,13 +101,13 @@ public class PublicController{
     	    	tStrB_Num.append(tAryNumStrsLeft[j]);
     	    	
     	    	if(j + 1 < tSize/2){
-    	    		tStrB.append('¯');
-        	    	tStrB_Num.append('¯');
+    	    		tStrB.append(BigUtil.SEP_ITEM);
+        	    	tStrB_Num.append(BigUtil.SEP_ITEM);
     	    	}
 	    	}
 
-    		tStrB.append('¬');
-    		tStrB_Num.append('¬');
+    		tStrB.append(BigUtil.SEP_LEFT_RIGHT);
+    		tStrB_Num.append(BigUtil.SEP_LEFT_RIGHT);
     		
     		for(int j = tSize/2; j < tSize; j++){
     			BigTag tTag = tBigTags.get(j);
@@ -120,11 +120,11 @@ public class PublicController{
     	    	tStrB_Num.append(tAryNumStrsRight[j - tSize/2]);
     	    	
     	    	if(j + 1 < tSize){
-    	    		tStrB.append('¯');
-        	    	tStrB_Num.append('¯');
+    	    		tStrB.append(BigUtil.SEP_ITEM);
+        	    	tStrB_Num.append(BigUtil.SEP_ITEM);
     	    	}
 	    	}
-    		tStrB.append('™').append(tStrB_Num);
+    		tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
 
     		tOwner.setLayout(tStrB.toString());	    						//save to DB
     		tOwner.persist();
@@ -430,18 +430,18 @@ public class PublicController{
 	   	String[] tAryNumStrsRight = null;
 	   	
 	   	String tLayout = tOwner.getLayout();							//get the layout info from DB.and separate it into the array
-   		int p = tLayout.indexOf('™');
+   		int p = tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
 		String tTagStr = tLayout.substring(0, p);
 		String tSizeStr = tLayout.substring(p+1);
-		p = tTagStr.indexOf('¬');
+		p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
 		if(p >= 0){
-    		tAryTagStrsLeft = tTagStr.substring(0, p).split("¯");
-    		tAryTagStrsRight = tTagStr.substring(p+1).split("¯");
+    		tAryTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
+    		tAryTagStrsRight = tTagStr.substring(p+1).split(BigUtil.SEP_ITEM);
 		}
-		p = tSizeStr.indexOf('¬');
+		p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
 		if(p >= 0){
-    		tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
-    		tAryNumStrsRight = tSizeStr.substring(p+1).split("¯");
+    		tAryNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
+    		tAryNumStrsRight = tSizeStr.substring(p+1).split(BigUtil.SEP_ITEM);
 		}
 		//for the case that when empty string split, it return a string[] which one element. which will the treated as has meaningful element later.
 		if(tAryTagStrsLeft.length == 1 && tAryTagStrsLeft[0].length() == 0)
@@ -699,23 +699,23 @@ public class PublicController{
    	    	tStrB.append(tAryTagStrsLeft[j]);
    	    	tStrB_Num.append(tAryNumStrsLeft[j]);
    	    	if(j + 1 < tAryTagStrsLeft.length){
-   	    		tStrB.append('¯');
-       	    	tStrB_Num.append('¯');
+   	    		tStrB.append(BigUtil.SEP_ITEM);
+       	    	tStrB_Num.append(BigUtil.SEP_ITEM);
    	    	}
 	    }
 
-   		tStrB.append('¬');
-   		tStrB_Num.append('¬');
+   		tStrB.append(BigUtil.SEP_LEFT_RIGHT);
+   		tStrB_Num.append(BigUtil.SEP_LEFT_RIGHT);
    		
    		for(int j = 0; j < tAryTagStrsRight.length; j++){
    	    	tStrB.append(tAryTagStrsRight[j]);
    	    	tStrB_Num.append(tAryNumStrsRight[j]);
    	    	if(j + 1 < tAryTagStrsRight.length){
-   	    		tStrB.append('¯');
-       	    	tStrB_Num.append('¯');
+   	    		tStrB.append(BigUtil.SEP_ITEM);
+       	    	tStrB_Num.append(BigUtil.SEP_ITEM);
    	    	}
 	    }
-   		tStrB.append('™').append(tStrB_Num);
+   		tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
 
    		tOwner.setLayout(tStrB.toString());	    						//save the new layout string to DB
    		tOwner.persist();

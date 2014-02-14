@@ -111,14 +111,14 @@ public class ContentController {
 	        uiModel.asMap().clear();
 	        bigTag.persist();
 	        String tLayout = tUserAccount.getLayout();
-	        int p = tLayout == null ? -1 : tLayout.indexOf('™');
+	        int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
 	        if (p > -1) {
 	            String tTagStr = tLayout.substring(0, p);
 	            String tSizeStr = tLayout.substring(p + 1);
 	            StringBuilder tStrB = new StringBuilder();
-	            tStrB.append(tTagStr).append("¯");
+	            tStrB.append(tTagStr).append(BigUtil.SEP_ITEM);
 	            tStrB.append(BigUtil.getTagInLayoutString(bigTag));
-	            tStrB.append("™").append(tSizeStr).append("¯").append("8");
+	            tStrB.append("™").append(tSizeStr).append(BigUtil.SEP_ITEM).append("8");
 	            tUserAccount.setLayout(tStrB.toString());
 	            tUserAccount.persist();
 	        } else {

@@ -12,6 +12,11 @@ import com.aeiou.bigbang.domain.UserAccount;
 
 
 public class BigAuthority {
+	public static final int SHOW_TO_EVERY_ONE = 0;
+	public static final int ONLY_MYSELF_CAN_SEE = 1;
+	public static final int ALL_MY_TEAM_CAN_SEE = 2;
+	public static final int ONLY_FOR_SELECTED_PERSON = 3;
+	public static final int ONLY_FOR_RECEIVER = 11;
 	
 	public BigAuthority(MessageSource pMessageSource, Locale pLocale){
 		messageSource = pMessageSource;
@@ -20,15 +25,15 @@ public class BigAuthority {
 	
 	
 	public String toString(){
-		if(id == 0){
+		if(id == SHOW_TO_EVERY_ONE){
 			return messageSource.getMessage("SHOW_TO_EVERY_ONE", null, locale);
-		}else if(id == 1){
+		}else if(id == ONLY_MYSELF_CAN_SEE){
 			return messageSource.getMessage("ONLY_MYSELF_CAN_SEE", null, locale);
-		}else if(id == 2){
+		}else if(id == ALL_MY_TEAM_CAN_SEE){
 			return messageSource.getMessage("ALL_MY_TEAM_CAN_SEE", null, locale);
-		}else if(id == 3){
+		}else if(id == ONLY_FOR_SELECTED_PERSON){
 			return messageSource.getMessage("ONLY_FOR_SELECTED_PERSON", null, locale);
-		}else if(id == 11){
+		}else if(id == ONLY_FOR_RECEIVER){
 			return messageSource.getMessage("ONLY_FOR_RECEIVER", null, locale);
 		}else{
 			return null;
@@ -60,14 +65,14 @@ public class BigAuthority {
 	
 	public static Set<Integer> getAuthSet(UserAccount pCurUser, UserAccount pOwner){
 		Set<Integer> tAuthSetFR = new HashSet<Integer>();
-    	tAuthSetFR.add(Integer.valueOf(0));
+    	tAuthSetFR.add(Integer.valueOf(SHOW_TO_EVERY_ONE));
     	if(pOwner.equals(pCurUser)){
-    		tAuthSetFR.add(Integer.valueOf(1));
-    		tAuthSetFR.add(Integer.valueOf(2));
-    		tAuthSetFR.add(Integer.valueOf(3));
-    		tAuthSetFR.add(Integer.valueOf(11));
+    		tAuthSetFR.add(Integer.valueOf(ONLY_MYSELF_CAN_SEE));
+    		tAuthSetFR.add(Integer.valueOf(ALL_MY_TEAM_CAN_SEE));
+    		tAuthSetFR.add(Integer.valueOf(ONLY_FOR_SELECTED_PERSON));
+    		tAuthSetFR.add(Integer.valueOf(ONLY_FOR_RECEIVER));
     	}else if(pOwner.getListento().contains(pCurUser)){
-    		tAuthSetFR.add(Integer.valueOf(2));
+    		tAuthSetFR.add(Integer.valueOf(ALL_MY_TEAM_CAN_SEE));
     	}else{//TODO: consider the case that visible to specific person.
     		
     	}

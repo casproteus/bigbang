@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -14,7 +13,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
@@ -50,9 +48,6 @@ public class RemarkController {
 
     @Inject
     private MessageSource messageSource;
-
-    @Autowired
-    private transient MailSender mailTemplate;
 
     @RequestMapping(value = "/refreshRemarks", method = RequestMethod.GET)
     @ResponseBody
@@ -311,27 +306,11 @@ public class RemarkController {
     				
     		if(email != null && email.indexOf("@") > 0 && email.indexOf(".", email.indexOf("@")) > 0){	//if it's valid.
     			if(!email.equals(remark.getPublisher().getEmail()))										//if it's not the author himself.
-    				sendMessage("info@sharethegoodones.com", 
+    				BigUtil.sendMessage("info@sharethegoodones.com", 
     						tNewRemark + tTwitter.getTwtitle(), 
     						email, 
     						remark.getContent() + content);
     		}
     	}
     }
-    
-    private void sendMessage(String mailFrom, String subject, String mailTo, String message) {
-        MimeMessage mimeMessage = ((JavaMailSender)mailTemplate).createMimeMessage();
-        MimeMessageHelper helper = null;
-        try{
-        	helper = new MimeMessageHelper(mimeMessage, false, "GB2312");
-	        mimeMessage.setContent(message, "text/html");
-	        helper.setTo(mailTo);
-	        helper.setSubject(subject);
-	        helper.setFrom(mailFrom);
-        }catch(Exception e){
-        	System.out.println("Sending email failed!" + mailTo + "|" + subject + "|" + message);
-        }
-        ((JavaMailSender)mailTemplate).send(mimeMessage);
-    }
-    
 }

@@ -57,14 +57,14 @@ public class BigTagController {
         bigTag.persist();
         if (bigTag.getOwner() != null && bigTag.getOwner() == 0) {
             String tLayout = tUserAccount.getLayout();
-            int p = tLayout == null ? -1 : tLayout.indexOf('™');
+            int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
             if (p > -1) {
                 String tTagStr = tLayout.substring(0, p);
                 String tSizeStr = tLayout.substring(p + 1);
                 StringBuilder tStrB = new StringBuilder();
-                tStrB.append(tTagStr).append("¯");
+                tStrB.append(tTagStr).append(BigUtil.SEP_ITEM);
                 tStrB.append(BigUtil.getTagInLayoutString(bigTag));
-                tStrB.append("™").append(tSizeStr).append("¯").append("8");
+                tStrB.append("™").append(tSizeStr).append(BigUtil.SEP_ITEM).append("8");
                 tUserAccount.setLayout(tStrB.toString());
                 tUserAccount.persist();
             } else {
@@ -84,7 +84,7 @@ public class BigTagController {
             BigTag tBigTag = BigTag.findBigTag(bigTag.getId());
             UserAccount tUserAccount = UserAccount.findUserAccountByName(tBigTag.getType());
             String tLayout = tUserAccount == null ? null : tUserAccount.getLayout();
-            int p = tLayout == null ? -1 : tLayout.indexOf('™');
+            int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
             if (p > -1) {
                 String[] tAryTagStrsLeft = null;
                 String[] tAryTagStrsRight = null;
@@ -92,15 +92,15 @@ public class BigTagController {
                 String[] tAryNumStrsRight = null;
                 String tTagStr = tLayout.substring(0, p);
                 String tSizeStr = tLayout.substring(p + 1);
-                p = tTagStr.indexOf('¬');
+                p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
                 if (p >= 0) {
-                    tAryTagStrsLeft = tTagStr.substring(0, p).split("¯");
-                    tAryTagStrsRight = tTagStr.substring(p + 1).split("¯");
+                    tAryTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
+                    tAryTagStrsRight = tTagStr.substring(p + 1).split(BigUtil.SEP_ITEM);
                 }
-                p = tSizeStr.indexOf('¬');
+                p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
                 if (p >= 0) {
-                    tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
-                    tAryNumStrsRight = tSizeStr.substring(p + 1).split("¯");
+                    tAryNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
+                    tAryNumStrsRight = tSizeStr.substring(p + 1).split(BigUtil.SEP_ITEM);
                 }
                 if (BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)) {
                     BigUtil.resetLayoutString(tUserAccount);
@@ -157,21 +157,21 @@ public class BigTagController {
                         tStrB.append(tAryTagStrsLeft[j]);
                         tStrB_Num.append(tAryNumStrsLeft[j]);
                         if (j + 1 < tAryTagStrsLeft.length) {
-                            tStrB.append('¯');
-                            tStrB_Num.append('¯');
+                            tStrB.append(BigUtil.SEP_ITEM);
+                            tStrB_Num.append(BigUtil.SEP_ITEM);
                         }
                     }
-                    tStrB.append('¬');
-                    tStrB_Num.append('¬');
+                    tStrB.append(BigUtil.SEP_LEFT_RIGHT);
+                    tStrB_Num.append(BigUtil.SEP_LEFT_RIGHT);
                     for (int j = 0; j < tAryTagStrsRight.length; j++) {
                         tStrB.append(tAryTagStrsRight[j]);
                         tStrB_Num.append(tAryNumStrsRight[j]);
                         if (j + 1 < tAryTagStrsRight.length) {
-                            tStrB.append('¯');
-                            tStrB_Num.append('¯');
+                            tStrB.append(BigUtil.SEP_ITEM);
+                            tStrB_Num.append(BigUtil.SEP_ITEM);
                         }
                     }
-                    tStrB.append('™').append(tStrB_Num);
+                    tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
                     tUserAccount.setLayout(tStrB.toString());
                     tUserAccount.persist();
                 }
@@ -191,7 +191,7 @@ public class BigTagController {
         if (bigTag.getOwner() != null && bigTag.getOwner() == 0) {
             UserAccount tUserAccount = UserAccount.findUserAccountByName(bigTag.getType());
             String tLayout = tUserAccount == null ? null : tUserAccount.getLayout();
-            int p = tLayout == null ? -1 : tLayout.indexOf('™');
+            int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
             if (p > -1) {
                 String[] tAryTagStrsLeft = null;
                 String[] tAryTagStrsRight = null;
@@ -199,15 +199,15 @@ public class BigTagController {
                 String[] tAryNumStrsRight = null;
                 String tTagStr = tLayout.substring(0, p);
                 String tSizeStr = tLayout.substring(p + 1);
-                p = tTagStr.indexOf('¬');
+                p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
                 if (p >= 0) {
-                    tAryTagStrsLeft = tTagStr.substring(0, p).split("¯");
-                    tAryTagStrsRight = tTagStr.substring(p + 1).split("¯");
+                    tAryTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
+                    tAryTagStrsRight = tTagStr.substring(p + 1).split(BigUtil.SEP_ITEM);
                 }
-                p = tSizeStr.indexOf('¬');
+                p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
                 if (p >= 0) {
-                    tAryNumStrsLeft = tSizeStr.substring(0, p).split("¯");
-                    tAryNumStrsRight = tSizeStr.substring(p + 1).split("¯");
+                    tAryNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
+                    tAryNumStrsRight = tSizeStr.substring(p + 1).split(BigUtil.SEP_ITEM);
                 }
                 if (BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)) {
                     BigUtil.resetLayoutString(tUserAccount);
@@ -267,21 +267,21 @@ public class BigTagController {
                         tStrB.append(tAryTagStrsLeft[j]);
                         tStrB_Num.append(tAryNumStrsLeft[j]);
                         if (j + 1 < tAryTagStrsLeft.length) {
-                            tStrB.append('¯');
-                            tStrB_Num.append('¯');
+                            tStrB.append(BigUtil.SEP_ITEM);
+                            tStrB_Num.append(BigUtil.SEP_ITEM);
                         }
                     }
-                    tStrB.append('¬');
-                    tStrB_Num.append('¬');
+                    tStrB.append(BigUtil.SEP_LEFT_RIGHT);
+                    tStrB_Num.append(BigUtil.SEP_LEFT_RIGHT);
                     for (int j = 0; j < tAryTagStrsRight.length; j++) {
                         tStrB.append(tAryTagStrsRight[j]);
                         tStrB_Num.append(tAryNumStrsRight[j]);
                         if (j + 1 < tAryTagStrsRight.length) {
-                            tStrB.append('¯');
-                            tStrB_Num.append('¯');
+                            tStrB.append(BigUtil.SEP_ITEM);
+                            tStrB_Num.append(BigUtil.SEP_ITEM);
                         }
                     }
-                    tStrB.append('™').append(tStrB_Num);
+                    tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
                     tUserAccount.setLayout(tStrB.toString());
                     tUserAccount.persist();
                 }

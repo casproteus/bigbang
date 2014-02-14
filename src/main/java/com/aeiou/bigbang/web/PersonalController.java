@@ -25,7 +25,7 @@ import com.aeiou.bigbang.util.BigUtil;
 @RequestMapping("/")
 @Controller
 public class PersonalController{
-
+	
 	@Inject
 	private UserContextService userContextService;
 
@@ -62,20 +62,20 @@ public class PersonalController{
     	List<Long> tTagIdsRight = new ArrayList<Long>();
     	
     	String tLayout = tOwner.getLayout();										//get the layout info from DB.
-    	int p = tLayout == null ? -1 : tLayout.indexOf('™');
+    	int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
 		if(p > -1){
     		String tTagStr = tLayout.substring(0, p);
     		String tSizeStr = tLayout.substring(p+1);
     		
-    		p = tTagStr.indexOf('¬');
+    		p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
     		if(p >= 0){
-	    		tBigTagStrsLeft = tTagStr.substring(0, p).split("¯");
-	    		tBigTagStrsRight = tTagStr.substring(p+1).split("¯");
+	    		tBigTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
+	    		tBigTagStrsRight = tTagStr.substring(p+1).split(BigUtil.SEP_ITEM);
     		}
-    		p = tSizeStr.indexOf('¬');
+    		p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
     		if(p >= 0){
-	    		tNumStrsLeft = tSizeStr.substring(0, p).split("¯");
-	    		tNumStrsRight = tSizeStr.substring(p+1).split("¯");
+	    		tNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
+	    		tNumStrsRight = tSizeStr.substring(p+1).split(BigUtil.SEP_ITEM);
     		}
 		}
     																				//if the layout info in DB is not good, create it from beginning.
@@ -103,13 +103,13 @@ public class PersonalController{
     	    	tStrB_Num.append(tNumStrsLeft[j]);
     	    	
     	    	if(j + 1 < tSize/2){
-    	    		tStrB.append('¯');
-        	    	tStrB_Num.append('¯');
+    	    		tStrB.append(BigUtil.SEP_ITEM);
+        	    	tStrB_Num.append(BigUtil.SEP_ITEM);
     	    	}
 	    	}
 
-    		tStrB.append('¬');
-    		tStrB_Num.append('¬');
+    		tStrB.append(BigUtil.SEP_LEFT_RIGHT);
+    		tStrB_Num.append(BigUtil.SEP_LEFT_RIGHT);
     		
     		for(int j = tSize/2; j < tSize; j++){
     			BigTag tTag = tBigTags.get(j);
@@ -122,11 +122,11 @@ public class PersonalController{
     	    	tStrB_Num.append(tNumStrsRight[j - tSize/2]);
     	    	
     	    	if(j + 1 < tSize){
-    	    		tStrB.append('¯');
-        	    	tStrB_Num.append('¯');
+    	    		tStrB.append(BigUtil.SEP_ITEM);
+        	    	tStrB_Num.append(BigUtil.SEP_ITEM);
     	    	}
 	    	}
-    		tStrB.append('™').append(tStrB_Num);
+    		tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
 
     		tOwner.setLayout(tStrB.toString());	    						//save the correct layout string back to DB
     		tOwner.persist();

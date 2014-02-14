@@ -3,6 +3,12 @@ package com.aeiou.bigbang.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.internet.MimeMessage;
+
+import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Remark;
@@ -13,6 +19,14 @@ import com.aeiou.bigbang.services.synchronization.ClientSyncTool;
 
 public class BigUtil {
 
+	public static final String SEP_TAG_NUMBER = "¿";
+	public static final String SEP_LEFT_RIGHT = "¬";
+	public static final String SEP_ITEM = "¯";
+	public static final String MARK_PUBLIC_TAG = "¶";
+	public static final String MARK_PRIVATE_TAG = "";
+	public static final String MARK_MEMBERONLY_TAG = "®";
+	public static final String MARK_TBD_TAG = "©";
+	
 	public static String getUTFString(String pString){
 		byte tByteAry[];
 		try{
@@ -77,10 +91,10 @@ public class BigUtil {
     	for(int i = 0; i < tAryTagStrs.length; i++){
     		//System.out.println("i:" + i);
     		//System.out.println("tAryTagStrs[i]:" + tAryTagStrs[i]);
-    		if(tAryTagStrs[i].endsWith("¶") ||tAryTagStrs[i].endsWith("") ||tAryTagStrs[i].endsWith("†"))
+    		if(tAryTagStrs[i].endsWith(MARK_PRIVATE_TAG) ||tAryTagStrs[i].endsWith(MARK_MEMBERONLY_TAG) ||tAryTagStrs[i].endsWith(MARK_TBD_TAG))
     			tAryTagStrs[i] = tAryTagStrs[i].substring(0, tAryTagStrs[i].length() - 1);
     		
-    		if(tAryTagStrs[i].startsWith("¶")){
+    		if(tAryTagStrs[i].startsWith(MARK_PUBLIC_TAG)){
     			BigTag tTag = BigTag.findBMTagByNameAndOwner(tAryTagStrs[i].substring(1), "admin");
     			if(tTag != null)
     				tBigTags.add(tTag);
@@ -124,13 +138,13 @@ public class BigUtil {
 	    	tStrB_Num.append("8");
 	    	
 	    	if(j + 1 < tSize/2){
-	    		tStrB.append('¯');
-    	    	tStrB_Num.append('¯');
+	    		tStrB.append(SEP_ITEM);
+    	    	tStrB_Num.append(SEP_ITEM);
 	    	}
     	}
 
-		tStrB.append('¬');
-		tStrB_Num.append('¬');
+		tStrB.append(SEP_LEFT_RIGHT);
+		tStrB_Num.append(SEP_LEFT_RIGHT);
 		
 		for(int j = tSize/2; j < tSize; j++){
 	    	tStrB.append(getTagInLayoutString(tBigTags.get(j)));
@@ -138,11 +152,11 @@ public class BigUtil {
 	    	tStrB_Num.append("8");
 	    	
 	    	if(j + 1 < tSize){
-	    		tStrB.append('¯');
-    	    	tStrB_Num.append('¯');
+	    		tStrB.append(SEP_ITEM);
+    	    	tStrB_Num.append(SEP_ITEM);
 	    	}
     	}
-		tStrB.append('™').append(tStrB_Num);
+		tStrB.append(SEP_TAG_NUMBER).append(tStrB_Num);
 
 		pUser.setLayout(tStrB.toString());	    						//save to DB
 		pUser.persist();
@@ -153,19 +167,19 @@ public class BigUtil {
 		StringBuilder tStrB = new StringBuilder();
 		
 		if("admin".equals(pTag.getType()) || "administrator".equals(pTag.getType()))
-    		tStrB.append('¶');
+    		tStrB.append(MARK_PUBLIC_TAG);
     	
     	tStrB.append(pTag.getTagName());
     	
     	switch (pTag.getAuthority()) {
-		case 1:
-			tStrB.append("¶");
+		case BigAuthority.ONLY_MYSELF_CAN_SEE:
+			tStrB.append(MARK_PRIVATE_TAG);
 			break;
-		case 2:
-			tStrB.append("");
+		case BigAuthority.ALL_MY_TEAM_CAN_SEE:
+			tStrB.append(MARK_MEMBERONLY_TAG);
 			break;
-		case 3:
-			tStrB.append("†");
+		case BigAuthority.ONLY_FOR_SELECTED_PERSON:
+			tStrB.append(MARK_TBD_TAG);
 			break;
 		default:
 			break;
@@ -177,11 +191,11 @@ public class BigUtil {
 	//transfer string form "in layout string" format to normal format (clean tag name format).
 	public static String getTagNameFromLayoutStr(String pLayoutString){
 		StringBuilder tStrB = new StringBuilder(pLayoutString);
-		if(tStrB.charAt(0) == '¶')
+		if(tStrB.indexOf(MARK_PUBLIC_TAG) == 0)
 			tStrB = tStrB.deleteCharAt(0);
 		
-		char tEndChar = tStrB.charAt(tStrB.length() - 1);
-		if(tEndChar == '¶' || tEndChar == '' || tEndChar == '†')
+		String tEndStr = tStrB.substring(tStrB.length() - 1);
+		if(MARK_PUBLIC_TAG.equals(tEndStr) || MARK_PRIVATE_TAG.equals(tEndStr) || SEP_TAG_NUMBER.equals(tEndStr))
 			tStrB = tStrB.deleteCharAt(tStrB.length() - 1);
 		
 		return tStrB.toString();
@@ -297,5 +311,21 @@ public class BigUtil {
 		return tGhostUAList.get(randomIdx);
 	}
 	//SpringApplicationContext.getApplicationContext().getBean("themeResolver", CookieThemeResolver.class).setDefaultThemeName("2");
-
+	
+    public static void sendMessage(String mailFrom, String subject, String mailTo, String message) {
+    	MailSender tMailSender = SpringApplicationContext.getApplicationContext().getBean("mailSender", MailSender.class);
+        MimeMessage mimeMessage = ((JavaMailSender)tMailSender).createMimeMessage();
+        MimeMessageHelper helper = null;
+        try{
+        	helper = new MimeMessageHelper(mimeMessage, false, "GB2312");
+	        mimeMessage.setContent(message, "text/html");
+	        helper.setTo(mailTo);
+	        helper.setSubject(subject);
+	        helper.setFrom(mailFrom);
+        }catch(Exception e){
+        	System.out.println("Sending email failed!" + mailTo + "|" + subject + "|" + message);
+        }
+        ((JavaMailSender)tMailSender).send(mimeMessage);
+    }
+	    
 }

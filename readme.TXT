@@ -8,6 +8,8 @@
     	key: i18n_Replay		value:Reply				添加评论
     	key: i18n_Unsubscribe		value:Unsubscribe			退订
     	key: i18n_NewRemark		value:New remark:			新的评论
+6/when Admin modifys a user's layout string, don't use the null, because if layout string is null, then the layout string will be egnored.(have no choice, because when user modify his useraccount, the layoutstring field doesn't show, so controller always get a null as layout string, and controller
+ have to ignore it.
 
 dev:
 1/get the source code, unzip it, then import it as eclipse project.

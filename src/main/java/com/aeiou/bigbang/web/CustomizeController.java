@@ -170,7 +170,7 @@ public class CustomizeController {
     	}
     	
     	//save the new layout string into DB
-    	tOwner.setLayout(tLayoutStrBuilder.append("™").append(tNumStrBuilder).toString()); 						//save the correct layout string back to DB
+    	tOwner.setLayout(tLayoutStrBuilder.append(BigUtil.SEP_TAG_NUMBER).append(tNumStrBuilder).toString()); 						//save the correct layout string back to DB
     	tOwner.persist();
     	
     	//go to personal page;

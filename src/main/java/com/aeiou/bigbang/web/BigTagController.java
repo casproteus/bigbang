@@ -64,7 +64,7 @@ public class BigTagController {
                 StringBuilder tStrB = new StringBuilder();
                 tStrB.append(tTagStr).append(BigUtil.SEP_ITEM);
                 tStrB.append(BigUtil.getTagInLayoutString(bigTag));
-                tStrB.append("™").append(tSizeStr).append(BigUtil.SEP_ITEM).append("8");
+                tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tSizeStr).append(BigUtil.SEP_ITEM).append("8");
                 tUserAccount.setLayout(tStrB.toString());
                 tUserAccount.persist();
             } else {

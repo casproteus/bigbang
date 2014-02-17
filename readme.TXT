@@ -20,7 +20,7 @@ public static final String SEP_TAG_NUMBER = "¿";
 	public static final String MARK_TBD_TAG = "©";
 ------------------------
 7/add a customize with key:stgo, value:
-http://www.transhing.com,http://www.tuyistudio.com,http://test-rightnow.rhcloud.com,http://spa-rightnow.rhcloud.com
+http://food-thebest.rhcloud.com,http://draw-thebest.rhcloud.com,http://test-rightnow.rhcloud.com,http://spa-rightnow.rhcloud.com @notice: 不能用顶级域名，只能用openshift的域名，否则返回400号错误。
 ========================
 dev:
 1/get the source code, unzip it, then import it as eclipse project.

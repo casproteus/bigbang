@@ -7,15 +7,20 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.theme.CookieThemeResolver;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.Customize;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
@@ -246,5 +251,24 @@ public class PersonalController{
         //BigAuthenticationSuccessHandler tHandler = SpringApplicationContext.getApplicationContext().getBean("authenticationSuccessHandler", BigAuthenticationSuccessHandler.class);
         //tHandler.getRequestCache().saveRequest(request, response);
         return "public/index";
+    }
+	
+    //==============================alive check==================================
+    @RequestMapping(value = "stgocheck/{keyStr}", headers = "Accept=application/json")
+    @ResponseBody
+    public ResponseEntity<String> stgocheck(@PathVariable("keyStr") String keyStr, HttpServletRequest request) {
+    	if(!keyStr.equals("stgo")) return null;
+    	 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        
+        Customize customize = Customize.findCustomizeByKey(keyStr);       
+        //for first time, put in how long it has run.
+        if (customize == null) {
+        	customize = new Customize();
+        	customize.setCusKey("stgo");
+        	customize.setCusValue("s");
+        }
+        return new ResponseEntity<String>(customize.toJson(), headers, HttpStatus.OK);
     }
 }

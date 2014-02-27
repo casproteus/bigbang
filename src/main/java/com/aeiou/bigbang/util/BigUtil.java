@@ -317,8 +317,8 @@ public class BigUtil {
         MimeMessage mimeMessage = ((JavaMailSender)tMailSender).createMimeMessage();
         MimeMessageHelper helper = null;
         try{
-        	helper = new MimeMessageHelper(mimeMessage, false, "GB2312");
-	        mimeMessage.setContent(message, "text/html");
+        	helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+	        mimeMessage.setContent(message, "text/html;charset=utf-8");
 	        helper.setTo(mailTo);
 	        helper.setSubject(subject);
 	        helper.setFrom(mailFrom);
@@ -327,5 +327,4 @@ public class BigUtil {
         }
         ((JavaMailSender)tMailSender).send(mimeMessage);
     }
-	    
 }

@@ -10,8 +10,8 @@
        default-lazy-init="true">
         
     <!-- Quartz configuration -->
-   	<bean id="updatingBalanceJobProcessor" class="com.aeiou.bigbang.services.quartz.UpdatingBalanceJobProcessor">
-	</bean>
+    <!-- update balance -->
+   	<bean id="updatingBalanceJobProcessor" class="com.aeiou.bigbang.services.quartz.UpdatingBalanceJobProcessor"></bean>
 	
 	<bean id="updateBalanceJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
@@ -21,12 +21,6 @@
 			<value>updateBalance</value>
 		</property>
 	</bean>
-	
-	<bean id="refreshSessionTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-		<property name="jobDetail" ref="updateBalanceJobDetail" />
-		<property name="startDelay"><value>0</value></property>
-		<property name="repeatInterval"><value>6000</value></property>
-	</bean>
 	 
 	<bean id="updateBalanceTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="updateBalanceJobDetail" />
@@ -35,10 +29,10 @@
            <value>0 43 2 1 * ?</value>
         </property>
 	</bean>
+	<!-- update balance end-->
 	 
-	 
-	<bean id="stgoCheckProcessor" class="com.aeiou.bigbang.services.quartz.StgoCheckProcessor">
-	</bean>
+	<!-- stgo check -->
+	<bean id="stgoCheckProcessor" class="com.aeiou.bigbang.services.quartz.StgoCheckProcessor"></bean>
 	
 	<bean id="stgoCheckDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
@@ -49,19 +43,13 @@
 		</property>
 	</bean>
 	
-	<!-- <bean id="stgocheckTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+	<bean id="stgoCheckTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
 		<property name="jobDetail" ref="stgoCheckDetail" />
 		<property name="startDelay"><value>0</value></property>
-		<property name="repeatInterval"><value>6000</value></property>
-	</bean> -->
-	 
-	<bean id="stgoCheckTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="stgoCheckDetail" />
-		<property name="startDelay"><value>0</value></property>
-		<property name="cronExpression">
-           <value>10 10 * * * ?</value>
-        </property>
+		<property name="repeatInterval"><value>600000</value></property> <!-- every 10 mins do stgo check. -->
 	</bean>
+	<!-- stgo check end-->
+	 
 	<!-- Quartz Scheduler -->
 	<bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">

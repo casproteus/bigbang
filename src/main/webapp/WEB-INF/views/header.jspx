@@ -101,6 +101,7 @@
   </c:choose>
   
   <span class="new">
+  	<spring:message code="AddOnNotice2" htmlEscape="false"/>
     <spring:message code="AddOnNotice" htmlEscape="false" var="AddOnNotice"/>
 	<spring:url value="/resources/images/addon.png" var="addon_img_url" />
 	<img src="${addon_img_url}" style="vertical-align: bottom;"/>
@@ -210,7 +211,7 @@
   </form>
   <!-- Don't think this is meaningful to real user. so we leave it only in footer. <util:websiteSwitch/> -->
 
-  <div class="headImgArea">
+  <div class="headImgArea" background="getImage/headimage">
 	  <spring:url var="home" value="/" />
 	  <spring:message code="button_home" var="home_label" htmlEscape="false" />
 	  <a href="${home}" name="${fn:escapeXml(home_label)}" title="${fn:escapeXml(home_label)}">

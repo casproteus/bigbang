@@ -19,13 +19,17 @@ import com.aeiou.bigbang.services.synchronization.ClientSyncTool;
 
 public class BigUtil {
 
-	public static final String SEP_TAG_NUMBER = "¿";
-	public static final String SEP_LEFT_RIGHT = "¬";
-	public static final String SEP_ITEM = "¯";
-	public static final String MARK_PUBLIC_TAG = "¶";
-	public static final String MARK_PRIVATE_TAG = "";
-	public static final String MARK_MEMBERONLY_TAG = "®";
-	public static final String MARK_TBD_TAG = "©";
+	//Can not use strnge characters, because when the coding formmat of the IDE changes or are not same with database, will cause mismatch.
+	//Can neiter use "[","(","+".... because the string will be considered as an expression in split method, those character have special
+	//meaning and will cause splite
+	public static final String SEP_TAG_NUMBER = "zSTNz";//"¿";
+	public static final String SEP_LEFT_RIGHT = "zSLRz";// "¬";
+	public static final String SEP_ITEM = "zSISz";//"¯";
+	public static final String MARK_PUBLIC_TAG = "zMUTz";// "¶";
+	public static final String MARK_PRIVATE_TAG = "zMITz";// "";
+	public static final String MARK_MEMBERONLY_TAG = "zMMTz";// "®";
+	public static final String MARK_TBD_TAG = "zMTTz";// "©";
+	public static final int MARK_SEP_LENGTH = 5;
 	
 	public static String getUTFString(String pString){
 		byte tByteAry[];
@@ -92,14 +96,14 @@ public class BigUtil {
     		//System.out.println("i:" + i);
     		//System.out.println("tAryTagStrs[i]:" + tAryTagStrs[i]);
     		if(tAryTagStrs[i].endsWith(MARK_PRIVATE_TAG) ||tAryTagStrs[i].endsWith(MARK_MEMBERONLY_TAG) ||tAryTagStrs[i].endsWith(MARK_TBD_TAG))
-    			tAryTagStrs[i] = tAryTagStrs[i].substring(0, tAryTagStrs[i].length() - 1);
+    			tAryTagStrs[i] = tAryTagStrs[i].substring(0, tAryTagStrs[i].length() - MARK_SEP_LENGTH);
     		
     		if(tAryTagStrs[i].startsWith(MARK_PUBLIC_TAG)){
-    			BigTag tTag = BigTag.findBMTagByNameAndOwner(tAryTagStrs[i].substring(1), "admin");
+    			BigTag tTag = BigTag.findBMTagByNameAndOwner(tAryTagStrs[i].substring(MARK_SEP_LENGTH), "admin");
     			if(tTag != null)
     				tBigTags.add(tTag);
     			else{
-    				tTag = BigTag.findBMTagByNameAndOwner(tAryTagStrs[i].substring(1), "administrator");
+    				tTag = BigTag.findBMTagByNameAndOwner(tAryTagStrs[i].substring(MARK_SEP_LENGTH), "administrator");
     				if(tTag != null)
     					tBigTags.add(tTag);
     			}
@@ -192,11 +196,11 @@ public class BigUtil {
 	public static String getTagNameFromLayoutStr(String pLayoutString){
 		StringBuilder tStrB = new StringBuilder(pLayoutString);
 		if(tStrB.indexOf(MARK_PUBLIC_TAG) == 0)
-			tStrB = tStrB.deleteCharAt(0);
+			tStrB = tStrB.delete(0, MARK_SEP_LENGTH);
 		
-		String tEndStr = tStrB.substring(tStrB.length() - 1);
+		String tEndStr = tStrB.substring(tStrB.length() - MARK_SEP_LENGTH);
 		if(MARK_PUBLIC_TAG.equals(tEndStr) || MARK_PRIVATE_TAG.equals(tEndStr) || SEP_TAG_NUMBER.equals(tEndStr))
-			tStrB = tStrB.deleteCharAt(tStrB.length() - 1);
+			tStrB = tStrB.delete(tStrB.length() - MARK_SEP_LENGTH, tStrB.length());
 		
 		return tStrB.toString();
 	}
@@ -327,4 +331,12 @@ public class BigUtil {
         }
         ((JavaMailSender)tMailSender).send(mimeMessage);
     }
+    
+    public static void main(String args[]){
+    	String a = "abcdefiSTNijklmn";
+    	String b = "iSTNi";
+    	String[] c = a.split(b);
+    
+    }
+    
 }

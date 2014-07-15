@@ -10,14 +10,14 @@
     	key: i18n_NewRemark		value:New remark:			新的评论
 6/when Admin modifys a user's layout string, don't use the null, because if layout string is null, then the layout string will be egnored.(have no choice, because when user modify his useraccount, the layoutstring field doesn't show, so controller always get a null as layout string, and controller
  have to ignore it.
-------------------------
-public static final String SEP_TAG_NUMBER = "¿";
-	public static final String SEP_LEFT_RIGHT = "¬";
-	public static final String SEP_ITEM = "¯";
-	public static final String MARK_PUBLIC_TAG = "¶";
-	public static final String MARK_PRIVATE_TAG = "";
-	public static final String MARK_MEMBERONLY_TAG = "®";
-	public static final String MARK_TBD_TAG = "©";
+------------------------	
+	public static final String SEP_TAG_NUMBER = "[S^T^N]";
+	public static final String SEP_LEFT_RIGHT = "[S^L^R]";
+	public static final String SEP_ITEM = "[S^I^S]";
+	public static final String MARK_PUBLIC_TAG = "[M^+^T]";
+	public static final String MARK_PRIVATE_TAG = "[M^-^T]";
+	public static final String MARK_MEMBERONLY_TAG = "[M^M^T]";
+	public static final String MARK_TBD_TAG = "[M^T^T]";
 ------------------------
 7/add a customize with key:stgo, value:
 http://food-thebest.rhcloud.com,http://draw-thebest.rhcloud.com,http://test-rightnow.rhcloud.com,http://spa-rightnow.rhcloud.com @notice: 不能用顶级域名，只能用openshift的域名，否则返回400号错误。

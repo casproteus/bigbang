@@ -101,6 +101,7 @@
   </c:choose>
 
   <span class="new">
+  	<spring:message code="AddOnNotice2" htmlEscape="false"/>
     <spring:message code="AddOnNotice" htmlEscape="false" var="AddOnNotice"/>
 	<spring:url value="/resources/images/addon.png" var="addon_img_url" />
 	<img src="${addon_img_url}" style="vertical-align: bottom;"/>

@@ -60,7 +60,7 @@ public class BigTagController {
             int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
             if (p > -1) {
                 String tTagStr = tLayout.substring(0, p);
-                String tSizeStr = tLayout.substring(p + 1);
+                String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
                 StringBuilder tStrB = new StringBuilder();
                 tStrB.append(tTagStr).append(BigUtil.SEP_ITEM);
                 tStrB.append(BigUtil.getTagInLayoutString(bigTag));
@@ -91,16 +91,16 @@ public class BigTagController {
                 String[] tAryNumStrsLeft = null;
                 String[] tAryNumStrsRight = null;
                 String tTagStr = tLayout.substring(0, p);
-                String tSizeStr = tLayout.substring(p + 1);
+                String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
                 p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
                 if (p >= 0) {
                     tAryTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
-                    tAryTagStrsRight = tTagStr.substring(p + 1).split(BigUtil.SEP_ITEM);
+                    tAryTagStrsRight = tTagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
                 }
                 p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
                 if (p >= 0) {
                     tAryNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
-                    tAryNumStrsRight = tSizeStr.substring(p + 1).split(BigUtil.SEP_ITEM);
+                    tAryNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
                 }
                 if (BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)) {
                     BigUtil.resetLayoutString(tUserAccount);
@@ -198,16 +198,16 @@ public class BigTagController {
                 String[] tAryNumStrsLeft = null;
                 String[] tAryNumStrsRight = null;
                 String tTagStr = tLayout.substring(0, p);
-                String tSizeStr = tLayout.substring(p + 1);
+                String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
                 p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
                 if (p >= 0) {
                     tAryTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
-                    tAryTagStrsRight = tTagStr.substring(p + 1).split(BigUtil.SEP_ITEM);
+                    tAryTagStrsRight = tTagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
                 }
                 p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
                 if (p >= 0) {
                     tAryNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
-                    tAryNumStrsRight = tSizeStr.substring(p + 1).split(BigUtil.SEP_ITEM);
+                    tAryNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
                 }
                 if (BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)) {
                     BigUtil.resetLayoutString(tUserAccount);

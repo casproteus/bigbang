@@ -92,17 +92,17 @@ public class CustomizeController {
     	int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
 		if(p > -1){
     		String tTagStr = tLayout.substring(0, p);
-    		String tSizeStr = tLayout.substring(p+1);
+    		String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
     		
     		p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
     		if(p >= 0){
 	    		tBigTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM); //when an empty string is splited, the returned ary will be have one element(which is empty).
-	    		tBigTagStrsRight = tTagStr.substring(p+1).split(BigUtil.SEP_ITEM);
+	    		tBigTagStrsRight = tTagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
     		}
     		p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
     		if(p >= 0){
 	    		tNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
-	    		tNumStrsRight = tSizeStr.substring(p+1).split(BigUtil.SEP_ITEM);
+	    		tNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
     		}
 		}//----------------------------------------
     	

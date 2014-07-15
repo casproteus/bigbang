@@ -61,17 +61,17 @@ public class PublicController{
     	int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
 		if(p > -1){
 			String tTagStr = tLayout.substring(0, p);
-			String tSizeStr = tLayout.substring(p+1);
+			String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
 			
     		p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
     		if(p >=0 ){
     			tAryTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
-    			tAryTagStrsRight = tTagStr.substring(p+1).split(BigUtil.SEP_ITEM);
+    			tAryTagStrsRight = tTagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
     		}
     		p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
     		if(p >=0 ){
     			tAryNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
-    			tAryNumStrsRight = tSizeStr.substring(p+1).split(BigUtil.SEP_ITEM);
+    			tAryNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
     		}
 		}
     	
@@ -415,7 +415,7 @@ public class PublicController{
 		UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);
 		tCurName = tOwner.getName();
 
-		//this command is not used for now, because we are using the icon for another function which display an interface for add/remve tags on screen.
+		//this command is not used for now, because we are using the icon for another function which display an interface for add/remve tags on screen.//@?while I just saw there's a set to default link in that page.
 		if("reset".equals(relayouttype)){
 			tOwner.setLayout(null);
 			tOwner.persist();
@@ -432,16 +432,16 @@ public class PublicController{
 	   	String tLayout = tOwner.getLayout();							//get the layout info from DB.and separate it into the array
    		int p = tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
 		String tTagStr = tLayout.substring(0, p);
-		String tSizeStr = tLayout.substring(p+1);
+		String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
 		p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
 		if(p >= 0){
     		tAryTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
-    		tAryTagStrsRight = tTagStr.substring(p+1).split(BigUtil.SEP_ITEM);
+    		tAryTagStrsRight = tTagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
 		}
 		p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
 		if(p >= 0){
     		tAryNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
-    		tAryNumStrsRight = tSizeStr.substring(p+1).split(BigUtil.SEP_ITEM);
+    		tAryNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
 		}
 		//for the case that when empty string split, it return a string[] which one element. which will the treated as has meaningful element later.
 		if(tAryTagStrsLeft.length == 1 && tAryTagStrsLeft[0].length() == 0)

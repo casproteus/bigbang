@@ -150,9 +150,14 @@
 			<version>1.8.0.10</version>
 		</dependency>
 		<dependency>
+		    <groupId>org.postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <version>9.2-1004-jdbc4</version>
+		    <!-- 
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>8.4-701.jdbc3</version>
+             -->
         </dependency>
 		<dependency>
 			<groupId>org.apache.openjpa</groupId>

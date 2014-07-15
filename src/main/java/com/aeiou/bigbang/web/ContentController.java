@@ -114,7 +114,7 @@ public class ContentController {
 	        int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
 	        if (p > -1) {
 	            String tTagStr = tLayout.substring(0, p);
-	            String tSizeStr = tLayout.substring(p + 1);
+	            String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
 	            StringBuilder tStrB = new StringBuilder();
 	            tStrB.append(tTagStr).append(BigUtil.SEP_ITEM);
 	            tStrB.append(BigUtil.getTagInLayoutString(bigTag));

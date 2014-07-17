@@ -92,3 +92,10 @@ field email template --class ~.web.RemarkController
 field email template --class ~.web.RemarkController
 quit
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2014-01-14 13:34:32
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2014-07-15 23:36:30
+entity jpa --class ~.model.MediaUpload
+field string --fieldName filepath --notNull true --sizeMax 128
+field number --type long --fieldName filesize --notNull true
+field string --fieldName contentType --notNull true
+exit
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2014-07-15 23:59:27

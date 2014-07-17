@@ -195,11 +195,10 @@ public class BigUtil {
 	//transfer string form "in layout string" format to normal format (clean tag name format).
 	public static String getTagNameFromLayoutStr(String pLayoutString){
 		StringBuilder tStrB = new StringBuilder(pLayoutString);
-		if(tStrB.indexOf(MARK_PUBLIC_TAG) == 0)
+		if(tStrB.indexOf(MARK_PUBLIC_TAG) == 0 || tStrB.indexOf(MARK_PRIVATE_TAG) == 0)  //remove the prefix.
 			tStrB = tStrB.delete(0, MARK_SEP_LENGTH);
 		
-		String tEndStr = tStrB.substring(tStrB.length() - MARK_SEP_LENGTH);
-		if(MARK_PUBLIC_TAG.equals(tEndStr) || MARK_PRIVATE_TAG.equals(tEndStr) || SEP_TAG_NUMBER.equals(tEndStr))
+		if(tStrB.indexOf(MARK_PUBLIC_TAG) > -1 || tStrB.indexOf(MARK_PRIVATE_TAG) > -1 || tStrB.indexOf(SEP_TAG_NUMBER) > -1 )  //remove the affix.
 			tStrB = tStrB.delete(tStrB.length() - MARK_SEP_LENGTH, tStrB.length());
 		
 		return tStrB.toString();

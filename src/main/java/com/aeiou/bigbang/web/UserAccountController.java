@@ -5,6 +5,7 @@ import com.aeiou.bigbang.domain.Message;
 import com.aeiou.bigbang.domain.RssTwitter;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.model.MediaUpload;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigUtil;
 import java.util.ArrayList;
@@ -83,6 +84,23 @@ public class UserAccountController {
             }
         }
         uiModel.asMap().clear();
+        
+    	//if name changed, need to update the image paths.
+        if(!tUserAccount.getName().equals(userAccount.getName())){
+            if(MediaUpload.countMediaUploadsByKey(tUserAccount.getName()) > 0){
+            	//not now, when imaged uploaded, the theme will be changed. tUserAccount.setTheme(9);
+            	MediaUpload tMH = MediaUpload.findMediaByKey(tUserAccount.getName() + "_headimg");
+            	if(tMH != null){
+            		tMH.setFilepath(userAccount.getName() + "_headimg");
+            		tMH.merge();
+            	}
+            	MediaUpload tMB = MediaUpload.findMediaByKey(tUserAccount.getName() + "_bg");
+            	if(tMB != null){
+            		tMB.setFilepath(userAccount.getName() + "_bg");
+            		tMB.merge();
+            	}
+            }
+        }
         
         tUserAccount.setName(userAccount.getName());
         tUserAccount.setPassword(userAccount.getPassword());

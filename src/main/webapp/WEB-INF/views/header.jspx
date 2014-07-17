@@ -211,7 +211,7 @@
   </form>
   <!-- Don't think this is meaningful to real user. so we leave it only in footer. <util:websiteSwitch/> -->
 
-  <div class="headImgArea" background="getImage/headimage">
+  <div class="headImgArea" background="getImage/uc_${fn:toLowerCase(spaceOwnerName)}_headimage">
 	  <spring:url var="home" value="/" />
 	  <spring:message code="button_home" var="home_label" htmlEscape="false" />
 	  <a href="${home}" name="${fn:escapeXml(home_label)}" title="${fn:escapeXml(home_label)}">

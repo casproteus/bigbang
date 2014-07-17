@@ -22,6 +22,7 @@ import com.aeiou.bigbang.util.SpringApplicationContext;
 import com.aeiou.bigbang.web.PersonalController;
 import com.aeiou.bigbang.web.PublicController;
 import com.aeiou.bigbang.web.RemarkController;
+import com.aeiou.bigbang.web.UserAccountController;
 
 @Configuration
 public class SecurityConfig {
@@ -86,6 +87,12 @@ public class SecurityConfig {
 	RemarkController remarkController() {
 		return new RemarkController();
 	}
+	
+//	@Bean(autowire = Autowire.BY_NAME)
+//	@Scope("singleton")
+//	UserAccountController userAccountController() {
+//		return new UserAccountController();
+//	}
 
 	@Bean(autowire = Autowire.BY_NAME)
 	@Scope("singleton")

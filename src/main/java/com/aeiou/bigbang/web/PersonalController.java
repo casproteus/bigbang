@@ -7,16 +7,20 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.theme.CookieThemeResolver;
 
 import com.aeiou.bigbang.domain.BigTag;
@@ -24,9 +28,11 @@ import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Customize;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.model.MediaUpload;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
 import com.aeiou.bigbang.util.BigUtil;
+import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/")
 @Controller
@@ -428,4 +434,86 @@ public class PersonalController{
 //			return index(uiModel, request);
 //		}
 	}
+    
+	@RequestMapping(value = "/changeImgForm",method = RequestMethod.POST)
+	public String changeImgForm(Model uiModel, HttpServletRequest request) {
+		uiModel.addAttribute("replacingImage", request.getParameter("position"));
+		uiModel.addAttribute("mediaUpload", new MediaUpload());
+		
+		UserAccountController tController = SpringApplicationContext.getApplicationContext().getBean("userAccountController", UserAccountController.class);
+		return tController.updateForm(Long.parseLong(request.getParameter("returnPath")), uiModel);
+	}	
+	
+	//hard code here, because As we know only the 2.3,4,5 are disigned to display galarry.
+	@RequestMapping(value = "/mediauploads", method = RequestMethod.POST, produces = "text/html")
+	public String create(@Valid MediaUpload mediaUpload, BindingResult bindingResult, Model uiModel,
+	       @RequestParam("content") CommonsMultipartFile content,
+	       HttpServletRequest request) {
+		
+		String tKeyString = request.getParameter("position");	//can be category, big-slid, product's pratNo...
+		
+//		long tCount = -1;
+//		MediaUpload tMedia;
+//		
+//		//-----------file path---------
+//		if(TaoUtil.isADDMode(tKeyString)){		//if it's add mode, then we need to know how many picture there already are. then create a new one.
+//    		tCount = MediaUpload.countMediaUploadsByKey(tKeyString);
+//    		if(TaoUtil.isTHUMNeeded(tKeyString))
+//    			tCount = tCount / 2;
+//    		tMedia = new MediaUpload();
+//    		tMedia.setFilepath(tKeyString + "_" + (tCount + 1));
+//		}else{									//if not add mode, then just create a new one.
+//			try {
+//				tMedia = MediaUpload.findMediaByKey(tKeyString);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				tMedia = new MediaUpload();
+//		    	tMedia.setFilepath(tKeyString);
+//			}
+//		}
+//		FileItem tFileItem = content.getFileItem();
+//		
+//	    //-----------file type-----------------
+//		String tFormat = TaoUtil.DEFAULT_IMAGE_TYPE;
+//		if(tFileItem != null){
+//			String tFileName = tFileItem.getName();
+//		   
+//			if(tFileName.indexOf("sharethegoodones.com") >= 0){ //check if it is a delete command
+//				tMedia.remove();
+//			    return getReturnPathStr(uiModel, request);
+//			}
+//			
+//			if(tFileName != null){
+//				int tPos = tFileName.lastIndexOf(".");
+//				if(tPos > 0 && tPos < tFileName.length() - 1){
+//					tFormat = tFileName.substring(tPos);
+//				}
+//			}
+//		}
+//	    tMedia.setContentType(tFormat);
+//
+//		//------------if need to save to disk-------------
+//		//File tDiskFile = new File(serverInfo.getDataPath() + tKeyString + tFormat);
+//		//content.transferTo(tDiskFile);
+//	    //------------save image to db------------------
+//		BufferedImage inputImage = null;
+//		try{
+//			inputImage = ImageIO.read(content.getInputStream());
+//			//Image big = inputImage.getScaledInstance(256, 256,Image.SCALE_DEFAULT);
+//			byte[] tContent = TaoUtil.resizeImage(inputImage, tMedia.getFilepath(), tFormat);//tKeyString);	//because when uploading gallery, the tKeyString is like "gallery_".
+//			tMedia.setContent(tContent == null ? content.getBytes() : tContent);	//------------file content----------
+//			tMedia.setFilesize(tContent == null ? content.getSize() : tContent.length);							//------------file size-------------
+//		}catch(Exception e){
+//			e.printStackTrace();
+//			System.out.println("got exception when resizing the image!"+e);
+//		    return getReturnPathStr(uiModel, request);
+//		}
+//		   
+//	    uiModel.asMap().clear();
+//	    tMedia.persist();
+
+		UserAccountController tController = SpringApplicationContext.getApplicationContext().getBean("userAccountController", UserAccountController.class);
+		return tController.updateForm(Long.parseLong(request.getParameter("returnPath")), uiModel);
+	}
+	
 }

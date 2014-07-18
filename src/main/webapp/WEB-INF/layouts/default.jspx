@@ -17,7 +17,7 @@ xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:fn="http://java.sun.com/jsp/
 		<title><spring:message code="welcome_h3"/></title>
 	</head>
 	
-  	<body class="tundra spring" background="getImage/uc_${fn:toLowerCase(spaceOwnerName)}_bg">
+  	<body class="tundra spring" background="getImage/uc_${fn:toLowerCase(spaceOwner)}_bg">
    		<div id="wrapper">
 		    <tiles:insertAttribute name="header" ignore="true" />
 		    <tiles:insertAttribute name="menu" ignore="true" />   

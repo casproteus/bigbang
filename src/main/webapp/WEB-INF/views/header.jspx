@@ -210,12 +210,19 @@
     </span>
   </form>
   <!-- Don't think this is meaningful to real user. so we leave it only in footer. <util:websiteSwitch/> -->
-
-  <div class="headImgArea" background="getImage/uc_${fn:toLowerCase(spaceOwnerName)}_headimage">
+  <div class="headImgArea">
 	  <spring:url var="home" value="/" />
 	  <spring:message code="button_home" var="home_label" htmlEscape="false" />
 	  <a href="${home}" name="${fn:escapeXml(home_label)}" title="${fn:escapeXml(home_label)}">
-	  	<span class="emptySpan"> </span>
+	    <spring:theme code="styleSheet" var="roo_css" />
+	  	<c:choose>
+	  		<c:when test="${'resources/styles/9.css' eq roo_css}">
+		 		<img src = "getImage/uc_${fn:toLowerCase(spaceOwner)}_headimage" alt="title image"/>
+	  		</c:when>
+	  		<c:otherwise>
+	  			<span class="emptySpan"> </span>
+	  		</c:otherwise>
+	  	</c:choose>
 	  </a>
   </div>
 </div> 

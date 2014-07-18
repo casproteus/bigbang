@@ -1,14 +1,17 @@
 package com.aeiou.bigbang.web;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.fileupload.FileItem;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -281,160 +284,28 @@ public class PersonalController{
     
 	//=====================================changing images on page=====================================
     @RequestMapping(value = "/getImage/{id}")
+    //when a user's theme was set to 9, then this method will be called to get his own images. if he's no image, then use admin's image.
     public void getImage(@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
 	    response.setContentType("image/jpeg");
-//	    MediaUpload tMedia = MediaUpload.findMediaByKey(id);
-//	    try{
-//		    if(tMedia != null && tMedia.getContent() != null){
-//		    	byte[] imageBytes = tMedia.getContent();
-//		    	response.getOutputStream().write(imageBytes);
-//		    	response.getOutputStream().flush();
-//		    
-//		    }else{	
-////		    	String pathToWeb = request.getServletPath();
-////		    	File tFile = new File();
-////		    	
-////				BufferedImage bi = ImageIO.read(tFile);
-////				OutputStream out = response.getOutputStream();
-////				ImageIO.write(bi, "jpg", out);
-////				out.close();
-//		    }
-//	    }catch(Exception e){
-//	    	System.out.println("Exception occured when fetching img of ID:" + id + "! " + e);
-//	    }
-//    }
-//
-//	@RequestMapping(value = "/changeImgForm",method = RequestMethod.POST)
-//	public String changeImgForm(Model model, HttpServletRequest request) {
-//		model.addAttribute("replacingImage", request.getParameter("position"));
-//		model.addAttribute("mediaUpload", new MediaUpload());
-//		//return index(model, request);
-//		return getReturnPathStr(model, request);
-//	}	
-//	
-//	//hard code here, because As we know only the 2.3,4,5 are disigned to display galarry.
-//	@RequestMapping(value = "/mediauploads", method = RequestMethod.POST, produces = "text/html")
-//	public String create(@Valid MediaUpload mediaUpload, BindingResult bindingResult, Model uiModel,
-//	       @RequestParam("content") CommonsMultipartFile content,
-//	       HttpServletRequest request) {
-//		
-//		String tKeyString = request.getParameter("position");	//can be category, big-slid, product's pratNo...
-//		
-//		long tCount = -1;
-//		MediaUpload tMedia;
-//		
-//		//-----------file path---------
-//		if(TaoUtil.isADDMode(tKeyString)){		//if it's add mode, then we need to know how many picture there already are. then create a new one.
-//    		tCount = MediaUpload.countMediaUploadsByKey(tKeyString);
-//    		if(TaoUtil.isTHUMNeeded(tKeyString))
-//    			tCount = tCount / 2;
-//    		tMedia = new MediaUpload();
-//    		tMedia.setFilepath(tKeyString + "_" + (tCount + 1));
-//		}else{									//if not add mode, then just create a new one.
-//			try {
-//				tMedia = MediaUpload.findMediaByKey(tKeyString);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				tMedia = new MediaUpload();
-//		    	tMedia.setFilepath(tKeyString);
-//			}
-//		}
-//		FileItem tFileItem = content.getFileItem();
-//		
-//	    //-----------file type-----------------
-//		String tFormat = TaoUtil.DEFAULT_IMAGE_TYPE;
-//		if(tFileItem != null){
-//			String tFileName = tFileItem.getName();
-//		   
-//			if(tFileName.indexOf("sharethegoodones.com") >= 0){ //check if it is a delete command
-//				tMedia.remove();
-//			    return getReturnPathStr(uiModel, request);
-//			}
-//			
-//			if(tFileName != null){
-//				int tPos = tFileName.lastIndexOf(".");
-//				if(tPos > 0 && tPos < tFileName.length() - 1){
-//					tFormat = tFileName.substring(tPos);
-//				}
-//			}
-//		}
-//	    tMedia.setContentType(tFormat);
-//
-//		//------------if need to save to disk-------------
-//		//File tDiskFile = new File(serverInfo.getDataPath() + tKeyString + tFormat);
-//		//content.transferTo(tDiskFile);
-//	    //------------save image to db------------------
-//		BufferedImage inputImage = null;
-//		try{
-//			inputImage = ImageIO.read(content.getInputStream());
-//			//Image big = inputImage.getScaledInstance(256, 256,Image.SCALE_DEFAULT);
-//			byte[] tContent = TaoUtil.resizeImage(inputImage, tMedia.getFilepath(), tFormat);//tKeyString);	//because when uploading gallery, the tKeyString is like "gallery_".
-//			tMedia.setContent(tContent == null ? content.getBytes() : tContent);	//------------file content----------
-//			tMedia.setFilesize(tContent == null ? content.getSize() : tContent.length);							//------------file size-------------
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			System.out.println("got exception when resizing the image!"+e);
-//		    return getReturnPathStr(uiModel, request);
-//		}
-//		   
-//	    uiModel.asMap().clear();
-//	    tMedia.persist();
-//	   
-//	    //--------------------------for Thum image---------------------------
-//	    if(TaoUtil.isTHUMNeeded(tKeyString)){ //-------------additional access for gallery type-------tCount != -1 means that it's adding mode.-----
-//	    	if(TaoUtil.isADDMode(tKeyString)){		//if it's add mode, then we need to know how many picture there already are. then create a new one.
-//	    		tMedia = new MediaUpload();
-//	    		tKeyString = tKeyString + "_" + (tCount + 1) + "_thum";
-//	    		tMedia.setFilepath(tKeyString);
-//			}else{									//if not add mode, then just create a new one.
-//	    		tKeyString = tKeyString + "_thum";
-//				try {
-//					tMedia = MediaUpload.findMediaByKey(tKeyString);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//					tMedia = new MediaUpload();
-//			    	tMedia.setFilepath(tKeyString);
-//				}
-//			}
-//	    	
-//	    	tMedia.setFilepath(tKeyString);
-//			try{            
-//				//Image big = inputImage.getScaledInstance(256, 256,Image.SCALE_DEFAULT);
-//				byte[] tContent = TaoUtil.resizeImage(inputImage, tKeyString, tFormat);
-//				tMedia.setContent(tContent);	//------------file content----------
-//				tMedia.setFilesize(tContent.length);							//------------file size-------------
-//				tMedia.setContentType(tFormat);
-//			}catch(Exception e){
-//				e.printStackTrace();
-//				System.out.println("got exception when resizing the Thumimage!"+e);
-//				System.out.println("start to remove the new created image from database..............");
-//				tMedia.remove();
-//			}
-//		    //uiModel.asMap().clear();
-//			tMedia.persist();
-//	    }
-//
-//	    return getReturnPathStr(uiModel, request);
-//	}
-//	
-//	private String getReturnPathStr(Model uiModel, HttpServletRequest request){
-//	    //if returnPath is not null, then return to the returnPath
-//		String tReturnPath = request.getParameter("returnPath");
-//		
-//		if(tReturnPath != null && tReturnPath.length() > 0){
-//			if(tReturnPath.startsWith("catalog_")){
-//				tReturnPath = "menu_" + tReturnPath.substring(8);
-//			}else if(!tReturnPath.startsWith("menu_")){
-//				tReturnPath = "menu_" + tReturnPath;
-//			}
-//			uiModel.addAttribute("returnPath", tReturnPath);
-//			//return "/" + tReturnPath;// shouldn't do this, because redirect is like input the string in address bar.
-//			return displaySubpage(uiModel, request, tReturnPath.substring(5));
-//		}else{
-//			return index(uiModel, request);
-//		}
-	}
-    
+	    MediaUpload tMedia = MediaUpload.findMediaByKey(id);
+	    try{
+		    if(tMedia != null && tMedia.getContent() != null){
+		    	byte[] imageBytes = tMedia.getContent();
+		    	response.getOutputStream().write(imageBytes);
+		    	response.getOutputStream().flush();
+		    }else{	
+			    tMedia = MediaUpload.findMediaByKey(id.endsWith("_bg") ? "uc_admin_bg" : "uc_admin_headimage");
+			    if(tMedia != null && tMedia.getContent() != null){
+			    	byte[] imageBytes = tMedia.getContent();
+			    	response.getOutputStream().write(imageBytes);
+			    	response.getOutputStream().flush();
+			    }
+		    }
+	    }catch(Exception e){
+	    	System.out.println("Exception occured when fetching img of ID:" + id + "! " + e);
+	    }
+    }
+
 	@RequestMapping(value = "/changeImgForm",method = RequestMethod.POST)
 	public String changeImgForm(Model uiModel, HttpServletRequest request) {
 		uiModel.addAttribute("replacingImage", request.getParameter("position"));
@@ -444,76 +315,75 @@ public class PersonalController{
 		return tController.updateForm(Long.parseLong(request.getParameter("returnPath")), uiModel);
 	}	
 	
-	//hard code here, because As we know only the 2.3,4,5 are disigned to display galarry.
 	@RequestMapping(value = "/mediauploads", method = RequestMethod.POST, produces = "text/html")
 	public String create(@Valid MediaUpload mediaUpload, BindingResult bindingResult, Model uiModel,
 	       @RequestParam("content") CommonsMultipartFile content,
 	       HttpServletRequest request) {
 		
-		String tKeyString = request.getParameter("position");	//can be category, big-slid, product's pratNo...
+		String tKeyString = request.getParameter("position");	//can uc_tao_headimage or uc_tao_bg.
+		Long ownerID = Long.parseLong(request.getParameter("returnPath"));	//the owner must be the logged in user.
 		
-//		long tCount = -1;
-//		MediaUpload tMedia;
-//		
-//		//-----------file path---------
-//		if(TaoUtil.isADDMode(tKeyString)){		//if it's add mode, then we need to know how many picture there already are. then create a new one.
-//    		tCount = MediaUpload.countMediaUploadsByKey(tKeyString);
-//    		if(TaoUtil.isTHUMNeeded(tKeyString))
-//    			tCount = tCount / 2;
-//    		tMedia = new MediaUpload();
-//    		tMedia.setFilepath(tKeyString + "_" + (tCount + 1));
-//		}else{									//if not add mode, then just create a new one.
-//			try {
-//				tMedia = MediaUpload.findMediaByKey(tKeyString);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				tMedia = new MediaUpload();
-//		    	tMedia.setFilepath(tKeyString);
-//			}
-//		}
-//		FileItem tFileItem = content.getFileItem();
-//		
-//	    //-----------file type-----------------
-//		String tFormat = TaoUtil.DEFAULT_IMAGE_TYPE;
-//		if(tFileItem != null){
-//			String tFileName = tFileItem.getName();
-//		   
-//			if(tFileName.indexOf("sharethegoodones.com") >= 0){ //check if it is a delete command
-//				tMedia.remove();
-//			    return getReturnPathStr(uiModel, request);
-//			}
-//			
-//			if(tFileName != null){
-//				int tPos = tFileName.lastIndexOf(".");
-//				if(tPos > 0 && tPos < tFileName.length() - 1){
-//					tFormat = tFileName.substring(tPos);
-//				}
-//			}
-//		}
-//	    tMedia.setContentType(tFormat);
-//
-//		//------------if need to save to disk-------------
-//		//File tDiskFile = new File(serverInfo.getDataPath() + tKeyString + tFormat);
-//		//content.transferTo(tDiskFile);
-//	    //------------save image to db------------------
-//		BufferedImage inputImage = null;
-//		try{
-//			inputImage = ImageIO.read(content.getInputStream());
-//			//Image big = inputImage.getScaledInstance(256, 256,Image.SCALE_DEFAULT);
-//			byte[] tContent = TaoUtil.resizeImage(inputImage, tMedia.getFilepath(), tFormat);//tKeyString);	//because when uploading gallery, the tKeyString is like "gallery_".
-//			tMedia.setContent(tContent == null ? content.getBytes() : tContent);	//------------file content----------
-//			tMedia.setFilesize(tContent == null ? content.getSize() : tContent.length);							//------------file size-------------
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			System.out.println("got exception when resizing the image!"+e);
-//		    return getReturnPathStr(uiModel, request);
-//		}
-//		   
-//	    uiModel.asMap().clear();
-//	    tMedia.persist();
+		long tCount = -1;
+		MediaUpload tMedia;
+		
+		//-----------file path---------
+		try {
+			tMedia = MediaUpload.findMediaByKey(tKeyString);
+		} catch (Exception e) {
+			e.printStackTrace();
+			tMedia = new MediaUpload();
+	    	tMedia.setFilepath(tKeyString);
+		}
+		FileItem tFileItem = content.getFileItem();
+		
+	    //-----------file type-----------------
+		String tFormat = BigUtil.DEFAULT_IMAGE_TYPE;
+		if(tFileItem != null){
+			String tFileName = tFileItem.getName();
+		   
+			if(tFileName.indexOf("sharethegoodones.com") >= 0){ //check if it is a delete command
+				tMedia.remove();
+				UserAccountController tController = SpringApplicationContext.getApplicationContext().getBean("userAccountController", UserAccountController.class);
+				return tController.updateForm(ownerID, uiModel);
+			}
+			
+			if(tFileName != null){
+				int tPos = tFileName.lastIndexOf(".");
+				if(tPos > 0 && tPos < tFileName.length() - 1){
+					tFormat = tFileName.substring(tPos);
+				}
+			}
+		}
+	    tMedia.setContentType(tFormat);
 
+		//------------if need to save to disk-------------
+		//File tDiskFile = new File(serverInfo.getDataPath() + tKeyString + tFormat);
+		//content.transferTo(tDiskFile);
+	    //------------save image to db------------------
+		BufferedImage inputImage = null;
+		try{
+			inputImage = ImageIO.read(content.getInputStream());
+			//Image big = inputImage.getScaledInstance(256, 256,Image.SCALE_DEFAULT);
+			byte[] tContent = BigUtil.resizeImage(inputImage, tMedia.getFilepath(), tFormat);//tKeyString);	//because when uploading gallery, the tKeyString is like "gallery_".
+			tMedia.setContent(tContent == null ? content.getBytes() : tContent);	//------------file content----------
+			tMedia.setFilesize(tContent == null ? content.getSize() : tContent.length);							//------------file size-------------
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println("got exception when resizing the image!"+e);
+			UserAccountController tController = SpringApplicationContext.getApplicationContext().getBean("userAccountController", UserAccountController.class);
+			return tController.updateForm(ownerID, uiModel);
+		}
+		   
+	    uiModel.asMap().clear();
+	    tMedia.persist();
+
+	    //change user's them to 9.css
+	    UserAccount tUser = UserAccount.findUserAccount(ownerID);
+	    tUser.setTheme(9);
+	    tUser.persist();
+	    
 		UserAccountController tController = SpringApplicationContext.getApplicationContext().getBean("userAccountController", UserAccountController.class);
-		return tController.updateForm(Long.parseLong(request.getParameter("returnPath")), uiModel);
+		return tController.updateForm(ownerID, uiModel);
 	}
 	
 }

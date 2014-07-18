@@ -5,109 +5,62 @@
   xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:springform="http://www.springframework.org/tags/form" version="2.0">
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
-    
-     <table class="gallery" style="border-width: 0px"><tbody><tr>
-       <td align="center" width="940px">
-           <form:update id="fu_com_aeiou_bigbang_domain_UserAccount" modelAttribute="userAccount" path="/useraccounts" versionField="Version" z="0F8idzGSdxooYhrvOCp6vO/PSkM=">
-		        <field:input field="name" id="c_com_aeiou_bigbang_domain_UserAccount_name" min="2" required="true" z="ivL1uj01/Ogki4rPE5I3PdFQud0="/>
-		        <field:input field="password" id="c_com_aeiou_bigbang_domain_UserAccount_password" min="4" required="true" z="YHbNvuLsTds1kSQGXBMkBmk/LIo="/>
-		        <field:input field="email" id="c_com_aeiou_bigbang_domain_UserAccount_email" validationMessageCode="field_invalid_email" z="ceq1TElqZB2WL71Mrwy7m1UNg0o="/>
-		        <field:input field="description" id="c_com_aeiou_bigbang_domain_UserAccount_description" z="IHXfmTHIFzCFUY3TARmFZXUT838="/>
-		        <c:if test="${fn:toLowerCase(pageContext['request'].userPrincipal.name) eq 'admin'}">
-		            <field:input field="price" id="c_com_aeiou_bigbang_domain_UserAccount_price" max="9" min="0" required="true" z="NNXWMQKTCd/lmw4Q/AvzmkSI5cs="/>
-		            <field:input field="layout" id="c_com_aeiou_bigbang_domain_UserAccount_layout" z="DZP4oppDs9iitXlz6zafXsQ860o="/>
-		            <field:input field="balance" id="c_com_aeiou_bigbang_domain_UserAccount_balance" required="true" z="iGBZ2hYbTCMyVVJ+abO7tKBIjIM="/>
-		            <field:input field="newMessageAmount" id="c_com_aeiou_bigbang_domain_UserAccount_newMessageAmount" required="true" z=""/>
-		        </c:if>
-		    </form:update>
-       </td>
-       <td valign="top" align="center" width="25%">
-       	<img src="getImage/uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_headimage" alt="Image"/>
-       	<util:changeImg position="uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_headimage" returnPath="${returnPath}"/>
-       </td>
-       <td valign="top" align="center" width="25%">
-       	<img src="getImage/uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_bg" alt="Image"/>
-       	<util:changeImg position="uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_bg" returnPath="${returnPath}"/>
-       </td>
-    </tr></tbody></table>
+
+     <table class="gallery" style="border-width: 0px; background-color: #ddd;"><tbody>
+	     <tr>
+	     	<td valign="middle" align="center" colspan="2">
+		     	<util:panel title="Title Image" id="titleImagePanel">
+		     	 	<div style="text-align: center;">
+				       	 <img src="getImage/uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_headimage" alt="Please Select a image to appear on title area"/>
+				       	 <spring:url value="/mediauploads" var="form_url"/>
+					     <springform:form action="${form_url}" method="POST" modelAttribute="mediaUpload" enctype="multipart/form-data">
+					      	<span>
+								<input type ="file" style="height: 24px" name="content" />
+								<input type="hidden" name="position" value="uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_headimage" />		       
+								<input name="returnPath" type="hidden" value="${returnPath}"/>
+								<button  class="btn btn-primary" type="submit">Upload</button>
+							</span>
+					     </springform:form>
+				     </div>
+			     </util:panel>
+	       </td>
+	     </tr>
+	     <tr>
+	       <td align="center" width="60%">
+	           <form:update id="fu_com_aeiou_bigbang_domain_UserAccount" modelAttribute="userAccount" path="/useraccounts" versionField="Version" z="0F8idzGSdxooYhrvOCp6vO/PSkM=">
+			        <field:input field="name" id="c_com_aeiou_bigbang_domain_UserAccount_name" min="2" required="true" z="ivL1uj01/Ogki4rPE5I3PdFQud0="/>
+			        <field:input field="password" id="c_com_aeiou_bigbang_domain_UserAccount_password" min="4" required="true" z="YHbNvuLsTds1kSQGXBMkBmk/LIo="/>
+			        <field:input field="email" id="c_com_aeiou_bigbang_domain_UserAccount_email" validationMessageCode="field_invalid_email" z="ceq1TElqZB2WL71Mrwy7m1UNg0o="/>
+			        <field:input field="description" id="c_com_aeiou_bigbang_domain_UserAccount_description" z="IHXfmTHIFzCFUY3TARmFZXUT838="/>
+			        <c:if test="${fn:toLowerCase(pageContext['request'].userPrincipal.name) eq 'admin'}">
+			            <field:input field="price" id="c_com_aeiou_bigbang_domain_UserAccount_price" max="9" min="0" required="true" z="NNXWMQKTCd/lmw4Q/AvzmkSI5cs="/>
+			            <field:input field="layout" id="c_com_aeiou_bigbang_domain_UserAccount_layout" z="DZP4oppDs9iitXlz6zafXsQ860o="/>
+			            <field:input field="balance" id="c_com_aeiou_bigbang_domain_UserAccount_balance" required="true" z="iGBZ2hYbTCMyVVJ+abO7tKBIjIM="/>
+			            <field:input field="newMessageAmount" id="c_com_aeiou_bigbang_domain_UserAccount_newMessageAmount" required="true" z=""/>
+			        </c:if>
+			    </form:update>
+	       </td>
+	       <td valign="middle" align="center" width="40%">
+	       	 <img src="getImage/uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_bg" alt="backgroud tiles"/>
+	       	 <spring:url value="/mediauploads" var="form_url"/>
+		     <springform:form action="${form_url}" method="POST" modelAttribute="mediaUpload" enctype="multipart/form-data">
+		      	<span>
+					<input type ="file" style="height: 24px" name="content" />
+					<input type="hidden" name="position" value="uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_bg" />		       
+					<input name="returnPath" type="hidden" value="${returnPath}"/>
+					<button  class="btn btn-primary" type="submit">Upload</button>
+				</span>
+		     </springform:form>
+	       </td>
+	    </tr>
+    </tbody></table>
 		
-	<!-- change image -->
-	<div class="modal fade" style="display:none" id="displayChangeImgBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-	        <h4 class="modal-title" id="myModalLabel"><b>Please click the 'Browse...' button</b>: to select an image file from disk! <br/><b>To achieve the best layout result</b>: please try to make the selected image has the similar or same size with the old one first. <br/>(If diferent size of image is selected, system will resize it to the fit size automatically.) <br/><b>Please be careful</b>: for Gallery, once you add an image into the gallery, to remove it will be troublesome, if you do need to remove, please contact <b>tao.mtl@hotmail.com</b>  </h4>
-	      </div>
-	     <spring:url value="/mediauploads" var="form_url"/>
-	     <springform:form action="${form_url}" method="POST" modelAttribute="mediaUpload" enctype="multipart/form-data">
-	      	<div class="modal-body col-xs-4 padding-top-5px" style="vertical-align: middle;">
-				<input type ="file" name="content" />
-				<input type="hidden" name="position" value="${replacingImage}" />		       
-				<input name="returnPath" type="hidden" value="${returnPath}"/>
-			</div>
-	        <div class="modal-footer">
-				<button  class="btn btn-primary" type="submit">Upload</button>
-			</div>
-	     </springform:form>
-	    </div><!-- /.modal-content -->
-	  </div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
-
-	<!-- to check if there's any modal dialog need to be shown -->
 	<script type="text/javascript">
-		var showFileChooser = ${replacingImage ne null};
-
-	    /* if it doesn't work, might because there's some thing stopped the document from fully load. then try to use 
-	    window.onload = function(){playit();$('.carousel').carousel({interval: 5000})}; Please remember to call the 
-	    "playit();", because it's for the promotion swicher, and was difined in external js file, in JSP, if we define a 
-	    window.onload in html file, looks like it can replace the window.onload in external js file.*/   
 	    $(document).ready(
     		function(){
     			document.getElementById('j_username').focus()
-    			if(showFileChooser == true)
-    			    $('#displayChangeImgBox').modal('show');
     		}
 	    );
-	    
-		function displayChangeImgBox() {
-			$('#displayChangeImgBox').modal('show');
-		}
-		
-		function initToolbarBootstrapBindings() {
-		 /*  var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
-				'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
-				'Times New Roman', 'Verdana'],
-				fontTarget = $('[title=Font]').siblings('.dropdown-menu');
-		    	$.each(fonts, function (idx, fontName) {
-				  fontTarget.append($('<li><a data-edit="fontName ' + fontName +'" style="font-family:\''+ fontName +'\'">'+fontName + '</a></li>'));
-			    });
-		  $('a[title]').tooltip({container:'body'});
-			$('.dropdown-menu input').click(function() {return false;})
-				.change(function () {$(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');})
-			.keydown('esc', function () {this.value='';$(this).change();});
-
-		  $('[data-role=magic-overlay]').each(function () {
-			var overlay = $(this), target = $(overlay.data('target'));
-			overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
-		  });
-		  if ("onwebkitspeechchange"  in document.createElement("input")) {
-			var editorOffset = $('#editor').offset();
-			$('#voiceBtn').css('position','absolute').offset({top: editorOffset.top, left: editorOffset.left+$('#editor').innerWidth()-35});
-		  } else {
-			$('#voiceBtn').hide();
-		  }*/
-		};
-		function showErrorAlert (reason, detail) {
-		/*	var msg='';
-			if (reason==='unsupported-file-type') { msg = "Unsupported format " +detail; }
-			else {
-				console.log("error uploading file", reason, detail);
-			}
-			$('<div class="alert"> <button type="button" class="close" data-dismiss="alert">s</button>'+
-			 '<strong>File upload error</strong> '+msg+' </div>').prependTo('#alerts');  */
-		};
-		
 	</script>
 
 </div>

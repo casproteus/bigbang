@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -69,7 +70,14 @@ public class UserAccountController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
+	@RequestMapping(value = "/{id}", params = "form", produces = "text/html")
+    public String updateForm(@PathVariable("id") Long id, Model uiModel) {
+        populateEditForm(uiModel, UserAccount.findUserAccount(id));
+        uiModel.addAttribute("returnPath", id);
+        return "useraccounts/update";
+    }
+
+	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String update(@Valid UserAccount userAccount, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, userAccount);
@@ -88,7 +96,6 @@ public class UserAccountController {
     	//if name changed, need to update the image paths.
         if(!tUserAccount.getName().equals(userAccount.getName())){
             if(MediaUpload.countMediaUploadsByKey(tUserAccount.getName()) > 0){
-            	//not now, when imaged uploaded, the theme will be changed. tUserAccount.setTheme(9);
             	MediaUpload tMH = MediaUpload.findMediaByKey(tUserAccount.getName() + "_headimg");
             	if(tMH != null){
             		tMH.setFilepath(userAccount.getName() + "_headimg");
@@ -204,5 +211,23 @@ public class UserAccountController {
         Object[] tObjAry = new Object[] { pPublisher.getName() };
         tMessage.setContent(messageSource.getMessage("default_welcome_message", tObjAry, pLocale));
         tMessage.persist();
+    }
+
+    @RequestMapping(value = "/getImage/{id}")
+    public void getImage(@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+	    response.setContentType("image/jpeg");
+	    MediaUpload tMedia = MediaUpload.findMediaByKey(id);
+	    try{
+		    if(tMedia != null && tMedia.getContent() != null){
+		    	byte[] imageBytes = tMedia.getContent();
+		    	response.getOutputStream().write(imageBytes);
+		    	response.getOutputStream().flush();
+		    }else{	
+		    	//leave empty. this method will only be called when displaying the updateForm of useraccount to display the image in the dialog, 
+		    	//so shall not display admin's default image.		    	
+		    }
+	    }catch(Exception e){
+	    	System.out.println("Exception occured when fetching img of ID:" + id + "! " + e);
+	    }
     }
 }

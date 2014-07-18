@@ -1,8 +1,11 @@
 package com.aeiou.bigbang.util;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.MailSender;
@@ -19,6 +22,8 @@ import com.aeiou.bigbang.services.synchronization.ClientSyncTool;
 
 public class BigUtil {
 
+	public static String DEFAULT_IMAGE_TYPE = ".jpg";
+	
 	//Can not use strnge characters, because when the coding formmat of the IDE changes or are not same with database, will cause mismatch.
 	//Can neiter use "[","(","+".... because the string will be considered as an expression in split method, those character have special
 	//meaning and will cause splite
@@ -338,4 +343,56 @@ public class BigUtil {
     
     }
     
+    public static byte[] resizeImage(BufferedImage im, String tKeyString, String pFormat) {
+    	int pToWidth = 100;
+    	int pToHeight = 100;
+    	
+    	if(tKeyString.startsWith("uc_")){
+    		if(tKeyString.endsWith("_bg")){
+    			pToWidth = im.getWidth();
+        		pToHeight = im.getHeight();
+        		if(pToWidth > 123){	//check if the width are too big?
+        			pToWidth = 123;
+        			pToHeight = im.getHeight() * 123 / im.getWidth();
+        		}
+        		if(pToHeight > 187){	//width is already under 1370, if the height are still too big, modify again!
+        			pToHeight = 187;
+        			pToWidth = im.getWidth() * 187 / im.getHeight();
+        		}
+    		}else if(tKeyString.endsWith("_headimage")){
+    			pToWidth = im.getWidth();
+        		pToHeight = im.getHeight();
+        		if(pToWidth > 800){	//check if the width are too big?
+        			pToWidth = 800;
+        			pToHeight = im.getHeight() * 800 / im.getWidth();
+        		}
+        		if(pToHeight > 200){	//width is already under 1370, if the height are still too big, modify again!
+        			pToHeight = 200;
+        			pToWidth = im.getWidth() * 200 / im.getHeight();
+        		}
+    		}else{
+        		return null;
+    		}
+    	}else{
+    		return null;
+    	}
+    	
+    	BufferedImage inputbig = new BufferedImage(pToWidth, pToHeight, BufferedImage.TYPE_INT_BGR);
+		//inputbig.getGraphics().drawImage(im, 0, 0, pToWidth, pToHeight, null);	//the created thum image is not clear enough with this way.
+        inputbig.getGraphics().drawImage(im.getScaledInstance(pToWidth, pToHeight, java.awt.Image.SCALE_SMOOTH), 0, 0, null);	//this way is better.
+		
+		byte[] bFR = null;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();  
+        if(pFormat.startsWith("."))
+        	pFormat = pFormat.substring(1);
+        
+        try{
+	        ImageIO.write(inputbig, pFormat, out);  
+	        bFR = out.toByteArray(); 
+        }catch(Exception e){
+        	e.printStackTrace();
+        }
+        return bFR;
+    }
+
 }

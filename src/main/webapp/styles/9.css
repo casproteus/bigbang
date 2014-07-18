@@ -1,12 +1,12 @@
 /* main elements */
 .headImgArea {
+	text-align: center;
 	background-repeat: no-repeat;
 	background-position: 0px 0px;
 	top: 0px;
 	left: 0px;
-	height: 129px;
 	width: 800px;
-	margin: 0px auto;
+	margin: 10px;
 }
 
 .emptySpan{

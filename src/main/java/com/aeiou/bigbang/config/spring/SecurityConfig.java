@@ -88,11 +88,11 @@ public class SecurityConfig {
 		return new RemarkController();
 	}
 	
-//	@Bean(autowire = Autowire.BY_NAME)
-//	@Scope("singleton")
-//	UserAccountController userAccountController() {
-//		return new UserAccountController();
-//	}
+	@Bean(autowire = Autowire.BY_NAME)
+	@Scope("singleton")
+	UserAccountController userAccountController() {
+		return new UserAccountController();
+	}
 
 	@Bean(autowire = Autowire.BY_NAME)
 	@Scope("singleton")

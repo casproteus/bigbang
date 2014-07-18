@@ -21,13 +21,7 @@ privileged aspect UserAccountController_Roo_Controller {
         uiModel.addAttribute("itemId", id);
         return "useraccounts/show";
     }
-    
-    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String UserAccountController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, UserAccount.findUserAccount(id));
-        return "useraccounts/update";
-    }
-    
+        
     void UserAccountController.populateEditForm(Model uiModel, UserAccount userAccount) {
         uiModel.addAttribute("userAccount", userAccount);
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());

@@ -6,7 +6,7 @@
 
   <!-- if user has logged in, home page point to personal space, if not logged in, then point to public space -->
 <spring:url value="/resources/j_spring_security_check" var="form_url" />
-  <form id="headloginform" name="f" modelAttribute="${login}" action="${fn:escapeXml(form_url)}" method="POST" style="height:20px; color: #AAAAAA">
+<form id="headloginform" name="f" modelAttribute="${login}" action="${fn:escapeXml(form_url)}" method="POST" style="height:20px; color: #AAAAAA">
   <c:choose>
      <c:when test="${pageContext['request'].userPrincipal != null}">
      	<c:choose>
@@ -210,6 +210,7 @@
     </span>
   </form>
   <!-- Don't think this is meaningful to real user. so we leave it only in footer. <util:websiteSwitch/> -->
+  
   <div class="headImgArea">
 	  <spring:url var="home" value="/" />
 	  <spring:message code="button_home" var="home_label" htmlEscape="false" />
@@ -217,7 +218,7 @@
 	    <spring:theme code="styleSheet" var="roo_css" />
 	  	<c:choose>
 	  		<c:when test="${'resources/styles/9.css' eq roo_css}">
-		 		<img src = "getImage/uc_${fn:toLowerCase(spaceOwner)}_headimage" alt="title image"/>
+		 		<img src = "getImage/uc_${fn:toLowerCase(spaceOwner)}_headimage" alt=""/>
 	  		</c:when>
 	  		<c:otherwise>
 	  			<span class="emptySpan"> </span>

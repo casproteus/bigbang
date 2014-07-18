@@ -158,7 +158,7 @@
         <spring:message code="global_menu_inboxManage" var="inboxManage_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}" title="${fn:escapeXml(inboxManage_message)}" />
         <c:if test="${newMessageAmount > 0}">
-        	[${newMessageAmount}]
+        	[<span style="color: red;">${newMessageAmount}</span>]
         </c:if>
       </a>
 
@@ -216,7 +216,15 @@
 	  <spring:url var="home" value="/" />
 	  <spring:message code="button_home" var="home_label" htmlEscape="false" />
 	  <a href="${home}" name="${fn:escapeXml(home_label)}" title="${fn:escapeXml(home_label)}">
-	  	<span class="emptySpan"> </span>
+	    <spring:theme code="styleSheet" var="roo_css" />
+	  	<c:choose>
+	  		<c:when test="${'resources/styles/9.css' eq roo_css}">
+		 		<img src = "getImage/uc_${fn:toLowerCase(spaceOwner)}_headimage" alt=""/>
+	  		</c:when>
+	  		<c:otherwise>
+	  			<span class="emptySpan"> </span>
+	  		</c:otherwise>
+	  	</c:choose>
 	  </a>
   </div>
 </div> 

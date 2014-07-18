@@ -351,13 +351,15 @@ public class BigUtil {
     		if(tKeyString.endsWith("_bg")){
     			pToWidth = im.getWidth();
         		pToHeight = im.getHeight();
-        		if(pToWidth > 123){	//check if the width are too big?
-        			pToWidth = 123;
-        			pToHeight = im.getHeight() * 123 / im.getWidth();
-        		}
-        		if(pToHeight > 187){	//width is already under 1370, if the height are still too big, modify again!
-        			pToHeight = 187;
-        			pToWidth = im.getWidth() * 187 / im.getHeight();
+        		if(pToWidth * pToHeight > 25000){  //so the thin lines texture are allowed.
+	        		if(pToWidth > 123){	//check if the width are too big?
+	        			pToWidth = 123;
+	        			pToHeight = im.getHeight() * 123 / im.getWidth();
+	        		}
+	        		if(pToHeight > 187){	//width is already under 1370, if the height are still too big, modify again!
+	        			pToHeight = 187;
+	        			pToWidth = im.getWidth() * 187 / im.getHeight();
+	        		}
         		}
     		}else if(tKeyString.endsWith("_headimage")){
     			pToWidth = im.getWidth();

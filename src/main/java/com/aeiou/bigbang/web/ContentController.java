@@ -53,7 +53,11 @@ public class ContentController {
         };
         tTag.setId(Long.valueOf(-1));
         tList_Tag.add(tTag);
-        String tCurName = UserAccount.findUserAccountByName(userContextService.getCurrentUserName()).getName();
+
+        String tCurName = userContextService.getCurrentUserName();
+        UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);        
+        BigUtil.checkTheme(tOwner, httpServletRequest);
+        
         tList_Tag.addAll(BigTag.findBMTagsByPublisher(tCurName, 0, 1000));
         uiModel.addAttribute("mytags", tList_Tag);
         List<UserAccount> tList = new ArrayList<UserAccount>();
@@ -63,7 +67,8 @@ public class ContentController {
     }
 
     @RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "sortExpression", required = false) String sortExpression, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+    public String list(@RequestParam(value = "sortExpression", required = false) String sortExpression, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,
+    		Model uiModel, HttpServletRequest httpServletRequest) {
         int sizeNo = size == null ? 10 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
         String tCurName = userContextService.getCurrentUserName();
@@ -81,12 +86,18 @@ public class ContentController {
             nrOfPages = (float) Content.countContentsByPublisher(tPublisher, tAuthSet) / sizeNo;
         }
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+        
+        BigUtil.checkTheme(tPublisher, httpServletRequest);
         return "contents/list";
     }
 
     void populateEditForm_Tag(Model uiModel, BigTag bigTag, HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("bigTag", bigTag);
         uiModel.addAttribute("authorities", BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
+
+        String tUserName = userContextService.getCurrentUserName();
+        UserAccount tOwner = UserAccount.findUserAccountByName(tUserName);        
+        BigUtil.checkTheme(tOwner, httpServletRequest);
     }
 
     public String createForm_Tag(Model uiModel, HttpServletRequest httpServletRequest, String contentTitle, String contentURL, String commonTagName) {

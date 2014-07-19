@@ -52,6 +52,10 @@ public class TwitterController {
         tList.add(UserAccount.findUserAccountByName(tCurName));
         uiModel.addAttribute("useraccounts", tList);
         uiModel.addAttribute("authorities", BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
+
+        String tUserName = userContextService.getCurrentUserName();
+        UserAccount tOwner = UserAccount.findUserAccountByName(tUserName);
+        BigUtil.checkTheme(tOwner, httpServletRequest);
     }
 
     void populateEditForm_Tag(Model uiModel, BigTag bigTag, HttpServletRequest httpServletRequest) {
@@ -167,7 +171,8 @@ public class TwitterController {
     }
 
     @RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,
+    		Model uiModel, HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
         if (tCurName == null) return "login";
         int sizeNo = size == null ? 10 : size.intValue();
@@ -186,6 +191,9 @@ public class TwitterController {
         }
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         addDateTimeFormatPatterns(uiModel);
+
+        BigUtil.checkTheme(tPublisher, httpServletRequest);
+        
         return "twitters/list";
     }
 
@@ -210,10 +218,8 @@ public class TwitterController {
     public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel, HttpServletRequest request) {
         Twitter tTwitter = Twitter.findTwitter(twitterid);
         UserAccount tOwner = tTwitter.getPublisher();
-        //if the owner has setted theme, then use the theme! (will effect only on this request)
-    	int tTheme = tOwner.getTheme();
-    	if(tTheme != 0)
-    		request.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME, String.valueOf(tTheme));
+
+        BigUtil.checkTheme(tOwner, request);
     	
         int sizeNo = size == null ? 20 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;

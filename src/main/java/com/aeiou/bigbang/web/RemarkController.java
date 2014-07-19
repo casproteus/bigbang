@@ -67,6 +67,10 @@ public class RemarkController {
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
         uiModel.addAttribute("authorities", BigAuthority.getRemarkOptions(messageSource, httpServletRequest.getLocale()));
         uiModel.addAttribute("refresh_time", remark.getRefresh_time());
+        String tUserName = userContextService.getCurrentUserName();
+        
+        UserAccount tOwner = UserAccount.findUserAccountByName(tUserName);
+        BigUtil.checkTheme(tOwner, httpServletRequest);
     }
 
     @RequestMapping(params = "pTwitterId", method = RequestMethod.POST, produces = "text/html")
@@ -126,7 +130,8 @@ public class RemarkController {
     }
 
     @RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,
+    		Model uiModel, HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
         if (tCurName == null) return "login";
         int sizeNo = size == null ? 10 : size.intValue();
@@ -144,6 +149,8 @@ public class RemarkController {
         }
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         addDateTimeFormatPatterns(uiModel);
+
+        BigUtil.checkTheme(tPublisher, httpServletRequest);
         return "remarks/list";
     }
 

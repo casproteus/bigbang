@@ -291,7 +291,8 @@ public class PersonalController{
 		    	response.getOutputStream().write(imageBytes);
 		    	response.getOutputStream().flush();
 		    }else{	
-			    tMedia = MediaUpload.findMediaByKey(id.endsWith("_bg") ? "uc_admin_bg" : "uc_admin_headimage");
+		    	String tName = "uc_" + userContextService.getCurrentUserName().toLowerCase();
+			    tMedia = MediaUpload.findMediaByKey(id.endsWith("_bg") ? tName + "_bg" : tName + "_headimage");
 			    if(tMedia != null && tMedia.getContent() != null){
 			    	byte[] imageBytes = tMedia.getContent();
 			    	response.getOutputStream().write(imageBytes);

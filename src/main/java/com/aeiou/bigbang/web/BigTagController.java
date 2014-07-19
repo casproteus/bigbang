@@ -39,6 +39,10 @@ public class BigTagController {
         uiModel.addAttribute("bigTag", bigTag);
         uiModel.addAttribute("authorities", BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
         uiModel.addAttribute("types", BigType.getAllOptions(bigTag.getOwner()));
+        
+        String tUserName = userContextService.getCurrentUserName();
+        UserAccount tOwner = UserAccount.findUserAccountByName(tUserName);
+        BigUtil.checkTheme(tOwner, httpServletRequest);
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
@@ -296,10 +300,12 @@ public class BigTagController {
     }
 
     @RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, 
+    		Model uiModel, HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
         if (tCurName == null) return "login";
-        tCurName = UserAccount.findUserAccountByName(tCurName).getName();
+        UserAccount tCurUser = UserAccount.findUserAccountByName(tCurName);
+        tCurName = tCurUser.getName();
         int sizeNo = size == null ? 10 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
         float nrOfPages;
@@ -312,6 +318,7 @@ public class BigTagController {
             nrOfPages = (float) BigTag.countTagsByPublisher(tCurName) / sizeNo;
         }
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+        BigUtil.checkTheme(tCurUser, httpServletRequest);
         return "bigtags/list";
     }
 

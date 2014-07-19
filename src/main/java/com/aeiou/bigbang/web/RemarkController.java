@@ -162,8 +162,9 @@ public class RemarkController {
     public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, Integer refresh_time, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel, HttpServletRequest request) {
         Twitter tTwitter = Twitter.findTwitter(twitterid);
         UserAccount tOwner = tTwitter.getPublisher();
-        int tTheme = tOwner.getTheme();		//if the owner has setted theme, then use the theme! (will effect only on this request)
-        if (tTheme != 0) request.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME, String.valueOf(tTheme));
+
+        BigUtil.checkTheme(tOwner, request);
+        
         int sizeNo = size == null ? 20 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
         String tCurName = userContextService.getCurrentUserName();

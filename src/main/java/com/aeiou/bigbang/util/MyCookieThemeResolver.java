@@ -46,9 +46,7 @@ public class MyCookieThemeResolver extends CookieThemeResolver{
 			cookie.setMaxAge(31536000); // One year
 			cookie.setPath("/");
 			response.addCookie(cookie);
-		}
-
-		else {
+		}else {
 			// Set request attribute to fallback theme and remove cookie.
 			request.setAttribute(THEME_REQUEST_ATTRIBUTE_NAME, getDefaultThemeName());
 			removeCookie(response);

@@ -59,11 +59,8 @@ public class PersonalController{
     		if(tOwner == null)
     			return null;
     	}
-    	
-    	//if the owner has setted theme, then use the theme! (will effect only on this request)
-    	int tTheme = tOwner.getTheme();
-    	if(tTheme != 0)
-    		request.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME, String.valueOf(tTheme));
+
+        BigUtil.checkTheme(tOwner, request);
     	
     	spaceOwner = tOwner.getName();
 

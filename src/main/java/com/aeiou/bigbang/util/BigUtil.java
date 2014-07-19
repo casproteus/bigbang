@@ -7,10 +7,12 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.web.servlet.theme.CookieThemeResolver;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
@@ -18,6 +20,7 @@ import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.quartz.UpdatingBalanceJobProcessor;
+import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.services.synchronization.ClientSyncTool;
 
 public class BigUtil {
@@ -397,4 +400,10 @@ public class BigUtil {
         return bFR;
     }
 
+    public static void checkTheme(UserAccount tOwner, HttpServletRequest httpServletRequest){
+        //if the owner has setted theme, then use the theme! (will effect only on this request)
+    	int tTheme = tOwner.getTheme();
+    	if(tTheme != 0)
+    		httpServletRequest.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME, String.valueOf(tTheme));
+    }
 }

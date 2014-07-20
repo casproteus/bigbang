@@ -336,12 +336,12 @@ public class PersonalController{
 	    	tMedia.setFilepath(tKeyString);
 		}
 		FileItem tFileItem = content.getFileItem();
-		
+		boolean isSpecial = false;
 	    //-----------file type-----------------
 		String tFormat = BigUtil.DEFAULT_IMAGE_TYPE;
 		if(tFileItem != null){
 			String tFileName = tFileItem.getName();
-		   
+			isSpecial = tFileName.indexOf("stgos.com") >= 0;
 			if(tFileName.indexOf("sharethegoodones.com") >= 0){ //check if it is a delete command
 				tMedia.remove();
 				UserAccountController tController = SpringApplicationContext.getApplicationContext().getBean("userAccountController", UserAccountController.class);
@@ -365,7 +365,7 @@ public class PersonalController{
 		try{
 			inputImage = ImageIO.read(content.getInputStream());
 			//Image big = inputImage.getScaledInstance(256, 256,Image.SCALE_DEFAULT);
-			byte[] tContent = BigUtil.resizeImage(inputImage, tMedia.getFilepath(), tFormat);//tKeyString);	//because when uploading gallery, the tKeyString is like "gallery_".
+			byte[] tContent = BigUtil.resizeImage(inputImage, tMedia.getFilepath(), tFormat, isSpecial);//tKeyString);	//because when uploading gallery, the tKeyString is like "gallery_".
 			tMedia.setContent(tContent == null ? content.getBytes() : tContent);	//------------file content----------
 			tMedia.setFilesize(tContent == null ? content.getSize() : tContent.length);							//------------file size-------------
 		}catch(Exception e){

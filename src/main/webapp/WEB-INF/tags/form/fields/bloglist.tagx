@@ -44,7 +44,7 @@
       <thead>
         <tr>
           <c:forTokens items="${columnLabels}" delims="${'&#9999;'}" var="columnHeading" varStatus="num">
-            <th class="tWireless">
+            <th class="tWireless" align="right">
               	<spring:url value="" var="sort__url">
               		<spring:param name="sortExpression" value="o.${properties[num.count-1]} ${fn:endsWith(param.sortExpression, 'DESC') ? '' : 'DESC' }" />
 				    <spring:param name="listmoreblog" value="${publisher}"/>
@@ -92,19 +92,13 @@
       <tr>
         <td class="tWireless" colspan="${colCounter}">          
           <c:if test="${not empty maxPages}">
-          	<c:choose>
-		        <c:when test="${not empty publisher}">
-		        	<util:contentPagination maxPages="${maxPages}" publisher="${publisher}" page="${param.page}" size="${param.size}" />
-		        </c:when>
-		        <c:otherwise>
-            		<util:contentPagination maxPages="${maxPages}" tagId="${tagId}" spaceOwner="${spaceOwner}" page="${param.page}" size="${param.size}" />
-            	</c:otherwise>
-            </c:choose>
+		      <util:blogPagination maxPages="${maxPages}" spaceOwner="${publisher}" twittertype="${type}" page="${param.page}" size="${param.size}" />
           </c:if>
         </td>
         <c:if test="${not empty publisher}">
         	<td class="tWireless namebox"/>
         </c:if>
+        <td class="tWireless namebox"/>
         <td class="tWireless namebox"/>
       </tr>
     </table>

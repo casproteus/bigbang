@@ -26,7 +26,7 @@
 			     </util:panel>
 	       </td>
 	     </tr>
-	     <tr>
+	     <tr height="217px">
 	       <td align="center" width="60%">
 	           <form:update id="fu_com_aeiou_bigbang_domain_UserAccount" modelAttribute="userAccount" path="/useraccounts" versionField="Version" z="0F8idzGSdxooYhrvOCp6vO/PSkM=">
 			        <field:input field="name" id="c_com_aeiou_bigbang_domain_UserAccount_name" min="2" required="true" z="ivL1uj01/Ogki4rPE5I3PdFQud0="/>
@@ -41,9 +41,9 @@
 			        </c:if>
 			    </form:update>
 	       </td>
-	       <td valign="middle" align="center" width="40%">
+	       <td valign="middle" align="center" width="40%" height="217px">
 	         <spring:message code="useraccount_update_bg" var="bg_image" htmlEscape="false" />
-	       	 <img src="getImage/uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_bg" alt="[${bg_image}]"/>
+	       	 <img src="getImage/uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_bg" height="180px" alt="[${bg_image}]"/>
 	       	 <spring:url value="/mediauploads" var="form_url"/>
 		     <springform:form action="${form_url}" method="POST" modelAttribute="mediaUpload" enctype="multipart/form-data">
 		      	<span>

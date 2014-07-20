@@ -346,7 +346,7 @@ public class BigUtil {
     
     }
     
-    public static byte[] resizeImage(BufferedImage im, String tKeyString, String pFormat) {
+    public static byte[] resizeImage(BufferedImage im, String tKeyString, String pFormat, boolean isSpecial) {
     	int pToWidth = 100;
     	int pToHeight = 100;
     	
@@ -354,7 +354,7 @@ public class BigUtil {
     		if(tKeyString.endsWith("_bg")){
     			pToWidth = im.getWidth();
         		pToHeight = im.getHeight();
-        		if(pToWidth * pToHeight > 25000){  //so the thin lines texture are allowed.
+        		if(pToWidth * pToHeight > 25000  && !isSpecial){  //so the thin lines texture are allowed.
 	        		if(pToWidth > 123){	//check if the width are too big?
 	        			pToWidth = 123;
 	        			pToHeight = im.getHeight() * 123 / im.getWidth();

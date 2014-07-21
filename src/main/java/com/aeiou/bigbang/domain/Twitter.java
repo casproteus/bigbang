@@ -95,9 +95,9 @@ public class Twitter {
      * these twitter list will appear on personal space on the top right. it will display the twitter from owner's friend which are setted as public.
      * (while, I hope if the current user is logged in, and is friends of the author of some twitter, the twitter should be displayed? is that possible? )
      */
-    public static List<com.aeiou.bigbang.domain.Twitter> findTwitterByOwner(UserAccount pOwner, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults, String sortExpression) {
-        Set<UserAccount> tTeamSet = pOwner.getListento();
-        if (tTeamSet.isEmpty()) return null;
+    public static List<com.aeiou.bigbang.domain.Twitter> findTwitterByOwner(Set<UserAccount> tTeamSet, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults, String sortExpression) {
+        if (tTeamSet.isEmpty())
+        	return null;
         EntityManager tEntityManager = entityManager();
         TypedQuery<Twitter> tQuery = tEntityManager.createQuery("SELECT o FROM Twitter AS o WHERE (o.publisher in :tTeamSet) and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.lastupdate DESC" : sortExpression), Twitter.class);
         tQuery = tQuery.setParameter("tTeamSet", tTeamSet);
@@ -107,8 +107,7 @@ public class Twitter {
         return tQuery.getResultList();
     }
 
-    public static long countTwittersByOwner(UserAccount pOwner, Set<java.lang.Integer> pAuthSet) {
-        Set<UserAccount> tTeamSet = pOwner.getListento();
+    public static long countTwittersByOwner(Set<UserAccount> tTeamSet, Set<java.lang.Integer> pAuthSet) {
         if (tTeamSet.isEmpty()) return 0;
         EntityManager tEntityManager = entityManager();
         TypedQuery<Long> tQuery = tEntityManager.createQuery("SELECT COUNT(o) FROM Twitter AS o WHERE (o.publisher in :tTeamSet) and (o.authority in :pAuthSet)", Long.class);

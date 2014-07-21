@@ -42,18 +42,18 @@ public class UserAccountController {
     private MessageSource messageSource;
 
     @RequestMapping(params = "form", produces = "text/html")
-    public String createForm(Model uiModel) {
+    public String createForm(Model uiModel, HttpServletRequest httpServletRequest) {
         UserAccount tUserAccount = new UserAccount();
         tUserAccount.setPrice(1);
         tUserAccount.setBalance(1000);
-        populateEditForm(uiModel, tUserAccount);
+        populateEditForm(uiModel, tUserAccount, httpServletRequest);
         return "useraccounts/create";
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(@Valid UserAccount userAccount, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, userAccount);
+            populateEditForm(uiModel, userAccount, httpServletRequest);
             return "useraccounts/create";
         }
         UserAccount tUserAccount = UserAccount.findUserAccountByName(userAccount.getName());
@@ -71,16 +71,18 @@ public class UserAccountController {
     }
 
 	@RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, UserAccount.findUserAccount(id));
+    public String updateForm(@PathVariable("id") Long id, Model uiModel, HttpServletRequest httpServletRequest) {
+        UserAccount tOwner = UserAccount.findUserAccount(id);
+        populateEditForm(uiModel, tOwner, httpServletRequest);
         uiModel.addAttribute("returnPath", id);
+
         return "useraccounts/update";
     }
 
 	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String update(@Valid UserAccount userAccount, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, userAccount);
+            populateEditForm(uiModel, userAccount, httpServletRequest);
             return "useraccounts/update";
         }
         UserAccount tUserAccount = UserAccount.findUserAccount(userAccount.getId());
@@ -237,5 +239,11 @@ public class UserAccountController {
 	    }catch(Exception e){
 	    	System.out.println("Exception occured when fetching img of ID:" + id + "! " + e);
 	    }
+    }
+
+	void populateEditForm(Model uiModel, UserAccount userAccount, HttpServletRequest httpServletRequest) {
+        uiModel.addAttribute("userAccount", userAccount);
+        uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
+        BigUtil.checkTheme(userAccount, httpServletRequest);
     }
 }

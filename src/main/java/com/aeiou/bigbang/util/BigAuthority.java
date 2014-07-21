@@ -79,11 +79,22 @@ public class BigAuthority {
     	return tAuthSetFR;
 	}
 	
+	public static Set<Integer> getAuthSetForFans(){
+		Set<Integer> tAuthSetFR = new HashSet<Integer>();
+    	tAuthSetFR.add(Integer.valueOf(SHOW_TO_EVERY_ONE));
+		tAuthSetFR.add(Integer.valueOf(ALL_MY_TEAM_CAN_SEE));
+    	return tAuthSetFR;
+	}
+	public static Set<Integer> getAuthSetForNonFans(){
+		Set<Integer> tAuthSetFR = new HashSet<Integer>();
+    	tAuthSetFR.add(Integer.valueOf(SHOW_TO_EVERY_ONE));
+    	return tAuthSetFR;
+	}
 	public static Set<Integer> getAuthSetForTwitterOfFriends(UserAccount pCurUser, UserAccount pOwner){
 		Set<Integer> tAuthSetFR = new HashSet<Integer>();
-    	tAuthSetFR.add(Integer.valueOf(0));
+    	tAuthSetFR.add(Integer.valueOf(SHOW_TO_EVERY_ONE));
     	if(pOwner.equals(pCurUser))
-    		tAuthSetFR.add(Integer.valueOf(2));
+    		tAuthSetFR.add(Integer.valueOf(ALL_MY_TEAM_CAN_SEE));
     	return tAuthSetFR;
 	}
 	

@@ -233,18 +233,19 @@ public class PersonalController{
         
         //====================prepare content for twitter area ============================
     	List<Twitter> twitterLeft = Twitter.findTwitterByPublisher(tOwner, tAuthSet, 0, 8, null);
-    	//for this part it's alittle complex: it's about to display the twitters of the owner's friends. not the owner's, so it's not
+    	//for this part it's a little complex: it's about to display the twitters of the owner's friends. not the owner's, so it's not
     	//like if the logged in user is owner, then display all, if it's owner's friend friends display more, if it's stranger, then display only public ones.
     	//so, can not use the tauthset directly. the logic should be:
-    	//if current user is owner, then display public and visible to friend ones, otherwise, display only public ones
+    	//if current user is owner, then display public and visible to friend ones, otherwise, display only public ones 
     	tAuthSet = BigAuthority.getAuthSetForTwitterOfFriends(tCurUser, tOwner);
     	List<Twitter> twitterRight = null;
     	List<Twitter> twitterRightFix = null;
+    	Set<UserAccount> tTeamSet = tOwner.getListento();  	//get all the users that the owner cares.
     	if(twitterLeft.size() == 0){
-    		twitterRight = Twitter.findTwitterByOwner(tOwner, tAuthSet, 9, 8, null);
-    		twitterRightFix = Twitter.findTwitterByOwner(tOwner, tAuthSet, 0, 9, null);
+    		twitterRight = Twitter.findTwitterByOwner(tTeamSet, tAuthSet, 9, 8, null);
+    		twitterRightFix = Twitter.findTwitterByOwner(tTeamSet, tAuthSet, 0, 9, null);
     	}else{
-    		twitterRight = Twitter.findTwitterByOwner(tOwner, tAuthSet, 0, twitterLeft.size(), null);
+    		twitterRight = Twitter.findTwitterByOwner(tTeamSet, tAuthSet, 0, twitterLeft.size(), null);
     	}
         uiModel.addAttribute("twitterLeft", twitterLeft);
         uiModel.addAttribute("twitterRight", twitterRight);
@@ -313,7 +314,7 @@ public class PersonalController{
 		uiModel.addAttribute("mediaUpload", new MediaUpload());
 		
 		UserAccountController tController = SpringApplicationContext.getApplicationContext().getBean("userAccountController", UserAccountController.class);
-		return tController.updateForm(Long.parseLong(request.getParameter("returnPath")), uiModel);
+		return tController.updateForm(Long.parseLong(request.getParameter("returnPath")), uiModel, request);
 	}	
 	
 	@RequestMapping(value = "/mediauploads", method = RequestMethod.POST, produces = "text/html")
@@ -345,7 +346,7 @@ public class PersonalController{
 			if(tFileName.indexOf("sharethegoodones.com") >= 0){ //check if it is a delete command
 				tMedia.remove();
 				UserAccountController tController = SpringApplicationContext.getApplicationContext().getBean("userAccountController", UserAccountController.class);
-				return tController.updateForm(ownerID, uiModel);
+				return tController.updateForm(ownerID, uiModel, request);
 			}
 			
 			if(tFileName != null){
@@ -372,7 +373,7 @@ public class PersonalController{
 			e.printStackTrace();
 			System.out.println("got exception when resizing the image!"+e);
 			UserAccountController tController = SpringApplicationContext.getApplicationContext().getBean("userAccountController", UserAccountController.class);
-			return tController.updateForm(ownerID, uiModel);
+			return tController.updateForm(ownerID, uiModel, request);
 		}
 		   
 	    uiModel.asMap().clear();
@@ -384,7 +385,7 @@ public class PersonalController{
 	    tUser.persist();
 	    
 		UserAccountController tController = SpringApplicationContext.getApplicationContext().getBean("userAccountController", UserAccountController.class);
-		return tController.updateForm(ownerID, uiModel);
+		return tController.updateForm(ownerID, uiModel, request);
 	}
 	
 }

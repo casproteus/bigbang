@@ -1,6 +1,7 @@
 package com.aeiou.bigbang.web;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -287,15 +288,64 @@ public class PublicController{
         float nrOfPages;
         
         int sizeNo = size == null ? 20 : size.intValue();
-        final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
+        int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
 
         String tCurName = userContextService.getCurrentUserName();
     	UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
-        Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tPublisher);
         if("friend".equals(twittertype)){
-        	uiModel.addAttribute("blogs", Twitter.findTwitterByOwner(tPublisher, tAuthSet, firstResult, sizeNo, sortExpression));
-        	nrOfPages = (float) Twitter.countTwittersByOwner(tPublisher, tAuthSet) / sizeNo;
+            Set<UserAccount> tTeamSet = tPublisher.getListento();  	//get all the users that the owner cares.
+            List<UserAccount> tFansList = new ArrayList<UserAccount>();
+            List<UserAccount> tNonfansList = new ArrayList<UserAccount>();
+
+            Set<Integer> tAuthSetFans = BigAuthority.getAuthSetForFans();		//the authset for fans.
+            Set<Integer> tAuthSetNonFans = BigAuthority.getAuthSetForNonFans();	//the autosent for non fans.
+            
+            long twittersFromFans = 0;
+            long twittersFromNonFans = 0;
+            
+            if(tCurUser != null){
+	            Object[] friendsAry = tTeamSet.toArray();
+	            for(int i = 0; i < friendsAry.length; i++){
+	            	Set<UserAccount> tWhoHeCares = ((UserAccount)friendsAry[i]).getListento();
+	            	if(tWhoHeCares.contains(tCurUser))					//check if this guy cares currently logged in user (not space owner).
+	            		tFansList.add((UserAccount)friendsAry[i]);							//fans into this list, will display hist public and visible to friends blog.
+	            	else
+	            		tNonfansList.add((UserAccount)friendsAry[i]);						//non-fans into this list, will display his only public blog.
+	            }
+	            
+	            twittersFromFans = Twitter.countTwittersByOwner(new HashSet<UserAccount>(tFansList), tAuthSetFans);				//twitter amount (fans)
+	            twittersFromNonFans = Twitter.countTwittersByOwner(new HashSet<UserAccount>(tNonfansList), tAuthSetNonFans);	//twitter amount (non-fans)
+	            
+	            //got the list from fans first. 
+	        	List<Twitter> tListTwitter = Twitter.findTwitterByOwner(new HashSet<UserAccount>(tFansList), tAuthSetFans, firstResult, sizeNo, sortExpression);
+	        	//if not find, or not enough, then find from non-fans. be careful that the parameters are different.
+        		if(tListTwitter == null){		//out of range  
+	        		//Let's say the second page should start from 20(suppose page size is 20), but because the first page has 5 blogs from fans, So, first result is 20 - 5.
+	        		int fanFullPageQt = (int)twittersFromFans/sizeNo;
+	        		int fanItemQtLeft = (int)twittersFromFans - (int)twittersFromFans/sizeNo * sizeNo;
+	        		firstResult = ((page.intValue() - 1) - fanFullPageQt) * sizeNo - fanItemQtLeft;
+	        		tListTwitter = Twitter.findTwitterByOwner(new HashSet<UserAccount>(tNonfansList), tAuthSetNonFans, firstResult, sizeNo, sortExpression);
+		        	uiModel.addAttribute("blogs", tListTwitter);
+	        	}else if(tListTwitter.size() < sizeNo){ //or on the last page of fans. so must be start from 0. size must be (sizeNo - tListTwitter.size())
+		        	List<Twitter> tListForReturn = new ArrayList<Twitter>();//serch result can't be changed, so create a new one.
+		        	tListForReturn.addAll(tListTwitter);
+		        	
+		        	List<Twitter> tList = Twitter.findTwitterByOwner(new HashSet<UserAccount>(tNonfansList), tAuthSetNonFans, 0, sizeNo - tListTwitter.size(), sortExpression);
+	        		if(tList != null)
+	        			tListForReturn.addAll(tList);
+
+		        	uiModel.addAttribute("blogs", tListForReturn);
+	        	}else{
+	        		uiModel.addAttribute("blogs", tListTwitter);
+	        	}
+        		
+	        }else{
+	        	uiModel.addAttribute("blogs", Twitter.findTwitterByOwner(tTeamSet, tAuthSetNonFans, firstResult, sizeNo, sortExpression));
+	        }
+        	nrOfPages = (float) (twittersFromFans + twittersFromNonFans) / sizeNo;
+        	
         }else{
+            Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tPublisher);
         	uiModel.addAttribute("blogs", Twitter.findTwitterByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, sortExpression));
         	nrOfPages = (float) Twitter.countTwitterByPublisher(tPublisher, tAuthSet) / sizeNo;
         }

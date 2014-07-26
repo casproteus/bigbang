@@ -62,9 +62,14 @@
       <table:bloglist data="${blogs}" id="l_com_aeiou_bigbang_domain_Twitter" path="/twitters"  dateTimePattern="${twitter_twitdate_date_format}" type="${type}" spaceOwner="${spaceOwner}" publisher="${publisher}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
           <table:column id="c_com_aeiou_bigbang_domain_twitter_twtitle" property="twtitle" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
           <table:column id="c_com_aeiou_bigbang_domain_twitter_twittertag" property="twittertag" z="kDjPyZY8s59nSnA4ASrIOJGmeps="/>
-          <c:if test="${fn:containsIgnoreCase(type, 'friend')}">
+          <c:choose>
+			<c:when test="${fn:containsIgnoreCase(type, 'friend')}">
               <table:column id="c_com_aeiou_bigbang_domain_twitter_publisher" property="publisher" z="kDjPyZY8s59nSnA4ASrIOJGmeps="/>
-          </c:if>
+          	</c:when>
+          	<c:otherwise>
+              <table:column id="c_com_aeiou_bigbang_domain_twitter_lastupdate" property="lastupdate"/>
+          	</c:otherwise>
+          </c:choose>
           <table:column id="c_com_aeiou_bigbang_domain_Twitter_twitDate" property="twitDate" z="kDjPyZY8s59nSnA4ASrIOJGmeps="/>
       </table:bloglist>
   </page:contentPane>

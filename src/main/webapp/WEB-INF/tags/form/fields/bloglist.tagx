@@ -44,7 +44,7 @@
       <thead>
         <tr>
           <c:forTokens items="${columnLabels}" delims="${'&#9999;'}" var="columnHeading" varStatus="num">
-            <th class="tWireless" align="right">
+            <th class="tWireless">
               	<spring:url value="" var="sort__url">
               		<spring:param name="sortExpression" value="o.${properties[num.count-1]} ${fn:endsWith(param.sortExpression, 'DESC') ? '' : 'DESC' }" />
 				    <spring:param name="listmoreblog" value="${publisher}"/>
@@ -76,11 +76,20 @@
 	      	<td class="tWireless namebox">
 			    <c:out value="${item['twittertag']}" />
 	      	</td>
-	      	<c:if test="${fn:containsIgnoreCase(type, 'friend')}">
-	      		<td class="tWireless namebox">
-              		<c:out value="${item['publisher']}" />
-              	</td>
-          	</c:if>
+          	<c:choose>
+				<c:when test="${fn:containsIgnoreCase(type, 'friend')}">
+		      		<td class="tWireless namebox">
+	              		<c:out value="${item['publisher']}" />
+	              	</td>
+	          	</c:when>
+	          	<c:otherwise>
+		      		<td class="tWireless namebox">
+						<spring:escapeBody>
+			              <fmt:formatDate value="${item['lastupdate']}" pattern="${fn:escapeXml(dateTimePattern)}" />
+			            </spring:escapeBody>
+	              	</td>
+	          	</c:otherwise>
+	        </c:choose>
 	      	<td class="tWireless namebox">
 				<spring:escapeBody>
 	              <fmt:formatDate value="${item['twitDate']}" pattern="${fn:escapeXml(dateTimePattern)}" />

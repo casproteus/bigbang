@@ -77,12 +77,7 @@ privileged aspect MessageController_Roo_Controller {
         uiModel.addAttribute("message_posttime_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
     
-    void MessageController.populateEditForm(Model uiModel, Message message) {
-        uiModel.addAttribute("message", message);
-        addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
-    }
-    
+        
     String MessageController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
         String enc = httpServletRequest.getCharacterEncoding();
         if (enc == null) {

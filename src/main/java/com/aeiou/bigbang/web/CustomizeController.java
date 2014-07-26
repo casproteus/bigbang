@@ -68,6 +68,8 @@ public class CustomizeController {
 		
 		uiModel.addAttribute("commonUnCheckedBMTags", commonUnCheckedBMTags);
 		uiModel.addAttribute("uncommonUnCheckedBMTags", uncommonUnCheckedBMTags);
+		
+		BigUtil.checkTheme(tOwner, request);
 	    return "customizes/tagsDisplay";
     }
     

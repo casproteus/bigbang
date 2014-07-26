@@ -3,7 +3,7 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <page:list id="pl_com_aeiou_bigbang_domain_UserAccount" items="${useraccounts}" z="GJvuZ0yxOcvh6FFkhy5zdXpTpqY=">
-        <table:table data="${useraccounts}" id="l_com_aeiou_bigbang_domain_UserAccount" path="/useraccounts" z="teRX+LtcYQWliJGRxQz++hZdUc0=">
+        <table:BigSortable data="${useraccounts}" id="l_com_aeiou_bigbang_domain_UserAccount" path="/useraccounts" z="teRX+LtcYQWliJGRxQz++hZdUc0=">
             <table:column id="c_com_aeiou_bigbang_domain_UserAccount_name" property="name" z="kPMoQDIDzWJl6xWgRufm8SuIBnU="/>
             <c:if test="${fn:toLowerCase(pageContext['request'].userPrincipal.name) ne 'admin'}">
                 <table:column id="c_com_aeiou_bigbang_domain_UserAccount_email" property="email" z="MbW1BbdyefM+TsEcTAue73MF9Jg="/>
@@ -16,6 +16,6 @@
             <c:if test="${fn:toLowerCase(pageContext['request'].userPrincipal.name) ne 'admin'}">            
              	<table:column id="c_com_aeiou_bigbang_domain_UserAccount_layout" property="layout" z="?"/>
             </c:if>
-        </table:table>
+        </table:BigSortable>
     </page:list>
 </div>

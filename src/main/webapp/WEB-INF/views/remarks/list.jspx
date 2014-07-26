@@ -3,12 +3,12 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <page:list id="pl_com_aeiou_bigbang_domain_Remark" items="${remarks}" z="KLqpUVNJsKiu4VOjx76+vDx7988=">
-        <table:table data="${remarks}" id="l_com_aeiou_bigbang_domain_Remark" path="/remarks" z="adZ9QX5p0p5Qz2fIt8EVxJHpMH0=">
+        <table:BigSortable data="${remarks}" id="l_com_aeiou_bigbang_domain_Remark" path="/remarks" z="adZ9QX5p0p5Qz2fIt8EVxJHpMH0=">
             <table:column id="c_com_aeiou_bigbang_domain_Remark_content" property="content" z="WsTKbTSNdVI9Ur/PID9to9j5Q+Q="/>
             <table:column id="c_com_aeiou_bigbang_domain_Remark_publisher" property="publisher" z="/MCkBnq2SAbaEYDclJ/Zh3aPyIs="/>
             <table:column date="true" dateTimePattern="${remark_remarktime_date_format}" id="c_com_aeiou_bigbang_domain_Remark_remarkTime" property="remarkTime" z="JcnWePBsDBs4KzGQzxe1ZsM+1PU="/>
             <table:column id="c_com_aeiou_bigbang_domain_Remark_authority" property="authority" z="9H37BQGSrFMsu5u9OX+BaBz9Ip8="/>
             <table:column id="c_com_aeiou_bigbang_domain_Remark_remarkto" property="remarkto" z="aG7uxCbRKyXaw+mBRdc1zsd+5W8="/>
-        </table:table>
+        </table:BigSortable>
     </page:list>
 </div>

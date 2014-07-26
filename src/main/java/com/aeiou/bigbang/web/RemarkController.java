@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,11 @@ import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.RssTwitter;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.model.MediaUpload;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
 import com.aeiou.bigbang.util.BigUtil;
+import com.aeiou.bigbang.util.SpringApplicationContext;
 import com.aeiou.bigbang.web.beans.RefreshBean;
 
 @RequestMapping("/remarks")
@@ -320,5 +323,13 @@ public class RemarkController {
     						remark.getContent() + content);
     		}
     	}
+    }
+    
+	//=====================================changing images on page=====================================
+    @RequestMapping(value = "/getImage/{id}")
+    //when a user's theme was set to 9, then this method will be called to get his own images. if he's no image, then use admin's image.
+    public void getImage(@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+    	PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
+    	tController.getImage(id, request, response);
     }
 }

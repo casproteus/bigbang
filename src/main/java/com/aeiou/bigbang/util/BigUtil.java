@@ -401,6 +401,7 @@ public class BigUtil {
     }
 
     public static void checkTheme(UserAccount tOwner, HttpServletRequest httpServletRequest){
+    	httpServletRequest.setAttribute("spaceOwner", tOwner.getName());
         //if the owner has setted theme, then use the theme! (will effect only on this request)
     	int tTheme = tOwner.getTheme();
     	if(tTheme != 0)

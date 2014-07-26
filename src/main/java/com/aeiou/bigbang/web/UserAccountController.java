@@ -219,13 +219,15 @@ public class UserAccountController {
     /**this method should be called only when user has logged in, and user's cliking the useraccount button on top-right corner.  */
     public void getImage(@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
 	    response.setContentType("image/jpeg");
-	    if("uc__headimage".equals(id) || "uc__bg".equals(id)){
-	    	if(userContextService.getCurrentUserName() != null){
-	    		id = userContextService.getCurrentUserName().toLowerCase() + (id.endsWith("_bg") ? "_bg" : "_headimage");
-    			id = "uc_" + id;
-	    	}
-	    }
+	    //@TODO(delete):I added chenck in checkTheme method, to add the spaceOwner property again, so here, shouldn't be uc__...", must have value.
+//	    if("uc__headimage".equals(id) || "uc__bg".equals(id)){
+//	    	if(userContextService.getCurrentUserName() != null){
+//	    		id = userContextService.getCurrentUserName().toLowerCase() + (id.endsWith("_bg") ? "_bg" : "_headimage");
+//    			id = "uc_" + id;
+//	    	}
+//	    }
 	    
+	    //NOTE: can not reuse personalController's method, because here, if fond no image, will leave it empty not using admin's image.
 	    MediaUpload tMedia = MediaUpload.findMediaByKey(id);
 	    try{
 		    if(tMedia != null && tMedia.getContent() != null){

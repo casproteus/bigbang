@@ -5,6 +5,7 @@ import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.model.MediaUpload;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.util.BigAuthority;
 import com.aeiou.bigbang.util.BigType;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
@@ -45,7 +47,8 @@ public class TwitterController {
     void populateEditForm(Model uiModel, Twitter twitter, HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("twitter", twitter);
         List<BigTag> tList_Tag = new ArrayList<BigTag>();
-        String tCurName = UserAccount.findUserAccountByName(userContextService.getCurrentUserName()).getName();
+        UserAccount tCurUser = UserAccount.findUserAccountByName(userContextService.getCurrentUserName());
+        String tCurName = tCurUser.getName();
         tList_Tag.addAll(BigTag.findTWTagsByPublisher(tCurName));
         uiModel.addAttribute("mytags", tList_Tag);
         List<UserAccount> tList = new ArrayList<UserAccount>();
@@ -53,9 +56,7 @@ public class TwitterController {
         uiModel.addAttribute("useraccounts", tList);
         uiModel.addAttribute("authorities", BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
 
-        String tUserName = userContextService.getCurrentUserName();
-        UserAccount tOwner = UserAccount.findUserAccountByName(tUserName);
-        BigUtil.checkTheme(tOwner, httpServletRequest);
+        BigUtil.checkTheme(tCurUser, httpServletRequest);
     }
 
     void populateEditForm_Tag(Model uiModel, BigTag bigTag, HttpServletRequest httpServletRequest) {
@@ -242,5 +243,13 @@ public class TwitterController {
         //not need to check how many new remarks. because when not logged in, user can not set the refresh time. 
         //so the new item number make no use to them.
         return "public/list_detail_twitter";
+    }
+
+	//=====================================changing images on page=====================================
+    @RequestMapping(value = "/getImage/{id}")
+    //when a user's theme was set to 9, then this method will be called to get his own images. if he's no image, then use admin's image.
+    public void getImage(@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+    	PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
+    	tController.getImage(id, request, response);
     }
 }

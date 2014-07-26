@@ -175,7 +175,7 @@ public class PublicController{
      */
     @RequestMapping(params = "spaceOwner", produces = "text/html")
     public String showMore(@RequestParam(value = "tagId", required = false) Long tagId, @RequestParam(value = "spaceOwner", required = false) String spaceOwner,
-    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, String sortExpression) {
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, String sortExpression, HttpServletRequest request) {
     	BigTag tBigTag = BigTag.findBigTag(tagId);
     	UserAccount tOwner = UserAccount.findUserAccountByName(spaceOwner);
     	if(tOwner == null){
@@ -208,6 +208,8 @@ public class PublicController{
         uiModel.addAttribute("tag", tBigTag.getTagName());
         uiModel.addAttribute("tagId", tagId);
         uiModel.addAttribute("description", tOwner.getDescription());
+        
+        BigUtil.checkTheme(tOwner, request);
         return "public/list_more";
     }
     
@@ -276,7 +278,7 @@ public class PublicController{
     
     @RequestMapping(params = "listmoreblog", produces = "text/html")
     public String listMoreBlogs(@RequestParam(value = "listmoreblog", required = false) String pPublisher, @RequestParam(value = "twittertype", required = false) String twittertype,
-    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, String sortExpression) {
+    		@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,  Model uiModel, String sortExpression, HttpServletRequest request) {
 		UserAccount tPublisher = UserAccount.findUserAccountByName(pPublisher);
 		if(tPublisher == null){
 			pPublisher = BigUtil.getUTFString(pPublisher);
@@ -365,7 +367,9 @@ public class PublicController{
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         uiModel.addAttribute("type", twittertype);
         uiModel.addAttribute("twitter_twitdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
-            
+
+        BigUtil.checkTheme(tPublisher, request);
+        
         return "public/list_more_blog";
     }
     

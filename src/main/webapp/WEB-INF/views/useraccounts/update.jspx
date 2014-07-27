@@ -12,7 +12,6 @@
 	     		<spring:message code="useraccount_update_headimage" var="title_image" htmlEscape="false" />
 		     	<util:panel title="${title_image}" id="titleImagePanel">
 		     	 	<div style="text-align: center;">
-				       	 <img src="getImage/uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_headimage" alt="[${title_image}]"/>
 				       	 <spring:url value="/mediauploads" var="form_url"/>
 					     <springform:form action="${form_url}" method="POST" modelAttribute="mediaUpload" enctype="multipart/form-data">
 					      	<span>

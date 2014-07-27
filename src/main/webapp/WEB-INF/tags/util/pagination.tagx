@@ -13,13 +13,13 @@
     </c:if>
 
     <c:if test="${empty size || size lt 1}">
-      <c:set var="size" value="10" />
+      <c:set var="size" value="20" />
     </c:if>
 
     <spring:message code="list_size" var="list_size" htmlEscape="false" />
     <c:out value="${list_size} " />
 
-    <c:forEach var="i" begin="5" end="25" step="5">
+    <c:forEach var="i" begin="20" end="100" step="20">
       <c:choose>
         <c:when test="${size == i}">
           <c:out value="${i}" />

@@ -24,20 +24,7 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect MessageController_Roo_Controller {
     
-    @RequestMapping(params = "form", produces = "text/html")
-    public String MessageController.createForm(Model uiModel) {
-        populateEditForm(uiModel, new Message());
-        List<String[]> dependencies = new ArrayList<String[]>();
-        if (UserAccount.countUserAccounts() == 0) {
-            dependencies.add(new String[] { "useraccount", "useraccounts" });
-        }
-        if (UserAccount.countUserAccounts() == 0) {
-            dependencies.add(new String[] { "useraccount", "useraccounts" });
-        }
-        uiModel.addAttribute("dependencies", dependencies);
-        return "messages/create";
-    }
-    
+        
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String MessageController.show(@PathVariable("id") Long id, Model uiModel) {
         addDateTimeFormatPatterns(uiModel);
@@ -46,23 +33,8 @@ privileged aspect MessageController_Roo_Controller {
         return "messages/show";
     }
     
-    @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
-    public String MessageController.update(@Valid Message message, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, message);
-            return "messages/update";
-        }
-        uiModel.asMap().clear();
-        message.merge();
-        return "redirect:/messages/" + encodeUrlPathSegment(message.getId().toString(), httpServletRequest);
-    }
-    
-    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String MessageController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, Message.findMessage(id));
-        return "messages/update";
-    }
-    
+        
+        
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String MessageController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
         Message message = Message.findMessage(id);

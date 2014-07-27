@@ -58,9 +58,9 @@ public class Message {
         return tQuery.getResultList();
     }
     
-    public static List<com.aeiou.bigbang.domain.Message> findMessageByReceiver(UserAccount pReceiver, int firstResult, int maxResults) {
+    public static List<com.aeiou.bigbang.domain.Message> findMessageByReceiver(UserAccount pReceiver, int firstResult, int maxResults, String sortExpression) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Message> tQuery = tEntityManager.createQuery("SELECT o FROM Message AS o WHERE o.receiver = :pReceiver ORDER BY o.id DESC", Message.class);
+        TypedQuery<Message> tQuery = tEntityManager.createQuery("SELECT o FROM Message AS o WHERE o.receiver = :pReceiver ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Message.class);
         tQuery = tQuery.setParameter("pReceiver", pReceiver);
         if(firstResult > -1 && maxResults > 0)
         	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);

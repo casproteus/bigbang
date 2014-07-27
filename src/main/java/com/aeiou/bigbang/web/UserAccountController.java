@@ -87,7 +87,7 @@ public class UserAccountController {
         }
         UserAccount tUserAccount = UserAccount.findUserAccount(userAccount.getId());
         if (!tUserAccount.getName().equals(userAccount.getName())) {
-            List<BigTag> tBigTags = BigTag.findTagsByPublisher(tUserAccount.getName(), 0, 1000);
+            List<BigTag> tBigTags = BigTag.findTagsByPublisher(tUserAccount.getName(), 0, 1000, null);
             for (int i = tBigTags.size() - 1; i > -1; i--) {
                 tBigTags.get(i).setType(userAccount.getName());
                 tBigTags.get(i).merge();
@@ -124,7 +124,7 @@ public class UserAccountController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
         UserAccount userAccount = UserAccount.findUserAccount(id);
-        List<BigTag> tBigTags = BigTag.findTagsByPublisher(userAccount.getName(), 0, 1000);
+        List<BigTag> tBigTags = BigTag.findTagsByPublisher(userAccount.getName(), 0, 1000, null);
         for (int i = tBigTags.size() - 1; i > -1; i--) {
             tBigTags.get(i).remove();
         }
@@ -136,13 +136,13 @@ public class UserAccountController {
     }
 
     @RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+    public String list(@RequestParam(value = "sortExpression", required = false) String sortExpression, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
         String tCurName = userContextService.getCurrentUserName();
         if (tCurName == null) return "login";
         if (tCurName.equalsIgnoreCase("admin")) {
             int sizeNo = size == null ? 10 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("useraccounts", UserAccount.findUserAccountEntries(firstResult, sizeNo));
+            uiModel.addAttribute("useraccounts", UserAccount.findOrderedUserAccountEntries(firstResult, sizeNo, sortExpression));
             float nrOfPages = (float) UserAccount.countUserAccounts() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {

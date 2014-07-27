@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.json.RooJson;
@@ -112,8 +113,8 @@ public class BigTag {
      * @param maxResults
      * @return
      */
-    public static List<com.aeiou.bigbang.domain.BigTag> findTagsByPublisher(String pUserAccount, int firstResult, int maxResults) {
-        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type ORDER BY o.id DESC", BigTag.class);
+    public static List<com.aeiou.bigbang.domain.BigTag> findTagsByPublisher(String pUserAccount, int firstResult, int maxResults, String sortExpression) {
+        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), BigTag.class);
         tQuery = tQuery.setParameter("type", pUserAccount);
         if(firstResult >= 0 && maxResults > 0)
         	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
@@ -227,7 +228,7 @@ public class BigTag {
     }
     
     //used by no one for now, becuase when we genereate a string to save to layout string, we need a BigTag Obect, use it's authority and owner properties to know what marks we should add to front and end.
-    //while this is a good lession to show that we can use “select o.tagName ...." to return a string list.
+    //while this is a good lession to show that we can use ï¿½select o.tagName ...." to return a string list.
     private static  List<String> findBMAllTagsStringByOwner(String pOwnerName){
         List<String> tListFR = new ArrayList<String>();
         TypedQuery<String> tQ = entityManager().createQuery("SELECT o.tagName FROM BigTag AS o WHERE o.type = :type and o.owner = 0", String.class);
@@ -312,13 +313,25 @@ public class BigTag {
      * @param maxResults
      * @return
      */
+    public static List<com.aeiou.bigbang.domain.BigTag> findOrderedBigTagEntries(int firstResult, int maxResults, String sortExpression) {
+    	TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag o ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), BigTag.class);
+        if(firstResult >= 0 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        return tQuery.getResultList();
+    }
+
+    /**
+     * called only from list function, so return both BM tags and TW tags
+     * @param firstResult
+     * @param maxResults
+     * @return
+     */
     public static List<com.aeiou.bigbang.domain.BigTag> findBigTagEntries(int firstResult, int maxResults) {
     	TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag o ORDER BY o.id DESC", BigTag.class);
         if(firstResult >= 0 && maxResults > 0)
         	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
-
     public String getCommonTagName() {
         return commonTagName;
     }

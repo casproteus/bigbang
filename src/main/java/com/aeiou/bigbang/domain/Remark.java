@@ -76,9 +76,9 @@ public class Remark {
      * @param maxResults
      * @return
      */
-    public static List<com.aeiou.bigbang.domain.Remark> findRemarkByPublisher(UserAccount pPublisher, int firstResult, int maxResults) {
+    public static List<com.aeiou.bigbang.domain.Remark> findRemarkByPublisher(UserAccount pPublisher, int firstResult, int maxResults, String sortExpression) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Remark> tQuery = tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.publisher = :publisher ORDER BY o.id DESC", Remark.class);
+        TypedQuery<Remark> tQuery = tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.publisher = :publisher ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Remark.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
         if(firstResult > -1 && maxResults > 0)
         	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
@@ -99,5 +99,13 @@ public class Remark {
 
     public String toString() {
         return content;
+    }
+
+	public static List<Remark> findOrderedRemarkEntries(int firstResult, int maxResults, String sortExpression) {
+        return entityManager().createQuery("SELECT o FROM Remark o ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Remark.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public static List<Remark> findRemarkEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Remark o ORDER BY o.id DESC", Remark.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 }

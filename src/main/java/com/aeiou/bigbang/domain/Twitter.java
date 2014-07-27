@@ -61,13 +61,20 @@ public class Twitter {
         return tQuery.getSingleResult();
     }
 
-    public static List<com.aeiou.bigbang.domain.Twitter> findTwitterEntries(int firstResult, int maxResults) {
-    	TypedQuery<Twitter> tQuery =  entityManager().createQuery("SELECT o FROM Twitter o ORDER BY o.id DESC", Twitter.class);
+    public static List<com.aeiou.bigbang.domain.Twitter> findOrderedTwitterEntries(int firstResult, int maxResults, String sortExpression) {
+    	TypedQuery<Twitter> tQuery =  entityManager().createQuery("SELECT o FROM Twitter o  ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.lastupdate DESC" : sortExpression), Twitter.class);
         if(firstResult > -1 && maxResults > 0)
         	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
 
+    public static List<com.aeiou.bigbang.domain.Twitter> findTwitterEntries(int firstResult, int maxResults) {
+    	TypedQuery<Twitter> tQuery =  entityManager().createQuery("SELECT o FROM Twitter o  ORDER BY o.lastupdate DESC", Twitter.class);
+        if(firstResult > -1 && maxResults > 0)
+        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        return tQuery.getResultList();
+    }
+    
     public static List<com.aeiou.bigbang.domain.Twitter> findTwitterByPublisher(UserAccount pPublisher, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults, String sortExpression) {
         EntityManager tEntityManager = entityManager();
         TypedQuery<Twitter> tQuery = tEntityManager.createQuery("SELECT o FROM Twitter AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.lastupdate DESC" : sortExpression), Twitter.class);

@@ -172,7 +172,7 @@ public class TwitterController {
     }
 
     @RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,
+    public String list(@RequestParam(value = "sortExpression", required = false) String sortExpression, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,
     		Model uiModel, HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
         if (tCurName == null) return "login";
@@ -182,12 +182,12 @@ public class TwitterController {
         tCurName = tPublisher.getName();
         float nrOfPages;
         if (tCurName.equals("admin")) {
-            uiModel.addAttribute("twitters", Twitter.findTwitterEntries(firstResult, sizeNo));
+            uiModel.addAttribute("twitters", Twitter.findOrderedTwitterEntries(firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Twitter.countTwitters() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
             Set<Integer> tAuthSet = BigAuthority.getAuthSet(tPublisher, tPublisher);
-            uiModel.addAttribute("twitters", Twitter.findTwitterByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, null));
+            uiModel.addAttribute("twitters", Twitter.findTwitterByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Twitter.countTwitterByPublisher(tPublisher, tAuthSet) / sizeNo;
         }
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));

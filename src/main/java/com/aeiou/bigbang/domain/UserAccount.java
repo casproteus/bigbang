@@ -69,6 +69,13 @@ public class UserAccount {
         return this.getName();
     }
 
+    public static List<com.aeiou.bigbang.domain.UserAccount> findOrderedUserAccountEntries(int firstResult, int maxResults, String sortExpression) {
+    	TypedQuery<UserAccount> tQuery =  entityManager().createQuery("SELECT o FROM UserAccount o ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), UserAccount.class);
+    	if(firstResult >= 0 && maxResults > 0)
+    		tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+    	return tQuery.getResultList();
+    }
+
     public static List<com.aeiou.bigbang.domain.UserAccount> findUserAccountEntries(int firstResult, int maxResults) {
     	TypedQuery<UserAccount> tQuery =  entityManager().createQuery("SELECT o FROM UserAccount o ORDER BY o.id DESC", UserAccount.class);
     	if(firstResult >= 0 && maxResults > 0)

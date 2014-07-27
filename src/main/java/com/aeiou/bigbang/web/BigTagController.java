@@ -300,7 +300,7 @@ public class BigTagController {
     }
 
     @RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, 
+    public String list(@RequestParam(value = "sortExpression", required = false) String sortExpression, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, 
     		Model uiModel, HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
         if (tCurName == null) return "login";
@@ -310,11 +310,11 @@ public class BigTagController {
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
         float nrOfPages;
         if (tCurName.equals("admin")) {
-            uiModel.addAttribute("bigtags", BigTag.findBigTagEntries(firstResult, sizeNo));
+            uiModel.addAttribute("bigtags", BigTag.findOrderedBigTagEntries(firstResult, sizeNo, sortExpression));
             nrOfPages = (float) BigTag.countBigTags() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-            uiModel.addAttribute("bigtags", BigTag.findTagsByPublisher(tCurName, firstResult, sizeNo));
+            uiModel.addAttribute("bigtags", BigTag.findTagsByPublisher(tCurName, firstResult, sizeNo, sortExpression));
             nrOfPages = (float) BigTag.countTagsByPublisher(tCurName) / sizeNo;
         }
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));

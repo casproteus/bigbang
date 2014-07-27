@@ -114,7 +114,7 @@ public class MessageController {
             addDateTimeFormatPatterns(uiModel);
             return "messages/list";
         } else {
-            uiModel.addAttribute("messages", Message.findMessageByReceiver(tUserAccount, firstResult, sizeNo));
+            uiModel.addAttribute("messages", Message.findMessageByReceiver(tUserAccount, firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Message.countMessagesByReceiver(tReceiver) / sizeNo;
             tUserAccount.setNewMessageAmount(0);
             tUserAccount.persist();

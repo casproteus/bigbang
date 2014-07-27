@@ -84,7 +84,7 @@ public class RemarkController {
         }
         String tCurName = userContextService.getCurrentUserName();
         UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
-        List<Remark> tList = Remark.findRemarkByPublisher(tUserAccount, 0, 1);
+        List<Remark> tList = Remark.findRemarkByPublisher(tUserAccount, 0, 1, null);
         if (tList != null && tList.size() > 0) {
             Remark tTwitter = tList.get(0);
             if (remark.getContent().equals(tTwitter.getContent()) && remark.getRemarkto().equals(tTwitter.getRemarkto())) {
@@ -133,7 +133,7 @@ public class RemarkController {
     }
 
     @RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,
+    public String list(@RequestParam(value = "sortExpression", required = false) String sortExpression, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,
     		Model uiModel, HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
         if (tCurName == null) return "login";
@@ -143,11 +143,11 @@ public class RemarkController {
         tCurName = tPublisher.getName();
         float nrOfPages;
         if (tCurName.equals("admin")) {
-            uiModel.addAttribute("remarks", Remark.findRemarkEntries(firstResult, sizeNo));
+            uiModel.addAttribute("remarks", Remark.findOrderedRemarkEntries(firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Remark.countRemarks() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-            uiModel.addAttribute("remarks", Remark.findRemarkByPublisher(tPublisher, firstResult, sizeNo));
+            uiModel.addAttribute("remarks", Remark.findRemarkByPublisher(tPublisher, firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Remark.countRemarkByPublisher(tPublisher) / sizeNo;
         }
         uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
@@ -217,7 +217,7 @@ public class RemarkController {
         }
         String tCurName = userContextService.getCurrentUserName();
         UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
-        List<Remark> tList = Remark.findRemarkByPublisher(tUserAccount, 0, 1);
+        List<Remark> tList = Remark.findRemarkByPublisher(tUserAccount, 0, 1, null);
         if (tList != null && tList.size() > 0) {
             Remark tRemark = tList.get(0);
             if (tRemark.getContent().equals(remark.getContent()) && tRemark.getRemarkto().getId().equals(pTwitterId)) {
@@ -290,6 +290,7 @@ public class RemarkController {
 
         return showDetailTwitters(pTwitterId, 0, null, null, uiModel, httpServletRequest);
 	}
+
     private void checkRss(Remark remark){
     	Twitter tTwitter = remark.getRemarkto();
     	List<RssTwitter> tList = RssTwitter.findAllListenersByTwitter(tTwitter);

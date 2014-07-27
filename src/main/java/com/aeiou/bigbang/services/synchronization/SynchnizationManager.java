@@ -180,7 +180,7 @@ public class SynchnizationManager {
 			}
 			List<BigTag> tList = tagMap.get(pTag.getType());
 			if(tList == null){
-				tList = BigTag.findTagsByPublisher(pTag.getType(), 0, 0);
+				tList = BigTag.findTagsByPublisher(pTag.getType(), 0, 0, null);
 				tagMap.put(pTag.getType(), tList);
 			}
 			
@@ -224,7 +224,7 @@ public class SynchnizationManager {
 			UserAccount tUA = findUserInLocalDB(pMessage.getReceiver());
 			List<Message> tList = messageMap.get(tUA);
 			if(tList == null){
-				tList = Message.findMessageByReceiver(tUA, 0, 0);
+				tList = Message.findMessageByReceiver(tUA, 0, 0, null);
 				messageMap.put(tUA, tList);
 			}
 			

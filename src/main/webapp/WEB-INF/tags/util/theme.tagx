@@ -43,7 +43,7 @@
 		      <spring:url var="url_theme5" value="">
 		        <spring:param name="theme" value="5" />
 		      </spring:url>
-		      <spring:message code="global_theme_line" var="theme_5" htmlEscape="false" />
+		      <spring:message code="global_theme_cements" var="theme_5" htmlEscape="false" />
 		      <a href="${url_theme5}" title="${fn:escapeXml(theme_5)}">${fn:escapeXml(theme_5)}</a>
 		      
 		      <c:out value=" | " />
@@ -105,7 +105,7 @@
 		      <spring:url var="url_theme5" value="">
 		        <spring:param name="theme" value="5" />
 		      </spring:url>
-		      <spring:message code="global_theme_line" var="theme_5" htmlEscape="false" />
+		      <spring:message code="global_theme_cements" var="theme_5" htmlEscape="false" />
 		      <a href="${url_theme5}" title="${fn:escapeXml(theme_5)}">${fn:escapeXml(theme_5)}</a>
 		      
 		      <c:out value=" | " />

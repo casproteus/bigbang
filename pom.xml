@@ -368,6 +368,12 @@
 			<artifactId>jersey-client</artifactId>
 			<version>1.16</version>
 		</dependency>
+		<!-- appliteye test -->
+		<dependency>
+		 <groupId>com.applitools</groupId>
+		 <artifactId>eyes-selenium-java</artifactId>
+		 <version>RELEASE</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

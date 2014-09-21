@@ -40,7 +40,6 @@ import com.aeiou.bigbang.util.SpringApplicationContext;
 @RequestMapping("/")
 @Controller
 public class PersonalController{
-	
 	@Inject
 	private UserContextService userContextService;
 

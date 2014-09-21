@@ -19,6 +19,7 @@ import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.model.MediaUpload;
 import com.aeiou.bigbang.services.quartz.UpdatingBalanceJobProcessor;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.services.synchronization.ClientSyncTool;
@@ -27,7 +28,7 @@ public class BigUtil {
 
 	public static String DEFAULT_IMAGE_TYPE = ".jpg";
 	
-	//Can not use strnge characters, because when the coding formmat of the IDE changes or are not same with database, will cause mismatch.
+	//Can not use strange characters, because when the coding formmat of the IDE changes or are not same with database, will cause mismatch.
 	//Can neiter use "[","(","+".... because the string will be considered as an expression in split method, those character have special
 	//meaning and will cause splite
 	public static final String SEP_TAG_NUMBER = "zSTNz";//"¿";
@@ -92,6 +93,17 @@ public class BigUtil {
 						tBM.persist();
 					}
 				}
+			}
+		} else if(pCommand != null && pCommand.startsWith("tianjiaceshishuju")){
+			String a = pCommand.substring("tianjiaceshishuju".length() + 1);
+			int count = Integer.valueOf(a);
+			for(int i = 1342; i < count; i++){
+				MediaUpload tMedia = new MediaUpload();
+				tMedia.setContent(new byte[100]);
+				tMedia.setFilepath("test_" + i);
+				tMedia.setContentType("test");
+				tMedia.setFilesize(12345);
+				tMedia.persist();
 			}
 		}
 		

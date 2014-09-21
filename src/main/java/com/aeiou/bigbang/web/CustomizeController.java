@@ -120,40 +120,43 @@ public class CustomizeController {
 		StringBuilder tLayoutStrBuilder = new StringBuilder();
 		StringBuilder tNumStrBuilder = new StringBuilder();
 		boolean tmpFlag = false;					//use this flag to make the first time don't add BigUtil.SEP_ITEM.
-    	for(int i = 0; i < tBigTagStrsLeft.length; i++){
-    		if(tBigTagStrsLeft[i].length() > 0 && tMap.get(BigUtil.getTagNameFromLayoutStr(tBigTagStrsLeft[i])) != null){
-    			if(tmpFlag == true){
-    				tLayoutStrBuilder.append(BigUtil.SEP_ITEM);
-        			tLayoutStrBuilder.append(tBigTagStrsLeft[i]);
-    				tNumStrBuilder.append(BigUtil.SEP_ITEM);
-        			tNumStrBuilder.append(tNumStrsLeft[i]);
-    			}else{
-        			tLayoutStrBuilder.append(tBigTagStrsLeft[i]);
-        			tNumStrBuilder.append(tNumStrsLeft[i]);
-        			tmpFlag = true;
-    			}
-    			tMap.remove(BigUtil.getTagNameFromLayoutStr(tBigTagStrsLeft[i]));
-    		}
-    	}
+		if(tBigTagStrsLeft != null){
+	    	for(int i = 0; i < tBigTagStrsLeft.length; i++){
+	    		if(tBigTagStrsLeft[i].length() > 0 && tMap.get(BigUtil.getTagNameFromLayoutStr(tBigTagStrsLeft[i])) != null){
+	    			if(tmpFlag == true){
+	    				tLayoutStrBuilder.append(BigUtil.SEP_ITEM);
+	        			tLayoutStrBuilder.append(tBigTagStrsLeft[i]);
+	    				tNumStrBuilder.append(BigUtil.SEP_ITEM);
+	        			tNumStrBuilder.append(tNumStrsLeft[i]);
+	    			}else{
+	        			tLayoutStrBuilder.append(tBigTagStrsLeft[i]);
+	        			tNumStrBuilder.append(tNumStrsLeft[i]);
+	        			tmpFlag = true;
+	    			}
+	    			tMap.remove(BigUtil.getTagNameFromLayoutStr(tBigTagStrsLeft[i]));
+	    		}
+	    	}
+		}
     	tmpFlag = false;
     	tLayoutStrBuilder.append(BigUtil.SEP_LEFT_RIGHT);
     	tNumStrBuilder.append(BigUtil.SEP_LEFT_RIGHT);
-    	for(int i = 0; i < tBigTagStrsRight.length; i++){
-    		if(tBigTagStrsRight[i].length() > 0 && tMap.get(BigUtil.getTagNameFromLayoutStr(tBigTagStrsRight[i])) != null){
-    			if(tmpFlag == true){
-    				tLayoutStrBuilder.append(BigUtil.SEP_ITEM);
-        			tLayoutStrBuilder.append(tBigTagStrsRight[i]);
-    				tNumStrBuilder.append(BigUtil.SEP_ITEM);
-        			tNumStrBuilder.append(tNumStrsRight[i]);
-    			}else{
-        			tLayoutStrBuilder.append(tBigTagStrsRight[i]);
-        			tNumStrBuilder.append(tNumStrsRight[i]);
-        			tmpFlag = true;
-    			}
-    			tMap.remove(BigUtil.getTagNameFromLayoutStr(tBigTagStrsRight[i]));
-    		}
-    	}
-    	
+		if(tBigTagStrsLeft != null){
+	    	for(int i = 0; i < tBigTagStrsRight.length; i++){
+	    		if(tBigTagStrsRight[i].length() > 0 && tMap.get(BigUtil.getTagNameFromLayoutStr(tBigTagStrsRight[i])) != null){
+	    			if(tmpFlag == true){
+	    				tLayoutStrBuilder.append(BigUtil.SEP_ITEM);
+	        			tLayoutStrBuilder.append(tBigTagStrsRight[i]);
+	    				tNumStrBuilder.append(BigUtil.SEP_ITEM);
+	        			tNumStrBuilder.append(tNumStrsRight[i]);
+	    			}else{
+	        			tLayoutStrBuilder.append(tBigTagStrsRight[i]);
+	        			tNumStrBuilder.append(tNumStrsRight[i]);
+	        			tmpFlag = true;
+	    			}
+	    			tMap.remove(BigUtil.getTagNameFromLayoutStr(tBigTagStrsRight[i]));
+	    		}
+	    	}
+		}
     	//add new added tags to the end of both taglist and number list.
     	Object[] tKeys = tMap.keySet().toArray();
     	for (int i = 0; i < tKeys.length; i++){

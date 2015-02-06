@@ -60,6 +60,8 @@ public class SynchnizationManager {
         return new JSONSerializer().exclude("*.class").serialize(collection);
     }
     
+    //TODO: Bug1: the local useraccount should not update remote useraccount, because the romote one might
+    //be modified already and is newer than local ones. so should check the last update time to know which should be modified.
 	public int saveContentIntoLocalDB(List<String> tList, String pCommand){
     	if("1210_syncdb".equals(pCommand)){
 			if(!saveUserAccountToLocalDB(tList.get(0)))		//useraccount
@@ -355,6 +357,11 @@ public class SynchnizationManager {
 				pRemark.setRemarkto(tBlog);
 				pRemark.setPublisher(findUserInLocalDB(pRemark.getPublisher()));
 				pRemark.persist();
+			}
+			
+			if(pRemark.getRemarkTime().compareTo(tBlog.getLastupdate()) > 0){
+				tBlog.setLastupdate(pRemark.getRemarkTime());
+				tBlog.persist();
 			}
 		}
 		twitterMap.clear();

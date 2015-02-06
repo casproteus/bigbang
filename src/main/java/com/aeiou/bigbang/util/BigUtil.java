@@ -3,12 +3,17 @@ package com.aeiou.bigbang.util;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Appender;
+import org.apache.log4j.FileAppender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -21,11 +26,12 @@ import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.model.MediaUpload;
 import com.aeiou.bigbang.services.quartz.UpdatingBalanceJobProcessor;
-import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.services.synchronization.ClientSyncTool;
 
 public class BigUtil {
 
+	private static final Logger log = LoggerFactory.getLogger(BigUtil.class);
+	
 	public static String DEFAULT_IMAGE_TYPE = ".jpg";
 	
 	//Can not use strange characters, because when the coding formmat of the IDE changes or are not same with database, will cause mismatch.

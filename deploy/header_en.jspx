@@ -219,7 +219,7 @@
 	    <spring:theme code="styleSheet" var="roo_css" />
 	  	<c:choose>
 	  		<c:when test="${'resources/styles/9.css' eq roo_css}">
-		 		<img src = "getImage/uc_${fn:toLowerCase(spaceOwner)}_headimage" alt=""/>
+		 		<img src = "getImage/uc_${fn:toLowerCase(spaceOwner)}_headimage"/>
 	  		</c:when>
 	  		<c:otherwise>
 	  			<span class="emptySpan"> </span>

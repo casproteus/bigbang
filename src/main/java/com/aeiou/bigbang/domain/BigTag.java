@@ -114,8 +114,8 @@ public class BigTag {
      * @return
      */
     public static List<com.aeiou.bigbang.domain.BigTag> findTagsByPublisher(String pUserAccount, int firstResult, int maxResults, String sortExpression) {
-        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), BigTag.class);
-        tQuery = tQuery.setParameter("type", pUserAccount);
+        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE UPPER(o.type) = :type ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), BigTag.class);
+        tQuery = tQuery.setParameter("type", pUserAccount.toUpperCase());
         if(firstResult >= 0 && maxResults > 0)
         	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
@@ -127,8 +127,8 @@ public class BigTag {
      * @return
      */
     public static long countTagsByPublisher(String pPublisher) {
-        TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM BigTag o WHERE o.type = :pPublisher", Long.class);
-        tQuery = tQuery.setParameter("pPublisher", pPublisher);
+        TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM BigTag o WHERE UPPER(o.type) = :pPublisher", Long.class);
+        tQuery = tQuery.setParameter("pPublisher", pPublisher.toUpperCase());
         return tQuery.getSingleResult();
     }
     
@@ -153,8 +153,8 @@ public class BigTag {
      * @return
      */
     public static List<com.aeiou.bigbang.domain.BigTag> findTWTagsByPublisher(String pUserAccount) {
-        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = :owner ORDER BY o.id DESC", BigTag.class);
-        tQuery = tQuery.setParameter("type", pUserAccount).setParameter("owner", 1).setFirstResult(0).setMaxResults(1000);
+        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE UPPER(o.type) = :type and o.owner = :owner ORDER BY o.id DESC", BigTag.class);
+        tQuery = tQuery.setParameter("type", pUserAccount.toUpperCase()).setParameter("owner", 1).setFirstResult(0).setMaxResults(1000);
         return tQuery.getResultList();
     }
 
@@ -167,11 +167,11 @@ public class BigTag {
     public static List<com.aeiou.bigbang.domain.BigTag> findBMTagsByOwner(String pOwnerName) {
         List<BigTag> tListFR = new ArrayList<BigTag>();
         if (pOwnerName == null || "admin".equals(pOwnerName)){
-           tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0", BigTag.class).setParameter("type", "admin").getResultList());
-           tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0", BigTag.class).setParameter("type", "administrator").getResultList());
+           tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE LOWER(o.type) = :type and o.owner = 0", BigTag.class).setParameter("type", "admin").getResultList());
+           tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE LOWER(o.type) = :type and o.owner = 0", BigTag.class).setParameter("type", "administrator").getResultList());
            return tListFR; 
         }else {
-            List<BigTag> tTagListOfPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0", BigTag.class).setParameter("type", pOwnerName).getResultList();
+            List<BigTag> tTagListOfPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE UPPER(o.type) = :type and o.owner = 0", BigTag.class).setParameter("type", pOwnerName.toUpperCase()).getResultList();
             List<String> tListOfTagNames = new ArrayList<String>();			//used for checking if the tags name from friends are duplicated with tag of current user.
             for (int i = 0; i < tTagListOfPublisher.size(); i++) {
                 tListFR.add(tTagListOfPublisher.get(i));
@@ -182,7 +182,7 @@ public class BigTag {
             for (int i = 0; i < tPublishers.length; i++) {
                 tPublisher = (UserAccount) tPublishers[i];
                 if ("admin".equals(tPublisher.getName())) continue;
-                List<BigTag> tTagListOfListenedPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0 AND o.authority = 0", BigTag.class).setParameter("type", tPublisher.getName()).getResultList();
+                List<BigTag> tTagListOfListenedPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE UPPER(o.type) = :type and o.owner = 0 AND o.authority = 0", BigTag.class).setParameter("type", tPublisher.getName().toUpperCase()).getResultList();
                 for (int j = 0; j < tTagListOfListenedPublisher.size(); j++) {
                     String tTagName = tTagListOfListenedPublisher.get(j).getTagName();
                     if (!tListOfTagNames.contains(tTagName)) {
@@ -198,12 +198,12 @@ public class BigTag {
     //used by no one for now,
     private static  List<BigTag> findBMAllTagsByOwner(String pOwnerName){
         List<BigTag> tListFR = new ArrayList<BigTag>();
-        tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0", BigTag.class).setParameter("type", "admin").getResultList());
-        tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0", BigTag.class).setParameter("type", "administrator").getResultList());
+        tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE LOWER(o.type) = :type and o.owner = 0", BigTag.class).setParameter("type", "admin").getResultList());
+        tListFR.addAll(entityManager().createQuery("SELECT o FROM BigTag AS o WHERE LOWER(o.type) = :type and o.owner = 0", BigTag.class).setParameter("type", "administrator").getResultList());
         if (pOwnerName == null || "admin".equals(pOwnerName)){
            return tListFR; 
         }else {
-            List<BigTag> tTagListOfPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0", BigTag.class).setParameter("type", pOwnerName).getResultList();
+            List<BigTag> tTagListOfPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE UPPER(o.type) = :type and o.owner = 0", BigTag.class).setParameter("type", pOwnerName.toUpperCase()).getResultList();
             List<String> tListOfTagNames = new ArrayList<String>();			//used for checking if the tags name from friends are duplicated with tag of current user.
             for (int i = 0; i < tTagListOfPublisher.size(); i++) {
                 tListFR.add(tTagListOfPublisher.get(i));
@@ -214,7 +214,7 @@ public class BigTag {
             for (int i = 0; i < tPublishers.length; i++) {
                 tPublisher = (UserAccount) tPublishers[i];
                 if ("admin".equals(tPublisher.getName())) continue;
-                List<BigTag> tTagListOfListenedPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0 AND o.authority = 0", BigTag.class).setParameter("type", tPublisher.getName()).getResultList();
+                List<BigTag> tTagListOfListenedPublisher = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE UPPER(o.type) = :type and o.owner = 0 AND o.authority = 0", BigTag.class).setParameter("type", tPublisher.getName().toUpperCase()).getResultList();
                 for (int j = 0; j < tTagListOfListenedPublisher.size(); j++) {
                     String tTagName = tTagListOfListenedPublisher.get(j).getTagName();
                     if (!tListOfTagNames.contains(tTagName)) {
@@ -231,14 +231,14 @@ public class BigTag {
     //while this is a good lession to show that we can use �select o.tagName ...." to return a string list.
     private static  List<String> findBMAllTagsStringByOwner(String pOwnerName){
         List<String> tListFR = new ArrayList<String>();
-        TypedQuery<String> tQ = entityManager().createQuery("SELECT o.tagName FROM BigTag AS o WHERE o.type = :type and o.owner = 0", String.class);
+        TypedQuery<String> tQ = entityManager().createQuery("SELECT o.tagName FROM BigTag AS o WHERE LOWER(o.type) = :type and o.owner = 0", String.class);
         tQ.setParameter("type", "admin");
         tListFR.addAll(tQ.getResultList());
  
         tQ.setParameter("type", "administrator");
         tListFR.addAll(tQ.getResultList());
 
-        List<String> tTagListOfPublisher = entityManager().createQuery("SELECT o.tagName FROM BigTag AS o WHERE o.type = :type and o.owner = 0", String.class).setParameter("type", pOwnerName).getResultList();
+        List<String> tTagListOfPublisher = entityManager().createQuery("SELECT o.tagName FROM BigTag AS o WHERE LOWER(o.type) = :type and o.owner = 0", String.class).setParameter("type", pOwnerName.toLowerCase()).getResultList();
         List<String> tListOfTagNames = new ArrayList<String>();			//used for checking if the tags name from friends are duplicated with tag of current user.
         for (int i = 0; i < tTagListOfPublisher.size(); i++) {
             tListFR.add(tTagListOfPublisher.get(i));
@@ -249,7 +249,7 @@ public class BigTag {
         for (int i = 0; i < tPublishers.length; i++) {
             tPublisher = (UserAccount) tPublishers[i];
             if ("admin".equals(tPublisher.getName())) continue;
-            List<String> tTagListOfListenedPublisher = entityManager().createQuery("SELECT o.tagName FROM BigTag AS o WHERE o.type = :type and o.owner = 0 AND o.authority = 0", String.class).setParameter("type", tPublisher.getName()).getResultList();
+            List<String> tTagListOfListenedPublisher = entityManager().createQuery("SELECT o.tagName FROM BigTag AS o WHERE LOWER(o.type) = :type and o.owner = 0 AND o.authority = 0", String.class).setParameter("type", tPublisher.getName().toLowerCase()).getResultList();
             for (int j = 0; j < tTagListOfListenedPublisher.size(); j++) {
                 String tTagName = tTagListOfListenedPublisher.get(j);
                 if (!tListOfTagNames.contains(tTagName)) {
@@ -268,7 +268,7 @@ public class BigTag {
     		return null;
     	
         BigTag tBigTag = null;
-        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and o.type = :pOwnerName", BigTag.class);
+        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and LOWER(o.type) = :pOwnerName", BigTag.class);
         tQuery = tQuery.setParameter("pTagName", pTagName);
         
         tQuery = tQuery.setParameter("pOwnerName", "admin");
@@ -288,8 +288,8 @@ public class BigTag {
 	                if(tOwner.getListento() != null){
 		                Iterator<UserAccount> tList = tOwner.getListento().iterator();
 		                while (tList.hasNext()) 
-		                	tOwnerNameSet.add(tList.next().getName());
-		                tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and o.owner = 0 and o.type in :tOwnerNameSet", BigTag.class);
+		                	tOwnerNameSet.add(tList.next().getName().toLowerCase());
+		                tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and o.owner = 0 and LOWER(o.type) in :tOwnerNameSet", BigTag.class);
 		                tQuery = tQuery.setParameter("pTagName", pTagName).setParameter("tOwnerNameSet", tOwnerNameSet);
 		                try{
 		                	tBigTag = tQuery.getSingleResult();

@@ -65,7 +65,7 @@ privileged aspect UserAccountController_Roo_Controller_Json {
         
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", null), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb"), headers, HttpStatus.OK);
     }
     
     @RequestMapping(value = "/1210_syncdb_ua", method = RequestMethod.POST, headers = "Accept=application/json")

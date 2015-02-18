@@ -67,7 +67,7 @@
         			<spring:param name="owner" value="${spaceOwner}"/>
         			<spring:param name="twitterid" value="${item['id']}"/>
         			<spring:param name="page" value="1"/>
-        			<spring:param name="size" value="${empty param.size ? 20 : param.size}"/>
+        			<spring:param name="size" value="${empty param.size ? 100 : param.size}"/>
 	        	</spring:url>
       			<a href="${readDetail_url}">
       				<c:out value="${item['twtitle']}" />

@@ -79,7 +79,7 @@
 	        			<spring:param name="owner" value="${spaceOwner}"/>
 	        			<spring:param name="twitterid" value="${twitter.id}"/>
 	        			<spring:param name="page" value="1"/>
-	        			<spring:param name="size" value="${empty param.size ? 25 : param.size}"/>
+	        			<spring:param name="size" value="${empty param.size ? 100 : param.size}"/>
 		        	</spring:url>
 			      	<a href="${addRemark_url}">
 			        	<spring:message code="global_login_notice"/>

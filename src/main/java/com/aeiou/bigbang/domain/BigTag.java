@@ -279,7 +279,7 @@ public class BigTag {
         	try{
         		tBigTag = tQuery.getSingleResult();
         	}catch(Exception ee){
-    	   	 	tQuery = tQuery.setParameter("pOwnerName", pOwnerName);
+    	   	 	tQuery = tQuery.setParameter("pOwnerName", pOwnerName.toLowerCase());
     	   	 	try{
     	   	 		tBigTag = tQuery.getSingleResult();
     	   	 	}catch(Exception eee){

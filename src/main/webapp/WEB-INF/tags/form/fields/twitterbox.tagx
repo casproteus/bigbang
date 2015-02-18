@@ -45,7 +45,7 @@
         			<spring:param name="owner" value="${spaceOwner}"/>
         			<spring:param name="twitterid" value="${item['id']}"/>
         			<spring:param name="page" value="1"/>
-        			<spring:param name="size" value="${empty param.size ? 20 : param.size}"/>
+        			<spring:param name="size" value="${empty param.size ? 100 : param.size}"/>
 	        	</spring:url>
       			<a href="${readDetail_url}">
       				<c:out value="${item['twtitle']}" />
@@ -64,7 +64,7 @@
 	        		<spring:url value="/public" var="listAllContentOfPublisher">
 	        			<spring:param name="listmoreblog" value="${item['publisher']}"/>
 	        			<spring:param name="page" value="1"/>
-	        			<spring:param name="size" value="${empty param.size ? 20 : param.size}"/>
+	        			<spring:param name="size" value="${empty param.size ? 100 : param.size}"/>
 	      			</spring:url>
 		        	<a href="${listAllContentOfPublisher}">
 			            <c:out value="${item['publisher']}" />
@@ -89,7 +89,7 @@
         			<spring:param name="listmoreblog" value="${spaceOwner}"/>
         			<spring:param name="twittertype" value="${type}"/>
         			<spring:param name="page" value="1"/>
-        			<spring:param name="size" value="${empty param.size ? 20 : param.size}"/>
+        			<spring:param name="size" value="${empty param.size ? 100 : param.size}"/>
 	        	</spring:url>
 	        	<a href="${readMore_url}">
 		            <spring:message arguments="${typeName}" code="global_menu_readmore" htmlEscape="false" />

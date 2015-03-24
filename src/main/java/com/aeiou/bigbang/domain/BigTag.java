@@ -140,8 +140,8 @@ public class BigTag {
      * @return
      */
     public static List<com.aeiou.bigbang.domain.BigTag> findBMTagsByPublisher(String pUserAccount, int firstResult, int maxResults) {
-        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE o.type = :type and o.owner = 0 ORDER BY o.id DESC", BigTag.class);
-        tQuery = tQuery.setParameter("type", pUserAccount);
+        TypedQuery<BigTag> tQuery = entityManager().createQuery("SELECT o FROM BigTag AS o WHERE LOWER(o.type) = :type and o.owner = 0 ORDER BY o.id DESC", BigTag.class);
+        tQuery = tQuery.setParameter("type", pUserAccount.toLowerCase());
         if(firstResult >= 0 && maxResults > 0)
         	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();

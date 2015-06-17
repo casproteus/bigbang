@@ -14,6 +14,8 @@ privileged aspect Twitter_Roo_Jpa_ActiveRecord {
     @PersistenceContext
     transient EntityManager Twitter.entityManager;
     
+    public static final List<String> Twitter.fieldNames4OrderClauseFilter = java.util.Arrays.asList("twitent", "twitDate", "publisher", "twittertag", "authority", "twtitle", "lastupdate", "addingTagFlag");
+    
     public static final EntityManager Twitter.entityManager() {
         EntityManager em = new Twitter().entityManager;
         if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
@@ -28,9 +30,31 @@ privileged aspect Twitter_Roo_Jpa_ActiveRecord {
         return entityManager().createQuery("SELECT o FROM Twitter o", Twitter.class).getResultList();
     }
     
+    public static List<Twitter> Twitter.findAllTwitters(String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM Twitter o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, Twitter.class).getResultList();
+    }
+    
     public static Twitter Twitter.findTwitter(Long id) {
         if (id == null) return null;
         return entityManager().find(Twitter.class, id);
+    }
+    
+    public static List<Twitter> Twitter.findTwitterEntries(int firstResult, int maxResults, String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM Twitter o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, Twitter.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
     @Transactional

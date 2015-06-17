@@ -6,7 +6,10 @@ package com.aeiou.bigbang.domain;
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.BigTagDataOnDemand;
 import com.aeiou.bigbang.domain.BigTagIntegrationTest;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +22,12 @@ privileged aspect BigTagIntegrationTest_Roo_IntegrationTest {
     
     declare @type: BigTagIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: BigTagIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: BigTagIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: BigTagIntegrationTest: @Transactional;
     
     @Autowired
-    private BigTagDataOnDemand BigTagIntegrationTest.dod;
+    BigTagDataOnDemand BigTagIntegrationTest.dod;
     
     @Test
     public void BigTagIntegrationTest.testCountBigTags() {
@@ -101,7 +104,16 @@ privileged aspect BigTagIntegrationTest_Roo_IntegrationTest {
         BigTag obj = dod.getNewTransientBigTag(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'BigTag' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'BigTag' identifier to be null", obj.getId());
-        obj.persist();
+        try {
+            obj.persist();
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         obj.flush();
         Assert.assertNotNull("Expected 'BigTag' identifier to no longer be null", obj.getId());
     }

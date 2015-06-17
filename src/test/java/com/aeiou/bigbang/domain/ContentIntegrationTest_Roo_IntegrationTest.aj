@@ -6,7 +6,10 @@ package com.aeiou.bigbang.domain;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.ContentDataOnDemand;
 import com.aeiou.bigbang.domain.ContentIntegrationTest;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +22,12 @@ privileged aspect ContentIntegrationTest_Roo_IntegrationTest {
     
     declare @type: ContentIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: ContentIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: ContentIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: ContentIntegrationTest: @Transactional;
     
     @Autowired
-    private ContentDataOnDemand ContentIntegrationTest.dod;
+    ContentDataOnDemand ContentIntegrationTest.dod;
     
     @Test
     public void ContentIntegrationTest.testCountContents() {
@@ -101,7 +104,16 @@ privileged aspect ContentIntegrationTest_Roo_IntegrationTest {
         Content obj = dod.getNewTransientContent(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'Content' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'Content' identifier to be null", obj.getId());
-        obj.persist();
+        try {
+            obj.persist();
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         obj.flush();
         Assert.assertNotNull("Expected 'Content' identifier to no longer be null", obj.getId());
     }

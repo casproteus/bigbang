@@ -6,7 +6,10 @@ package com.aeiou.bigbang.domain;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.domain.UserAccountDataOnDemand;
 import com.aeiou.bigbang.domain.UserAccountIntegrationTest;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +22,12 @@ privileged aspect UserAccountIntegrationTest_Roo_IntegrationTest {
     
     declare @type: UserAccountIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: UserAccountIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: UserAccountIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: UserAccountIntegrationTest: @Transactional;
     
     @Autowired
-    private UserAccountDataOnDemand UserAccountIntegrationTest.dod;
+    UserAccountDataOnDemand UserAccountIntegrationTest.dod;
     
     @Test
     public void UserAccountIntegrationTest.testCountUserAccounts() {
@@ -101,7 +104,16 @@ privileged aspect UserAccountIntegrationTest_Roo_IntegrationTest {
         UserAccount obj = dod.getNewTransientUserAccount(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'UserAccount' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'UserAccount' identifier to be null", obj.getId());
-        obj.persist();
+        try {
+            obj.persist();
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         obj.flush();
         Assert.assertNotNull("Expected 'UserAccount' identifier to no longer be null", obj.getId());
     }

@@ -14,6 +14,8 @@ privileged aspect Customize_Roo_Jpa_ActiveRecord {
     @PersistenceContext
     transient EntityManager Customize.entityManager;
     
+    public static final List<String> Customize.fieldNames4OrderClauseFilter = java.util.Arrays.asList("cusKey", "cusValue");
+    
     public static final EntityManager Customize.entityManager() {
         EntityManager em = new Customize().entityManager;
         if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
@@ -28,6 +30,17 @@ privileged aspect Customize_Roo_Jpa_ActiveRecord {
         return entityManager().createQuery("SELECT o FROM Customize o", Customize.class).getResultList();
     }
     
+    public static List<Customize> Customize.findAllCustomizes(String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM Customize o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, Customize.class).getResultList();
+    }
+    
     public static Customize Customize.findCustomize(Long id) {
         if (id == null) return null;
         return entityManager().find(Customize.class, id);
@@ -35,6 +48,17 @@ privileged aspect Customize_Roo_Jpa_ActiveRecord {
     
     public static List<Customize> Customize.findCustomizeEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM Customize o", Customize.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
+    public static List<Customize> Customize.findCustomizeEntries(int firstResult, int maxResults, String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM Customize o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, Customize.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
     @Transactional

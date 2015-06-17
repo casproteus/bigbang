@@ -40,7 +40,7 @@ privileged aspect CircleController_Roo_Controller {
         populateEditForm(uiModel, new Circle());
         List<String[]> dependencies = new ArrayList<String[]>();
         if (UserAccount.countUserAccounts() == 0) {
-            dependencies.add(new String[] { "useraccount", "useraccounts" });
+            dependencies.add(new String[] { "owner", "useraccounts" });
         }
         uiModel.addAttribute("dependencies", dependencies);
         return "circles/create";
@@ -55,15 +55,15 @@ privileged aspect CircleController_Roo_Controller {
     }
     
     @RequestMapping(produces = "text/html")
-    public String CircleController.list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+    public String CircleController.list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "sortFieldName", required = false) String sortFieldName, @RequestParam(value = "sortOrder", required = false) String sortOrder, Model uiModel) {
         if (page != null || size != null) {
             int sizeNo = size == null ? 10 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("circles", Circle.findCircleEntries(firstResult, sizeNo));
+            uiModel.addAttribute("circles", Circle.findCircleEntries(firstResult, sizeNo, sortFieldName, sortOrder));
             float nrOfPages = (float) Circle.countCircles() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-            uiModel.addAttribute("circles", Circle.findAllCircles());
+            uiModel.addAttribute("circles", Circle.findAllCircles(sortFieldName, sortOrder));
         }
         addDateTimeFormatPatterns(uiModel);
         return "circles/list";

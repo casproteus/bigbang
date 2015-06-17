@@ -99,3 +99,6 @@ field number --type long --fieldName filesize --notNull true
 field string --fieldName contentType --notNull true
 exit
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2014-07-15 23:59:27
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-03-24 20:49:36
+exit
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-03-24 20:50:08

@@ -30,10 +30,10 @@ privileged aspect ContentDataOnDemand_Roo_DataOnDemand {
     private List<Content> ContentDataOnDemand.data;
     
     @Autowired
-    private BigTagDataOnDemand ContentDataOnDemand.bigTagDataOnDemand;
+    BigTagDataOnDemand ContentDataOnDemand.bigTagDataOnDemand;
     
     @Autowired
-    private UserAccountDataOnDemand ContentDataOnDemand.userAccountDataOnDemand;
+    UserAccountDataOnDemand ContentDataOnDemand.userAccountDataOnDemand;
     
     public Content ContentDataOnDemand.getNewTransientContent(int index) {
         Content obj = new Content();
@@ -116,13 +116,13 @@ privileged aspect ContentDataOnDemand_Roo_DataOnDemand {
             Content obj = getNewTransientContent(i);
             try {
                 obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
+            } catch (final ConstraintViolationException e) {
+                final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
-                    ConstraintViolation<?> cv = iter.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                    final ConstraintViolation<?> cv = iter.next();
+                    msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
                 }
-                throw new RuntimeException(msg.toString(), e);
+                throw new IllegalStateException(msg.toString(), e);
             }
             obj.flush();
             data.add(obj);

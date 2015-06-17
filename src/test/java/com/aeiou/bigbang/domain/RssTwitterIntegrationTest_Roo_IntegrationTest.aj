@@ -6,7 +6,10 @@ package com.aeiou.bigbang.domain;
 import com.aeiou.bigbang.domain.RssTwitter;
 import com.aeiou.bigbang.domain.RssTwitterDataOnDemand;
 import com.aeiou.bigbang.domain.RssTwitterIntegrationTest;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +22,12 @@ privileged aspect RssTwitterIntegrationTest_Roo_IntegrationTest {
     
     declare @type: RssTwitterIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: RssTwitterIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: RssTwitterIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: RssTwitterIntegrationTest: @Transactional;
     
     @Autowired
-    private RssTwitterDataOnDemand RssTwitterIntegrationTest.dod;
+    RssTwitterDataOnDemand RssTwitterIntegrationTest.dod;
     
     @Test
     public void RssTwitterIntegrationTest.testCountRssTwitters() {
@@ -101,7 +104,16 @@ privileged aspect RssTwitterIntegrationTest_Roo_IntegrationTest {
         RssTwitter obj = dod.getNewTransientRssTwitter(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'RssTwitter' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'RssTwitter' identifier to be null", obj.getId());
-        obj.persist();
+        try {
+            obj.persist();
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         obj.flush();
         Assert.assertNotNull("Expected 'RssTwitter' identifier to no longer be null", obj.getId());
     }

@@ -3,11 +3,9 @@
 
 package com.aeiou.bigbang.web;
 
-import java.util.ArrayList;
+import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.web.UserAccountController;
 import java.util.List;
-
-import javax.ws.rs.core.MultivaluedMap;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,24 +14,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.aeiou.bigbang.domain.UserAccount;
-import com.aeiou.bigbang.services.synchronization.SynchnizationManager;
-
-import flexjson.JSONDeserializer;
+import org.springframework.web.util.UriComponentsBuilder;
 
 privileged aspect UserAccountController_Roo_Controller_Json {
     
-    @RequestMapping(value = "/{id}", headers = "Accept=application/json")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseBody
     public ResponseEntity<String> UserAccountController.showJson(@PathVariable("id") Long id) {
-        UserAccount userAccount = UserAccount.findUserAccount(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        if (userAccount == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+        try {
+            UserAccount userAccount = UserAccount.findUserAccount(id);
+            if (userAccount == null) {
+                return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<String>(userAccount.toJson(), headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<String>(userAccount.toJson(), headers, HttpStatus.OK);
     }
     
     @RequestMapping(headers = "Accept=application/json")
@@ -41,144 +39,73 @@ privileged aspect UserAccountController_Roo_Controller_Json {
     public ResponseEntity<String> UserAccountController.listJson() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        List<UserAccount> result = UserAccount.findAllUserAccounts();
-        return new ResponseEntity<String>(UserAccount.toJsonArray(result), headers, HttpStatus.OK);
+        try {
+            List<UserAccount> result = UserAccount.findAllUserAccounts();
+            return new ResponseEntity<String>(UserAccount.toJsonArray(result), headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> UserAccountController.createFromJson(@RequestBody String json) {
-        UserAccount userAccount = UserAccount.fromJsonToUserAccount(json);
-        userAccount.persist();
+    public ResponseEntity<String> UserAccountController.createFromJson(@RequestBody String json, UriComponentsBuilder uriBuilder) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
-    }
-    
-    @RequestMapping(value = "/1210_syncdb", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> UserAccountController.createFromJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			if(tList.size() == 6)
-				tSyncManager.saveContentIntoLocalDB(tList, "1210_syncdb");
-    	}
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb"), headers, HttpStatus.OK);
-    }
-    
-    @RequestMapping(value = "/1210_syncdb_ua", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> UserAccountController.createFromUAJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			tSyncManager.saveUserAccountToLocalDB(tList.get(0));
-    	}
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_ua"), headers, HttpStatus.OK);
-    }
-    
-    @RequestMapping(value = "/1210_syncdb_tg", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> UserAccountController.createFromTGJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			tSyncManager.saveTagsToLocalDB(tList.get(0));
-    	}
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_tg"), headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/1210_syncdb_ms", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> UserAccountController.createFromMSJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			tSyncManager.saveMessagesToLocalDB(tList.get(0));
-    	}
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_ms"), headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/1210_syncdb_bg", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> UserAccountController.createFromBGJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			tSyncManager.saveBlogsToLocalDB(tList.get(0));
-    	}
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_bg"), headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/1210_syncdb_rm", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> UserAccountController.createFromRMJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			tSyncManager.saveRemarksToLocalDB(tList.get(0));
-    	}
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_rm"), headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/1210_syncdb_bm", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> UserAccountController.createFromBMJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			tSyncManager.saveBookmarksToLocalDB(tList.get(0));
-    	}
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_bm"), headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String> UserAccountController.updateFromJson(@RequestBody String json) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        UserAccount userAccount = UserAccount.fromJsonToUserAccount(json);
-        if (userAccount.merge() == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+        try {
+            UserAccount userAccount = UserAccount.fromJsonToUserAccount(json);
+            userAccount.persist();
+            RequestMapping a = (RequestMapping) getClass().getAnnotation(RequestMapping.class);
+            headers.add("Location",uriBuilder.path(a.value()[0]+"/"+userAccount.getId().toString()).build().toUriString());
+            return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/jsonArray", method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String> UserAccountController.updateFromJsonArray(@RequestBody String json) {
+    @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> UserAccountController.createFromJsonArray(@RequestBody String json) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        for (UserAccount userAccount: UserAccount.fromJsonArrayToUserAccounts(json)) {
+        try {
+            for (UserAccount userAccount: UserAccount.fromJsonArrayToUserAccounts(json)) {
+                userAccount.persist();
+            }
+            return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, headers = "Accept=application/json")
+    public ResponseEntity<String> UserAccountController.updateFromJson(@RequestBody String json, @PathVariable("id") Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        try {
+            UserAccount userAccount = UserAccount.fromJsonToUserAccount(json);
+            userAccount.setId(id);
             if (userAccount.merge() == null) {
                 return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
             }
+            return new ResponseEntity<String>(headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public ResponseEntity<String> UserAccountController.deleteFromJson(@PathVariable("id") Long id) {
-        UserAccount userAccount = UserAccount.findUserAccount(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        if (userAccount == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+        try {
+            UserAccount userAccount = UserAccount.findUserAccount(id);
+            if (userAccount == null) {
+                return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+            }
+            userAccount.remove();
+            return new ResponseEntity<String>(headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        userAccount.remove();
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
     
 }

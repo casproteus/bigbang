@@ -14,6 +14,8 @@ privileged aspect MediaUpload_Roo_Jpa_ActiveRecord {
     @PersistenceContext
     transient EntityManager MediaUpload.entityManager;
     
+    public static final List<String> MediaUpload.fieldNames4OrderClauseFilter = java.util.Arrays.asList("filepath", "filesize", "contentType", "content");
+    
     public static final EntityManager MediaUpload.entityManager() {
         EntityManager em = new MediaUpload().entityManager;
         if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
@@ -28,6 +30,17 @@ privileged aspect MediaUpload_Roo_Jpa_ActiveRecord {
         return entityManager().createQuery("SELECT o FROM MediaUpload o", MediaUpload.class).getResultList();
     }
     
+    public static List<MediaUpload> MediaUpload.findAllMediaUploads(String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM MediaUpload o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, MediaUpload.class).getResultList();
+    }
+    
     public static MediaUpload MediaUpload.findMediaUpload(Long id) {
         if (id == null) return null;
         return entityManager().find(MediaUpload.class, id);
@@ -35,6 +48,17 @@ privileged aspect MediaUpload_Roo_Jpa_ActiveRecord {
     
     public static List<MediaUpload> MediaUpload.findMediaUploadEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM MediaUpload o", MediaUpload.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
+    public static List<MediaUpload> MediaUpload.findMediaUploadEntries(int firstResult, int maxResults, String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM MediaUpload o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, MediaUpload.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
     @Transactional

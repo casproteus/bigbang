@@ -13,19 +13,33 @@ import java.util.List;
 privileged aspect Remark_Roo_Json {
     
     public String Remark.toJson() {
-        return new JSONSerializer().exclude("*.class").serialize(this);
+        return new JSONSerializer()
+        .exclude("*.class").serialize(this);
+    }
+    
+    public String Remark.toJson(String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(this);
     }
     
     public static Remark Remark.fromJsonToRemark(String json) {
-        return new JSONDeserializer<Remark>().use(null, Remark.class).deserialize(json);
+        return new JSONDeserializer<Remark>()
+        .use(null, Remark.class).deserialize(json);
     }
     
     public static String Remark.toJsonArray(Collection<Remark> collection) {
-        return new JSONSerializer().exclude("*.class").serialize(collection);
+        return new JSONSerializer()
+        .exclude("*.class").serialize(collection);
+    }
+    
+    public static String Remark.toJsonArray(Collection<Remark> collection, String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(collection);
     }
     
     public static Collection<Remark> Remark.fromJsonArrayToRemarks(String json) {
-        return new JSONDeserializer<List<Remark>>().use(null, ArrayList.class).use("values", Remark.class).deserialize(json);
+        return new JSONDeserializer<List<Remark>>()
+        .use("values", Remark.class).deserialize(json);
     }
     
 }

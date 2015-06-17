@@ -21,8 +21,11 @@ privileged aspect UserAccountController_Roo_Controller {
         uiModel.addAttribute("itemId", id);
         return "useraccounts/show";
     }
-        
     
+    void UserAccountController.populateEditForm(Model uiModel, UserAccount userAccount) {
+        uiModel.addAttribute("userAccount", userAccount);
+        uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
+    }
     
     String UserAccountController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
         String enc = httpServletRequest.getCharacterEncoding();

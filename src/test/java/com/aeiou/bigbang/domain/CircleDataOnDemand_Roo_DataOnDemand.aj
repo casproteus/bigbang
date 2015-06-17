@@ -29,7 +29,7 @@ privileged aspect CircleDataOnDemand_Roo_DataOnDemand {
     private List<Circle> CircleDataOnDemand.data;
     
     @Autowired
-    private UserAccountDataOnDemand CircleDataOnDemand.userAccountDataOnDemand;
+    UserAccountDataOnDemand CircleDataOnDemand.userAccountDataOnDemand;
     
     public Circle CircleDataOnDemand.getNewTransientCircle(int index) {
         Circle obj = new Circle();
@@ -100,13 +100,13 @@ privileged aspect CircleDataOnDemand_Roo_DataOnDemand {
             Circle obj = getNewTransientCircle(i);
             try {
                 obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
+            } catch (final ConstraintViolationException e) {
+                final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
-                    ConstraintViolation<?> cv = iter.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                    final ConstraintViolation<?> cv = iter.next();
+                    msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
                 }
-                throw new RuntimeException(msg.toString(), e);
+                throw new IllegalStateException(msg.toString(), e);
             }
             obj.flush();
             data.add(obj);

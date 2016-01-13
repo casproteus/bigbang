@@ -8,8 +8,8 @@
   <spring:message code="public" htmlEscape="false" var="publicspace"/>
   <spring:message code="publicDescription" htmlEscape="false" var="publicDescription"/>
   <spring:message code="NotesAndPraysOfFriend" htmlEscape="false" arguments="${spaceOwner}" var="NotesAndPraysFromFriend"/>
- 
-  <!-- If this file file changed in any line, don't forget to change the three file under deploy folder -->
+
+  <!-- If this file changed in any line, don't forget to change the three file under deploy folder -->
   
   <!-- The Title Area, including owner info, butttons for adding blog, adding bookmark, leaving message and addon. -->
   <c:choose>
@@ -91,31 +91,77 @@
   
   <!-- display the bookmarks of the user. -->
   <!-- c:set var="tagsize" value="${bigTags.size()}" scope="request" /> -->
-  <table class="tWireless"><tr>
-  	<td class="tWireless nopaddingleft" valign="top">
-	  	<c:forEach items="${contentsLeft}" var="content" varStatus="num">			<!-- don't need these two params anymore: begin="0" end="${tagsize/2 - 1}" -->
-		  <page:contentPane id="contentlistleft${(num.count - 1)}" items="${content}" label="${bigTagsLeft[num.count - 1]}" tagId="${tagIdsLeft[num.count - 1]}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
-		    <table:contentbox data="${content}" id="l_com_aeiou_bigbang_domain_Content" path="/public" tagId="${tagIdsLeft[num.count - 1]}" spaceOwner="${spaceOwner}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
-		        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
-		        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="sourceURL" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
-		        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
-		    </table:contentbox>
-		  </page:contentPane>
-	  </c:forEach>
-  	</td>
-  	<td class="tWireless nopaddingright" valign="top" >
-  		<c:forEach items="${contentsRight}" var="content" varStatus="num">
-		  <page:contentPane id="contentlistright${(num.count - 1)}" items="${content}" label="${bigTagsRight[num.count - 1]}" tagId="${tagIdsRight[num.count - 1]}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
-		    <table:contentbox data="${content}" id="l_com_aeiou_bigbang_domain_Content" path="/public" tagId="${tagIdsRight[num.count - 1]}" spaceOwner="${spaceOwner}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
-		        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
-		        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="sourceURL" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
-		        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
-		    </table:contentbox>
-		  </page:contentPane>
-	  </c:forEach>
-  	</td>
-  </tr></table>
-  <!-- <div data-dojo-type="dijit.Dialog" id="formDialog" title="Form Dialog"  execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
+	<table class="tWireless">
+		<tr>
+			<td class="tWireless nopaddingleft" valign="top">
+				<c:forEach items="${contentsLeft}" var="content" varStatus="num">
+					<!-- don't need these two params anymore: begin="0" end="${tagsize/2 - 1}" -->
+					<page:contentPane id="contentlistleft${(num.count - 1)}"
+						items="${content}" label="${bigTagsLeft[num.count - 1]}"
+						tagId="${tagIdsLeft[num.count - 1]}"
+						z="hnfyfk7YNdTBdBza4/mViLT4aos=">
+						<table:contentbox data="${content}"
+							id="l_com_aeiou_bigbang_domain_Content" path="/public"
+							tagId="${tagIdsLeft[num.count - 1]}" spaceOwner="${spaceOwner}"
+							z="lLVLIzUb5uufSIaV72f5pNvyScI=">
+							<table:column id="c_com_aeiou_bigbang_domain_Content_title"
+								property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />
+							<table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL"
+								property="sourceURL" z="s58Apv8PkSRyKzF8JLn0IqIrTNc=" />
+							<table:column id="c_com_aeiou_bigbang_domain_Content_publisher"
+								property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
+						</table:contentbox>
+					</page:contentPane>
+				</c:forEach>
+			</td>
+			<td class="tWireless nopaddingright" valign="top">
+				<c:forEach items="${contentsRight}" var="content" varStatus="num">
+					<page:contentPane id="contentlistright${(num.count - 1)}"
+						items="${content}" label="${bigTagsRight[num.count - 1]}"
+						tagId="${tagIdsRight[num.count - 1]}"
+						z="hnfyfk7YNdTBdBza4/mViLT4aos=">
+						<table:contentbox data="${content}"
+							id="l_com_aeiou_bigbang_domain_Content" path="/public"
+							tagId="${tagIdsRight[num.count - 1]}" spaceOwner="${spaceOwner}"
+							z="lLVLIzUb5uufSIaV72f5pNvyScI=">
+							<table:column id="c_com_aeiou_bigbang_domain_Content_title"
+								property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />
+							<table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL"
+								property="sourceURL" z="s58Apv8PkSRyKzF8JLn0IqIrTNc=" />
+							<table:column id="c_com_aeiou_bigbang_domain_Content_publisher"
+								property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
+						</table:contentbox>
+					</page:contentPane>
+				</c:forEach>
+			</td>
+		</tr>
+	</table>
+	<!-- for sharethis,  while seems no effect -->
+	<script type="text/javascript">
+		stLight.options({
+			publisher : "a1800cce-5aac-40c5-8fbd-e0e4c83315a0",
+			doNotHash : false,
+			doNotCopy : false,
+			hashAddressBar : false
+		});
+	</script>
+	<script>
+		var options = {
+			"publisher" : "a1800cce-5aac-40c5-8fbd-e0e4c83315a0",
+			"position" : "right",
+			"ad" : {
+				"visible" : false,
+				"openDelay" : 5,
+				"closeDelay" : 0
+			},
+			"chicklets" : {
+				"items" : [ "facebook", "twitter", "linkedin", "email",
+						"sharethis", "googleplus" ]
+			}
+		};
+		var st_hover_widget = new sharethis.widgets.hoverbuttons(options);
+	</script>
+	<!-- <div data-dojo-type="dijit.Dialog" id="formDialog" title="Form Dialog"  execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
     <table>
         <tr>
             <td><label for="date">End date: </label></td>

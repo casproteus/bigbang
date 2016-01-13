@@ -1,26 +1,27 @@
 package com.aeiou.bigbang.domain;
 
-import flexjson.JSONSerializer;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ManyToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.springframework.format.annotation.DateTimeFormat;
+
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
+
+import com.aeiou.bigbang.util.BigUtil;
+
+import flexjson.JSONSerializer;
 
 @RooJavaBean
 @RooToString
@@ -64,7 +65,24 @@ public class UserAccount {
         List<UserAccount> tList = tQuery.getResultList();
         if (tList != null && tList.size() == 1) return (UserAccount) tList.get(0); else return null;
     }
-
+    
+    public static com.aeiou.bigbang.domain.UserAccount findUserAccountByNameAndPassword(String pUserNameAndPassword) {
+    	int p = pUserNameAndPassword.indexOf(BigUtil.SEP_ITEM);
+    	if(p < 0) return null;
+    	
+    	String pUserName = pUserNameAndPassword.substring(0, p);
+    	String pPassword = pUserNameAndPassword.substring(p);
+        TypedQuery<UserAccount> tQuery = entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)", UserAccount.class);
+        tQuery = tQuery.setParameter("tname", pUserName);
+        List<UserAccount> tList = tQuery.getResultList();
+        if (tList != null && tList.size() == 1){ 
+        	UserAccount tUserAccount = (UserAccount) tList.get(0); 
+        	if (tUserAccount.getPassword().equals(pPassword))
+        		return tUserAccount;
+        }
+        return null;
+    }
+    
     public String toString() {
         return this.getName();
     }

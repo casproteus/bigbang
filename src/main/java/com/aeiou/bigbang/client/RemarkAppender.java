@@ -38,8 +38,8 @@ import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
 public class RemarkAppender extends JFrame implements ActionListener, ListSelectionListener, WindowListener{
-	String path = "http://my-bookmark.rhcloud.com/useraccounts/";
-	//String path = "http://localhost/bigbang/useraccounts/";
+	//String path = "http://my-bookmark.rhcloud.com/useraccount/";
+	String path = "http://localhost/bigbang/useraccount/";
 	
 	JTextPane editor;
 	JTextPane twitterContent;
@@ -152,7 +152,7 @@ public class RemarkAppender extends JFrame implements ActionListener, ListSelect
 			SortableList sl = new SortableList(tBlogList);
 			return sl.getTwitters();
 		}
-		return null;
+		return new ArrayList<Twitter>();
 	}
 	
 	private List<Remark> getAllRemarks(){
@@ -215,6 +215,8 @@ public class RemarkAppender extends JFrame implements ActionListener, ListSelect
 			valueChanged(new ListSelectionEvent(blogList, -1, -1, true));
 			
 			editor.setText("");
+		}else{
+			editor.setText(editor.getText() + "/n" + "request failed!");
 		}
 	}
 

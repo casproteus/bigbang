@@ -42,14 +42,14 @@ public class CustomizeController {
 		tCurName = tOwner.getName();
 		
 		List<BigTag> commonCheckedBMTags = BigTag.findBMTagsByOwner(null);				//the tags created by admin and administrators
-		List<BigTag> uncommonCheckedBMTags = BigTag.findBMTagsByOwner(tCurName);		//the tags created by user and user's friends.
-		String layoutString = tOwner.getLayout();
 		List<BigTag> commonUnCheckedBMTags = new ArrayList<BigTag>();
+		List<BigTag> uncommonCheckedBMTags = BigTag.findBMTagsByOwner(tCurName);		//the tags created by user and user's friends.
 		List<BigTag> uncommonUnCheckedBMTags = new ArrayList<BigTag>();
+		String layoutString = tOwner.getLayout();
 		
 		for (int i = commonCheckedBMTags.size() - 1; i >= 0; i--){
 			String tTagStr = BigUtil.getTagInLayoutString(commonCheckedBMTags.get(i));
-			if(layoutString.indexOf(tTagStr) < 0){
+			if(layoutString != null && layoutString.indexOf(tTagStr) < 0){
 				commonUnCheckedBMTags.add(commonCheckedBMTags.get(i));
 				commonCheckedBMTags.remove(i);
 			}
@@ -57,7 +57,7 @@ public class CustomizeController {
 
 		for (int i = uncommonCheckedBMTags.size() - 1; i >= 0; i--){
 			String tTagStr = BigUtil.getTagInLayoutString(uncommonCheckedBMTags.get(i));
-			if(layoutString.indexOf(tTagStr) < 0){
+			if(layoutString != null && layoutString.indexOf(tTagStr) < 0){
 				uncommonUnCheckedBMTags.add(uncommonCheckedBMTags.get(i));
 				uncommonCheckedBMTags.remove(i);
 			}

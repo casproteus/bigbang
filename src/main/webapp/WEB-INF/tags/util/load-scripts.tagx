@@ -28,5 +28,8 @@
   <script src="${spring_url}" type="text/javascript"><!-- /required for FF3 and Opera --></script>
   <script src="${spring_dojo_url}" type="text/javascript"><!-- required for FF3 and Opera --></script>
   <script language="JavaScript" type="text/javascript">dojo.require("dojo.parser");</script>
-
+    <!-- for sharethis.com, while seems no effect -->
+  <script type="text/javascript">var switchTo5x=true;</script>
+  <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"><!-- required for FF3 and Opera --></script>
+  <script type="text/javascript" src="http://s.sharethis.com/loader.js"><!-- required for FF3 and Opera --></script>
 </jsp:root>

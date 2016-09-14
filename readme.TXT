@@ -51,3 +51,7 @@ know bugs:
 1/works better with the tomcat6 on rhcloud, when work with the tomcat7 on rhcloud, the select component will not pop up the options (when with my local tomcat7.0.27 everything's fine, so NOW I AM THINKING ABOUT IT MIGHT BE IE64/IE32 PROBLEM).
 2/
 
+OTHERS
+1/the difference between each header.jspx is that the booklet.jspx pointing to different url, and save current webpage to different website.
+2/the difference between each crate.jspx  is that the help information are different.
+

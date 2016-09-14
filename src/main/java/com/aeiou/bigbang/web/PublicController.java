@@ -33,7 +33,7 @@ import com.aeiou.bigbang.web.beans.RefreshBean;
 
 @RequestMapping("/public")
 @Controller
-public class PublicController{
+public class PublicController extends BaseController{
 	
 	@Inject
 	private UserContextService userContextService;
@@ -46,8 +46,8 @@ public class PublicController{
     }
     
     @RequestMapping(produces = "text/html")
-    public String index( Model uiModel){
-    	
+    public String index( Model uiModel, HttpServletRequest request){
+    	init(uiModel, request);
     	String[] tAryTagStrsLeft = null;
     	String[] tAryTagStrsRight = null;
     	String[] tAryNumStrsLeft = null;
@@ -462,7 +462,7 @@ public class PublicController{
     	String tCurName = userContextService.getCurrentUserName();
     	//@Note:this method can be called by logoutfilter when click the logout link, don't know the reason yet. so for now, just add a check of the curname.
     	if(tCurName ==  null){
-    		return(index(uiModel));
+    		return(index(uiModel,request));
     	}
     	
 		PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);

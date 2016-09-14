@@ -38,8 +38,8 @@ import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
 public class RemarkAppender extends JFrame implements ActionListener, ListSelectionListener, WindowListener{
-	//String path = "http://my-bookmark.rhcloud.com/useraccount/";
-	String path = "http://localhost/bigbang/useraccount/";
+	String path = "http://mon-bookmark.rhcloud.com/useraccounts/";
+	//String path = "http://localhost/bigbang/useraccounts/";
 	
 	JTextPane editor;
 	JTextPane twitterContent;

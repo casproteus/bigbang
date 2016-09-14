@@ -39,7 +39,7 @@ import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/")
 @Controller
-public class PersonalController{
+public class PersonalController extends BaseController{
 	@Inject
 	private UserContextService userContextService;
 
@@ -59,6 +59,7 @@ public class PersonalController{
     			return null;
     	}
 
+    	init(uiModel, request);
         BigUtil.checkTheme(tOwner, request);
     	
     	spaceOwner = tOwner.getName();

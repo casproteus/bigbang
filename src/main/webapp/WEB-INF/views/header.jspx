@@ -34,6 +34,13 @@
 	    </span>
   	 </c:when>
   	 <c:otherwise>
+  	    <input id="proceed" type="image" value="${fn:escapeXml(submit_label)}" style="vertical-align:bottom; width: 0px; height: 0px; border-bottom: 0px; border-top: 0px"/>
+  	 
+        <input id="j_rememberme" name="j_rememberme" type="checkbox" style="vertical-align:top; height:14px;">
+      	  <spring:message code="label_rememberme" htmlEscape="false" />
+        </input>
+        
+        <c:out value=" | "/>
         <spring:message code="security_login_form_name" />
         <input id="j_username" type='text' name='j_username' style="width:60px; height:16px;" />
         <script type="text/javascript">
@@ -65,13 +72,6 @@
 		  }
 	    </script>
 	    
-      	<c:out value=" | "/>
-        <input id="j_rememberme" name="j_rememberme" type="checkbox" style="vertical-align:top; height:14px;">
-      	  <spring:message code="label_rememberme" htmlEscape="false" />
-        </input>
-          
-        <input id="proceed" type="image" value="${fn:escapeXml(submit_label)}" style="vertical-align:bottom; width: 0px; height: 0px; border-bottom: 0px; border-top: 0px"/>
-        
         <script type="text/javascript">
 			dojo.addOnLoad(function() {
 			  dojo.require("dojo.cookie");
@@ -101,8 +101,7 @@
   </c:choose>
   
   <span class="new">
-  	<spring:message code="AddOnNotice2" htmlEscape="false"/>
-    <spring:message code="AddOnNotice" htmlEscape="false" var="AddOnNotice"/>
+  	${AddOnNotice}
 	<spring:url value="/resources/images/addon.png" var="addon_img_url" />
 	<img src="${addon_img_url}" style="vertical-align: bottom;"/>
 	<a href='javascript:(
@@ -146,8 +145,9 @@
 	        e[o](u,a,false)
 	      },1)
 	    }
-	  )(window)' title="${AddOnNotice}">
-	  <spring:message code="AddOnName" htmlEscape="false"/>
+	  )(window)' title="${Tit_AddOnNotice}">
+	  <!-- spring:message code="AddOnName" htmlEscape="false"/-->
+	  ${Btn_Booklet}
 	</a>
   <c:if test="${pageContext['request'].userPrincipal != null}">
       <c:out value=" || "/>

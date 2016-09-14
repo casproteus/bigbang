@@ -2,11 +2,34 @@
 <div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
 	 xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" 
 	 xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" id="footer" version="2.0">
-  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-  <jsp:output omit-xml-declaration="yes"/>
+  	<jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  	<jsp:output omit-xml-declaration="yes"/>
 
-  <util:theme/>
-  <util:websiteSwitch/>
+  	<util:theme/>
+  	<!-- util:websiteSwitch/>
+  	 -->
+	<!-- language bar -->
+	<span class="new" style="color: #AAAAAA;">
+		<c:if test="${zh != null}">
+			<util:language label="Chinese" locale="zh"/>
+		</c:if>
+		<c:if test="${en != null}">
+			<c:out value=" | "/>
+			<util:language label="English" locale="en"/>
+		</c:if>
+		<c:if test="${fr != null}">
+			<c:out value=" | "/>
+			<util:language label="French" locale="fr"/>
+		</c:if>
+		<c:if test="${es != null}">
+			<c:out value=" | "/>
+			<util:language label="Spanish" locale="es"/>
+		</c:if>
+		<c:if test="${it != null}">
+			<c:out value=" | "/>
+			<util:language label="Italian" locale="it"/>
+		</c:if>
+	</span>
   <br/>
   <div style="color: #AAAAAA; text-align: right;">
    ©Copyright 2012 - 2014 | info@sharethegoodones.com

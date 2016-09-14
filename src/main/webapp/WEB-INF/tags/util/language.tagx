@@ -6,7 +6,6 @@
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
 
   <c:if test="${empty render or render}">
-    <spring:url var="img" value="/resources/images/${locale}.png" />
     <spring:url var="url" value="">
       <c:if test="${null ne param.form}">
         <spring:param name="form" />
@@ -23,8 +22,14 @@
       </c:if>
     </spring:url>
     <spring:message code="global_language_switch" arguments="${label}" var="lang_label" htmlEscape="false" />
-    <a href="${url}" title="${fn:escapeXml(lang_label)}">
-      <img class="flag" src="${img}" alt="${fn:escapeXml(lang_label)}" />
+    <a href="${url}" title="${fn:escapeXml(lang_label)}" style="padding-right: 25px; padding-left: 25px; text-align: right;">
+	    <c:if test="${true eq indicate_language_with_image}">
+	    	<spring:url var="img" value="/resources/images/${locale}.png" />
+      		<img class="flag" src="${img}" alt="${fn:toUpperCase(locale)}" />
+	    </c:if>
+	    <c:if test="${true ne indicate_language_with_image}">
+      		${fn:toUpperCase(locale)}
+	    </c:if>
     </a>
     <c:out value=" " />
   </c:if>

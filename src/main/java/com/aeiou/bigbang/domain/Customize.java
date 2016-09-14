@@ -22,7 +22,7 @@ public class Customize {
     private String cusKey;
 
     @NotNull
-    @Column(unique = true)
+    @Column
     private String cusValue;
     
     

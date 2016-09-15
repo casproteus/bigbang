@@ -51,14 +51,15 @@ public class BaseController {
 	}
 	
 	//find the language property from user request, if not matching the language in current session, return default resource texts.
+	//only when the local is in five supported lang, and the flag in customize table is set as "true", it will be returned.
 	private String decideDefaultLang(HttpServletRequest request){
 		Locale locale = request.getLocale();
 		String tlang = locale == null ? "en" : locale.getLanguage();
-		if (("en".equals(tlang) && request.getSession().getAttribute("en") != null) ||
-			("fr".equals(tlang) && request.getSession().getAttribute("fr") != null) ||
-			("zh".equals(tlang) && request.getSession().getAttribute("zh") != null) ||
-			("it".equals(tlang) && request.getSession().getAttribute("it") != null) ||
-			("es".equals(tlang) && request.getSession().getAttribute("es") != null)){
+		if (("en".equals(tlang) && request.getSession().getAttribute("en") != "true") ||
+			("fr".equals(tlang) && request.getSession().getAttribute("fr") != "true") ||
+			("zh".equals(tlang) && request.getSession().getAttribute("zh") != "true") ||
+			("it".equals(tlang) && request.getSession().getAttribute("it") != "true") ||
+			("es".equals(tlang) && request.getSession().getAttribute("es") != "true")){
 			return tlang;
 		}
 		return "en";

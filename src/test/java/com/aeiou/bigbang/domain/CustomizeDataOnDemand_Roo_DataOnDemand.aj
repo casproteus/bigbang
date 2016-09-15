@@ -5,6 +5,7 @@ package com.aeiou.bigbang.domain;
 
 import com.aeiou.bigbang.domain.Customize;
 import com.aeiou.bigbang.domain.CustomizeDataOnDemand;
+import com.aeiou.bigbang.domain.UserAccountDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect CustomizeDataOnDemand_Roo_DataOnDemand {
@@ -21,6 +23,9 @@ privileged aspect CustomizeDataOnDemand_Roo_DataOnDemand {
     private Random CustomizeDataOnDemand.rnd = new SecureRandom();
     
     private List<Customize> CustomizeDataOnDemand.data;
+    
+    @Autowired
+    UserAccountDataOnDemand CustomizeDataOnDemand.userAccountDataOnDemand;
     
     public Customize CustomizeDataOnDemand.getNewTransientCustomize(int index) {
         Customize obj = new Customize();

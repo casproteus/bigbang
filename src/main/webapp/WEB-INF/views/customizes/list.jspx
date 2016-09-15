@@ -6,6 +6,7 @@
         <table:table data="${customizes}" id="l_com_aeiou_bigbang_domain_Customize" path="/customizes" z="pQltmqdQuaiec67XNnaxtkxnME4=">
             <table:column id="c_com_aeiou_bigbang_domain_Customize_cusKey" property="cusKey" z="HWTWIT/JLC7NpI5Y+w41TzrZ1Io="/>
             <table:column id="c_com_aeiou_bigbang_domain_Customize_cusValue" property="cusValue" z="d6qQofxPs4+lKeQES5npWUhDDH8="/>
+            <table:column id="c_com_aeiou_bigbang_domain_Customize_useraccount" property="useraccount" z="dEZTovr4vHhHifJqi6kbpGX2GvU="/>
         </table:table>
     </page:list>
 </div>

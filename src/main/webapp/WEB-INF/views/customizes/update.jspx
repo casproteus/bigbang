@@ -5,5 +5,6 @@
     <form:update id="fu_com_aeiou_bigbang_domain_Customize" modelAttribute="customize" path="/customizes" versionField="Version" z="K80yvgKJBAXcTEVVMxwBFLitqaI=">
         <field:input field="cusKey" id="c_com_aeiou_bigbang_domain_Customize_cusKey" required="true" z="HO9aIF84v1b4Wftey3dUTTKPbfM="/>
         <field:input field="cusValue" id="c_com_aeiou_bigbang_domain_Customize_cusValue" required="true" z="MOcvgduXIUlASmNlHuNwrbU06ZM="/>
+        <field:select field="useraccount" id="c_com_aeiou_bigbang_domain_Customize_useraccount" itemValue="id" items="${useraccounts}" path="/useraccounts" z="KLa4Y5q58LX598K80S99zUUUSZ0="/>
     </form:update>
 </div>

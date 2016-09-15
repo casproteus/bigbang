@@ -4,6 +4,7 @@
 package com.aeiou.bigbang.web;
 
 import com.aeiou.bigbang.domain.Customize;
+import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.web.CustomizeController;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
@@ -86,6 +87,7 @@ privileged aspect CustomizeController_Roo_Controller {
     
     void CustomizeController.populateEditForm(Model uiModel, Customize customize) {
         uiModel.addAttribute("customize", customize);
+        uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
     }
     
     String CustomizeController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

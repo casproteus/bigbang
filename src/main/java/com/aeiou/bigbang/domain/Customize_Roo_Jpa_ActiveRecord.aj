@@ -14,7 +14,7 @@ privileged aspect Customize_Roo_Jpa_ActiveRecord {
     @PersistenceContext
     transient EntityManager Customize.entityManager;
     
-    public static final List<String> Customize.fieldNames4OrderClauseFilter = java.util.Arrays.asList("cusKey", "cusValue");
+    public static final List<String> Customize.fieldNames4OrderClauseFilter = java.util.Arrays.asList("cusKey", "cusValue", "useraccount");
     
     public static final EntityManager Customize.entityManager() {
         EntityManager em = new Customize().entityManager;

@@ -59,7 +59,7 @@ public class PersonalController extends BaseController{
     			return null;
     	}
 
-    	init(uiModel, request);
+    	init(tOwner, uiModel, request);
         BigUtil.checkTheme(tOwner, request);
     	
     	spaceOwner = tOwner.getName();

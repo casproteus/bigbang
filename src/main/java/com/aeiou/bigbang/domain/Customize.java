@@ -1,4 +1,5 @@
 package com.aeiou.bigbang.domain;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
@@ -17,7 +18,7 @@ import javax.persistence.ManyToOne;
 public class Customize {
 
     @NotNull
-    @Column(unique = true)
+    @Column
     private String cusKey;
 
     @NotNull
@@ -34,7 +35,20 @@ public class Customize {
             return null;
         }
     }
-
+    
+    public static List<Customize> findCustomizesByOwner(UserAccount pOwner) {
+    	if (pOwner == null){
+    		pOwner = UserAccount.findUserAccountByName("admin");
+    	}
+        EntityManager tEntityManager = entityManager();
+        TypedQuery<Customize> tQuery = tEntityManager.createQuery("SELECT o FROM Customize AS o WHERE o.useraccount = :owner", Customize.class);
+        tQuery = tQuery.setParameter("owner", pOwner);
+        try {
+            return tQuery.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
     /**
      */
     @ManyToOne

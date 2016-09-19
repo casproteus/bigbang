@@ -22,7 +22,7 @@
       </c:if>
     </spring:url>
     <spring:message code="global_language_switch" arguments="${label}" var="lang_label" htmlEscape="false" />
-    <a href="${url}" title="${fn:escapeXml(lang_label)}" style="padding-right: 25px; padding-left: 25px; text-align: right;">
+    <a href="${url}" title="${fn:escapeXml(lang_label)}" style="padding-right: 8px; padding-left: 8px; text-align: right;">
 	    <c:if test="${true eq indicate_language_with_image}">
 	    	<spring:url var="img" value="/resources/images/${locale}.png" />
       		<img class="flag" src="${img}" alt="${fn:toUpperCase(locale)}" />

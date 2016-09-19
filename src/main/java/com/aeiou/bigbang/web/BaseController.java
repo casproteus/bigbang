@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.aeiou.bigbang.domain.Customize;
+import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 
 @Controller
@@ -31,28 +32,39 @@ public class BaseController {
 		return userContextService.getCurrentUserName();
 	}
     
-	protected void init(Model model, HttpServletRequest request){
-		//get the session out
+    /**
+     * if the language is switched, or visiting a different owner's space, then re-init the texts on customisable areas (header and footer)
+     * @param pOwner
+     * @param model
+     * @param request
+     */
+	protected void init(UserAccount pOwner, Model model, HttpServletRequest request){
+		
 		HttpSession session = request.getSession();
 		
-		//if the language is switched, then reinit the texts on common area (header and footer)
-		Object tlang = request.getParameter("lang");			//language in request
-		Object tLangExisting = session.getAttribute("lang");	//language existing
-		if(tlang != null){				//user is clicking the language button
-			if(!tlang.equals(tLangExisting)){	// and the new setted languagd is different from old one.
-				session.setAttribute("lang", tlang);	//then set the new one into session.
-				reinitCommonText(session, tlang);
-			}
-		}else if(tLangExisting == null){//not the case that luanguage is being clicked. and in session, no language set yet.
-			tlang = decideDefaultLang(request);
-			session.setAttribute("lang", tlang);	//set it as en.
-			reinitCommonText(session, tlang);
+		if(session.getAttribute("lang") == null){	//first visiting, no language set yet. (beginning of visiting)
+			session.setAttribute("lang", decideDefaultLang(request));
 		}
+		Object tlang = request.getParameter("lang");			//language in request
+		
+		if(!pOwner.getId().equals(session.getAttribute("CurrentOwnerID"))){	//first visit or user is visiting different owner page.
+			reinitCommonText(pOwner, session, tlang); //
+		} else if(tlang != null){				//same owner page while user is clicking the language button
+			if(!session.getAttribute("lang").equals(tlang)){	// and the new setted languagd is different from old one.
+				session.setAttribute("lang", tlang);	//then set the new one into session.
+				reinitCommonText(pOwner, session, tlang);
+			}
+		}
+		session.setAttribute("CurrentOwnerID", pOwner.getId());
 	}
 	
-	//find the language property from user request, if not matching the language in current session, return default resource texts.
-	//only when the local is in five supported lang, and the flag in customize table is set as "true", it will be returned.
-	private String decideDefaultLang(HttpServletRequest request){
+	/**
+	 * find the language property from user request, if not matching supported language, return default resource texts.
+	 * only when the local is in five supported lang, and the flag in customize table is set as "true", request.locale will be returned.
+	 * @param request
+	 * @return
+	 */
+	protected String decideDefaultLang(HttpServletRequest request){
 		Locale locale = request.getLocale();
 		String tlang = locale == null ? "en" : locale.getLanguage();
 		if (("en".equals(tlang) && request.getSession().getAttribute("en") != "true") ||
@@ -66,14 +78,53 @@ public class BaseController {
 	}
 	
 	//load all customizes into session to allow the webpage costomizable.
-	protected void reinitCommonText(HttpSession session, Object tlang){
+	//when visiting public page, the 
+	private void reinitCommonText(UserAccount pOwner, HttpSession session, Object plang){
 
-		if(session.getAttribute("user_role") == null)
+		if(session.getAttribute("user_role") == null){
 			session.setAttribute("user_role", "");
+		}
+		if(plang == null){
+			plang = session.getAttribute("lang");
+		}
+		String suffix = "_" + plang.toString();
 		
-		List<Customize> customizes = Customize.findAllCustomizes();
+		//admin's customise need to be reload anyway.	
+		UserAccount admin = UserAccount.findUserAccountByName("admin");
+		List<Customize> customizesOfAdmin = reloadCustomizesToSession(admin, session);
+		replaceValuesWithLang(customizesOfAdmin, suffix, session);
+		
+		if(pOwner != null && !"admin".equals(pOwner.getName())){
+			List<Customize> customizesOfGeneralUser = reloadCustomizesToSession(pOwner, session);
+			replaceValuesWithLang(customizesOfGeneralUser, suffix, session);
+		}
+	}
+	
+	/*
+	 * if it's normal user's main page, then need to reload his/her customise. in case he has his own customize.
+	 * please be noticced order, make sure admin's first, then user's customise, so user's can replace admins.
+	 */
+	private List<Customize> reloadCustomizesToSession(UserAccount pOwner, HttpSession session){
+		List<Customize> customizes = Customize.findCustomizesByOwner(pOwner);
 		for (Customize customize : customizes){
 			session.setAttribute(customize.getCusKey(), customize.getCusValue());
+		}
+		return customizes;
+	}
+	
+	/*
+	 * apply the language property, replace the value with the one under right key(with language mark).
+	 * the logic, if found key end with current lang, then use it to replace the one which is used in jspx page.
+	 */
+	private void replaceValuesWithLang(List<Customize> customizes, String suffix, HttpSession session){
+		if(customizes == null){
+			return;
+		}
+		for (Customize customize : customizes){
+			String tCusKey = customize.getCusKey();
+			if(tCusKey.endsWith(suffix)){
+				session.setAttribute(tCusKey.substring(0, tCusKey.length() - 3 ), customize.getCusValue());
+			}
 		}
 	}
 }

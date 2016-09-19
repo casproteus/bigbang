@@ -12,25 +12,15 @@
   <!-- If this file changed in any line, don't forget to change the three file under deploy folder -->
   
   <!-- The Title Area, including owner info, butttons for adding blog, adding bookmark, leaving message and addon. -->
-  <c:choose>
-  	<c:when test="${empty spaceOwner or spaceOwner eq 'admin'}">
-		<spring:message code="publicDescription" htmlEscape="false" var="title"/>
-  		<!-- Admin has only one right column <spring:message code="NotesAndPrays" arguments="${spaceOwner}" htmlEscape="false" var="NotesAndPrays"/> -->
-    </c:when>
-  	<c:otherwise>
-		<spring:message code="label_public_index" arguments="${spaceOwner}" htmlEscape="false" var="title"/>
-		<c:set value="${empty description ? publicDescription : description}" var="motto" />
-  		<spring:message code="NotesAndPrays" arguments="${spaceOwner}" htmlEscape="false" var="NotesAndPrays"/>
-  	</c:otherwise>
-  </c:choose>
   <div style="background: #efefef; padding: 5px; margin-bottom: 3px">
-    <div style="text-align: center; padding-bottom: 5px"><b>${title}${motto}</b></div>
+    <div style="text-align: center; padding-bottom: 5px"><b>${txt_welcome}</b></div>
     <span> <!-- don't use "new" style here, because it make a right align, and will make the line height too low.-->
       <spring:url value="/twitters" var="write_url">
         <spring:param name="form" />
       </spring:url>
       <a href="${write_url}">
-        <spring:message code="contributeTwitter" htmlEscape="false"/>
+        <!-- <spring:message code="contributeTwitter" htmlEscape="false"/> -->
+        ${btn_write_log}
         <spring:url value="/resources/images/addnote.png" var="write_img_url" />
         <spring:message arguments="${typeName}" code="global_menu_newnote" var="add_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(add_message)}" src="${write_img_url}" title="${fn:escapeXml(add_message)}" />
@@ -40,7 +30,8 @@
         <spring:param name="form" />
       </spring:url>
       <a href="${create_url}">
-        <spring:message code="contributeContent" htmlEscape="false"/>
+        <!-- <spring:message code="contributeContent" htmlEscape="false"/> -->
+        ${btn_save_favorite}
         <spring:url value="/resources/images/addcontent.png" var="create_img_url" />
         <spring:message arguments="${typeName}" code="global_menu_newbookmark" var="add_message" htmlEscape="false" />
         <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />

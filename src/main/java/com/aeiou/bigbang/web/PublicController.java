@@ -47,7 +47,7 @@ public class PublicController extends BaseController{
     
     @RequestMapping(produces = "text/html")
     public String index( Model uiModel, HttpServletRequest request){
-    	init(uiModel, request);
+
     	String[] tAryTagStrsLeft = null;
     	String[] tAryTagStrsRight = null;
     	String[] tAryNumStrsLeft = null;
@@ -58,6 +58,7 @@ public class PublicController extends BaseController{
     	List<Long> tTagIdsRight = new ArrayList<Long>();
     	
     	UserAccount tOwner = UserAccount.findUserAccountByName("admin");
+    	init(tOwner, uiModel, request);
     	String tLayout = tOwner.getLayout();										//get the layout info from DB.
     	int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
 		if(p > -1){

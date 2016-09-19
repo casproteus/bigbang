@@ -24,7 +24,6 @@
      		</c:otherwise>
      	</c:choose>
   		
-  		
   		<c:out value=" || "/>
 	    <span>
 	      <spring:url value="/resources/j_spring_security_logout" var="logout"/>
@@ -34,7 +33,6 @@
 	    </span>
   	 </c:when>
   	 <c:otherwise>
-  	    <input id="proceed" type="image" value="${fn:escapeXml(submit_label)}" style="vertical-align:bottom; width: 0px; height: 0px; border-bottom: 0px; border-top: 0px"/>
   	 
         <input id="j_rememberme" name="j_rememberme" type="checkbox" style="vertical-align:top; height:14px;">
       	  <spring:message code="label_rememberme" htmlEscape="false" />
@@ -96,7 +94,10 @@
 		<spring:url value="/useraccounts?form" var="signupURL"/>
 		<a href="${signupURL}">
        		<spring:message code="button_signup"/>
-		</a>
+		</a>  	    
+		
+		<input id="proceed" type="image" value="${fn:escapeXml(submit_label)}" style="vertical-align:bottom; width: 0px; height: 0px; border-bottom: 0px; border-top: 0px"/>
+		
   	 </c:otherwise>
   </c:choose>
   

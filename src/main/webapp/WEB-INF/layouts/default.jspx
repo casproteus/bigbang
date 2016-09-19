@@ -14,7 +14,7 @@ xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:fn="http://java.sun.com/jsp/
 		<util:load-scripts />
 		
 		<spring:message code="application_name" var="app_name" htmlEscape="false"/>
-		<title><spring:message code="welcome_h3"/></title>
+		<title>${app_name}</title>
 	</head>
 	
   	<body class="tundra spring" background="getImage/uc_${fn:toLowerCase(spaceOwner)}_bg">

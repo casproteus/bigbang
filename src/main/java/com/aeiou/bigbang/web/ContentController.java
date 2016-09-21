@@ -40,26 +40,23 @@ public class ContentController {
 
     void populateEditForm(Model uiModel, Content content, HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("content", content);
-        List<BigTag> tCommontags = new ArrayList<BigTag>();
-        tCommontags.addAll(BigTag.findBMTagsByPublisher("administrator", 0, 10));
-        tCommontags.addAll(BigTag.findBMTagsByPublisher("admin", 0, 200));
-        uiModel.addAttribute("bigtags", tCommontags);
-        List<BigTag> tList_Tag = new ArrayList<BigTag>();
-        BigTag tTag = new BigTag() {
-
-            public String toString() {
-                return "";
-            }
-        };
-        tTag.setId(Long.valueOf(-1));
-        tList_Tag.add(tTag);
 
         String tCurName = userContextService.getCurrentUserName();
         UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);        
         BigUtil.checkTheme(tOwner, httpServletRequest);
         
-        tList_Tag.addAll(BigTag.findBMTagsByPublisher(tCurName, 0, 1000));
-        uiModel.addAttribute("mytags", tList_Tag);
+        List<BigTag> tTags = null;
+        List<String[]> tTagsAndNums = BigUtil.prepareTagAndNumberList(tOwner);
+        if(BigUtil.notCorrect(tTagsAndNums)){
+        	List<List> lists = BigUtil.resetTagsForOwner(tOwner, httpServletRequest);
+        	tTags = lists.get(0);
+        	tTags.addAll(lists.get(1));
+    	}else{	
+        	tTags = BigUtil.transferToTags(tTagsAndNums.get(0), tCurName);
+        	tTags.addAll(BigUtil.transferToTags(tTagsAndNums.get(1), tCurName));
+    	}
+        
+        uiModel.addAttribute("mytags", tTags);
         List<UserAccount> tList = new ArrayList<UserAccount>();
         tList.add(UserAccount.findUserAccountByName(tCurName));
         uiModel.addAttribute("useraccounts", tList);

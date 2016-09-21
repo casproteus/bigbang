@@ -37,13 +37,13 @@ public class BigUtil {
 	//Can not use strange characters, because when the coding formmat of the IDE changes or are not same with database, will cause mismatch.
 	//Can neiter use "[","(","+".... because the string will be considered as an expression in split method, those character have special
 	//meaning and will cause splite
-	public static final String SEP_TAG_NUMBER = "zSTNz";//"¿";
-	public static final String SEP_LEFT_RIGHT = "zSLRz";// "¬";
-	public static final String SEP_ITEM = "zSISz";//"¯";
-	public static final String MARK_PUBLIC_TAG = "zMUTz";// "¶";
+	public static final String SEP_TAG_NUMBER = "zSTNz";//"ï¿½";
+	public static final String SEP_LEFT_RIGHT = "zSLRz";// "ï¿½";
+	public static final String SEP_ITEM = "zSISz";//"ï¿½";
+	public static final String MARK_PUBLIC_TAG = "zMUTz";// "ï¿½";
 	public static final String MARK_PRIVATE_TAG = "zMITz";// "";
-	public static final String MARK_MEMBERONLY_TAG = "zMMTz";// "®";
-	public static final String MARK_TBD_TAG = "zMTTz";// "©";
+	public static final String MARK_MEMBERONLY_TAG = "zMMTz";// "ï¿½";
+	public static final String MARK_TBD_TAG = "zMTTz";// "ï¿½";
 	public static final int MARK_SEP_LENGTH = 5;
 	
 	public static String getUTFString(String pString){
@@ -118,23 +118,23 @@ public class BigUtil {
 	
 	public static List<BigTag> transferToTags(String[] tAryTagStrs, String pOwnerName){
     	List<BigTag> tBigTags = new ArrayList<BigTag>();
-    	for(int i = 0; i < tAryTagStrs.length; i++){
+    	for(String tagStr : tAryTagStrs){
     		//System.out.println("i:" + i);
     		//System.out.println("tAryTagStrs[i]:" + tAryTagStrs[i]);
-    		if(tAryTagStrs[i].endsWith(MARK_PRIVATE_TAG) ||tAryTagStrs[i].endsWith(MARK_MEMBERONLY_TAG) ||tAryTagStrs[i].endsWith(MARK_TBD_TAG))
-    			tAryTagStrs[i] = tAryTagStrs[i].substring(0, tAryTagStrs[i].length() - MARK_SEP_LENGTH);
+    		if(tagStr.endsWith(MARK_PRIVATE_TAG) ||tagStr.endsWith(MARK_MEMBERONLY_TAG) ||tagStr.endsWith(MARK_TBD_TAG))
+    			tagStr = tagStr.substring(0, tagStr.length() - MARK_SEP_LENGTH);
     		
-    		if(tAryTagStrs[i].startsWith(MARK_PUBLIC_TAG)){
-    			BigTag tTag = BigTag.findBMTagByNameAndOwner(tAryTagStrs[i].substring(MARK_SEP_LENGTH), "admin");
-    			if(tTag != null)
+    		if(tagStr.startsWith(MARK_PUBLIC_TAG)){
+    			BigTag tTag = BigTag.findBMTagByNameAndOwner(tagStr.substring(MARK_SEP_LENGTH), "admin");
+    			if(tTag != null){
     				tBigTags.add(tTag);
-    			else{
-    				tTag = BigTag.findBMTagByNameAndOwner(tAryTagStrs[i].substring(MARK_SEP_LENGTH), "administrator");
+    			}else{
+    				tTag = BigTag.findBMTagByNameAndOwner(tagStr.substring(MARK_SEP_LENGTH), "administrator");
     				if(tTag != null)
     					tBigTags.add(tTag);
     			}
     		}else{
-    			BigTag tTag = BigTag.findBMTagByNameAndOwner(tAryTagStrs[i], pOwnerName);
+    			BigTag tTag = BigTag.findBMTagByNameAndOwner(tagStr, pOwnerName);
     			if(tTag != null)
     				tBigTags.add(tTag);
     		}
@@ -230,7 +230,16 @@ public class BigUtil {
 		return tStrB.toString();
 	}
 	
-    public static boolean notCorrect(String[] tAryTagStrsLeft, String[] tAryTagStrsRight, String[] tAryNumStrsLeft, String[] tAryNumStrsRight){
+    public static boolean notCorrect(List<String[]> tTagsAndNums){
+		String[] tAryTagStrsLeft = tTagsAndNums.get(0);
+		String[] tAryTagStrsRight = tTagsAndNums.get(1);
+		String[] tAryNumStrsLeft = tTagsAndNums.get(2);
+		String[] tAryNumStrsRight = tTagsAndNums.get(3);
+		return notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight);
+    }
+    public static boolean notCorrect(
+		String[] tAryTagStrsLeft, String[] tAryTagStrsRight, String[] tAryNumStrsLeft, String[] tAryNumStrsRight){
+
     	if((tAryTagStrsLeft == null || tAryTagStrsLeft.length == 0) && (tAryTagStrsRight == null || tAryTagStrsRight.length == 0))
     		return true;
 		if((tAryNumStrsLeft == null || tAryNumStrsLeft.length == 0) && (tAryNumStrsRight == null || tAryNumStrsRight.length == 0))
@@ -251,7 +260,7 @@ public class BigUtil {
 		}
 		
 		return false;
-    }
+	}
     
 	private static void setDefaultValueForTags(){
 		List<BigTag> tList = BigTag.findAllBigTags();
@@ -425,4 +434,115 @@ public class BigUtil {
     	if(tTheme != 0)
     		httpServletRequest.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME, String.valueOf(tTheme));
     }
+    
+    /**
+     * @NOTE: can not use the string[] as parameter, it's not like list objects.
+     * @param tOwner
+     * @return
+     */
+    public static List<String[]> prepareTagAndNumberList(UserAccount tOwner){
+
+    	String[] tBigTagStrsLeft = null;
+    	String[] tBigTagStrsRight = null;
+    	String[] tNumStrsLeft = null;
+    	String[] tNumStrsRight = null;
+		
+		String tLayout = tOwner.getLayout();										//get the layout info from DB.
+    	int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
+		if(p > -1){
+    		String tTagStr = tLayout.substring(0, p);
+    		String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
+    		
+    		p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
+    		if(p >= 0){
+	    		tBigTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
+	    		tBigTagStrsRight = tTagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
+    		}
+    		p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
+    		if(p >= 0){
+	    		tNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
+	    		tNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
+    		}
+		}
+
+		List<String[]> listForReturn = new ArrayList<String[]>();
+		listForReturn.add(tBigTagStrsLeft);
+		listForReturn.add(tBigTagStrsRight);
+		listForReturn.add(tNumStrsLeft);
+		listForReturn.add(tNumStrsRight);
+		return listForReturn;
+	}
+    
+    /**
+     * @ Note the list works as reference.
+     * @param tOwner
+     * @param tBigTagsLeft
+     * @param tBigTagsRight
+     * @param tTagIdsLeft
+     * @param tTagIdsRight
+     */
+    public static List<List> resetTagsForOwner(UserAccount tOwner, HttpServletRequest httpServletRequest){
+    	List<BigTag> tBigTagsLeft = new ArrayList<BigTag>();
+    	List<BigTag> tBigTagsRight = new ArrayList<BigTag>();	
+    	List<Long> tTagIdsLeft = new ArrayList<Long>();
+    	List<Long> tTagIdsRight = new ArrayList<Long>();
+    	
+		List<BigTag> tBigTags = BigTag.findBMTagsByOwner(tOwner.getName()); 	//fetch out all tags owner's and his team's, 
+		List<Long> tTagIds = new ArrayList<Long>();						//then adjust it. @note: don't know if we can use AthenSet to move this into JPQL, because 
+    	for(int i = 0; i < tBigTags.size(); i++){						//here, we need to compare the tag names, to avoid duplication.
+    		tTagIds.add(tBigTags.get(i).getId());
+    	}
+    	
+    	int tSize = tBigTags.size();									//Separate tags and IDs into 2 columns and prepare the Layout String.
+    	String[] tNumStrsLeft = new String[tSize/2];
+    	String[] tNumStrsRight = new String[tSize - tSize/2] ;
+    	
+    	StringBuilder tStrB = new StringBuilder();
+    	StringBuilder tStrB_Num = new StringBuilder();
+		for(int j = 0; j < tSize/2; j++){
+			BigTag tTag = tBigTags.get(j);
+	    	tBigTagsLeft.add(tBigTags.get(j));
+	    	tTagIdsLeft.add(tTagIds.get(j));
+	    	
+	    	tStrB.append(BigUtil.getTagInLayoutString(tTag));
+
+	    	tNumStrsLeft[j] = "8";
+	    	tStrB_Num.append(tNumStrsLeft[j]);
+	    	
+	    	if(j + 1 < tSize/2){
+	    		tStrB.append(BigUtil.SEP_ITEM);
+    	    	tStrB_Num.append(BigUtil.SEP_ITEM);
+	    	}
+    	}
+
+		tStrB.append(BigUtil.SEP_LEFT_RIGHT);
+		tStrB_Num.append(BigUtil.SEP_LEFT_RIGHT);
+		
+		for(int j = tSize/2; j < tSize; j++){
+			BigTag tTag = tBigTags.get(j);
+			tBigTagsRight.add(tBigTags.get(j));
+	    	tTagIdsRight.add(tTagIds.get(j));
+
+	    	tStrB.append(BigUtil.getTagInLayoutString(tTag));
+
+	    	tNumStrsRight[j - tSize/2] = "8";
+	    	tStrB_Num.append(tNumStrsRight[j - tSize/2]);
+	    	
+	    	if(j + 1 < tSize){
+	    		tStrB.append(BigUtil.SEP_ITEM);
+    	    	tStrB_Num.append(BigUtil.SEP_ITEM);
+	    	}
+    	}
+		tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
+
+		tOwner.setLayout(tStrB.toString());	    						//save the correct layout string back to DB
+		tOwner.persist();
+		
+		List<List> listForReturn = new ArrayList<List>();
+		listForReturn.add(tBigTagsLeft);
+		listForReturn.add(tBigTagsRight);
+		listForReturn.add(tTagIdsLeft);
+		listForReturn.add(tTagIdsRight);
+		return listForReturn;
+	}
 }

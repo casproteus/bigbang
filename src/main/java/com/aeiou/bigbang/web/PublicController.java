@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.format.DateTimeFormat;
@@ -47,116 +48,67 @@ public class PublicController extends BaseController{
     
     @RequestMapping(produces = "text/html")
     public String index( Model uiModel, HttpServletRequest request){
-
-    	String[] tAryTagStrsLeft = null;
-    	String[] tAryTagStrsRight = null;
-    	String[] tAryNumStrsLeft = null;
-    	String[] tAryNumStrsRight = null;
-    	List<BigTag> tBigTagsLeft = new ArrayList<BigTag>();
-    	List<BigTag> tBigTagsRight = new ArrayList<BigTag>();
-    	List<Long> tTagIdsLeft = new ArrayList<Long>();
-    	List<Long> tTagIdsRight = new ArrayList<Long>();
-    	
+    	//init if needed
     	UserAccount tOwner = UserAccount.findUserAccountByName("admin");
     	init(tOwner, uiModel, request);
-    	String tLayout = tOwner.getLayout();										//get the layout info from DB.
-    	int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
-		if(p > -1){
-			String tTagStr = tLayout.substring(0, p);
-			String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
-			
-    		p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
-    		if(p >=0 ){
-    			tAryTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
-    			tAryTagStrsRight = tTagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
-    		}
-    		p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
-    		if(p >=0 ){
-    			tAryNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
-    			tAryNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
-    		}
-		}
     	
-		//if the layout info in DB is not good, create it from beginning.
-		if(BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)){
-			
-	    	List<BigTag> tBigTags = BigTag.findBMTagsByOwner("admin"); 	//fetch out all tags of admin's, 
-    		List<Long> tTagIds = new ArrayList<Long>();						//then adjust it. @note: don't know if we can use AthenSet to move this into JPQL, because 
-	    	for(int i = 0; i < tBigTags.size(); i++){						//here, we need to compare the tag names, to avoid duplication.
-	    		tTagIds.add(tBigTags.get(i).getId());
-	    	}
-	    	
-	    	int tSize = tBigTags.size();									//Separate tags and IDs into 2 columns and prepare the Layout String.
-	    	tAryNumStrsLeft = new String[tSize/2];
-	    	tAryNumStrsRight = new String[tSize - tSize/2] ;
-	    	
-	    	StringBuilder tStrB = new StringBuilder();
-	    	StringBuilder tStrB_Num = new StringBuilder();
-    		for(int j = 0; j < tSize/2; j++){
-    			BigTag tTag = tBigTags.get(j);
-    	    	tBigTagsLeft.add(tBigTags.get(j));
-    	    	tTagIdsLeft.add(tTagIds.get(j));
-    	    	
-    	    	tStrB.append(BigUtil.getTagInLayoutString(tTag));
-
-    	    	tAryNumStrsLeft[j] = "8";
-    	    	tStrB_Num.append(tAryNumStrsLeft[j]);
-    	    	
-    	    	if(j + 1 < tSize/2){
-    	    		tStrB.append(BigUtil.SEP_ITEM);
-        	    	tStrB_Num.append(BigUtil.SEP_ITEM);
-    	    	}
-	    	}
-
-    		tStrB.append(BigUtil.SEP_LEFT_RIGHT);
-    		tStrB_Num.append(BigUtil.SEP_LEFT_RIGHT);
-    		
-    		for(int j = tSize/2; j < tSize; j++){
-    			BigTag tTag = tBigTags.get(j);
-    			tBigTagsRight.add(tBigTags.get(j));
-    	    	tTagIdsRight.add(tTagIds.get(j));
-    	    	
-    	    	tStrB.append(BigUtil.getTagInLayoutString(tTag));
-    	    	
-    	    	tAryNumStrsRight[j - tSize/2] = "8";
-    	    	tStrB_Num.append(tAryNumStrsRight[j - tSize/2]);
-    	    	
-    	    	if(j + 1 < tSize){
-    	    		tStrB.append(BigUtil.SEP_ITEM);
-        	    	tStrB_Num.append(BigUtil.SEP_ITEM);
-    	    	}
-	    	}
-    		tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
-
-    		tOwner.setLayout(tStrB.toString());	    						//save to DB
-    		tOwner.persist();
-		}else{																			//prepare the info for view base on the string in db:
-    		tBigTagsLeft = BigUtil.transferToTags(tAryTagStrsLeft, "admin");
-    		for(int i = 0; i < tBigTagsLeft.size(); i++){
-    			tTagIdsLeft.add(tBigTagsLeft.get(i).getId());
-    		}
-    		
-    		tBigTagsRight = BigUtil.transferToTags(tAryTagStrsRight, "admin");
-    		for(int i = 0; i < tBigTagsRight.size(); i++){
-    			tTagIdsRight.add(tBigTagsRight.get(i).getId());
+    	//get out admin and administrator's tags in string.
+    	List<String> tBigTagStrsOfAdmin = new ArrayList<String>();
+    	List<String> tBigTagStrsOfAdministrator = new ArrayList<String>();
+    	HttpSession session = request.getSession();
+    	for(int i = 1; i < 100; i++){
+    		Object tTagStr = session.getAttribute("suggested_tag" + i); 
+    		if(tTagStr != null){
+    			tBigTagStrsOfAdmin.add(tTagStr.toString());
+    		}else{
+    			break;
     		}
     	}
+    	for(int i = 1; i < 100; i++){
+    		Object tTagStr = session.getAttribute("selectable_tag" + i); 
+    		if(tTagStr != null){
+    			tBigTagStrsOfAdministrator.add(tTagStr.toString());
+    		}else{
+    			break;
+    		}
+    	}
+    	
+    	//translate the tag into object.
+    	List<BigTag> tBigTagsAdmin = new ArrayList<BigTag>();
+    	List<BigTag> tBigTagsAdministrator = new ArrayList<BigTag>();
+    	List<Long> tTagIdsAdmin = new ArrayList<Long>();
+    	List<Long> tTagIdsAdministrator = new ArrayList<Long>();
+    	
+		String[] tags = new String[tBigTagStrsOfAdmin.size()];
+		tBigTagsAdmin = BigUtil.transferToTags(tBigTagStrsOfAdmin.toArray(tags), "admin");
+		tags = new String[tBigTagStrsOfAdministrator.size()];
+		tBigTagsAdministrator = BigUtil.transferToTags(tBigTagStrsOfAdministrator.toArray(tags), "administrator");
+		for(int i = 0; i < tBigTagsAdmin.size(); i++){
+			tTagIdsAdmin.add(tBigTagsAdmin.get(i).getId());
+		}    		
+		for(int i = 0; i < tBigTagsAdministrator.size(); i++){
+			tTagIdsAdministrator.add(tBigTagsAdministrator.get(i).getId());
+		}
 		
+		//get out relevant content (urls)
+		Object cus_items_per_page = session.getAttribute("items_per_page");
+		int items_per_page = cus_items_per_page == null ? 8 : Integer.valueOf(cus_items_per_page.toString());
         List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
         List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
-    	for(int i = 0; i < tBigTagsLeft.size(); i++){
-    		tContentListsLeft.add(Content.findContentsByTag(tBigTagsLeft.get(i), 0, Integer.valueOf(tAryNumStrsLeft[i]).intValue(), null));
+    	for(int i = 0; i < tBigTagsAdmin.size(); i++){
+    		tContentListsLeft.add(Content.findContentsByTag(tBigTagsAdmin.get(i), 0, items_per_page, null));
     	}
-    	for(int i = 0; i < tBigTagsRight.size(); i++){
-    		tContentListsRight.add(Content.findContentsByTag(tBigTagsRight.get(i), 0, Integer.valueOf(tAryNumStrsRight[i]).intValue(), null));
+    	for(int i = 0; i < tBigTagsAdministrator.size(); i++){
+    		tContentListsRight.add(Content.findContentsByTag(tBigTagsAdministrator.get(i), 0, items_per_page, null));
     	}
 
+    	//set to front end model.
         uiModel.addAttribute("spaceOwner", "admin");
         uiModel.addAttribute("description", tOwner.getDescription());
-        uiModel.addAttribute("bigTagsLeft", tBigTagsLeft);
-        uiModel.addAttribute("bigTagsRight", tBigTagsRight);
-        uiModel.addAttribute("tagIdsLeft", tTagIdsLeft);
-        uiModel.addAttribute("tagIdsRight", tTagIdsRight);
+        uiModel.addAttribute("bigTagsLeft", tBigTagsAdmin);
+        uiModel.addAttribute("bigTagsRight", tBigTagsAdministrator);
+        uiModel.addAttribute("tagIdsLeft", tTagIdsAdmin);
+        uiModel.addAttribute("tagIdsRight", tTagIdsAdministrator);
         uiModel.addAttribute("contentsLeft", tContentListsLeft);
         uiModel.addAttribute("contentsRight", tContentListsRight);
         

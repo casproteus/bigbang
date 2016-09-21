@@ -42,7 +42,7 @@ import com.aeiou.bigbang.util.SpringApplicationContext;
 public class PersonalController extends BaseController{
 	@Inject
 	private UserContextService userContextService;
-
+	
 	@RequestMapping(value = "/{spaceOwner}", produces = "text/html")
     public String index(@PathVariable("spaceOwner") String spaceOwner, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel, HttpServletRequest request) {
 		String tCurName = userContextService.getCurrentUserName();				//the current user.
@@ -62,95 +62,34 @@ public class PersonalController extends BaseController{
     	init(tOwner, uiModel, request);
         BigUtil.checkTheme(tOwner, request);
     	
-    	spaceOwner = tOwner.getName();
+    	spaceOwner = tOwner.getName();	//this name has no utf8 string issue. is a readable one.
+    
+    	List<String[]> tagsAndNumbers = BigUtil.prepareTagAndNumberList(tOwner);
+    	String[] tBigTagStrsLeft = tagsAndNumbers.get(0);
+    	String[] tBigTagStrsRight = tagsAndNumbers.get(1);
+    	String[] tNumStrsLeft = tagsAndNumbers.get(2);
+    	String[] tNumStrsRight = tagsAndNumbers.get(3);
 
-    	String[] tBigTagStrsLeft = null;
-    	String[] tBigTagStrsRight = null;
-    	String[] tNumStrsLeft = null;
-    	String[] tNumStrsRight = null;
     	List<BigTag> tBigTagsLeft = new ArrayList<BigTag>();
     	List<BigTag> tBigTagsRight = new ArrayList<BigTag>();
     	List<Long> tTagIdsLeft = new ArrayList<Long>();
     	List<Long> tTagIdsRight = new ArrayList<Long>();
-    	
-    	String tLayout = tOwner.getLayout();										//get the layout info from DB.
-    	int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
-		if(p > -1){
-    		String tTagStr = tLayout.substring(0, p);
-    		String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
-    		
-    		p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
-    		if(p >= 0){
-	    		tBigTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
-	    		tBigTagStrsRight = tTagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
-    		}
-    		p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
-    		if(p >= 0){
-	    		tNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
-	    		tNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
-    		}
-		}
-    																				//if the layout info in DB is not good, create it from beginning.
-    	if(BigUtil.notCorrect(tBigTagStrsLeft, tBigTagStrsRight, tNumStrsLeft, tNumStrsRight)){
-    		
-    		List<BigTag> tBigTags = BigTag.findBMTagsByOwner(spaceOwner); 	//fetch out all tags owner's and his team's, 
-    		List<Long> tTagIds = new ArrayList<Long>();						//then adjust it. @note: don't know if we can use AthenSet to move this into JPQL, because 
-	    	for(int i = 0; i < tBigTags.size(); i++){						//here, we need to compare the tag names, to avoid duplication.
-	    		tTagIds.add(tBigTags.get(i).getId());
-	    	}					
-	    	int tSize = tBigTags.size();									//Separate tags and IDs into 2 columns and prepare the Layout String.
-	    	tNumStrsLeft = new String[tSize/2];
-	    	tNumStrsRight = new String[tSize - tSize/2] ;
-	    	
-	    	StringBuilder tStrB = new StringBuilder();
-	    	StringBuilder tStrB_Num = new StringBuilder();
-    		for(int j = 0; j < tSize/2; j++){
-    			BigTag tTag = tBigTags.get(j);
-    	    	tBigTagsLeft.add(tBigTags.get(j));
-    	    	tTagIdsLeft.add(tTagIds.get(j));
-    	    	
-    	    	tStrB.append(BigUtil.getTagInLayoutString(tTag));
-
-    	    	tNumStrsLeft[j] = "8";
-    	    	tStrB_Num.append(tNumStrsLeft[j]);
-    	    	
-    	    	if(j + 1 < tSize/2){
-    	    		tStrB.append(BigUtil.SEP_ITEM);
-        	    	tStrB_Num.append(BigUtil.SEP_ITEM);
-    	    	}
-	    	}
-
-    		tStrB.append(BigUtil.SEP_LEFT_RIGHT);
-    		tStrB_Num.append(BigUtil.SEP_LEFT_RIGHT);
-    		
-    		for(int j = tSize/2; j < tSize; j++){
-    			BigTag tTag = tBigTags.get(j);
-    			tBigTagsRight.add(tBigTags.get(j));
-    	    	tTagIdsRight.add(tTagIds.get(j));
-
-    	    	tStrB.append(BigUtil.getTagInLayoutString(tTag));
-
-    	    	tNumStrsRight[j - tSize/2] = "8";
-    	    	tStrB_Num.append(tNumStrsRight[j - tSize/2]);
-    	    	
-    	    	if(j + 1 < tSize){
-    	    		tStrB.append(BigUtil.SEP_ITEM);
-        	    	tStrB_Num.append(BigUtil.SEP_ITEM);
-    	    	}
-	    	}
-    		tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
-
-    		tOwner.setLayout(tStrB.toString());	    						//save the correct layout string back to DB
-    		tOwner.persist();
+    	//if the layout info in DB is not good, create it from beginning.
+    	if(BigUtil.notCorrect(tagsAndNumbers)){
+    		List<List> lists = BigUtil.resetTagsForOwner(tOwner, request);
+    		tBigTagsLeft = lists.get(0);
+    		tBigTagsRight = lists.get(1);
+    		tTagIdsLeft = lists.get(2);
+    		tTagIdsRight = lists.get(3);
     	}else{																			//prepare the info for view base on the string in db:
     		tBigTagsLeft = BigUtil.transferToTags(tBigTagStrsLeft, spaceOwner);
-    		for(int i = 0; i < tBigTagsLeft.size(); i++){
-    				tTagIdsLeft.add(tBigTagsLeft.get(i).getId());   //it can not be null, even if admin changed the name of the tags, cause it's handled in BigtUtil
-    		}
-    		
     		tBigTagsRight = BigUtil.transferToTags(tBigTagStrsRight, spaceOwner);
-    		for(int i = 0; i < tBigTagsRight.size(); i++){
-    				tTagIdsRight.add(tBigTagsRight.get(i).getId()); //it can not be null, even if admin changed the name of the tags, cause it's handled in BigtUtil
+    		
+    		for(BigTag tag : tBigTagsLeft){
+    			tTagIdsLeft.add(tag.getId());   //it can not be null, even if admin changed the name of the tags, cause it's handled in BigtUtil
+    		}
+    		for(BigTag tag : tBigTagsRight){
+    			tTagIdsRight.add(tag.getId()); //it can not be null, even if admin changed the name of the tags, cause it's handled in BigtUtil
     		}
     	}
 																						//final adjust---not all tags should be shown to curUser:

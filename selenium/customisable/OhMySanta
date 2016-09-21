@@ -9,7 +9,10 @@
 <table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
 <tr><td><b>Test Suite</b></td></tr>
 <tr><td><a href="Create Admin User.html">Create Admin User</a></td></tr>
-<tr><td><a href="Create Admin Customises.html">create cutomises</a></td></tr>
+<tr><td><a href="Create Admin Customises.html">Create Admin Customises</a></td></tr>
+<tr><td><a href="Create Tao Customises.html">Create Tao's Customizes</a></td></tr>
+<tr><td><a href="Create Wei User.html">Create Wei Customises</a></td></tr>
+<tr><td><a href="Create Administrator Tags.html">Create Administrator Tags</a></td></tr>
 </tbody></table>
 </body>
 </html>

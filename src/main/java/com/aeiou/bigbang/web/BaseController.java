@@ -79,20 +79,25 @@ public class BaseController {
 	
 	//load all customizes into session to allow the webpage costomizable.
 	//when visiting public page, the 
-	private void reinitCommonText(UserAccount pOwner, HttpSession session, Object plang){
+	private void reinitCommonText(UserAccount pOwner, HttpSession session, Object pLang){
 
 		if(session.getAttribute("user_role") == null){
 			session.setAttribute("user_role", "");
 		}
-		if(plang == null){
-			plang = session.getAttribute("lang");
+		if(pLang == null){
+			pLang = session.getAttribute("lang");
 		}
-		String suffix = "_" + plang.toString();
+		String suffix = "_" + pLang.toString();
 		
 		//admin's customise need to be reload anyway.	
 		UserAccount admin = UserAccount.findUserAccountByName("admin");
 		List<Customize> customizesOfAdmin = reloadCustomizesToSession(admin, session);
 		replaceValuesWithLang(customizesOfAdmin, suffix, session);
+
+		//load administrator's customizations.
+		UserAccount administrator = UserAccount.findUserAccountByName("administrator");
+		List<Customize> customizesOfAdministrator = reloadCustomizesToSession(administrator, session);
+		replaceValuesWithLang(customizesOfAdministrator, suffix, session);
 		
 		if(pOwner != null && !"admin".equals(pOwner.getName())){
 			List<Customize> customizesOfGeneralUser = reloadCustomizesToSession(pOwner, session);

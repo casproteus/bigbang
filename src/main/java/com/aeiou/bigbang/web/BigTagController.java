@@ -38,7 +38,7 @@ public class BigTagController {
     void populateEditForm(Model uiModel, BigTag bigTag, HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("bigTag", bigTag);
         uiModel.addAttribute("authorities", BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
-        uiModel.addAttribute("types", BigType.getAllOptions(bigTag.getOwner()));
+        uiModel.addAttribute("types", BigType.getAllOptions(bigTag.getOwner(), httpServletRequest.getLocale()));
         
         String tUserName = userContextService.getCurrentUserName();
         UserAccount tOwner = UserAccount.findUserAccountByName(tUserName);

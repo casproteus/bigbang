@@ -17,13 +17,17 @@ public class BigAuthority {
 	public static final int ALL_MY_TEAM_CAN_SEE = 2;
 	public static final int ONLY_FOR_SELECTED_PERSON = 3;
 	public static final int ONLY_FOR_RECEIVER = 11;
+
+	private Short id;
+	private MessageSource messageSource;
+	private Locale locale;
 	
 	public BigAuthority(MessageSource pMessageSource, Locale pLocale){
 		messageSource = pMessageSource;
 		locale = pLocale;
 	}
 	
-	
+	//TODO: change to support customization.
 	public String toString(){
 		if(id == SHOW_TO_EVERY_ONE){
 			return messageSource.getMessage("SHOW_TO_EVERY_ONE", null, locale);
@@ -97,10 +101,6 @@ public class BigAuthority {
     		tAuthSetFR.add(Integer.valueOf(ALL_MY_TEAM_CAN_SEE));
     	return tAuthSetFR;
 	}
-	
-	private Short id;
-	private MessageSource messageSource;
-	private Locale locale;
 	
 	public Short getId() {
 		return id;

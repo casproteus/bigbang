@@ -69,7 +69,7 @@ public class UserAccountController extends BaseController{
             uiModel.asMap().clear();
             userAccount.setBalance(1000);
             userAccount.persist();
-            addDefaultUserTags(userAccount, httpServletRequest);
+            //add default messsage.
             addDefaultMessageTwitter(userAccount, httpServletRequest.getLocale());
             return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
         } else {
@@ -162,32 +162,6 @@ public class UserAccountController extends BaseController{
         return "useraccounts/list";
     }
     
-    /*
-     * find suggested_tag from Customise table and add for the new created user.
-     */
-    private void addDefaultUserTags(UserAccount pUser, HttpServletRequest httpServletRequest) {
-    	String lang = decideDefaultLang(httpServletRequest);
-    	for(int i = 1; i < 100; i++){
-    		StringBuilder tSB = new StringBuilder("suggested_tag");
-    		tSB.append(i);
-    		Object tagName = httpServletRequest.getSession().getAttribute(tSB.toString());
-    		Object tagName_local = httpServletRequest.getSession().getAttribute(tSB.append("_").append(lang).toString());
-    		if(tagName_local != null){
-    			tagName = tagName_local;
-    		}
-    		
-    		if(tagName == null){
-    			break;
-    		}
-            BigTag tBigTag = new BigTag();
-            tBigTag.setTagName(tagName.toString());
-            tBigTag.setType(pUser.getName());
-            tBigTag.setAuthority(0);
-            tBigTag.setOwner(0);
-            tBigTag.persist();
-    	}
-    }
-
     private void addDefaultMessageTwitter(UserAccount pPublisher, Locale pLocale) {
         Message tMessage = new Message();
         tMessage.setReceiver(pPublisher);

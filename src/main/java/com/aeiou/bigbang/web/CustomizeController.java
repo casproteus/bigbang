@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
@@ -40,13 +41,17 @@ public class CustomizeController {
     	}
 		UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);
 		tCurName = tOwner.getName();
-		
-		List<BigTag> commonCheckedBMTags = BigTag.findBMTagsByOwner(null);				//the tags created by admin and administrators
+
+    	//prepare the common tags.
+    	HttpSession session = request.getSession();
+		List<BigTag> tBigTagsAdmin = new ArrayList<BigTag>();
+    	List<BigTag> tBigTagsAdministrator = new ArrayList<BigTag>();
+    	BigUtil.prepareAdminTags(tBigTagsAdmin, tBigTagsAdministrator, session);
+    	tBigTagsAdmin.addAll(tBigTagsAdministrator);
+    	
+		List<BigTag> commonCheckedBMTags = tBigTagsAdmin;	//the tags created by admin and administrators
 		List<BigTag> commonUnCheckedBMTags = new ArrayList<BigTag>();
-		List<BigTag> uncommonCheckedBMTags = BigTag.findBMTagsByOwner(tCurName);		//the tags created by user and user's friends.
-		List<BigTag> uncommonUnCheckedBMTags = new ArrayList<BigTag>();
 		String layoutString = tOwner.getLayout();
-		
 		for (int i = commonCheckedBMTags.size() - 1; i >= 0; i--){
 			String tTagStr = BigUtil.getTagInLayoutString(commonCheckedBMTags.get(i));
 			if(layoutString != null && layoutString.indexOf(tTagStr) < 0){
@@ -54,7 +59,10 @@ public class CustomizeController {
 				commonCheckedBMTags.remove(i);
 			}
 		}
-
+		
+		//prepare uncommon tags.
+		List<BigTag> uncommonCheckedBMTags = BigTag.findBMTagsByOwner(tCurName);		//the tags created by user and user's friends.
+		List<BigTag> uncommonUnCheckedBMTags = new ArrayList<BigTag>();
 		for (int i = uncommonCheckedBMTags.size() - 1; i >= 0; i--){
 			String tTagStr = BigUtil.getTagInLayoutString(uncommonCheckedBMTags.get(i));
 			if(layoutString != null && layoutString.indexOf(tTagStr) < 0){

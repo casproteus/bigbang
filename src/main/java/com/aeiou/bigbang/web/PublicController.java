@@ -52,37 +52,14 @@ public class PublicController extends BaseController{
     	UserAccount tOwner = UserAccount.findUserAccountByName("admin");
     	init(tOwner, uiModel, request);
     	
-    	//get out admin and administrator's tags in string.
-    	List<String> tBigTagStrsOfAdmin = new ArrayList<String>();
-    	List<String> tBigTagStrsOfAdministrator = new ArrayList<String>();
-    	HttpSession session = request.getSession();
-    	for(int i = 1; i < 100; i++){
-    		Object tTagStr = session.getAttribute("suggested_tag" + i); 
-    		if(tTagStr != null){
-    			tBigTagStrsOfAdmin.add(tTagStr.toString());
-    		}else{
-    			break;
-    		}
-    	}
-    	for(int i = 1; i < 100; i++){
-    		Object tTagStr = session.getAttribute("selectable_tag" + i); 
-    		if(tTagStr != null){
-    			tBigTagStrsOfAdministrator.add(tTagStr.toString());
-    		}else{
-    			break;
-    		}
-    	}
-    	
     	//translate the tag into object.
+    	HttpSession session = request.getSession();
     	List<BigTag> tBigTagsAdmin = new ArrayList<BigTag>();
     	List<BigTag> tBigTagsAdministrator = new ArrayList<BigTag>();
+    	BigUtil.prepareAdminTags(tBigTagsAdmin, tBigTagsAdministrator, session);
+    	
     	List<Long> tTagIdsAdmin = new ArrayList<Long>();
     	List<Long> tTagIdsAdministrator = new ArrayList<Long>();
-    	
-		String[] tags = new String[tBigTagStrsOfAdmin.size()];
-		tBigTagsAdmin = BigUtil.transferToTags(tBigTagStrsOfAdmin.toArray(tags), "admin");
-		tags = new String[tBigTagStrsOfAdministrator.size()];
-		tBigTagsAdministrator = BigUtil.transferToTags(tBigTagStrsOfAdministrator.toArray(tags), "administrator");
 		for(int i = 0; i < tBigTagsAdmin.size(); i++){
 			tTagIdsAdmin.add(tBigTagsAdmin.get(i).getId());
 		}    		

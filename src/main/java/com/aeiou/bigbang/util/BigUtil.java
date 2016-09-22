@@ -9,6 +9,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.FileAppender;
@@ -545,4 +546,33 @@ public class BigUtil {
 		listForReturn.add(tTagIdsRight);
 		return listForReturn;
 	}
+    
+    public static void prepareAdminTags(List<BigTag> tBigTagsAdmin, List<BigTag> tBigTagsAdministrator,
+    		HttpSession session){
+    	//get out admin and administrator's tags in string.
+    	List<String> tBigTagStrsOfAdmin = new ArrayList<String>();
+    	List<String> tBigTagStrsOfAdministrator = new ArrayList<String>();
+
+    	for(int i = 1; i < 100; i++){
+    		Object tTagStr = session.getAttribute("suggested_tag" + i); 
+    		if(tTagStr != null){
+    			tBigTagStrsOfAdmin.add(tTagStr.toString());
+    		}else{
+    			break;
+    		}
+    	}
+    	for(int i = 1; i < 100; i++){
+    		Object tTagStr = session.getAttribute("selectable_tag" + i); 
+    		if(tTagStr != null){
+    			tBigTagStrsOfAdministrator.add(tTagStr.toString());
+    		}else{
+    			break;
+    		}
+    	}
+    	
+    	String[] tags = new String[tBigTagStrsOfAdmin.size()];
+		tBigTagsAdmin.addAll(BigUtil.transferToTags(tBigTagStrsOfAdmin.toArray(tags), "admin"));
+		tags = new String[tBigTagStrsOfAdministrator.size()];
+		tBigTagsAdministrator.addAll(BigUtil.transferToTags(tBigTagStrsOfAdministrator.toArray(tags), "administrator"));
+    }
 }

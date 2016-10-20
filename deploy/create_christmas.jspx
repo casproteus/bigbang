@@ -23,14 +23,13 @@ xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" version="2.0">
             </td>
             <td class="tWireless" valign="top" width="450px">
                 <util:panel id="title2" title="${title2}">
-                    <p>Hi Big Editor, Adding some interesting content?</p>
-                    <p>Cool! And here's some notes for you:</p>
-                    <p>1.Just put down the Title and URL, they will be displayed on both public space and your own space.</p>
-                    <p>2.Don't know where is your own space yet? How about this: <a>http://www.ShareTheGoodOnes.com/${pageContext['request'].userPrincipal.name}</a>
-                    </p>
-                    <p>3.What? can not find a tag for your content in public space? OK, please use 'other' for now.</p>
-                    <p>4.Sure you can create new tag, you are the big editor! BTW, in your own space, content will be organised with tags you created.</p>
-                    <p>5.Why set as private? Because we thought you may have some content don't want others to see yet. Set it private, so only you can see.</p>
+                    <p>${create_line1}</p>
+                    <p>${create_line2}</p>
+                    <p>${create_line3}</p>
+                    <p>${create_line4}</p>
+                    <p>${create_line5}</p>
+                    <p>${create_line6}</p>
+                    <p>${create_line7}</p>
                 </util:panel>
             </td>
         </tr>

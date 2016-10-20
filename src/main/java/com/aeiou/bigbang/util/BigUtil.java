@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.theme.CookieThemeResolver;
 
 import com.aeiou.bigbang.domain.BigTag;
@@ -117,7 +118,7 @@ public class BigUtil {
 		return false;
 	}
 	
-	public static List<BigTag> transferToTags(String[] tAryTagStrs, String pOwnerName){
+	public static List<BigTag> convertTagArrayToList(String[] tAryTagStrs, String pOwnerName){
     	List<BigTag> tBigTags = new ArrayList<BigTag>();
     	for(String tagStr : tAryTagStrs){
     		//System.out.println("i:" + i);
@@ -430,7 +431,7 @@ public class BigUtil {
 
     public static void checkTheme(UserAccount tOwner, HttpServletRequest httpServletRequest){
     	httpServletRequest.setAttribute("spaceOwner", tOwner.getName());
-        //if the owner has setted theme, then use the theme! (will effect only on this request)
+        //if the owner has theme already, then use the theme! (will effect only on this request)
     	int tTheme = tOwner.getTheme();
     	if(tTheme != 0)
     		httpServletRequest.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME, String.valueOf(tTheme));
@@ -441,7 +442,7 @@ public class BigUtil {
      * @param tOwner
      * @return
      */
-    public static List<String[]> prepareTagAndNumberList(UserAccount tOwner){
+    public static List<String[]> fetchTagAndNumberInListOfArrayFormat(UserAccount tOwner){
 
     	String[] tBigTagStrsLeft = null;
     	String[] tBigTagStrsRight = null;
@@ -547,32 +548,68 @@ public class BigUtil {
 		return listForReturn;
 	}
     
-    public static void prepareAdminTags(List<BigTag> tBigTagsAdmin, List<BigTag> tBigTagsAdministrator,
-    		HttpSession session){
+    /**
+     * @param bigTagsAdmin     must be an empty list, it is used to be filled in with default tags.
+     * @param bigTagsAdministrator    must be an empty list, it is used to be filled in with default tags.
+     * @param uiModel
+     * @param session
+     */
+    public static void prepareAdminTags(List<BigTag> bigTagsAdmin, List<BigTag> bigTagsAdministrator, Model uiModel, HttpSession session){
+
+    	List<Long> tTagIdsAdmin = new ArrayList<Long>();
+    	List<Long> tTagIdsAdministrator = new ArrayList<Long>();
     	//get out admin and administrator's tags in string.
     	List<String> tBigTagStrsOfAdmin = new ArrayList<String>();
     	List<String> tBigTagStrsOfAdministrator = new ArrayList<String>();
 
     	for(int i = 1; i < 100; i++){
     		Object tTagStr = session.getAttribute("suggested_tag" + i); 
-    		if(tTagStr != null){
-    			tBigTagStrsOfAdmin.add(tTagStr.toString());
-    		}else{
+    		if(tTagStr == null)
     			break;
-    		}
+    		tBigTagStrsOfAdmin.add(tTagStr.toString());
     	}
     	for(int i = 1; i < 100; i++){
     		Object tTagStr = session.getAttribute("selectable_tag" + i); 
-    		if(tTagStr != null){
-    			tBigTagStrsOfAdministrator.add(tTagStr.toString());
-    		}else{
+    		if(tTagStr == null)
     			break;
-    		}
+    		tBigTagStrsOfAdministrator.add(tTagStr.toString());
     	}
     	
+    	for(BigTag bigTag : bigTagsAdmin){
+			tTagIdsAdmin.add(bigTag.getId());
+		}    		
+		for(BigTag bigTag : bigTagsAdministrator){
+			tTagIdsAdministrator.add(bigTag.getId());
+		}
+		
     	String[] tags = new String[tBigTagStrsOfAdmin.size()];
-		tBigTagsAdmin.addAll(BigUtil.transferToTags(tBigTagStrsOfAdmin.toArray(tags), "admin"));
+		bigTagsAdmin.addAll(BigUtil.convertTagArrayToList(tBigTagStrsOfAdmin.toArray(tags), "admin"));
 		tags = new String[tBigTagStrsOfAdministrator.size()];
-		tBigTagsAdministrator.addAll(BigUtil.transferToTags(tBigTagStrsOfAdministrator.toArray(tags), "administrator"));
+		bigTagsAdministrator.addAll(BigUtil.convertTagArrayToList(tBigTagStrsOfAdministrator.toArray(tags), "administrator"));
+
+    	//set to front end model.
+        uiModel.addAttribute("bigTagsLeft", bigTagsAdmin);
+        uiModel.addAttribute("bigTagsRight", bigTagsAdministrator);
+        uiModel.addAttribute("tagIdsLeft", tTagIdsAdmin);
+        uiModel.addAttribute("tagIdsRight", tTagIdsAdministrator);
+    }
+
+    public static void prepareAdminContents(List<BigTag> bigTagsAdmin, List<BigTag> bigTagsAdministrator, Model uiModel, HttpSession session){
+
+    	//get out relevant content (urls)
+		Object cus_items_per_page = session.getAttribute("items_per_page");
+		int items_per_page = cus_items_per_page == null ? 8 : Integer.valueOf(cus_items_per_page.toString());
+        List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
+        List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
+    	for(int i = 0; i < bigTagsAdmin.size(); i++){
+    		tContentListsLeft.add(Content.findContentsByTag(bigTagsAdmin.get(i), 0, items_per_page, null));
+    	}
+    	for(int i = 0; i < bigTagsAdministrator.size(); i++){
+    		tContentListsRight.add(Content.findContentsByTag(bigTagsAdministrator.get(i), 0, items_per_page, null));
+    	}
+
+    	//set to front end model.
+        uiModel.addAttribute("contentsLeft", tContentListsLeft);
+        uiModel.addAttribute("contentsRight", tContentListsRight);
     }
 }

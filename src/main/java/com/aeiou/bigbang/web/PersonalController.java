@@ -51,20 +51,17 @@ public class PersonalController extends BaseController{
 		if(BigUtil.isSystemCommand(spaceOwner, tCurUser))										//secrete commands goes here.
     		 return "public/index";
 
-    	UserAccount tOwner = UserAccount.findUserAccountByName(spaceOwner);			//make sure the owner exist, and set the name on title
+    	UserAccount tOwner = convertUserNameToUserAccount(spaceOwner);
     	if(tOwner == null){
-    		spaceOwner = BigUtil.getUTFString(spaceOwner);
-    		tOwner = UserAccount.findUserAccountByName(spaceOwner); //bet it might still not UTF8 encoded.
-    		if(tOwner == null)
-    			return null;
+    		return null;
     	}
 
-    	init(tOwner, uiModel, request);
+    	swithCurrentOwner(tOwner, uiModel, request);
         BigUtil.checkTheme(tOwner, request);
     	
     	spaceOwner = tOwner.getName();	//this name has no utf8 string issue. is a readable one.
     
-    	List<String[]> tagsAndNumbers = BigUtil.prepareTagAndNumberList(tOwner);
+    	List<String[]> tagsAndNumbers = BigUtil.fetchTagAndNumberInListOfArrayFormat(tOwner);
     	String[] tBigTagStrsLeft = tagsAndNumbers.get(0);
     	String[] tBigTagStrsRight = tagsAndNumbers.get(1);
     	String[] tNumStrsLeft = tagsAndNumbers.get(2);
@@ -74,7 +71,7 @@ public class PersonalController extends BaseController{
     	List<BigTag> tBigTagsRight = new ArrayList<BigTag>();
     	List<Long> tTagIdsLeft = new ArrayList<Long>();
     	List<Long> tTagIdsRight = new ArrayList<Long>();
-    	//if the layout info in DB is not good, create it from beginning.
+    	//if the layout info in DB is not correct, create it from beginning.
     	if(BigUtil.notCorrect(tagsAndNumbers)){
     		List<List> lists = BigUtil.resetTagsForOwner(tOwner, request);
     		tBigTagsLeft = lists.get(0);
@@ -82,8 +79,8 @@ public class PersonalController extends BaseController{
     		tTagIdsLeft = lists.get(2);
     		tTagIdsRight = lists.get(3);
     	}else{																			//prepare the info for view base on the string in db:
-    		tBigTagsLeft = BigUtil.transferToTags(tBigTagStrsLeft, spaceOwner);
-    		tBigTagsRight = BigUtil.transferToTags(tBigTagStrsRight, spaceOwner);
+    		tBigTagsLeft = BigUtil.convertTagArrayToList(tBigTagStrsLeft, spaceOwner);
+    		tBigTagsRight = BigUtil.convertTagArrayToList(tBigTagStrsRight, spaceOwner);
     		
     		for(BigTag tag : tBigTagsLeft){
     			tTagIdsLeft.add(tag.getId());   //it can not be null, even if admin changed the name of the tags, cause it's handled in BigtUtil
@@ -92,59 +89,13 @@ public class PersonalController extends BaseController{
     			tTagIdsRight.add(tag.getId()); //it can not be null, even if admin changed the name of the tags, cause it's handled in BigtUtil
     		}
     	}
-																						//final adjust---not all tags should be shown to curUser:
-		if(tCurName == null){										//not logged in
-			for(int i = tBigTagsLeft.size()-1; i >=0 ; i--){
-				if(tBigTagsLeft.get(i).getAuthority() != 0){
-					tBigTagsLeft.remove(i);
-					tTagIdsLeft.remove(i);
-				}
-			}
-			for(int i = tBigTagsRight.size()-1; i >=0 ; i--){
-				if(tBigTagsRight.get(i).getAuthority() != 0){
-					tBigTagsRight.remove(i);
-					tTagIdsRight.remove(i);
-				}
-			}
-		}else{
-			tCurName = tCurUser.getName();
-			if(!tCurName.equals(spaceOwner)){						//has logged in but not self.
-				if(tOwner.getListento().contains(tCurUser)){					//it's team member
-					for(int i = tBigTagsLeft.size()-1; i >=0 ; i--){
-						if(tBigTagsLeft.get(i).getAuthority() != 0 && tBigTagsLeft.get(i).getAuthority() != 2){
-							tBigTagsLeft.remove(i);
-							tTagIdsLeft.remove(i);
-						}
-					}
-					for(int i = tBigTagsRight.size()-1; i >=0 ; i--){
-						if(tBigTagsRight.get(i).getAuthority() != 0 && tBigTagsRight.get(i).getAuthority() != 2){
-							tBigTagsRight.remove(i);
-							tTagIdsRight.remove(i);
-						}
-					}
-				}else{															//it's someone else TODO: consider about case 3 in future.
-					for(int i = tBigTagsLeft.size()-1; i >=0 ; i--){
-						if(tBigTagsLeft.get(i).getAuthority() != 0){
-							tBigTagsLeft.remove(i);
-							tTagIdsLeft.remove(i);
-						}
-					}
-					for(int i = tBigTagsRight.size()-1; i >=0 ; i--){
-						if(tBigTagsRight.get(i).getAuthority() != 0){
-							tBigTagsRight.remove(i);
-							tTagIdsRight.remove(i);
-						}
-					}
-				}
-				
-				//Determine if the add_as_friend/unfollow links should be displayed.
-            	if(tCurUser.getListento().contains(tOwner)){
-        			uiModel.addAttribute("nothireable", "true");
-        		}else{
-        			uiModel.addAttribute("notfireable", "true");
-        		}
-			}
-		}
+		
+    	finalAdjustment(tBigTagsLeft, tBigTagsRight, tTagIdsLeft, tTagIdsRight, tCurName, tCurUser, spaceOwner, tOwner);
+    	
+		// Determine if the add_as_friend/unfollow links should be displayed.
+		boolean isFriend = tCurUser.getListento().contains(tOwner);
+		uiModel.addAttribute("nothireable", isFriend ? "true" : "false");
+		uiModel.addAttribute("notfireable", isFriend ? "false" : "true");
 		
 		Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
         List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
@@ -152,17 +103,14 @@ public class PersonalController extends BaseController{
     	for(int i = 0; i < tBigTagsLeft.size(); i++){
     		tContentListsLeft.add(
     				Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, tAuthSet,
-    				0, Integer.valueOf(tNumStrsLeft[i]).intValue(), null));
+    				0, tNumStrsLeft == null || tNumStrsLeft[i] == null ? 8 : Integer.valueOf(tNumStrsLeft[i]).intValue(), null));
     	}
     	for(int i = 0; i < tBigTagsRight.size(); i++){
     		tContentListsRight.add(
     				Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, tAuthSet,
-    				0, Integer.valueOf(tNumStrsRight[i]).intValue(), null));
+    				0, tNumStrsRight == null || tNumStrsRight[i] == null ? 8 : Integer.valueOf(tNumStrsRight[i]).intValue(), null));
     	}
 
-        uiModel.addAttribute("spaceOwner", spaceOwner);
-        uiModel.addAttribute("spaceOwnerId", tOwner.getId());
-        uiModel.addAttribute("description", tOwner.getDescription());
         uiModel.addAttribute("bigTagsLeft", tBigTagsLeft);
         uiModel.addAttribute("bigTagsRight", tBigTagsRight);
         uiModel.addAttribute("tagIdsLeft", tTagIdsLeft);
@@ -199,6 +147,64 @@ public class PersonalController extends BaseController{
         //tHandler.getRequestCache().saveRequest(request, response);
         return "public/index";
     }
+	
+	private void finalAdjustment(List<BigTag> tBigTagsLeft,
+	    	List<BigTag> tBigTagsRight,
+	    	List<Long> tTagIdsLeft,
+	    	List<Long> tTagIdsRight, String tCurName, UserAccount tCurUser, String spaceOwner, UserAccount tOwner) {
+		// final adjust---not all tags should be shown to curUser:
+		if (tCurName == null) { // not logged in
+			for (int i = tBigTagsLeft.size() - 1; i >= 0; i--) {
+				if (tBigTagsLeft.get(i).getAuthority() != 0) {
+					tBigTagsLeft.remove(i);
+					tTagIdsLeft.remove(i);
+				}
+			}
+			for (int i = tBigTagsRight.size() - 1; i >= 0; i--) {
+				if (tBigTagsRight.get(i).getAuthority() != 0) {
+					tBigTagsRight.remove(i);
+					tTagIdsRight.remove(i);
+				}
+			}
+		} else {
+			tCurName = tCurUser.getName(); // to avoid the Capital issue.
+											// tCurName are not capital
+											// sensitive.
+			if (!tCurName.equals(spaceOwner)) { // has logged in but not self.
+				if (tOwner.getListento().contains(tCurUser)) { // it's team
+																// member
+					for (int i = tBigTagsLeft.size() - 1; i >= 0; i--) {
+						if (tBigTagsLeft.get(i).getAuthority() != 0
+								&& tBigTagsLeft.get(i).getAuthority() != 2) {
+							tBigTagsLeft.remove(i);
+							tTagIdsLeft.remove(i);
+						}
+					}
+					for (int i = tBigTagsRight.size() - 1; i >= 0; i--) {
+						if (tBigTagsRight.get(i).getAuthority() != 0
+								&& tBigTagsRight.get(i).getAuthority() != 2) {
+							tBigTagsRight.remove(i);
+							tTagIdsRight.remove(i);
+						}
+					}
+				} else { // it's someone else TODO: consider about case 3 in
+							// future.
+					for (int i = tBigTagsLeft.size() - 1; i >= 0; i--) {
+						if (tBigTagsLeft.get(i).getAuthority() != 0) {
+							tBigTagsLeft.remove(i);
+							tTagIdsLeft.remove(i);
+						}
+					}
+					for (int i = tBigTagsRight.size() - 1; i >= 0; i--) {
+						if (tBigTagsRight.get(i).getAuthority() != 0) {
+							tBigTagsRight.remove(i);
+							tTagIdsRight.remove(i);
+						}
+					}
+				}
+			}
+		}
+	}
 	
     //==============================alive check==================================
     @RequestMapping(value = "stgocheck/{keyStr}", headers = "Accept=application/json")
@@ -325,6 +331,17 @@ public class PersonalController extends BaseController{
 	    
 		UserAccountController tController = SpringApplicationContext.getApplicationContext().getBean("userAccountController", UserAccountController.class);
 		return tController.updateForm(ownerID, uiModel, request);
+	}
+	
+	private UserAccount convertUserNameToUserAccount(String pName){
+		UserAccount tUserAccount = UserAccount.findUserAccountByName(pName);			//make sure the owner exist, and set the name on title
+		if(tUserAccount == null){
+    		pName = BigUtil.getUTFString(pName);
+    		tUserAccount = UserAccount.findUserAccountByName(pName); //bet it might still not UTF8 encoded.
+    		if(tUserAccount == null)
+    			return null;
+    	}
+		return tUserAccount;
 	}
 	
 }

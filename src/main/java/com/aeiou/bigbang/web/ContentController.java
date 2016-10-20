@@ -46,14 +46,14 @@ public class ContentController {
         BigUtil.checkTheme(tOwner, httpServletRequest);
         
         List<BigTag> tTags = null;
-        List<String[]> tTagsAndNums = BigUtil.prepareTagAndNumberList(tOwner);
+        List<String[]> tTagsAndNums = BigUtil.fetchTagAndNumberInListOfArrayFormat(tOwner);
         if(BigUtil.notCorrect(tTagsAndNums)){
         	List<List> lists = BigUtil.resetTagsForOwner(tOwner, httpServletRequest);
         	tTags = lists.get(0);
         	tTags.addAll(lists.get(1));
     	}else{	
-        	tTags = BigUtil.transferToTags(tTagsAndNums.get(0), tCurName);
-        	tTags.addAll(BigUtil.transferToTags(tTagsAndNums.get(1), tCurName));
+        	tTags = BigUtil.convertTagArrayToList(tTagsAndNums.get(0), tCurName);
+        	tTags.addAll(BigUtil.convertTagArrayToList(tTagsAndNums.get(1), tCurName));
     	}
         
         uiModel.addAttribute("mytags", tTags);

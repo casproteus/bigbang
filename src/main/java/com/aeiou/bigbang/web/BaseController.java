@@ -32,30 +32,34 @@ public class BaseController {
 		return userContextService.getCurrentUserName();
 	}
     
+    protected void swithCurrentOwner(UserAccount pOwner, Model model, HttpServletRequest request){
+    	model.addAttribute("spaceOwner", pOwner.getName());
+    	model.addAttribute("description", pOwner.getDescription());
+    	checkIfCusTextNeedTobeReInit(pOwner, model, request);
+    	request.getSession().setAttribute("CurrentOwnerID", pOwner.getId());
+    }
     /**
      * if the language is switched, or visiting a different owner's space, then re-init the texts on customisable areas (header and footer)
      * @param pOwner
      * @param model
      * @param request
      */
-	protected void init(UserAccount pOwner, Model model, HttpServletRequest request){
-		
+	private void checkIfCusTextNeedTobeReInit(UserAccount pOwner, Model model, HttpServletRequest request){
+		//make sure session has language prop first.
 		HttpSession session = request.getSession();
-		
 		if(session.getAttribute("lang") == null){	//first visiting, no language set yet. (beginning of visiting)
-			session.setAttribute("lang", decideDefaultLang(request));
+			session.setAttribute("lang", decideLangWithDefaultValue(request, "en"));
 		}
-		Object tlang = request.getParameter("lang");			//language in request
 		
+		Object tlang = request.getParameter("lang");			//language in request
 		if(!pOwner.getId().equals(session.getAttribute("CurrentOwnerID"))){	//first visit or user is visiting different owner page.
-			reinitCommonText(pOwner, session, tlang); //
+			reInitCosText(pOwner, session, tlang);
 		} else if(tlang != null){				//same owner page while user is clicking the language button
 			if(!session.getAttribute("lang").equals(tlang)){	// and the new setted languagd is different from old one.
 				session.setAttribute("lang", tlang);	//then set the new one into session.
-				reinitCommonText(pOwner, session, tlang);
+				reInitCosText(pOwner, session, tlang);
 			}
 		}
-		session.setAttribute("CurrentOwnerID", pOwner.getId());
 	}
 	
 	/**
@@ -64,9 +68,9 @@ public class BaseController {
 	 * @param request
 	 * @return
 	 */
-	protected String decideDefaultLang(HttpServletRequest request){
+	private String decideLangWithDefaultValue(HttpServletRequest request, String defaultLang){
 		Locale locale = request.getLocale();
-		String tlang = locale == null ? "en" : locale.getLanguage();
+		String tlang = locale == null ? defaultLang : locale.getLanguage();
 		if (("en".equals(tlang) && request.getSession().getAttribute("en") != "true") ||
 			("fr".equals(tlang) && request.getSession().getAttribute("fr") != "true") ||
 			("zh".equals(tlang) && request.getSession().getAttribute("zh") != "true") ||
@@ -74,12 +78,12 @@ public class BaseController {
 			("es".equals(tlang) && request.getSession().getAttribute("es") != "true")){
 			return tlang;
 		}
-		return "en";
+		return defaultLang;
 	}
 	
 	//load all customizes into session to allow the webpage costomizable.
 	//when visiting public page, the 
-	private void reinitCommonText(UserAccount pOwner, HttpSession session, Object pLang){
+	private void reInitCosText(UserAccount pOwner, HttpSession session, Object pLang){
 
 		if(session.getAttribute("user_role") == null){
 			session.setAttribute("user_role", "");

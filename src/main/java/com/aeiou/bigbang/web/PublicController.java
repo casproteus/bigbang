@@ -46,49 +46,29 @@ public class PublicController extends BaseController{
     	LogFactory.getLog(PublicController.class).info("Called! PublicController.post is finally called from: " + Thread.getAllStackTraces().toString());
     }
     
+    /**
+     * when visiting a page with no path, will be considered as visiting admin's page.
+     * @NOTE: must be suer the admin user exists, other wise system will not work.
+     * @param uiModel
+     * @param request
+     * @return
+     */
     @RequestMapping(produces = "text/html")
     public String index( Model uiModel, HttpServletRequest request){
+        
     	//init if needed
     	UserAccount tOwner = UserAccount.findUserAccountByName("admin");
-    	init(tOwner, uiModel, request);
+    	swithCurrentOwner(tOwner, uiModel, request);
     	
     	//translate the tag into object.
     	HttpSession session = request.getSession();
-    	List<BigTag> tBigTagsAdmin = new ArrayList<BigTag>();
-    	List<BigTag> tBigTagsAdministrator = new ArrayList<BigTag>();
-    	BigUtil.prepareAdminTags(tBigTagsAdmin, tBigTagsAdministrator, session);
-    	
-    	List<Long> tTagIdsAdmin = new ArrayList<Long>();
-    	List<Long> tTagIdsAdministrator = new ArrayList<Long>();
-		for(int i = 0; i < tBigTagsAdmin.size(); i++){
-			tTagIdsAdmin.add(tBigTagsAdmin.get(i).getId());
-		}    		
-		for(int i = 0; i < tBigTagsAdministrator.size(); i++){
-			tTagIdsAdministrator.add(tBigTagsAdministrator.get(i).getId());
-		}
-		
-		//get out relevant content (urls)
-		Object cus_items_per_page = session.getAttribute("items_per_page");
-		int items_per_page = cus_items_per_page == null ? 8 : Integer.valueOf(cus_items_per_page.toString());
-        List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
-        List<List> tContentListsRight = new ArrayList<List>();								//prepare the contentList for each tag.
-    	for(int i = 0; i < tBigTagsAdmin.size(); i++){
-    		tContentListsLeft.add(Content.findContentsByTag(tBigTagsAdmin.get(i), 0, items_per_page, null));
-    	}
-    	for(int i = 0; i < tBigTagsAdministrator.size(); i++){
-    		tContentListsRight.add(Content.findContentsByTag(tBigTagsAdministrator.get(i), 0, items_per_page, null));
-    	}
 
-    	//set to front end model.
-        uiModel.addAttribute("spaceOwner", "admin");
-        uiModel.addAttribute("description", tOwner.getDescription());
-        uiModel.addAttribute("bigTagsLeft", tBigTagsAdmin);
-        uiModel.addAttribute("bigTagsRight", tBigTagsAdministrator);
-        uiModel.addAttribute("tagIdsLeft", tTagIdsAdmin);
-        uiModel.addAttribute("tagIdsRight", tTagIdsAdministrator);
-        uiModel.addAttribute("contentsLeft", tContentListsLeft);
-        uiModel.addAttribute("contentsRight", tContentListsRight);
-        
+    	//public page is actually admin's personal page, while tags of admin's are all public. and come from also administrator, so it's different from personal tags.
+    	List<BigTag> bigTagsAdmin = new ArrayList<BigTag>();
+    	List<BigTag> bigTagsAdministrator = new ArrayList<BigTag>();
+    	BigUtil.prepareAdminTags(bigTagsAdmin, bigTagsAdministrator, uiModel, session);
+    	BigUtil.prepareAdminContents(bigTagsAdmin, bigTagsAdministrator,uiModel, session);
+		   
         return "public/index";
     }
     

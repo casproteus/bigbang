@@ -46,7 +46,7 @@ public class CustomizeController {
     	HttpSession session = request.getSession();
 		List<BigTag> tBigTagsAdmin = new ArrayList<BigTag>();
     	List<BigTag> tBigTagsAdministrator = new ArrayList<BigTag>();
-    	BigUtil.prepareAdminTags(tBigTagsAdmin, tBigTagsAdministrator, session);
+    	BigUtil.prepareAdminTags(tBigTagsAdmin, tBigTagsAdministrator, uiModel, session);
     	tBigTagsAdmin.addAll(tBigTagsAdministrator);
     	
 		List<BigTag> commonCheckedBMTags = tBigTagsAdmin;	//the tags created by admin and administrators

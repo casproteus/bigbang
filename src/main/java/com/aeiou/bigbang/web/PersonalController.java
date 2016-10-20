@@ -90,12 +90,7 @@ public class PersonalController extends BaseController{
     		}
     	}
 		
-    	finalAdjustment(tBigTagsLeft, tBigTagsRight, tTagIdsLeft, tTagIdsRight, tCurName, tCurUser, spaceOwner, tOwner);
-    	
-		// Determine if the add_as_friend/unfollow links should be displayed.
-		boolean isFriend = tCurUser.getListento().contains(tOwner);
-		uiModel.addAttribute("nothireable", isFriend ? "true" : "false");
-		uiModel.addAttribute("notfireable", isFriend ? "false" : "true");
+    	filterTagsWithAithenticationCheck(tBigTagsLeft, tBigTagsRight, tTagIdsLeft, tTagIdsRight, tCurName, tCurUser, spaceOwner, tOwner);
 		
 		Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
         List<List> tContentListsLeft = new ArrayList<List>();								//prepare the contentList for each tag.
@@ -117,7 +112,13 @@ public class PersonalController extends BaseController{
         uiModel.addAttribute("tagIdsRight", tTagIdsRight);
         uiModel.addAttribute("contentsLeft", tContentListsLeft);
         uiModel.addAttribute("contentsRight", tContentListsRight);
-        
+
+		// Determine if the add_as_friend/unfollow links should be displayed.
+		boolean isFriend = tCurUser.getListento().contains(tOwner);
+		uiModel.addAttribute("nothireable", isFriend ? "true" : "false");
+		uiModel.addAttribute("notfireable", isFriend ? "false" : "true");
+		
+		
         //====================prepare content for twitter area ============================
     	List<Twitter> twitterLeft = Twitter.findTwitterByPublisher(tOwner, tAuthSet, 0, 8, null);
     	//for this part it's a little complex: it's about to display the twitters of the owner's friends. not the owner's, so it's not
@@ -148,7 +149,7 @@ public class PersonalController extends BaseController{
         return "public/index";
     }
 	
-	private void finalAdjustment(List<BigTag> tBigTagsLeft,
+	private void filterTagsWithAithenticationCheck(List<BigTag> tBigTagsLeft,
 	    	List<BigTag> tBigTagsRight,
 	    	List<Long> tTagIdsLeft,
 	    	List<Long> tTagIdsRight, String tCurName, UserAccount tCurUser, String spaceOwner, UserAccount tOwner) {

@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:sec="http://www.springframework.org/security/tags" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
-    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-    <jsp:output omit-xml-declaration="yes"/>
-    <form:update id="fu_com_aeiou_bigbang_domain_Remark" modelAttribute="remark" path="/remarks" versionField="Version" z="JYRKFQqMEvbVvr6ux+p68mWw5HI=">
-        <field:editor field="content" height="300" id="c_com_aeiou_bigbang_domain_Remark_content" required="true" z="T3F6giLLpXJrNETuQerWplAqyFY="/>
-        <field:select field="authority" id="c_com_aeiou_bigbang_domain_Twitter_authority" itemValue="id" items="${authorities}" path="/bigtags" z="user-managed"/>
+<div xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:form="urn:jsptagdir:/WEB-INF/tags/form"
+	xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<form:update id="fu_com_aeiou_bigbang_domain_Remark"
+		modelAttribute="remark" path="/remarks" versionField="Version"
+		z="JYRKFQqMEvbVvr6ux+p68mWw5HI=">
+		<field:editor field="content" height="300"
+			id="c_com_aeiou_bigbang_domain_Remark_content" required="true"
+			z="T3F6giLLpXJrNETuQerWplAqyFY=" />
+		<field:select field="authority"
+			id="c_com_aeiou_bigbang_domain_Twitter_authority" itemValue="id"
+			items="${authorities}" path="/bigtags" z="user-managed" />
 		<sec:authorize ifAllGranted="ROLE_ADMIN">
-        	<field:select field="publisher" id="c_com_aeiou_bigbang_domain_Content_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="K9RgD0iIpWMOvR2WiE3Lm7LaX5I="/>
-        </sec:authorize>
-    </form:update>
+			<field:select field="publisher"
+				id="c_com_aeiou_bigbang_domain_Content_publisher" itemValue="id"
+				items="${useraccounts}" path="/useraccounts" required="true"
+				z="K9RgD0iIpWMOvR2WiE3Lm7LaX5I=" />
+		</sec:authorize>
+	</form:update>
 </div>

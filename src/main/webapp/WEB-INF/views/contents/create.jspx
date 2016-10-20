@@ -1,38 +1,60 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" 
-xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:springform="http://www.springframework.org/tags/form"
-xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" 
-xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" version="2.0">
-    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-    <jsp:output omit-xml-declaration="yes"/>
-    <table class="tWireless">
-        <tr>
-            <td class="tWireless" valign="top">
-                <form:create id="fc_com_aeiou_bigbang_domain_Content" modelAttribute="content" path="/contents" render="${empty dependencies}" z="mZcFXRVgd+YQsRIO+7SoQkhNsmo=">
-					<springform:hidden path="addingTagFlag" id="addingTagFlag" name="addingTagFlag"/> 
-                    <field:BigContentTitle field="title" id="c_com_aeiou_bigbang_domain_Content_title" required="true" z="KykRIB9kokqjzUlWGTykm0UCgVk="/>
-                    <field:BigContentURL field="sourceURL" id="c_com_aeiou_bigbang_domain_Content_sourceURL" required="true" z="Hk2QDdFCnal0PPA/nrv6B/Kw28U="/>
-                    <!-- <field:select field="commonBigTag" id="c_com_aeiou_bigbang_domain_Content_commonBigTag" itemValue="id" items="${bigtags}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/> -->
-                    <field:selectPriTag field="uncommonBigTag" id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" itemValue="id" items="${mytags}" path="/bigtags" type="0" z="user-managed"/>
-                    <!-- <field:input field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" validationMessageCode="field_invalid_integer" z="13lgct4/IuNNNQhfERdHcr1QQ4A="/> -->
-                    <field:select field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" itemValue="id" items="${authorities}" path="/bigtags" z="user-managed"/>
-                    <!-- <field:textarea field="conentCache" id="c_com_aeiou_bigbang_domain_Content_conentCache" z="user-managed"/> 
+<div xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:form="urn:jsptagdir:/WEB-INF/tags/form"
+	xmlns:springform="http://www.springframework.org/tags/form"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<table class="tWireless">
+		<tr>
+			<td class="tWireless" valign="top"><form:create
+					id="fc_com_aeiou_bigbang_domain_Content" modelAttribute="content"
+					path="/contents" render="${empty dependencies}"
+					z="mZcFXRVgd+YQsRIO+7SoQkhNsmo=">
+					<springform:hidden path="addingTagFlag" id="addingTagFlag"
+						name="addingTagFlag" />
+					<field:BigContentTitle field="title"
+						id="c_com_aeiou_bigbang_domain_Content_title" required="true"
+						z="KykRIB9kokqjzUlWGTykm0UCgVk=" />
+					<field:BigContentURL field="sourceURL"
+						id="c_com_aeiou_bigbang_domain_Content_sourceURL" required="true"
+						z="Hk2QDdFCnal0PPA/nrv6B/Kw28U=" />
+					<!-- <field:select field="commonBigTag" id="c_com_aeiou_bigbang_domain_Content_commonBigTag" itemValue="id" items="${bigtags}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/> -->
+					<field:selectPriTag field="uncommonBigTag"
+						id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag"
+						itemValue="id" items="${mytags}" path="/bigtags" type="0"
+						z="user-managed" />
+					<!-- <field:input field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" validationMessageCode="field_invalid_integer" z="13lgct4/IuNNNQhfERdHcr1QQ4A="/> -->
+					<field:select field="authority"
+						id="c_com_aeiou_bigbang_domain_Content_authority" itemValue="id"
+						items="${authorities}" path="/bigtags" z="user-managed" />
+					<!-- <field:textarea field="conentCache" id="c_com_aeiou_bigbang_domain_Content_conentCache" z="user-managed"/> 
                     <field:select field="publisher" id="c_com_aeiou_bigbang_domain_Content_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="K9RgD0iIpWMOvR2WiE3Lm7LaX5I="/>-->
-                </form:create>
-                <form:dependency dependencies="${dependencies}" id="d_com_aeiou_bigbang_domain_Content" render="${not empty dependencies}" z="OIaGm9/s9pNT5CEMnSapCWMx+DY="/>
-            </td>
-            <td class="tWireless" valign="top" width="450px">
-                <util:panel id="title2" title="${title2}">
-                    <p>Hi Big Editor, Adding some interesting content?</p>
-                    <p>Cool! And here's some notes for you:</p>
-                    <p>1.Just put down the Title and URL, they will be displayed on both public space and your own space.</p>
-                    <p>2.Don't know where is your own space yet? How about this: <a>http://www.ShareTheGoodOnes.com/${pageContext['request'].userPrincipal.name}</a>
-                    </p>
-                    <p>3.What? can not find a tag for your content in public space? OK, please use 'other' for now.</p>
-                    <p>4.Sure you can create new tag, you are the big editor! BTW, in your own space, content will be organised with tags you created.</p>
-                    <p>5.Why set as private? Because we thought you may have some content don't want others to see yet. Set it private, so only you can see.</p>
-                </util:panel>
-            </td>
-        </tr>
-    </table>
+				</form:create> <form:dependency dependencies="${dependencies}"
+					id="d_com_aeiou_bigbang_domain_Content"
+					render="${not empty dependencies}" z="OIaGm9/s9pNT5CEMnSapCWMx+DY=" />
+			</td>
+			<td class="tWireless" valign="top" width="450px"><util:panel
+					id="title2" title="${title2}">
+					<p>Hi Big Editor, Adding some interesting content?</p>
+					<p>Cool! And here's some notes for you:</p>
+					<p>1.Just put down the Title and URL, they will be displayed on
+						both public space and your own space.</p>
+					<p>
+						2.Don't know where is your own space yet? How about this: <a>http://www.ShareTheGoodOnes.com/${pageContext['request'].userPrincipal.name}</a>
+					</p>
+					<p>3.What? can not find a tag for your content in public space?
+						OK, please use 'other' for now.</p>
+					<p>4.Sure you can create new tag, you are the big editor! BTW,
+						in your own space, content will be organised with tags you
+						created.</p>
+					<p>5.Why set as private? Because we thought you may have some
+						content don't want others to see yet. Set it private, so only you
+						can see.</p>
+				</util:panel></td>
+		</tr>
+	</table>
 </div>

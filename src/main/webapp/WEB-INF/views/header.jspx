@@ -1,76 +1,84 @@
-<div id="header" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
- xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:spring="http://www.springframework.org/tags" 
- xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" version="2.0">
-  <jsp:directive.page contentType="text/html;charset=UTF-8" />
-  <jsp:output omit-xml-declaration="yes" />
+<div id="header" xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
 
-  <!-- if user has logged in, home page point to personal space, if not logged in, then point to public space -->
-<spring:url value="/resources/j_spring_security_check" var="form_url" />
-<form id="headloginform" name="f" modelAttribute="${login}" action="${fn:escapeXml(form_url)}" method="POST" style="height:20px; color: #AAAAAA">
-  <c:choose>
-     <c:when test="${pageContext['request'].userPrincipal != null}">
-     	<c:choose>
-     		<c:when test="${spaceOwnerId eq currentUserID}"> <!-- on user's own space -->
-     		  <spring:url value="/" var="home"/>
-		  	  <a href="${home}">
-		  		<spring:message code="button_home"/>
-		  	  </a>
-     		</c:when>
-     		<c:otherwise>
-     		  <spring:url value="/${pageContext['request'].userPrincipal.name}" var="home"/>
-		  	  <a href="${home}">
-		  		<spring:message code="button_myhome" arguments="${pageContext['request'].userPrincipal.name}"/>
-		  	  </a>
-     		</c:otherwise>
-     	</c:choose>
-  		
-  		<c:out value=" || "/>
-	    <span>
-	      <spring:url value="/resources/j_spring_security_logout" var="logout"/>
-	      <a href="${logout}">
-	        <spring:message code="security_logout"/>
-	      </a>
-	    </span>
-  	 </c:when>
-  	 <c:otherwise>
-  	 
-        <input id="j_rememberme" name="j_rememberme" type="checkbox" style="vertical-align:top; height:14px;">
-      	  <spring:message code="label_rememberme" htmlEscape="false" />
-        </input>
-        
-        <c:out value=" | "/>
-        <spring:message code="security_login_form_name" />
-        <input id="j_username" type='text' name='j_username' style="width:60px; height:16px;" />
-        <script type="text/javascript">
+	<!-- if user has logged in, home page point to personal space, if not logged in, then point to public space -->
+	<spring:url value="/resources/j_spring_security_check" var="form_url" />
+	<form id="headloginform" name="f" modelAttribute="${login}"
+		action="${fn:escapeXml(form_url)}" method="POST"
+		style="height: 20px; color: #AAAAAA">
+		<c:choose>
+			<c:when test="${pageContext['request'].userPrincipal != null}">
+				<c:choose>
+					<c:when test="${spaceOwnerId eq currentUserID}">
+						<!-- on user's own space -->
+						<spring:url value="/" var="home" />
+						<a href="${home}"> <spring:message code="button_home" />
+						</a>
+					</c:when>
+					<c:otherwise>
+						<spring:url value="/${pageContext['request'].userPrincipal.name}"
+							var="home" />
+						<a href="${home}"> <spring:message code="button_myhome"
+								arguments="${pageContext['request'].userPrincipal.name}" />
+						</a>
+					</c:otherwise>
+				</c:choose>
+
+				<c:out value=" || " />
+				<span> <spring:url
+						value="/resources/j_spring_security_logout" var="logout" /> <a
+					href="${logout}"> <spring:message code="security_logout" />
+				</a>
+				</span>
+			</c:when>
+			<c:otherwise>
+
+				<input id="j_rememberme" name="j_rememberme" type="checkbox"
+					style="vertical-align: top; height: 14px;">
+				<spring:message code="label_rememberme" htmlEscape="false" />
+				</input>
+
+				<c:out value=" | " />
+				<spring:message code="security_login_form_name" />
+				<input id="j_username" type='text' name='j_username'
+					style="width: 60px; height: 16px;" />
+				<script type="text/javascript">
           <c:set var="sec_name_msg">
             <spring:escapeBody javaScriptEscape="true">${name_msg}</spring:escapeBody>
           </c:set>
           Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_username", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_name_msg}", required : true}})); 
         </script>
-        
-       	<c:out value=" "/>
-	    <spring:message code="security_login_form_password" />
-        <input id="j_password" type='password' name='j_password' style="width:60px; height:16px" onsubmit="setValues()"/>
-        <script type="text/javascript">
+
+				<c:out value=" " />
+				<spring:message code="security_login_form_password" />
+				<input id="j_password" type='password' name='j_password'
+					style="width: 60px; height: 16px" onsubmit="setValues()" />
+				<script type="text/javascript">
           <c:set var="sec_pwd_msg">
             <spring:escapeBody javaScriptEscape="true">${pwd_msg}</spring:escapeBody>
           </c:set>
           Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_password", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_pwd_msg}", required : true}})); 
         </script>
-	        
-      	<c:out value=" | "/>
-        <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
-        <a onclick="setValues()" href="#" style="height:18px; vertical-align: top;">
-          <spring:message code="button_submit" htmlEscape="false" />
-        </a>
-	    <script type="text/javascript">
+
+				<c:out value=" | " />
+				<script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
+				<a onclick="setValues()" href="#"
+					style="height: 18px; vertical-align: top;"> <spring:message
+						code="button_submit" htmlEscape="false" />
+				</a>
+				<script type="text/javascript">
 		  function setValues() {
 			var form = document.getElementById("headloginform");
 			form.submit();
 		  }
 	    </script>
-	    
-        <script type="text/javascript">
+
+				<script type="text/javascript">
 			dojo.addOnLoad(function() {
 			  dojo.require("dojo.cookie");
 			  var rememberedName = dojo.cookie('login_name');
@@ -89,23 +97,23 @@
 		        
 			})
         </script>
-        
-        <c:out value=" || "/>
-		<spring:url value="/useraccounts?form" var="signupURL"/>
-		<a href="${signupURL}">
-       		<spring:message code="button_signup"/>
-		</a>  	    
-		
-		<input id="proceed" type="image" value="${fn:escapeXml(submit_label)}" style="vertical-align:bottom; width: 0px; height: 0px; border-bottom: 0px; border-top: 0px"/>
-		
-  	 </c:otherwise>
-  </c:choose>
-  
-  <span class="new">
-  	${AddOnNotice}
-	<spring:url value="/resources/images/addon.png" var="addon_img_url" />
-	<img src="${addon_img_url}" style="vertical-align: bottom;"/>
-	<a href='javascript:(
+
+				<c:out value=" || " />
+				<spring:url value="/useraccounts?form" var="signupURL" />
+				<a href="${signupURL}"> <spring:message code="button_signup" />
+				</a>
+
+				<input id="proceed" type="image"
+					value="${fn:escapeXml(submit_label)}"
+					style="vertical-align: bottom; width: 0px; height: 0px; border-bottom: 0px; border-top: 0px" />
+
+			</c:otherwise>
+		</c:choose>
+
+		<span class="new"> ${AddOnNotice} <spring:url
+				value="/resources/images/addon.png" var="addon_img_url" /> <img
+			src="${addon_img_url}" style="vertical-align: bottom;" /> <a
+			href='javascript:(
 	  function(e,t){
 	    var%20n=e.document;
 	    setTimeout(
@@ -146,85 +154,98 @@
 	        e[o](u,a,false)
 	      },1)
 	    }
-	  )(window)' title="${Tit_AddOnNotice}">
-	  <!-- spring:message code="AddOnName" htmlEscape="false"/-->
-	  ${Btn_Booklet}
-	</a>
-  <c:if test="${pageContext['request'].userPrincipal != null}">
-      <c:out value=" || "/>
-      
-      <spring:url value="/messages" var="messages_url"/>
-      <a href="${messages_url}">
-        <spring:url value="/resources/images/inbox.png" var="inbox_img_url" />
-        <spring:message code="global_menu_inboxManage" var="inboxManage_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}" title="${fn:escapeXml(inboxManage_message)}" />
-        <c:if test="${newMessageAmount > 0}">
-        	[<span style="color: red;">${newMessageAmount}</span>]
-        </c:if> 
-      </a>
-    
-      <c:out value=" || "/>
-      <spring:url value="/contents" var="contents_url"/>
-      <a href="${contents_url}">
-        <spring:url value="/resources/images/content.png" var="content_img_url" />
-        <spring:message code="global_menu_contentsManage" var="contentsManage_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(contentsManage_message)}" src="${content_img_url}" title="${fn:escapeXml(contentsManage_message)}" />
-      </a>
-      
-      <spring:message code="doublespace"/>
-      <spring:url value="/twitters" var="twitter_url"/>
-      <a href="${twitter_url}">
-        <spring:url value="/resources/images/diary.png" var="diary_img_url" />
-        <spring:message code="global_menu_diaryManage" var="diaryManage_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(diaryManage_message)}" src="${diary_img_url}" title="${fn:escapeXml(diaryManage_message)}" />
-      </a>
-      
-      <spring:message code="doublespace"/>
-      <spring:url value="/bigtags" var="bigtags_url"/>
-      <a href="${bigtags_url}">
-        <spring:url value="/resources/images/tag.png" var="tag_img_url" />
-        <spring:message code="global_menu_tagsManage" var="tagsManage_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(tagsManage_message)}" src="${tag_img_url}" title="${fn:escapeXml(tagsManage_message)}" />
-      </a>
-      
-      <spring:message code="doublespace"/>
-      <spring:url value="/useraccounts/${currentUserID}" var="useraccounts_url">
-		<spring:param name="form"/>
-      </spring:url>
-      <a href="${useraccounts_url}">
-        <spring:url value="/resources/images/account.png" var="account_img_url" />
-        <spring:message code="global_menu_accountsManage" var="accountsManage_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(accountsManage_message)}" src="${account_img_url}" title="${fn:escapeXml(accountsManage_message)}" />
-      </a>
+	  )(window)'
+			title="${Tit_AddOnNotice}"> <!-- spring:message code="AddOnName" htmlEscape="false"/-->
+				${Btn_Booklet}
+		</a> <c:if test="${pageContext['request'].userPrincipal != null}">
+				<c:out value=" || " />
 
-      <spring:message code="doublespace"/>
-      <spring:url value="/customizes" var="reset_url">
-		<spring:param name="relayouttype" value="reset"/>
-      </spring:url>
-      <c:out value=" || " />
-      <a href="${reset_url}">
-        <spring:url value="/resources/images/reset.png" var="reset_img_url" />
-        <spring:message code="global_menu_setView" var="reset_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(reset_message)}" src="${reset_img_url}" title="${fn:escapeXml(reset_message)}" />
-      </a>
-    </c:if>    
-    </span>
-  </form>
-  <!-- Don't think this is meaningful to real user. so we leave it only in footer. <util:websiteSwitch/> -->
-  
-  <div class="headImgArea">
-	  <spring:url var="home" value="/" />
-	  <spring:message code="button_home" var="home_label" htmlEscape="false" />
-	  <a href="${home}" name="${fn:escapeXml(home_label)}" title="${fn:escapeXml(home_label)}">
-	    <spring:theme code="styleSheet" var="roo_css" />
-	  	<c:choose>
-	  		<c:when test="${'resources/styles/9.css' eq roo_css}">
-		 		<img src = "getImage/uc_${fn:toLowerCase(spaceOwner)}_headimage"/>
-	  		</c:when>
-	  		<c:otherwise>
-	  			<span class="emptySpan"> </span>
-	  		</c:otherwise>
-	  	</c:choose>
-	  </a>
-  </div>
-</div> 
+				<spring:url value="/messages" var="messages_url" />
+				<a href="${messages_url}"> <spring:url
+						value="/resources/images/inbox.png" var="inbox_img_url" /> <spring:message
+						code="global_menu_inboxManage" var="inboxManage_message"
+						htmlEscape="false" /> <img
+					alt="${fn:escapeXml(inboxManage_message)}" src="${inbox_img_url}"
+					title="${fn:escapeXml(inboxManage_message)}" /> <c:if
+						test="${newMessageAmount > 0}">
+        	[<span style="color: red;">${newMessageAmount}</span>]
+        </c:if>
+				</a>
+
+				<c:out value=" || " />
+				<spring:url value="/contents" var="contents_url" />
+				<a href="${contents_url}"> <spring:url
+						value="/resources/images/content.png" var="content_img_url" /> <spring:message
+						code="global_menu_contentsManage" var="contentsManage_message"
+						htmlEscape="false" /> <img
+					alt="${fn:escapeXml(contentsManage_message)}"
+					src="${content_img_url}"
+					title="${fn:escapeXml(contentsManage_message)}" />
+				</a>
+
+				<spring:message code="doublespace" />
+				<spring:url value="/twitters" var="twitter_url" />
+				<a href="${twitter_url}"> <spring:url
+						value="/resources/images/diary.png" var="diary_img_url" /> <spring:message
+						code="global_menu_diaryManage" var="diaryManage_message"
+						htmlEscape="false" /> <img
+					alt="${fn:escapeXml(diaryManage_message)}" src="${diary_img_url}"
+					title="${fn:escapeXml(diaryManage_message)}" />
+				</a>
+
+				<spring:message code="doublespace" />
+				<spring:url value="/bigtags" var="bigtags_url" />
+				<a href="${bigtags_url}"> <spring:url
+						value="/resources/images/tag.png" var="tag_img_url" /> <spring:message
+						code="global_menu_tagsManage" var="tagsManage_message"
+						htmlEscape="false" /> <img
+					alt="${fn:escapeXml(tagsManage_message)}" src="${tag_img_url}"
+					title="${fn:escapeXml(tagsManage_message)}" />
+				</a>
+
+				<spring:message code="doublespace" />
+				<spring:url value="/useraccounts/${currentUserID}"
+					var="useraccounts_url">
+					<spring:param name="form" />
+				</spring:url>
+				<a href="${useraccounts_url}"> <spring:url
+						value="/resources/images/account.png" var="account_img_url" /> <spring:message
+						code="global_menu_accountsManage" var="accountsManage_message"
+						htmlEscape="false" /> <img
+					alt="${fn:escapeXml(accountsManage_message)}"
+					src="${account_img_url}"
+					title="${fn:escapeXml(accountsManage_message)}" />
+				</a>
+
+				<spring:message code="doublespace" />
+				<spring:url value="/customizes" var="reset_url">
+					<spring:param name="relayouttype" value="reset" />
+				</spring:url>
+				<c:out value=" || " />
+				<a href="${reset_url}"> <spring:url
+						value="/resources/images/reset.png" var="reset_img_url" /> <spring:message
+						code="global_menu_setView" var="reset_message" htmlEscape="false" />
+					<img alt="${fn:escapeXml(reset_message)}" src="${reset_img_url}"
+					title="${fn:escapeXml(reset_message)}" />
+				</a>
+			</c:if>
+		</span>
+	</form>
+	<!-- Don't think this is meaningful to real user. so we leave it only in footer. <util:websiteSwitch/> -->
+
+	<div class="headImgArea">
+		<spring:url var="home" value="/" />
+		<spring:message code="button_home" var="home_label" htmlEscape="false" />
+		<a href="${home}" name="${fn:escapeXml(home_label)}"
+			title="${fn:escapeXml(home_label)}"> <spring:theme
+				code="styleSheet" var="roo_css" /> <c:choose>
+				<c:when test="${'resources/styles/9.css' eq roo_css}">
+					<img src="getImage/uc_${fn:toLowerCase(spaceOwner)}_headimage" />
+				</c:when>
+				<c:otherwise>
+					<span class="emptySpan"> </span>
+				</c:otherwise>
+			</c:choose>
+		</a>
+	</div>
+</div>

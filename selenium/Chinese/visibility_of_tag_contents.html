@@ -7,295 +7,299 @@
 <title>visibility_of_tag_contents</title>
 </head>
 <body>
-<table cellpadding="1" cellspacing="1" border="1">
-<thead>
-<tr><td rowspan="1" colspan="3">visibility_of_tag_contents</td></tr>
-</thead><tbody>
-<tr>
-	<td>open</td>
-	<td>/bigbang/</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextNotPresent</td>
-	<td>退出登录状态</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>登录</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>/bigbang/bigtags</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>已注册用户请在此登录</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>/bigbang/bigtags/</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=j_username</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_username</td>
-	<td>tao</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_password</td>
-	<td>1234</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=proceed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>/bigbang/bigtags/</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>admin</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>阿苏阿南</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>姜姜</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>wei</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;Next Page&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Page 2 of 2</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>admin</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>姜姜</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>wei</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=退出登录状态</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=用户登录</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=j_username</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_username</td>
-	<td>姜姜</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_password</td>
-	<td>1234</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=proceed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>/bigbang/bigtags</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>spring-roo</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>tao</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>List results per page: 5 10 15 20 25 | Page 1 of 1</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>List results per page: 5 10 15 20 25 | Page 1 of 1</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>/bigbang/contents</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>paas</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>工作</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>spring-roo</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>tao </td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=退出登录状态</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>/bigbang/contents</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=j_username</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_username</td>
-	<td>admin</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_password</td>
-	<td>2ert</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=proceed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=25</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>tao</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>姜姜</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>采编</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>公共空间</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>个人空间</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>安全等级</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>标题</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=List all Big Tags</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>姜姜</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>test_user_1244</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>spring-roo</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>tag_of_TestUser1233</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=退出登录状态</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>用户注册 || 用户登录</td>
-	<td></td>
-</tr>
-</tbody></table>
+	<table cellpadding="1" cellspacing="1" border="1">
+		<thead>
+			<tr>
+				<td rowspan="1" colspan="3">visibility_of_tag_contents</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>open</td>
+				<td>/bigbang/</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>assertTextNotPresent</td>
+				<td>退出登录状态</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>登录</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>open</td>
+				<td>/bigbang/bigtags</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>已注册用户请在此登录</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>open</td>
+				<td>/bigbang/bigtags/</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=j_username</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_username</td>
+				<td>tao</td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_password</td>
+				<td>1234</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>open</td>
+				<td>/bigbang/bigtags/</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>admin</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>阿苏阿南</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>姜姜</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>wei</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;Next Page&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>Page 2 of 2</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>admin</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>姜姜</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>wei</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=退出登录状态</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=用户登录</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=j_username</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_username</td>
+				<td>姜姜</td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_password</td>
+				<td>1234</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>open</td>
+				<td>/bigbang/bigtags</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>spring-roo</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>tao</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>List results per page: 5 10 15 20 25 | Page 1 of 1</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>List results per page: 5 10 15 20 25 | Page 1 of 1</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>open</td>
+				<td>/bigbang/contents</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>paas</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>工作</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>spring-roo</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>tao</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=退出登录状态</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>open</td>
+				<td>/bigbang/contents</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=j_username</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_username</td>
+				<td>admin</td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_password</td>
+				<td>2ert</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=25</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>tao</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>assertTextPresent</td>
+				<td>姜姜</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>采编</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>公共空间</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>个人空间</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>安全等级</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>标题</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=List all Big Tags</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>姜姜</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>test_user_1244</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>spring-roo</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>tag_of_TestUser1233</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=退出登录状态</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>用户注册 || 用户登录</td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>

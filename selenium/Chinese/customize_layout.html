@@ -7,365 +7,369 @@
 <title>customize_layout</title>
 </head>
 <body>
-<table cellpadding="1" cellspacing="1" border="1">
-<thead>
-<tr><td rowspan="1" colspan="3">customize_layout</td></tr>
-</thead><tbody>
-<tr>
-	<td>open</td>
-	<td>/bigbang/</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=a[name=&quot;主页&quot;] &gt; img</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=用户登录</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=j_username</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_username</td>
-	<td>tao</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_password</td>
-	<td>1234</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=proceed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=tao的空间</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertText</td>
-	<td>css=img[alt=&quot;管理我发布的内容&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;以默认顺序显示所有的标签&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>国内新闻</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>国际新闻</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>搞笑趣闻</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;隐藏&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>国内新闻</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;隐藏&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>国际新闻</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;隐藏&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>搞笑趣闻</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>生活</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//img[@alt='向左移'])[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//img[@alt='隐藏'])[7]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>生活</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>未分类</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//img[@alt='隐藏'])[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>阿苏阿南</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//img[@alt='向左移'])[27]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//img[@alt='隐藏'])[6]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>阿苏阿南</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;管理我发布的内容&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>标题</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>公共空间</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>个人空间</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>安全等级</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=tao的空间</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;管理我的标签&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>名称 *</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>谁可以看见</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=tao的空间</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;管理我的用户信息&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=_description_id</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=_email_id</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyValue</td>
-	<td>id=_email_id</td>
-	<td>tao.mtl@hotmail.com</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=proceed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Show User Account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=tao的空间</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;以默认顺序显示所有的标签&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>国内新闻</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>国际新闻</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>搞笑趣闻</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>阿苏阿南</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=tao的空间</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>震惊 美国大使馆密电提前获中国反导情报</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//a[contains(text(),'&gt;&gt;&gt;')])[3]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>震惊 美国大使馆密电提前获中国反导情报</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=tao的空间</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>xpath=//div[@id='main']/div/table[2]/tbody/tr/td/div[2]/div[2]/div/div/table/tbody/tr[9]/td/form/input</td>
-	<td>10</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//button[@id='proceed'])[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>震惊 美国大使馆密电提前获中国反导情报</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>xpath=//div[@id='main']/div/table/tbody/tr/td/div[2]/div[2]/div/div/table/tbody/tr[10]/td/form/input</td>
-	<td>0</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//button[@id='proceed'])[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>朝鲜核爆，中国偷偷笑</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>xpath=//div[@id='main']/div/table/tbody/tr/td/div[2]/div[2]/div/div/form/input</td>
-	<td>-1</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//button[@id='proceed'])[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>朝鲜核爆，中国偷偷笑</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>震惊 美国大使馆密电提前获中国反导情报</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>xpath=//table/tbody/tr/td/div/div[2]/div/div/table/tbody/tr[9]/td/form/input</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>xpath=//table/tbody/tr/td/div/div[2]/div/div/table/tbody/tr[9]/td/form/input</td>
-	<td>300</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//button[@id='proceed'])[1]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>赵红霞真实照片公布</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=退出登录状态</td>
-	<td></td>
-</tr>
-</tbody></table>
+	<table cellpadding="1" cellspacing="1" border="1">
+		<thead>
+			<tr>
+				<td rowspan="1" colspan="3">customize_layout</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>open</td>
+				<td>/bigbang/</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=a[name=&quot;主页&quot;] &gt; img</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=用户登录</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=j_username</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_username</td>
+				<td>tao</td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_password</td>
+				<td>1234</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=tao的空间</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>assertText</td>
+				<td>css=img[alt=&quot;管理我发布的内容&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;以默认顺序显示所有的标签&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>国内新闻</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>国际新闻</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>搞笑趣闻</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;隐藏&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>国内新闻</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;隐藏&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>国际新闻</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;隐藏&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>搞笑趣闻</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>生活</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>xpath=(//img[@alt='向左移'])[2]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>xpath=(//img[@alt='隐藏'])[7]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>生活</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>未分类</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>xpath=(//img[@alt='隐藏'])[2]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>阿苏阿南</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>xpath=(//img[@alt='向左移'])[27]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>xpath=(//img[@alt='隐藏'])[6]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>阿苏阿南</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;管理我发布的内容&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>标题</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>公共空间</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>个人空间</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>安全等级</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=tao的空间</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;管理我的标签&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>名称 *</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>谁可以看见</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=tao的空间</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;管理我的用户信息&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=_description_id</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=_email_id</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyValue</td>
+				<td>id=_email_id</td>
+				<td>tao.mtl@hotmail.com</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>Show User Account</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=tao的空间</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;以默认顺序显示所有的标签&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>国内新闻</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>国际新闻</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>搞笑趣闻</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>阿苏阿南</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=tao的空间</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>震惊 美国大使馆密电提前获中国反导情报</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>xpath=(//a[contains(text(),'&gt;&gt;&gt;')])[3]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>震惊 美国大使馆密电提前获中国反导情报</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=tao的空间</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>xpath=//div[@id='main']/div/table[2]/tbody/tr/td/div[2]/div[2]/div/div/table/tbody/tr[9]/td/form/input</td>
+				<td>10</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>xpath=(//button[@id='proceed'])[2]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>震惊 美国大使馆密电提前获中国反导情报</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>xpath=//div[@id='main']/div/table/tbody/tr/td/div[2]/div[2]/div/div/table/tbody/tr[10]/td/form/input</td>
+				<td>0</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>xpath=(//button[@id='proceed'])[2]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>朝鲜核爆，中国偷偷笑</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>xpath=//div[@id='main']/div/table/tbody/tr/td/div[2]/div[2]/div/div/form/input</td>
+				<td>-1</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>xpath=(//button[@id='proceed'])[2]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>朝鲜核爆，中国偷偷笑</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>震惊 美国大使馆密电提前获中国反导情报</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>xpath=//table/tbody/tr/td/div/div[2]/div/div/table/tbody/tr[9]/td/form/input</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>xpath=//table/tbody/tr/td/div/div[2]/div/div/table/tbody/tr[9]/td/form/input</td>
+				<td>300</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>xpath=(//button[@id='proceed'])[1]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>赵红霞真实照片公布</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=退出登录状态</td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>

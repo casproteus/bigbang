@@ -1,32 +1,59 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" version="2.0">
-    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-    <jsp:output omit-xml-declaration="yes"/>
-    <spring:message code="security_signup_message" htmlEscape="false" var="title2"/>
-    <table class="tWireless">
-        <tr>
-            <td class="tWireless nopaddingleft" valign="top" width="350px">
-                <form:BigCreate id="fc_com_aeiou_bigbang_domain_UserAccount" info_error="${create_error}" modelAttribute="userAccount" path="/useraccounts" render="${empty dependencies}" z="user-managed">
-                    <field:input field="name" id="c_com_aeiou_bigbang_domain_UserAccount_name" min="2" required="true" z="ivL1uj01/Ogki4rPE5I3PdFQud0="/>
-                    <field:input field="password" id="c_com_aeiou_bigbang_domain_UserAccount_password" min="4" required="true" type="password" z="user-managed"/>
-                    <!-- to make it as simple as possible
+<div xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:form="urn:jsptagdir:/WEB-INF/tags/form"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<spring:message code="security_signup_message" htmlEscape="false"
+		var="title2" />
+	<table class="tWireless">
+		<tr>
+			<td class="tWireless nopaddingleft" valign="top" width="350px">
+				<form:BigCreate id="fc_com_aeiou_bigbang_domain_UserAccount"
+					info_error="${create_error}" modelAttribute="userAccount"
+					path="/useraccounts" render="${empty dependencies}"
+					z="user-managed">
+					<field:input field="name"
+						id="c_com_aeiou_bigbang_domain_UserAccount_name" min="2"
+						required="true" z="ivL1uj01/Ogki4rPE5I3PdFQud0=" />
+					<field:input field="password"
+						id="c_com_aeiou_bigbang_domain_UserAccount_password" min="4"
+						required="true" type="password" z="user-managed" />
+					<!-- to make it as simple as possible
                     <field:input field="email" id="c_com_aeiou_bigbang_domain_UserAccount_email" validationMessageCode="field_invalid_email" z="ceq1TElqZB2WL71Mrwy7m1UNg0o="/>
                     <field:input field="description" id="c_com_aeiou_bigbang_domain_UserAccount_description" z="IHXfmTHIFzCFUY3TARmFZXUT838="/> -->
-                </form:BigCreate>
-                <form:dependency dependencies="${dependencies}" id="d_com_aeiou_bigbang_domain_UserAccount" render="${not empty dependencies}" z="pRXKbS1jO/JZHS6yO3aerzXp/Tc="/>
-            </td>
-            <td class="tWireless nopaddingleft" valign="top">
-                <util:panel id="title2" title="${title2}">
-                    <p><spring:message code="security_signup_reason_0" /></p>
-                    <p><spring:message code="security_signup_reason_1" /></p>
-                    <p><spring:message code="security_signup_reason_2" /></p>
-                    <p><spring:message code="security_signup_reason_3" /></p>
-                    <p><spring:message code="security_signup_reason_4" /></p>
-                    <p><spring:message code="security_signup_reason_5" /></p>
-                    <p><spring:message code="security_signup_reason_last" /></p>
-                    <br/>
-                </util:panel>
-            </td>
-        </tr>
-    </table>
+				</form:BigCreate> <form:dependency dependencies="${dependencies}"
+					id="d_com_aeiou_bigbang_domain_UserAccount"
+					render="${not empty dependencies}" z="pRXKbS1jO/JZHS6yO3aerzXp/Tc=" />
+			</td>
+			<td class="tWireless nopaddingleft" valign="top"><util:panel
+					id="title2" title="${title2}">
+					<p>
+						<spring:message code="security_signup_reason_0" />
+					</p>
+					<p>
+						<spring:message code="security_signup_reason_1" />
+					</p>
+					<p>
+						<spring:message code="security_signup_reason_2" />
+					</p>
+					<p>
+						<spring:message code="security_signup_reason_3" />
+					</p>
+					<p>
+						<spring:message code="security_signup_reason_4" />
+					</p>
+					<p>
+						<spring:message code="security_signup_reason_5" />
+					</p>
+					<p>
+						<spring:message code="security_signup_reason_last" />
+					</p>
+					<br />
+				</util:panel></td>
+		</tr>
+	</table>
 </div>

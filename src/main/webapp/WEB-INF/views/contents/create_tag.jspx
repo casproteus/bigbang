@@ -1,17 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" 
-xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:springform="http://www.springframework.org/tags/form" 
-xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
-    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-    <jsp:output omit-xml-declaration="yes"/>
-    <form:BigTagCreate id="fc_com_aeiou_bigbang_domain_BigTag" modelAttribute="bigTag" path="/contents" render="${empty dependencies}" z="WgNMXxxUskORGvT8KaDenSDrbDI=">
-		<springform:hidden path="contentID" value="${bigTag['contentID']}"/> 
-		<springform:hidden path="contentTitle" value="${bigTag['contentTitle']}"/> 
-		<springform:hidden path="contentURL" value="${bigTag['contentURL']}"/>
-		<springform:hidden path="commonTagName" value="${bigTag['commonTagName']}"/>
-	
- 		<field:input field="tagName" id="c_com_aeiou_bigbang_domain_BigTag_tagName" min="2" required="true" z="5Ze3zc5yJhjLP+lXmg2mQPNTYdc="/>
-        <field:select field="authority" id="c_com_aeiou_bigbang_domain_Content_authority" itemValue="id" items="${authorities}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE="/>
-    </form:BigTagCreate>
-    <form:dependency dependencies="${dependencies}" id="d_com_aeiou_bigbang_domain_BigTag" render="${not empty dependencies}" z="wISMMVuzBPo3gS3UVlYC60m4tfU="/>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:form="urn:jsptagdir:/WEB-INF/tags/form"
+	xmlns:springform="http://www.springframework.org/tags/form"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:spring="http://www.springframework.org/tags" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<form:BigTagCreate id="fc_com_aeiou_bigbang_domain_BigTag"
+		modelAttribute="bigTag" path="/contents"
+		render="${empty dependencies}" z="WgNMXxxUskORGvT8KaDenSDrbDI=">
+		<springform:hidden path="contentID" value="${bigTag['contentID']}" />
+		<springform:hidden path="contentTitle"
+			value="${bigTag['contentTitle']}" />
+		<springform:hidden path="contentURL" value="${bigTag['contentURL']}" />
+		<springform:hidden path="commonTagName"
+			value="${bigTag['commonTagName']}" />
+
+		<field:input field="tagName"
+			id="c_com_aeiou_bigbang_domain_BigTag_tagName" min="2"
+			required="true" z="5Ze3zc5yJhjLP+lXmg2mQPNTYdc=" />
+		<field:select field="authority"
+			id="c_com_aeiou_bigbang_domain_Content_authority" itemValue="id"
+			items="${authorities}" path="/bigtags"
+			z="WKNnUnIysaWMajTikzigpbQOZYE=" />
+	</form:BigTagCreate>
+	<form:dependency dependencies="${dependencies}"
+		id="d_com_aeiou_bigbang_domain_BigTag"
+		render="${not empty dependencies}" z="wISMMVuzBPo3gS3UVlYC60m4tfU=" />
 </div>

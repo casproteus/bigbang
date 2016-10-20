@@ -1,62 +1,73 @@
-<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
-	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" 
-	xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form"
+<div xmlns:spring="http://www.springframework.org/tags"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:form="urn:jsptagdir:/WEB-INF/tags/form"
 	xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
-  <jsp:directive.page contentType="text/html;charset=UTF-8" />
-  <jsp:output omit-xml-declaration="yes" />
-  <spring:message code="security_login_title" var="title" htmlEscape="false" />
-  <spring:message code="security_signup_message" var="title2" htmlEscape="false" />
-  <table class="tWireless"><tr>
-  	<td class="tWireless nopaddingleft" valign="top">
-	  <util:panel id="title" title="${title}">
-	    <c:if test="${not empty param.login_error}">
-	      <div class="errors">
-	        <p>
-	          <spring:message code="security_login_unsuccessful" />
-	          <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}" />
-	          .
-	        </p>
-	      </div>
-	    </c:if>
-	    <c:if test="${empty param.login_error}">
-	      <p>
-	        <spring:message code="security_login_message" />
-	      </p>
-	    </c:if>
-	    <spring:url value="/resources/j_spring_security_check" var="form_url" />
-	    <form name="f" modelAttribute="${login}" action="${fn:escapeXml(form_url)}" method="POST">
-	      <div>
-	        <label for="j_username">
-	          <spring:message code="security_login_form_name" />
-	        </label>
-	        <input id="j_username" type='text' name='j_username' style="width:150px" />
-	        <spring:message code="security_login_form_name_message" var="name_msg" htmlEscape="false" />
-	        <script type="text/javascript">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<spring:message code="security_login_title" var="title"
+		htmlEscape="false" />
+	<spring:message code="security_signup_message" var="title2"
+		htmlEscape="false" />
+	<table class="tWireless">
+		<tr>
+			<td class="tWireless nopaddingleft" valign="top"><util:panel
+					id="title" title="${title}">
+					<c:if test="${not empty param.login_error}">
+						<div class="errors">
+							<p>
+								<spring:message code="security_login_unsuccessful" />
+								<c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}" />
+								.
+							</p>
+						</div>
+					</c:if>
+					<c:if test="${empty param.login_error}">
+						<p>
+							<spring:message code="security_login_message" />
+						</p>
+					</c:if>
+					<spring:url value="/resources/j_spring_security_check"
+						var="form_url" />
+					<form name="f" modelAttribute="${login}"
+						action="${fn:escapeXml(form_url)}" method="POST">
+						<div>
+							<label for="j_username"> <spring:message
+									code="security_login_form_name" />
+							</label> <input id="j_username" type='text' name='j_username'
+								style="width: 150px" />
+							<spring:message code="security_login_form_name_message"
+								var="name_msg" htmlEscape="false" />
+							<script type="text/javascript">
 	          <c:set var="sec_name_msg">
 	            <spring:escapeBody javaScriptEscape="true">${name_msg}</spring:escapeBody>
 	          </c:set>
 	          Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_username", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_name_msg}", required : true}})); 
 	        </script>
-	      </div>
-	      <br />
-	      <div>
-	        <label for="j_password">
-	          <spring:message code="security_login_form_password" />
-	        </label>
-	        <input id="j_password" type='password' name='j_password' style="width:150px" />
-	        <spring:message code="security_login_form_password_message" var="pwd_msg" htmlEscape="false" />
-	        <script type="text/javascript">
+						</div>
+						<br />
+						<div>
+							<label for="j_password"> <spring:message
+									code="security_login_form_password" />
+							</label> <input id="j_password" type='password' name='j_password'
+								style="width: 150px" />
+							<spring:message code="security_login_form_password_message"
+								var="pwd_msg" htmlEscape="false" />
+							<script type="text/javascript">
 	          <c:set var="sec_pwd_msg">
 	            <spring:escapeBody javaScriptEscape="true">${pwd_msg}</spring:escapeBody>
 	          </c:set>
 	          Spring.addDecoration(new Spring.ElementDecoration({elementId : "j_password", widgetType : "dijit.form.ValidationTextBox", widgetAttrs : {promptMessage: "${sec_pwd_msg}", required : true}})); 
 	        </script>
-	      </div>
-	      <input id="j_rememberme" name="j_rememberme" type="checkbox" style="vertical-align: bottom; margin-bottom: 0px;">
-	      	<spring:message code="label_rememberme" htmlEscape="false" />
-	      </input>
-           
-          <script type="text/javascript">
+						</div>
+						<input id="j_rememberme" name="j_rememberme" type="checkbox"
+							style="vertical-align: bottom; margin-bottom: 0px;">
+						<spring:message code="label_rememberme" htmlEscape="false" />
+						</input>
+
+						<script type="text/javascript">
 			dojo.addOnLoad(function() {
 			  dojo.require("dojo.cookie");
 			  var rememberedName = dojo.cookie('login_name');
@@ -69,37 +80,53 @@
 			  }
 			})
           </script>
-           
-	      <br/>
-	      <br/>
-	      <div class="submit">
-	        <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
-	        <spring:message code="button_submit" var="submit_label" htmlEscape="false" />
-	        <input id="proceed" type="submit" value="${fn:escapeXml(submit_label)}" />
-	      </div>
-	    </form>
-	  </util:panel>
-	 </td>
-	 <td class="tWireless nopaddingleft" valign="top">
-		<util:panel id="title2" title="${title2}">
-           <p><spring:message code="security_signup_reason_0" /></p>
-           <p><spring:message code="security_signup_reason_1" /></p>
-           <p><spring:message code="security_signup_reason_2" /></p>
-           <p><spring:message code="security_signup_reason_3" /></p>
-           <p><spring:message code="security_signup_reason_4" /></p>
-           <p><spring:message code="security_signup_reason_5" /></p>
-           <p><spring:message code="security_signup_reason_last" /></p>
-           <br/>
-		   <spring:url value="/useraccounts" var="create_url">
-	        	<spring:param name="form" />
-	       </spring:url>
-	       <p align="center"><a href="${create_url}" style="text-align: center; width: 100%">
-	        	<spring:message code="agree" htmlEscape="false" var="add_message"/>
-	        	${add_message}
-	       </a></p>
-		   
-		</util:panel>
-	 </td>
-	</tr></table>
+
+						<br /> <br />
+						<div class="submit">
+							<script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
+							<spring:message code="button_submit" var="submit_label"
+								htmlEscape="false" />
+							<input id="proceed" type="submit"
+								value="${fn:escapeXml(submit_label)}" />
+						</div>
+					</form>
+				</util:panel></td>
+			<td class="tWireless nopaddingleft" valign="top"><util:panel
+					id="title2" title="${title2}">
+					<p>
+						<spring:message code="security_signup_reason_0" />
+					</p>
+					<p>
+						<spring:message code="security_signup_reason_1" />
+					</p>
+					<p>
+						<spring:message code="security_signup_reason_2" />
+					</p>
+					<p>
+						<spring:message code="security_signup_reason_3" />
+					</p>
+					<p>
+						<spring:message code="security_signup_reason_4" />
+					</p>
+					<p>
+						<spring:message code="security_signup_reason_5" />
+					</p>
+					<p>
+						<spring:message code="security_signup_reason_last" />
+					</p>
+					<br />
+					<spring:url value="/useraccounts" var="create_url">
+						<spring:param name="form" />
+					</spring:url>
+					<p align="center">
+						<a href="${create_url}" style="text-align: center; width: 100%">
+							<spring:message code="agree" htmlEscape="false" var="add_message" />
+							${add_message}
+						</a>
+					</p>
+
+				</util:panel></td>
+		</tr>
+	</table>
 </div>
 

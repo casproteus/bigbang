@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
-    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-    <jsp:output omit-xml-declaration="yes"/>
-    <page:show id="ps_com_aeiou_bigbang_domain_Circle" object="${circle}" path="/circles" z="T2CefEi47R4q3NzYy7wVKpxBndA=">
-        <field:display field="circleName" id="s_com_aeiou_bigbang_domain_Circle_circleName" object="${circle}" z="fY93I1QOe1HSbGcFZeC0nulozZE="/>
-        <field:display field="description" id="s_com_aeiou_bigbang_domain_Circle_description" object="${circle}" z="GLvvi1dLTHgt/9PY4IMUsUFdRwE="/>
-        <field:display field="owner" id="s_com_aeiou_bigbang_domain_Circle_owner" object="${circle}" z="ykyrUs/kRX8ieeKuj7MdBouBeCk="/>
-        <field:display date="true" dateTimePattern="${circle_createddate_date_format}" field="createdDate" id="s_com_aeiou_bigbang_domain_Circle_createdDate" object="${circle}" z="KzxIHyx4JL+CcDF+ZazMD2RyucA="/>
-        <field:display field="members" id="s_com_aeiou_bigbang_domain_Circle_members" object="${circle}" z="q8w70e19dFnCWjHH9K0HjWa0iV4="/>
-    </page:show>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<page:show id="ps_com_aeiou_bigbang_domain_Circle" object="${circle}"
+		path="/circles" z="T2CefEi47R4q3NzYy7wVKpxBndA=">
+		<field:display field="circleName"
+			id="s_com_aeiou_bigbang_domain_Circle_circleName" object="${circle}"
+			z="fY93I1QOe1HSbGcFZeC0nulozZE=" />
+		<field:display field="description"
+			id="s_com_aeiou_bigbang_domain_Circle_description" object="${circle}"
+			z="GLvvi1dLTHgt/9PY4IMUsUFdRwE=" />
+		<field:display field="owner"
+			id="s_com_aeiou_bigbang_domain_Circle_owner" object="${circle}"
+			z="ykyrUs/kRX8ieeKuj7MdBouBeCk=" />
+		<field:display date="true"
+			dateTimePattern="${circle_createddate_date_format}"
+			field="createdDate"
+			id="s_com_aeiou_bigbang_domain_Circle_createdDate" object="${circle}"
+			z="KzxIHyx4JL+CcDF+ZazMD2RyucA=" />
+		<field:display field="members"
+			id="s_com_aeiou_bigbang_domain_Circle_members" object="${circle}"
+			z="q8w70e19dFnCWjHH9K0HjWa0iV4=" />
+	</page:show>
 </div>

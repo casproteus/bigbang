@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
-	 xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" 
-	 xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" id="footer" version="2.0">
-  	<jsp:directive.page contentType="text/html;charset=UTF-8"/>
-  	<jsp:output omit-xml-declaration="yes"/>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" id="footer" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
 
-  	<util:theme/>
-  	<!-- util:websiteSwitch/>
+	<util:theme />
+	<!-- util:websiteSwitch/>
   	 -->
 	<!-- language bar -->
-	<span class="new" style="color: #AAAAAA;">
-		<c:if test="${zh == true}">
-			<util:language label="Chinese" locale="zh"/>
+	<span class="new" style="color: #AAAAAA;"> <c:if
+			test="${zh == true}">
+			<util:language label="Chinese" locale="zh" />
+		</c:if> <c:if test="${en == true}">
+			<c:out value=" | " />
+			<util:language label="English" locale="en" />
+		</c:if> <c:if test="${fr == true}">
+			<c:out value=" | " />
+			<util:language label="French" locale="fr" />
+		</c:if> <c:if test="${es == true}">
+			<c:out value=" | " />
+			<util:language label="Spanish" locale="es" />
+		</c:if> <c:if test="${it == true}">
+			<c:out value=" | " />
+			<util:language label="Italian" locale="it" />
 		</c:if>
-		<c:if test="${en == true}">
-			<c:out value=" | "/>
-			<util:language label="English" locale="en"/>
-		</c:if>
-		<c:if test="${fr == true}">
-			<c:out value=" | "/>
-			<util:language label="French" locale="fr"/>
-		</c:if>
-		<c:if test="${es == true}">
-			<c:out value=" | "/>
-			<util:language label="Spanish" locale="es"/>
-		</c:if>
-		<c:if test="${it == true}">
-			<c:out value=" | "/>
-			<util:language label="Italian" locale="it"/>
-		</c:if>
-	</span>
-  <br/>
-  <div style="color: #AAAAAA; text-align: right;">
-   ${txt_footer_line2}
-  </div>
+	</span> <br />
+	<div style="color: #AAAAAA; text-align: right;">
+		${txt_footer_line2}</div>
 </div>

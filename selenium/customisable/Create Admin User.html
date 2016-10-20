@@ -7,85 +7,103 @@
 <title>Create Admin User</title>
 </head>
 <body>
-<table cellpadding="1" cellspacing="1" border="1">
-<thead>
-<tr><td rowspan="1" colspan="3">Create Admin User</td></tr>
-</thead><tbody>
-<tr>
-	<td>open</td>
-	<td>/bigbang/</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyText</td>
-	<td>css=p</td>
-	<td>您所定位的网页尚未被使用，请重新定位，或立即抢注该网页。</td>
-</tr>
-<tr>
-	<td>verifyTitle</td>
-	<td>Bigbang</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=新用户</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=_name_id</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=_name_id</td>
-	<td>admin</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=_password_id</td>
-	<td>adminmm</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=#fc_com_aeiou_bigbang_domain_UserAccount_submit &gt; #proceed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyText</td>
-	<td>id=_s_com_aeiou_bigbang_domain_UserAccount_name_name_id</td>
-	<td>admin</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_username</td>
-	<td>admin</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_password</td>
-	<td>adminmm</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=进入</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyText</td>
-	<td>id=wrapper</td>
-	<td>主页 || 退出登录状态 || || || <br /><br />User AccountCreate new 用户信息List all 用户信息ContentCreate new ContentList all ContentsTwitterCreate new 笔记List all 笔记RemarkCreate new 评论List all 评论留言Create new 留言List all 留言Big TagCreate new Big TagList all Big TagsCustomizeCreate new CustomizeList all CustomizesCircleCreate new CircleList all CirclesControllerPublic Controller View<br /><br />I want to write a wish! || I found what I like!<br /><br />界面风格: 默认 | 星空 | 斑点 | 云朵 | 水泥 | 石头 | 我的主题</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=退出登录状态</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyText</td>
-	<td>css=html.dj_gecko.dj_contentbox</td>
-	<td>Bigbang记住我 | 用户: <br /><br /><br /> 密码: <br /><br /><br /> | 进入 || 新用户 <br /><br /><br /><br />I want to write a wish! || I found what I like!<br /><br />界面风格: 默认 | 星空 | 斑点 | 云朵 | 水泥 | 石头<br /> <br /><br /><br /><br />ShareThis Copy and Paste</td>
-</tr>
-</tbody></table>
+	<table cellpadding="1" cellspacing="1" border="1">
+		<thead>
+			<tr>
+				<td rowspan="1" colspan="3">Create Admin User</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>open</td>
+				<td>/bigbang/</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>css=p</td>
+				<td>您所定位的网页尚未被使用，请重新定位，或立即抢注该网页。</td>
+			</tr>
+			<tr>
+				<td>verifyTitle</td>
+				<td>Bigbang</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=新用户</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=_name_id</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=_name_id</td>
+				<td>admin</td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=_password_id</td>
+				<td>adminmm</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=#fc_com_aeiou_bigbang_domain_UserAccount_submit &gt;
+					#proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>id=_s_com_aeiou_bigbang_domain_UserAccount_name_name_id</td>
+				<td>admin</td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_username</td>
+				<td>admin</td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_password</td>
+				<td>adminmm</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=进入</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>id=wrapper</td>
+				<td>主页 || 退出登录状态 || || || <br /> <br />User AccountCreate new
+					用户信息List all 用户信息ContentCreate new ContentList all
+					ContentsTwitterCreate new 笔记List all 笔记RemarkCreate new 评论List all
+					评论留言Create new 留言List all 留言Big TagCreate new Big TagList all Big
+					TagsCustomizeCreate new CustomizeList all CustomizesCircleCreate
+					new CircleList all CirclesControllerPublic Controller View<br /> <br />I
+					want to write a wish! || I found what I like!<br /> <br />界面风格:
+					默认 | 星空 | 斑点 | 云朵 | 水泥 | 石头 | 我的主题
+				</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=退出登录状态</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>css=html.dj_gecko.dj_contentbox</td>
+				<td>Bigbang记住我 | 用户: <br /> <br /> <br /> 密码: <br /> <br />
+					<br /> | 进入 || 新用户 <br /> <br /> <br /> <br />I want to write
+					a wish! || I found what I like!<br /> <br />界面风格: 默认 | 星空 | 斑点 |
+					云朵 | 水泥 | 石头<br /> <br /> <br /> <br /> <br />ShareThis Copy
+					and Paste
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>

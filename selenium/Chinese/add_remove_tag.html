@@ -7,320 +7,324 @@
 <title>Login</title>
 </head>
 <body>
-<table cellpadding="1" cellspacing="1" border="1">
-<thead>
-<tr><td rowspan="1" colspan="3">Login</td></tr>
-</thead><tbody>
-<tr>
-	<td>open</td>
-	<td>/bigbang/</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>祈祷，笔记，备忘</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>新闻，资料，图像，书签</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=新闻，资料，图像，书签</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>已注册用户请在此登录</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=j_username</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_username</td>
-	<td>admin</td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>新用户请看过来</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=j_password</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_password</td>
-	<td>2ert</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=proceed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>添加内容</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>网页内容标题 * :</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Twitter</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Customize</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Circle</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Remark</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Controller</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>User Account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Big Tag</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>退出登录状态</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=退出登录状态</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>已注册用户请在此登录</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=a[name=&quot;主页&quot;] &gt; img</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>跟朋友分享有趣新闻、分类管理书签链接、团队协作、建立能自动更新的个人主页（网址后加注册用户名就是个人主页），就是这儿了！</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>退出登录状态</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=新闻，资料，图像，书签</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=j_username</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_username</td>
-	<td>tao</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_password</td>
-	<td>1234</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=proceed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>添加内容</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;Create new 个人空间标签&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=_tagName_id</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=_tagName_id</td>
-	<td>taoTestForCreatingTag</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=proceed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=a[name=&quot;主页&quot;] &gt; img</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=新闻，资料，图像，书签</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>添加内容</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=退出登录状态</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=a[name=&quot;主页&quot;] &gt; img</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=新闻，资料，图像，书签</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=j_username</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_username</td>
-	<td>admin</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_password</td>
-	<td>2ert</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=proceed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=List all Big Tags</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=25</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>taoTestForCreatingTag</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>css=input.image</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertConfirmation</td>
-	<td>您确定要删除?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>taoTestForCreatingTag</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=退出登录状态</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=a[name=&quot;主页&quot;] &gt; img</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=新闻，资料，图像，书签</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_username</td>
-	<td>tao</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=j_password</td>
-	<td>1234</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=proceed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>退出登录状态</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=tao的空间</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>欢迎来tao的空间----哥就喜欢把有用的链接都收集起来，将来用时找起来方便。</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=退出登录状态</td>
-	<td></td>
-</tr>
-</tbody></table>
+	<table cellpadding="1" cellspacing="1" border="1">
+		<thead>
+			<tr>
+				<td rowspan="1" colspan="3">Login</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>open</td>
+				<td>/bigbang/</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>祈祷，笔记，备忘</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>新闻，资料，图像，书签</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=新闻，资料，图像，书签</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>已注册用户请在此登录</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=j_username</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_username</td>
+				<td>admin</td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>新用户请看过来</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=j_password</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_password</td>
+				<td>2ert</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>添加内容</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>网页内容标题 * :</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>Twitter</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>Customize</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>Circle</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>Remark</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>Controller</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>User Account</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>Big Tag</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>退出登录状态</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=退出登录状态</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>已注册用户请在此登录</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=a[name=&quot;主页&quot;] &gt; img</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>跟朋友分享有趣新闻、分类管理书签链接、团队协作、建立能自动更新的个人主页（网址后加注册用户名就是个人主页），就是这儿了！</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>退出登录状态</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=新闻，资料，图像，书签</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=j_username</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_username</td>
+				<td>tao</td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_password</td>
+				<td>1234</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>添加内容</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;Create new 个人空间标签&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=_tagName_id</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=_tagName_id</td>
+				<td>taoTestForCreatingTag</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=a[name=&quot;主页&quot;] &gt; img</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=新闻，资料，图像，书签</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>添加内容</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=退出登录状态</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=a[name=&quot;主页&quot;] &gt; img</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=新闻，资料，图像，书签</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=j_username</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_username</td>
+				<td>admin</td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_password</td>
+				<td>2ert</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=List all Big Tags</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=25</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>assertTextPresent</td>
+				<td>taoTestForCreatingTag</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>css=input.image</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>assertConfirmation</td>
+				<td>您确定要删除?</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>taoTestForCreatingTag</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=退出登录状态</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=a[name=&quot;主页&quot;] &gt; img</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=新闻，资料，图像，书签</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_username</td>
+				<td>tao</td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=j_password</td>
+				<td>1234</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>退出登录状态</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=tao的空间</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextPresent</td>
+				<td>欢迎来tao的空间----哥就喜欢把有用的链接都收集起来，将来用时找起来方便。</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=退出登录状态</td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>

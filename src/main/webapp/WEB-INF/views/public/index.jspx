@@ -1,91 +1,114 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:jsp="http://java.sun.com/JSP/Page" 		xmlns:spring="http://www.springframework.org/tags"
-	 xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"  xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" 
-	 xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:c="http://java.sun.com/jsp/jstl/core"
-	 xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
-  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-  <jsp:output omit-xml-declaration="yes"/>
-  <spring:message code="public" htmlEscape="false" var="publicspace"/>
-  <spring:message code="publicDescription" htmlEscape="false" var="publicDescription"/>
-  <spring:message code="NotesAndPraysOfFriend" htmlEscape="false" arguments="${spaceOwner}" var="NotesAndPraysFromFriend"/>
+<div xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:page="urn:jsptagdir:/WEB-INF/tags/form"
+	xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<spring:message code="public" htmlEscape="false" var="publicspace" />
+	<spring:message code="publicDescription" htmlEscape="false"
+		var="publicDescription" />
+	<spring:message code="NotesAndPraysOfFriend" htmlEscape="false"
+		arguments="${spaceOwner}" var="NotesAndPraysFromFriend" />
 
-  <!-- If this file changed in any line, don't forget to change the three file under deploy folder -->
-  
-  <!-- The Title Area, including owner info, butttons for adding blog, adding bookmark, leaving message and addon. -->
-  <div style="background: #efefef; padding: 5px; margin-bottom: 3px">
-    <div style="text-align: center; padding-bottom: 5px"><b>${txt_welcome}</b></div>
-    <span> <!-- don't use "new" style here, because it make a right align, and will make the line height too low.-->
-      <spring:url value="/twitters" var="write_url">
-        <spring:param name="form" />
-      </spring:url>
-      <a href="${write_url}">
-        <!-- <spring:message code="contributeTwitter" htmlEscape="false"/> -->
-        ${btn_write_log}
-        <spring:url value="/resources/images/addnote.png" var="write_img_url" />
-        <spring:message arguments="${typeName}" code="global_menu_newnote" var="add_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(add_message)}" src="${write_img_url}" title="${fn:escapeXml(add_message)}" />
-      </a>
-	  <c:out value=" || "/>
-      <spring:url value="/contents" var="create_url">
-        <spring:param name="form" />
-      </spring:url>
-      <a href="${create_url}">
-        <!-- <spring:message code="contributeContent" htmlEscape="false"/> -->
-        ${btn_save_favorite}
-        <spring:url value="/resources/images/addcontent.png" var="create_img_url" />
-        <spring:message arguments="${typeName}" code="global_menu_newbookmark" var="add_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
-      </a>
-    </span>
-    
-	<util:connectionUtils sharerName="${spaceOwner}" nothireable="${nothireable}" notfireable="${notfireable}"/>
-  </div>
+	<!-- If this file changed in any line, don't forget to change the three file under deploy folder -->
 
-  <!-- display the blog of the user -->
-  <c:if test="${not empty twitterLeft || not empty twitterRight}">
-	  <table class="tWireless" style="margin-bottom: 0px"><tr>
-	  	<c:if test="${not empty twitterLeft}">
-		  	<td class="tWireless nopaddingleft" valign="top">
-			  <page:contentPane id="twitterLeft" items="${twitterLeft}" label="${NotesAndPrays}" bottom="8">
-			    <table:twitterbox data="${twitterLeft}" id="l_com_aeiou_bigbang_domain_Content" type="self" path="/public" spaceOwner="${spaceOwner}">
-			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
-			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
-			        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="type" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
-			    </table:twitterbox>
-			  </page:contentPane>
-		  	</td>
-		</c:if>
-		<c:if test="${not empty twitterRightFix}">
-		   <td class="tWireless nopaddingleft" valign="top" >
-			  <page:contentPane id="twitterRightFix" items="${twitterRightFix}" label="${NotesAndPraysFromFriend}" bottom="8">
-			    <table:twitterbox data="${twitterRightFix}" id="l_com_aeiou_bigbang_domain_Content" type="friendFix" path="/public" spaceOwner="${spaceOwner}">
-			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
-			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
-			        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
-			    </table:twitterbox>
-			  </page:contentPane>
-		   </td>
-	  	</c:if>
-	  	<c:if test="${not empty twitterRight}">
-		   <td class="tWireless nopaddingright" valign="top" >
-			  <page:contentPane id="twitterRight" items="${twitterRight}" label="${NotesAndPraysFromFriend}" bottom="8">
-			    <table:twitterbox data="${twitterRight}" id="l_com_aeiou_bigbang_domain_Content" type="friend" path="/public" spaceOwner="${spaceOwner}">
-			        <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
-			        <table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL" property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc="/>
-			        <table:column id="c_com_aeiou_bigbang_domain_Content_publisher" property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg="/>
-			    </table:twitterbox>
-			  </page:contentPane>
-		   </td>
-	  	</c:if>	  	
-	  </tr></table>
-  </c:if>
-  
-  <!-- display the bookmarks of the user. -->
-  <!-- c:set var="tagsize" value="${bigTags.size()}" scope="request" /> -->
+	<!-- The Title Area, including owner info, butttons for adding blog, adding bookmark, leaving message and addon. -->
+	<div style="background: #efefef; padding: 5px; margin-bottom: 3px">
+		<div style="text-align: center; padding-bottom: 5px">
+			<b>${txt_welcome}</b>
+		</div>
+		<span> <!-- don't use "new" style here, because it make a right align, and will make the line height too low.-->
+			<spring:url value="/twitters" var="write_url">
+				<spring:param name="form" />
+			</spring:url> <a href="${write_url}"> <!-- <spring:message code="contributeTwitter" htmlEscape="false"/> -->
+				${btn_write_log} <spring:url value="/resources/images/addnote.png"
+					var="write_img_url" /> <spring:message arguments="${typeName}"
+					code="global_menu_newnote" var="add_message" htmlEscape="false" />
+				<img alt="${fn:escapeXml(add_message)}" src="${write_img_url}"
+				title="${fn:escapeXml(add_message)}" />
+		</a> <c:out value=" || " /> <spring:url value="/contents"
+				var="create_url">
+				<spring:param name="form" />
+			</spring:url> <a href="${create_url}"> <!-- <spring:message code="contributeContent" htmlEscape="false"/> -->
+				${btn_save_favorite} <spring:url
+					value="/resources/images/addcontent.png" var="create_img_url" /> <spring:message
+					arguments="${typeName}" code="global_menu_newbookmark"
+					var="add_message" htmlEscape="false" /> <img
+				alt="${fn:escapeXml(add_message)}" src="${create_img_url}"
+				title="${fn:escapeXml(add_message)}" />
+		</a>
+		</span>
+
+		<util:connectionUtils sharerName="${spaceOwner}"
+			nothireable="${nothireable}" notfireable="${notfireable}" />
+	</div>
+
+	<!-- display the blog of the user -->
+	<c:if test="${not empty twitterLeft || not empty twitterRight}">
+		<table class="tWireless" style="margin-bottom: 0px">
+			<tr>
+				<c:if test="${not empty twitterLeft}">
+					<td class="tWireless nopaddingleft" valign="top"><page:contentPane
+							id="twitterLeft" items="${twitterLeft}" label="${NotesAndPrays}"
+							bottom="8">
+							<table:twitterbox data="${twitterLeft}"
+								id="l_com_aeiou_bigbang_domain_Content" type="self"
+								path="/public" spaceOwner="${spaceOwner}">
+								<table:column id="c_com_aeiou_bigbang_domain_Content_title"
+									property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />
+								<table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL"
+									property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc=" />
+								<table:column id="c_com_aeiou_bigbang_domain_Content_publisher"
+									property="type" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
+							</table:twitterbox>
+						</page:contentPane></td>
+				</c:if>
+				<c:if test="${not empty twitterRightFix}">
+					<td class="tWireless nopaddingleft" valign="top"><page:contentPane
+							id="twitterRightFix" items="${twitterRightFix}"
+							label="${NotesAndPraysFromFriend}" bottom="8">
+							<table:twitterbox data="${twitterRightFix}"
+								id="l_com_aeiou_bigbang_domain_Content" type="friendFix"
+								path="/public" spaceOwner="${spaceOwner}">
+								<table:column id="c_com_aeiou_bigbang_domain_Content_title"
+									property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />
+								<table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL"
+									property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc=" />
+								<table:column id="c_com_aeiou_bigbang_domain_Content_publisher"
+									property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
+							</table:twitterbox>
+						</page:contentPane></td>
+				</c:if>
+				<c:if test="${not empty twitterRight}">
+					<td class="tWireless nopaddingright" valign="top"><page:contentPane
+							id="twitterRight" items="${twitterRight}"
+							label="${NotesAndPraysFromFriend}" bottom="8">
+							<table:twitterbox data="${twitterRight}"
+								id="l_com_aeiou_bigbang_domain_Content" type="friend"
+								path="/public" spaceOwner="${spaceOwner}">
+								<table:column id="c_com_aeiou_bigbang_domain_Content_title"
+									property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />
+								<table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL"
+									property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc=" />
+								<table:column id="c_com_aeiou_bigbang_domain_Content_publisher"
+									property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
+							</table:twitterbox>
+						</page:contentPane></td>
+				</c:if>
+			</tr>
+		</table>
+	</c:if>
+
+	<!-- display the bookmarks of the user. -->
+	<!-- c:set var="tagsize" value="${bigTags.size()}" scope="request" /> -->
 	<table class="tWireless">
 		<tr>
-			<td class="tWireless nopaddingleft" valign="top">
-				<c:forEach items="${contentsLeft}" var="content" varStatus="num">
+			<td class="tWireless nopaddingleft" valign="top"><c:forEach
+					items="${contentsLeft}" var="content" varStatus="num">
 					<!-- don't need these two params anymore: begin="0" end="${tagsize/2 - 1}" -->
 					<page:contentPane id="contentlistleft${(num.count - 1)}"
 						items="${content}" label="${bigTagsLeft[num.count - 1]}"
@@ -103,10 +126,9 @@
 								property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
 						</table:contentbox>
 					</page:contentPane>
-				</c:forEach>
-			</td>
-			<td class="tWireless nopaddingright" valign="top">
-				<c:forEach items="${contentsRight}" var="content" varStatus="num">
+				</c:forEach></td>
+			<td class="tWireless nopaddingright" valign="top"><c:forEach
+					items="${contentsRight}" var="content" varStatus="num">
 					<page:contentPane id="contentlistright${(num.count - 1)}"
 						items="${content}" label="${bigTagsRight[num.count - 1]}"
 						tagId="${tagIdsRight[num.count - 1]}"
@@ -123,8 +145,7 @@
 								property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
 						</table:contentbox>
 					</page:contentPane>
-				</c:forEach>
-			</td>
+				</c:forEach></td>
 		</tr>
 	</table>
 	<!-- for sharethis,  while seems no effect -->

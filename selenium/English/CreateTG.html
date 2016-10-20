@@ -7,171 +7,175 @@
 <title>Untitled2</title>
 </head>
 <body>
-<table cellpadding="1" cellspacing="1" border="1">
-<thead>
-<tr><td rowspan="1" colspan="3">Untitled2</td></tr>
-</thead><tbody>
-<tr>
-	<td>open</td>
-	<td>/</td>
-	<td></td>
-</tr>
-<!--swith to personal space and pretend to create a BM.-->
-<tr>
-	<td>open</td>
-	<td>/abc%20%E7%94%A8%E6%88%B7%2001230</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyText</td>
-	<td>link=News, Resource, Image, Bookmarks</td>
-	<td>News, Resource, Image, Bookmarks</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=News, Resource, Image, Bookmarks</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=_title_id</td>
-	<td></td>
-</tr>
-<!--when creating a new tag, the already inputed contents should not lost.-->
-<tr>
-	<td>sendKeys</td>
-	<td>id=_title_id</td>
-	<td>title should still be here after</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=_sourceURL_id</td>
-	<td></td>
-</tr>
-<tr>
-	<td>sendKeys</td>
-	<td>id=_sourceURL_id</td>
-	<td>http://url should still be here!</td>
-</tr>
-<!--start to create new Tag-->
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;Create new Your Category Tag&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=_tagName_id</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=_tagName_id</td>
-	<td>tag for test should disppear after test</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=proceed</td>
-	<td></td>
-</tr>
-<!--veriry the inputted contents are still there.-->
-<tr>
-	<td>verifyValue</td>
-	<td>id=_sourceURL_id</td>
-	<td>exact:http://url should still be here!</td>
-</tr>
-<tr>
-	<td>verifyValue</td>
-	<td>id=_title_id</td>
-	<td>title should still be here after</td>
-</tr>
-<!--verify the new created tag are there.-->
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;Manage Tags&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyText</td>
-	<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_BigTag_id_pane']/table/tbody/tr/td[4]</td>
-	<td>tag for test should disppear after test</td>
-</tr>
-<tr>
-	<td>verifyText</td>
-	<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_BigTag_id_pane']/table/tbody/tr/td[6]</td>
-	<td>0</td>
-</tr>
-<!--start to test new tag for Blog.-->
-<tr>
-	<td>clickAndWait</td>
-	<td>css=span.emptySpan</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=Write Something :D</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=_twtitle_id</td>
-	<td></td>
-</tr>
-<tr>
-	<td>sendKeys</td>
-	<td>id=_twtitle_id</td>
-	<td>abc test content should still be here</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=dijitEditorBody</td>
-	<td>def test content should still be here</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;Create new Type&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>id=_tagName_id</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=_tagName_id</td>
-	<td>new created tag for blog, will be removed after test</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=proceed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyValue</td>
-	<td>id=_twtitle_id</td>
-	<td>abc test content should still be here</td>
-</tr>
-<tr>
-	<td>verifyText</td>
-	<td>id=dijitEditorBody</td>
-	<td>def test content should still be here</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=img[alt=&quot;Manage Tags&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyText</td>
-	<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_BigTag_id_pane']/table/tbody/tr/td[4]</td>
-	<td>new created tag for blog, will be removed after test</td>
-</tr>
-<tr>
-	<td>verifyText</td>
-	<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_BigTag_id_pane']/table/tbody/tr/td[6]</td>
-	<td>1</td>
-</tr>
-</tbody></table>
+	<table cellpadding="1" cellspacing="1" border="1">
+		<thead>
+			<tr>
+				<td rowspan="1" colspan="3">Untitled2</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>open</td>
+				<td>/</td>
+				<td></td>
+			</tr>
+			<!--swith to personal space and pretend to create a BM.-->
+			<tr>
+				<td>open</td>
+				<td>/abc%20%E7%94%A8%E6%88%B7%2001230</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>link=News, Resource, Image, Bookmarks</td>
+				<td>News, Resource, Image, Bookmarks</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=News, Resource, Image, Bookmarks</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=_title_id</td>
+				<td></td>
+			</tr>
+			<!--when creating a new tag, the already inputed contents should not lost.-->
+			<tr>
+				<td>sendKeys</td>
+				<td>id=_title_id</td>
+				<td>title should still be here after</td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=_sourceURL_id</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>sendKeys</td>
+				<td>id=_sourceURL_id</td>
+				<td>http://url should still be here!</td>
+			</tr>
+			<!--start to create new Tag-->
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;Create new Your Category Tag&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=_tagName_id</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=_tagName_id</td>
+				<td>tag for test should disppear after test</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<!--veriry the inputted contents are still there.-->
+			<tr>
+				<td>verifyValue</td>
+				<td>id=_sourceURL_id</td>
+				<td>exact:http://url should still be here!</td>
+			</tr>
+			<tr>
+				<td>verifyValue</td>
+				<td>id=_title_id</td>
+				<td>title should still be here after</td>
+			</tr>
+			<!--verify the new created tag are there.-->
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;Manage Tags&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_BigTag_id_pane']/table/tbody/tr/td[4]</td>
+				<td>tag for test should disppear after test</td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_BigTag_id_pane']/table/tbody/tr/td[6]</td>
+				<td>0</td>
+			</tr>
+			<!--start to test new tag for Blog.-->
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=span.emptySpan</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=Write Something :D</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=_twtitle_id</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>sendKeys</td>
+				<td>id=_twtitle_id</td>
+				<td>abc test content should still be here</td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=dijitEditorBody</td>
+				<td>def test content should still be here</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;Create new Type&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=_tagName_id</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>id=_tagName_id</td>
+				<td>new created tag for blog, will be removed after test</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyValue</td>
+				<td>id=_twtitle_id</td>
+				<td>abc test content should still be here</td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>id=dijitEditorBody</td>
+				<td>def test content should still be here</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;Manage Tags&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_BigTag_id_pane']/table/tbody/tr/td[4]</td>
+				<td>new created tag for blog, will be removed after test</td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_BigTag_id_pane']/table/tbody/tr/td[6]</td>
+				<td>1</td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>

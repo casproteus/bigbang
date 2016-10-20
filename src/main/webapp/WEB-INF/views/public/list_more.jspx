@@ -1,53 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:jsp="http://java.sun.com/JSP/Page" 		xmlns:spring="http://www.springframework.org/tags"
-	 xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"  xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" 
-	 xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:c="http://java.sun.com/jsp/jstl/core"
-	 xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
-  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-  <jsp:output omit-xml-declaration="yes"/>
-  <spring:message code="public" htmlEscape="false" var="publicspace"/>
-  <spring:message code="publicDescription" htmlEscape="false" var="publicDescription"/>
-  <c:choose>
-  	<c:when test="${empty spaceOwner or spaceOwner eq 'admin'}">
-		<spring:message code="publicDescription" htmlEscape="false" var="title"/>
-    </c:when>
-  	<c:otherwise>
-		<spring:message code="label_public_index" arguments="${spaceOwner},${empty description ? publicDescription : description}" htmlEscape="false" var="title"/>
-  	</c:otherwise>
-  </c:choose>
-  
-  <div style="background: #efefef; padding: 5px; margin-bottom: 3px">
-    <div style="text-align: center; padding-bottom: 5px"><b>${title}</b></div>
-    <span> <!-- class="new" this style make a right align, while make the line height too low.-->
-      <spring:url value="/twitters" var="write_url">
-        <spring:param name="form" />
-      </spring:url>
-      <a href="${write_url}">
-        <spring:message code="contributeTwitter" htmlEscape="false"/>
-        <spring:url value="/resources/images/addnote.png" var="write_img_url" />
-        <spring:message arguments="${typeName}" code="global_menu_newnote" var="add_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(add_message)}" src="${write_img_url}" title="${fn:escapeXml(add_message)}" />
-      </a>
-	  <c:out value=" || "/>
-      <spring:url value="/contents" var="create_url">
-        <spring:param name="form" />
-      </spring:url>
-      <a href="${create_url}">
-        <spring:message code="contributeContent" htmlEscape="false"/>
-        <spring:url value="/resources/images/addcontent.png" var="create_img_url" />
-        <spring:message arguments="${typeName}" code="global_menu_newbookmark" var="add_message" htmlEscape="false" />
-        <img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
-      </a>
-    </span>
-  </div>
-  <br/>
-  <c:set var="tagsize" value="${fn:length(bigTags)}" scope="request" />
-  <spring:message code="label_com_aeiou_bigbang_publisher" var="sharerName" htmlEscape="false" />
-  <spring:message code="label_com_aeiou_bigbang_title" var="title" htmlEscape="false" />
-  <page:contentPane id="pl_com_aeiou_bigbang_domain_Content" items="${contents}" label="${tag}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
-      <table:contentlist data="${contents}" id="l_com_aeiou_bigbang_domain_Content" tagId="${tagId}" path="/contents" spaceOwner="${spaceOwner}" publisher="${publisher}" z="lLVLIzUb5uufSIaV72f5pNvyScI=">
-          <table:column id="c_com_aeiou_bigbang_domain_Content_title" property="title" label="${title}" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ="/>
-          <table:column id="c_com_aeiou_bigbang_domain_Content_commonBigTag" property="publisher" label="${sharerName}" z="054H0l7u1U7D14UvHgTdwqh3sy4="/>
-       </table:contentlist>
-  </page:contentPane>
+<div xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:page="urn:jsptagdir:/WEB-INF/tags/form"
+	xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<spring:message code="public" htmlEscape="false" var="publicspace" />
+	<spring:message code="publicDescription" htmlEscape="false"
+		var="publicDescription" />
+	<c:choose>
+		<c:when test="${empty spaceOwner or spaceOwner eq 'admin'}">
+			<spring:message code="publicDescription" htmlEscape="false"
+				var="title" />
+		</c:when>
+		<c:otherwise>
+			<spring:message code="label_public_index"
+				arguments="${spaceOwner},${empty description ? publicDescription : description}"
+				htmlEscape="false" var="title" />
+		</c:otherwise>
+	</c:choose>
+
+	<div style="background: #efefef; padding: 5px; margin-bottom: 3px">
+		<div style="text-align: center; padding-bottom: 5px">
+			<b>${title}</b>
+		</div>
+		<span> <!-- class="new" this style make a right align, while make the line height too low.-->
+			<spring:url value="/twitters" var="write_url">
+				<spring:param name="form" />
+			</spring:url> <a href="${write_url}"> <spring:message code="contributeTwitter"
+					htmlEscape="false" /> <spring:url
+					value="/resources/images/addnote.png" var="write_img_url" /> <spring:message
+					arguments="${typeName}" code="global_menu_newnote"
+					var="add_message" htmlEscape="false" /> <img
+				alt="${fn:escapeXml(add_message)}" src="${write_img_url}"
+				title="${fn:escapeXml(add_message)}" />
+		</a> <c:out value=" || " /> <spring:url value="/contents"
+				var="create_url">
+				<spring:param name="form" />
+			</spring:url> <a href="${create_url}"> <spring:message
+					code="contributeContent" htmlEscape="false" /> <spring:url
+					value="/resources/images/addcontent.png" var="create_img_url" /> <spring:message
+					arguments="${typeName}" code="global_menu_newbookmark"
+					var="add_message" htmlEscape="false" /> <img
+				alt="${fn:escapeXml(add_message)}" src="${create_img_url}"
+				title="${fn:escapeXml(add_message)}" />
+		</a>
+		</span>
+	</div>
+	<br />
+	<c:set var="tagsize" value="${fn:length(bigTags)}" scope="request" />
+	<spring:message code="label_com_aeiou_bigbang_publisher"
+		var="sharerName" htmlEscape="false" />
+	<spring:message code="label_com_aeiou_bigbang_title" var="title"
+		htmlEscape="false" />
+	<page:contentPane id="pl_com_aeiou_bigbang_domain_Content"
+		items="${contents}" label="${tag}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
+		<table:contentlist data="${contents}"
+			id="l_com_aeiou_bigbang_domain_Content" tagId="${tagId}"
+			path="/contents" spaceOwner="${spaceOwner}" publisher="${publisher}"
+			z="lLVLIzUb5uufSIaV72f5pNvyScI=">
+			<table:column id="c_com_aeiou_bigbang_domain_Content_title"
+				property="title" label="${title}" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />
+			<table:column id="c_com_aeiou_bigbang_domain_Content_commonBigTag"
+				property="publisher" label="${sharerName}"
+				z="054H0l7u1U7D14UvHgTdwqh3sy4=" />
+		</table:contentlist>
+	</page:contentPane>
 </div>

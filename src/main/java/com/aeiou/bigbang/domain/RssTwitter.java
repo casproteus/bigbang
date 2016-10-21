@@ -25,35 +25,48 @@ public class RssTwitter {
     @NotNull
     @ManyToOne
     private Twitter twitter = new Twitter();
-    
-    public static boolean isAllreadyExist(UserAccount pUserAccount, Twitter pTwitter) {
-    	EntityManager tEntityManager = entityManager();
-    	TypedQuery<RssTwitter> tQuery = tEntityManager.createQuery("SELECT o FROM RssTwitter AS o WHERE o.useraccount = :pUserAccount and o.twitter = :pTwitter", RssTwitter.class);
+
+    public static boolean isAllreadyExist(
+            UserAccount pUserAccount,
+            Twitter pTwitter) {
+        EntityManager tEntityManager = entityManager();
+        TypedQuery<RssTwitter> tQuery =
+                tEntityManager.createQuery(
+                        "SELECT o FROM RssTwitter AS o WHERE o.useraccount = :pUserAccount and o.twitter = :pTwitter",
+                        RssTwitter.class);
         tQuery = tQuery.setParameter("pUserAccount", pUserAccount);
         tQuery = tQuery.setParameter("pTwitter", pTwitter);
         List<RssTwitter> tList = tQuery.getResultList();
         return tList != null && tList.size() > 0;
     }
-    
-    public static List<RssTwitter> findAllListenersByTwitter(Twitter pTwitter){
-    	EntityManager tEntityManager = entityManager();
-    	TypedQuery<RssTwitter> tQuery = tEntityManager.createQuery("SELECT o FROM RssTwitter AS o WHERE o.twitter = :pTwitter", RssTwitter.class);
+
+    public static List<RssTwitter> findAllListenersByTwitter(
+            Twitter pTwitter) {
+        EntityManager tEntityManager = entityManager();
+        TypedQuery<RssTwitter> tQuery =
+                tEntityManager.createQuery("SELECT o FROM RssTwitter AS o WHERE o.twitter = :pTwitter",
+                        RssTwitter.class);
         tQuery = tQuery.setParameter("pTwitter", pTwitter);
         return tQuery.getResultList();
     }
-    
-    public static boolean deleteRssTwitterByTwitterAndUserAcount(Twitter pTwitter, UserAccount pUserAccount){
-    	EntityManager tEntityManager = entityManager();
-    	TypedQuery<RssTwitter> tQuery = tEntityManager.createQuery("SELECT o FROM RssTwitter AS o WHERE o.useraccount = :pUserAccount and o.twitter = :pTwitter", RssTwitter.class);
+
+    public static boolean deleteRssTwitterByTwitterAndUserAcount(
+            Twitter pTwitter,
+            UserAccount pUserAccount) {
+        EntityManager tEntityManager = entityManager();
+        TypedQuery<RssTwitter> tQuery =
+                tEntityManager.createQuery(
+                        "SELECT o FROM RssTwitter AS o WHERE o.useraccount = :pUserAccount and o.twitter = :pTwitter",
+                        RssTwitter.class);
         tQuery = tQuery.setParameter("pUserAccount", pUserAccount);
         tQuery = tQuery.setParameter("pTwitter", pTwitter);
-        try{
-        	RssTwitter tRssTwitter = tQuery.getSingleResult();
+        try {
+            RssTwitter tRssTwitter = tQuery.getSingleResult();
             tRssTwitter.remove();
-        }catch(Exception e){
-        	//do nothing.
+        } catch (Exception e) {
+            // do nothing.
         }
-        
-    	return true;
+
+        return true;
     }
 }

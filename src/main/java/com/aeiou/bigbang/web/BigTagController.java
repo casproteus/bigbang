@@ -35,18 +35,26 @@ public class BigTagController {
     @Inject
     private MessageSource messageSource;
 
-    void populateEditForm(Model uiModel, BigTag bigTag, HttpServletRequest httpServletRequest) {
+    void populateEditForm(
+            Model uiModel,
+            BigTag bigTag,
+            HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("bigTag", bigTag);
         uiModel.addAttribute("authorities", BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
         uiModel.addAttribute("types", BigType.getAllOptions(bigTag.getOwner(), httpServletRequest.getLocale()));
-        
+
         String tUserName = userContextService.getCurrentUserName();
         UserAccount tOwner = UserAccount.findUserAccountByName(tUserName);
         BigUtil.checkTheme(tOwner, httpServletRequest);
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
-    public String create(@Valid BigTag bigTag, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+    public String create(
+            @Valid
+            BigTag bigTag,
+            BindingResult bindingResult,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         if (StringUtils.isEmpty(bigTag.getTagName())) {
             populateEditForm(uiModel, bigTag, httpServletRequest);
             return "bigtags/create";
@@ -79,7 +87,12 @@ public class BigTagController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
-    public String update(@Valid BigTag bigTag, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+    public String update(
+            @Valid
+            BigTag bigTag,
+            BindingResult bindingResult,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         if (StringUtils.isEmpty(bigTag.getTagName())) {
             populateEditForm(uiModel, bigTag, httpServletRequest);
             return "bigtags/update";
@@ -189,7 +202,14 @@ public class BigTagController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
-    public String delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+    public String delete(
+            @PathVariable("id")
+            Long id,
+            @RequestParam(value = "page", required = false)
+            Integer page,
+            @RequestParam(value = "size", required = false)
+            Integer size,
+            Model uiModel) {
         BigTag bigTag = BigTag.findBigTag(id);
         bigTag.remove();
         if (bigTag.getOwner() != null && bigTag.getOwner() == 0) {
@@ -300,10 +320,18 @@ public class BigTagController {
     }
 
     @RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "sortExpression", required = false) String sortExpression, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, 
-    		Model uiModel, HttpServletRequest httpServletRequest) {
+    public String list(
+            @RequestParam(value = "sortExpression", required = false)
+            String sortExpression,
+            @RequestParam(value = "page", required = false)
+            Integer page,
+            @RequestParam(value = "size", required = false)
+            Integer size,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
-        if (tCurName == null) return "login";
+        if (tCurName == null)
+            return "login";
         UserAccount tCurUser = UserAccount.findUserAccountByName(tCurName);
         tCurName = tCurUser.getName();
         int sizeNo = size == null ? 10 : size.intValue();
@@ -312,18 +340,24 @@ public class BigTagController {
         if (tCurName.equals("admin")) {
             uiModel.addAttribute("bigtags", BigTag.findOrderedBigTagEntries(firstResult, sizeNo, sortExpression));
             nrOfPages = (float) BigTag.countBigTags() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
+                    : nrOfPages));
         } else {
             uiModel.addAttribute("bigtags", BigTag.findTagsByPublisher(tCurName, firstResult, sizeNo, sortExpression));
             nrOfPages = (float) BigTag.countTagsByPublisher(tCurName) / sizeNo;
         }
-        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
+                : nrOfPages));
         BigUtil.checkTheme(tCurUser, httpServletRequest);
         return "bigtags/list";
     }
 
     @RequestMapping(params = "form", produces = "text/html")
-    public String createForm(Model uiModel, @RequestParam(value = "type", required = false) String type, HttpServletRequest httpServletRequest) {
+    public String createForm(
+            Model uiModel,
+            @RequestParam(value = "type", required = false)
+            String type,
+            HttpServletRequest httpServletRequest) {
         BigTag tBigTag = new BigTag();
         tBigTag.setOwner(("0".equals(type) || "1".equals(type)) ? Integer.valueOf(type) : null);
         populateEditForm(uiModel, tBigTag, httpServletRequest);
@@ -331,7 +365,11 @@ public class BigTagController {
     }
 
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String updateForm(@PathVariable("id") Long id, Model uiModel, HttpServletRequest httpServletRequest) {
+    public String updateForm(
+            @PathVariable("id")
+            Long id,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         populateEditForm(uiModel, BigTag.findBigTag(id), httpServletRequest);
         return "bigtags/update";
     }

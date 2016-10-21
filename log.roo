@@ -113,3 +113,4 @@ field reference --class ~.domain.Customize --fieldName useraccount --type ~.doma
 field string --fieldName cusKey --notNull
 quit
 // Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2016-09-15 16:24:36
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2016-10-20 22:52:03

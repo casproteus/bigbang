@@ -47,7 +47,9 @@ public class RemarkController {
 
     @RequestMapping(value = "/refreshRemarks", method = RequestMethod.GET)
     @ResponseBody
-    public List<com.aeiou.bigbang.domain.Remark> refreshRemarks(@RequestParam String twitterid) {
+    public List<com.aeiou.bigbang.domain.Remark> refreshRemarks(
+            @RequestParam
+            String twitterid) {
         Twitter tTwitter = Twitter.findTwitter(Long.valueOf(twitterid));
         UserAccount tOwner = tTwitter.getPublisher();
         String tCurName = userContextService.getCurrentUserName();
@@ -56,21 +58,32 @@ public class RemarkController {
         return Remark.findRemarkByTwitter(tTwitter, tAuthSet, 0, 20);
     }
 
-    void populateEditForm(Model uiModel, Remark remark, HttpServletRequest httpServletRequest) {
+    void populateEditForm(
+            Model uiModel,
+            Remark remark,
+            HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("remark", remark);
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("twitters", Twitter.findAllTwitters());
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
-        uiModel.addAttribute("authorities", BigAuthority.getRemarkOptions(messageSource, httpServletRequest.getLocale()));
+        uiModel.addAttribute("authorities",
+                BigAuthority.getRemarkOptions(messageSource, httpServletRequest.getLocale()));
         uiModel.addAttribute("refresh_time", remark.getRefresh_time());
         String tUserName = userContextService.getCurrentUserName();
-        
+
         UserAccount tOwner = UserAccount.findUserAccountByName(tUserName);
         BigUtil.checkTheme(tOwner, httpServletRequest);
     }
 
     @RequestMapping(params = "pTwitterId", method = RequestMethod.POST, produces = "text/html")
-    public String create(@Valid Remark remark, BindingResult bindingResult, @RequestParam(value = "pTwitterId", required = false) Long pTwitterId, Model uiModel, HttpServletRequest httpServletRequest) {
+    public String create(
+            @Valid
+            Remark remark,
+            BindingResult bindingResult,
+            @RequestParam(value = "pTwitterId", required = false)
+            Long pTwitterId,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         if (remark.getContent() == null || remark.getContent().length() < 1) {
             populateEditForm(uiModel, new Remark(), httpServletRequest);
             return "remarks/create";
@@ -80,7 +93,8 @@ public class RemarkController {
         List<Remark> tList = Remark.findRemarkByPublisher(tUserAccount, 0, 1, null);
         if (tList != null && tList.size() > 0) {
             Remark tTwitter = tList.get(0);
-            if (remark.getContent().equals(tTwitter.getContent()) && remark.getRemarkto().equals(tTwitter.getRemarkto())) {
+            if (remark.getContent().equals(tTwitter.getContent())
+                    && remark.getRemarkto().equals(tTwitter.getRemarkto())) {
                 populateEditForm(uiModel, new Remark(), httpServletRequest);
                 return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
             }
@@ -97,16 +111,21 @@ public class RemarkController {
         }
         uiModel.asMap().clear();
         remark.persist();
-        
+
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
-        
-        checkRss(remark);	//to check if need to send out notice email.
-        
+
+        checkRss(remark); // to check if need to send out notice email.
+
         return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
     }
 
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
-    public String update(@Valid Remark remark, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+    public String update(
+            @Valid
+            Remark remark,
+            BindingResult bindingResult,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             if (bindingResult.getAllErrors().size() == 1 && remark.getPublisher() == null) {
                 String tCurName = userContextService.getCurrentUserName();
@@ -122,14 +141,23 @@ public class RemarkController {
         uiModel.asMap().clear();
         remark.merge();
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
-        return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest);
+        return "redirect:/remarks?twitterid="
+                + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest);
     }
 
     @RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "sortExpression", required = false) String sortExpression, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,
-    		Model uiModel, HttpServletRequest httpServletRequest) {
+    public String list(
+            @RequestParam(value = "sortExpression", required = false)
+            String sortExpression,
+            @RequestParam(value = "page", required = false)
+            Integer page,
+            @RequestParam(value = "size", required = false)
+            Integer size,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
-        if (tCurName == null) return "login";
+        if (tCurName == null)
+            return "login";
         int sizeNo = size == null ? 10 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
         UserAccount tPublisher = UserAccount.findUserAccountByName(tCurName);
@@ -138,12 +166,15 @@ public class RemarkController {
         if (tCurName.equals("admin")) {
             uiModel.addAttribute("remarks", Remark.findOrderedRemarkEntries(firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Remark.countRemarks() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
+                    : nrOfPages));
         } else {
-            uiModel.addAttribute("remarks", Remark.findRemarkByPublisher(tPublisher, firstResult, sizeNo, sortExpression));
+            uiModel.addAttribute("remarks",
+                    Remark.findRemarkByPublisher(tPublisher, firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Remark.countRemarkByPublisher(tPublisher) / sizeNo;
         }
-        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
+                : nrOfPages));
         addDateTimeFormatPatterns(uiModel);
 
         BigUtil.checkTheme(tPublisher, httpServletRequest);
@@ -151,7 +182,9 @@ public class RemarkController {
     }
 
     @RequestMapping(params = "form", produces = "text/html")
-    public String createForm(Model uiModel, HttpServletRequest httpServletRequest) {
+    public String createForm(
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         populateEditForm(uiModel, new Remark(), httpServletRequest);
         List<String[]> dependencies = new ArrayList<String[]>();
         if (UserAccount.countUserAccounts() == 0) {
@@ -162,12 +195,21 @@ public class RemarkController {
     }
 
     @RequestMapping(params = "twitterid", produces = "text/html")
-    public String showDetailTwitters(@RequestParam(value = "twitterid", required = false) Long twitterid, Integer refresh_time, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel, HttpServletRequest request) {
+    public String showDetailTwitters(
+            @RequestParam(value = "twitterid", required = false)
+            Long twitterid,
+            Integer refresh_time,
+            @RequestParam(value = "page", required = false)
+            Integer page,
+            @RequestParam(value = "size", required = false)
+            Integer size,
+            Model uiModel,
+            HttpServletRequest request) {
         Twitter tTwitter = Twitter.findTwitter(twitterid);
         UserAccount tOwner = tTwitter.getPublisher();
 
         BigUtil.checkTheme(tOwner, request);
-        
+
         int sizeNo = size == null ? 20 : size.intValue();
         final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
         String tCurName = userContextService.getCurrentUserName();
@@ -179,10 +221,12 @@ public class RemarkController {
         List<Remark> tRemarksList = Remark.findRemarkByTwitter(tTwitter, tAuthSet, firstResult, sizeNo);
         uiModel.addAttribute("remarks", tRemarksList);
         nrOfPages = (float) Remark.countRemarksByTwitter(tTwitter, tAuthSet) / sizeNo;
-        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
+                : nrOfPages));
         Remark tRemark = new Remark();
-        if (refresh_time == null) 	//default refresh time. @NOTE: can not be null, or the webpage will report error. like" if (  >0){"
-        	refresh_time = Integer.valueOf(0);
+        if (refresh_time == null) // default refresh time. @NOTE: can not be null, or the webpage will report error.
+                                  // like" if (  >0){"
+            refresh_time = Integer.valueOf(0);
         tRemark.setRefresh_time(refresh_time.intValue());
         uiModel.addAttribute("newremark", tRemark);
         uiModel.addAttribute("authorities", BigAuthority.getRemarkOptions(messageSource, request.getLocale()));
@@ -190,21 +234,31 @@ public class RemarkController {
         remarktos.add(tTwitter);
         uiModel.addAttribute("remarktos", remarktos);
         uiModel.addAttribute("refresh_time", refresh_time);
-        
-        //check how many new remark since last remark.
-        //if it's not displaying the lastest ones, it's pagging up to previous page, then don't show new message account.
+
+        // check how many new remark since last remark.
+        // if it's not displaying the lastest ones, it's pagging up to previous page, then don't show new message
+        // account.
         if (tCurUser != null && (page == null || page.intValue() == 0)) {
             int i = 0;
             for (; i < tRemarksList.size(); i++) {
-                if (tRemarksList.get(i).getPublisher().getId() == tCurUser.getId()) break;
+                if (tRemarksList.get(i).getPublisher().getId() == tCurUser.getId())
+                    break;
             }
             uiModel.addAttribute("newMessageNumber", i);
-        } else uiModel.addAttribute("newMessageNumber", 0);
+        } else
+            uiModel.addAttribute("newMessageNumber", 0);
         return "public/list_detail_twitter";
     }
 
     @RequestMapping(params = "twitterid", method = RequestMethod.POST, produces = "text/html")
-    public String createRemark(@Valid Remark remark, BindingResult bindingResult, @RequestParam(value = "twitterid", required = false) Long pTwitterId, Model uiModel, HttpServletRequest httpServletRequest) {
+    public String createRemark(
+            @Valid
+            Remark remark,
+            BindingResult bindingResult,
+            @RequestParam(value = "twitterid", required = false)
+            Long pTwitterId,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         if (remark.getContent() == null || remark.getContent().length() < 1) {
             return showDetailTwitters(pTwitterId, remark.getRefresh_time(), null, null, uiModel, httpServletRequest);
         }
@@ -225,29 +279,43 @@ public class RemarkController {
                 remark.setRemarkTime(new Date());
             } else {
                 populateEditForm(uiModel, remark, httpServletRequest);
-                return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest) + "&refresh_time=" + remark.getRefresh_time();
+                return "redirect:/remarks?twitterid="
+                        + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest)
+                        + "&refresh_time=" + remark.getRefresh_time();
             }
         }
         uiModel.asMap().clear();
         remark.persist();
-        
+
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
-        checkRss(remark);	//to check if need to send out notice email.
-        
-        return "redirect:/remarks?twitterid=" + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest) + "&refresh_time=" + remark.getRefresh_time();
+        checkRss(remark); // to check if need to send out notice email.
+
+        return "redirect:/remarks?twitterid="
+                + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest) + "&refresh_time="
+                + remark.getRefresh_time();
     }
 
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String updateForm(@PathVariable("id") Long id, Model uiModel, HttpServletRequest httpServletRequest) {
+    public String updateForm(
+            @PathVariable("id")
+            Long id,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         populateEditForm(uiModel, Remark.findRemark(id), httpServletRequest);
         return "remarks/update";
     }
 
     @RequestMapping(params = "refreshTime", produces = "text/html")
-    public String setRefreshTime(RefreshBean refreshBean, @RequestParam(value = "refreshTwitterid", required = true) Long refreshTwitterid, Model uiModel, HttpServletRequest httpServletRequest) {
+    public String setRefreshTime(
+            RefreshBean refreshBean,
+            @RequestParam(value = "refreshTwitterid", required = true)
+            Long refreshTwitterid,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         int tTime;
         String tTimeStr = refreshBean.getRefreshTime();
-        if (tTimeStr != null && tTimeStr.startsWith(",")) tTimeStr = tTimeStr.substring(1);
+        if (tTimeStr != null && tTimeStr.startsWith(","))
+            tTimeStr = tTimeStr.substring(1);
         try {
             tTime = Integer.valueOf(tTimeStr);
         } catch (Exception e) {
@@ -258,7 +326,13 @@ public class RemarkController {
     }
 
     @RequestMapping(params = "rss", produces = "text/html")
-    public String setRssOrder(@RequestParam(value = "rss", required = true) int refresh_time, @RequestParam(value = "rsstwitterid", required = false) Long pTwitterId, Model uiModel, HttpServletRequest httpServletRequest) {
+    public String setRssOrder(
+            @RequestParam(value = "rss", required = true)
+            int refresh_time,
+            @RequestParam(value = "rsstwitterid", required = false)
+            Long pTwitterId,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
         Twitter twitter = Twitter.findTwitter(pTwitterId);
         UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
@@ -270,60 +344,78 @@ public class RemarkController {
         }
         return showDetailTwitters(pTwitterId, refresh_time, null, null, uiModel, httpServletRequest);
     }
-    
+
     @RequestMapping(params = "removerss", produces = "text/html")
-    public String removeRssOrder(@RequestParam(value = "removerss", required = true) String username, @RequestParam(value = "removersstwitterid", required = true) Long pTwitterId,
-		Model uiModel, HttpServletRequest httpServletRequest) {
-    	
+    public String removeRssOrder(
+            @RequestParam(value = "removerss", required = true)
+            String username,
+            @RequestParam(value = "removersstwitterid", required = true)
+            Long pTwitterId,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
+
         Twitter twitter = Twitter.findTwitter(pTwitterId);
         UserAccount tCurUser = UserAccount.findUserAccountByName(username);
-        if(tCurUser != null){
-        	RssTwitter.deleteRssTwitterByTwitterAndUserAcount(twitter, tCurUser);
+        if (tCurUser != null) {
+            RssTwitter.deleteRssTwitterByTwitterAndUserAcount(twitter, tCurUser);
         }
 
         return showDetailTwitters(pTwitterId, 0, null, null, uiModel, httpServletRequest);
-	}
-
-    private void checkRss(Remark remark){
-    	Twitter tTwitter = remark.getRemarkto();
-    	List<RssTwitter> tList = RssTwitter.findAllListenersByTwitter(tTwitter);
-    	Customize tCustomizeLink = Customize.findCustomizeByKey("RemarkSourceLinkStr");
-    	Customize tCustomizeReplay = Customize.findCustomizeByKey("i18n_Replay");
-    	Customize tCustomizeUnsubscribe = Customize.findCustomizeByKey("i18n_Unsubscribe");
-    	Customize tCustomizeNewRemarkString = Customize.findCustomizeByKey("i18n_NewRemark");
-
-    	String linkStr = tCustomizeLink != null ? tCustomizeLink.getCusValue() : "http://www.sharethegoodones.com";
-    	String tReply = tCustomizeReplay != null ? tCustomizeReplay.getCusValue() : "Reply";
-    	String tUnsubscribe = tCustomizeUnsubscribe != null ? tCustomizeUnsubscribe.getCusValue() : "Unsubscribe";
-    	String tNewRemark = tCustomizeNewRemarkString != null ? tCustomizeNewRemarkString.getCusValue() : "New remark: ";
-    	
-    	for(int i = 0; i < tList.size(); i++){
-    		RssTwitter tRT = tList.get(i);
-    		String tUserName = tRT.getUseraccount().getName();
-    		if(remark.getAuthority() != 0 && !tUserName.equals(tTwitter.getPublisher().getName())) //if only visible to publisher, don't sent do others.
-    			continue;
-    		String email = tRT.getUseraccount().getEmail();
-    		String content = 
-    				"<p align='right'>---" + remark.getPublisher().getName() +" </p>" +
-    				"<p align='center'><a href='" + linkStr + "/remarks?twitterid=" + tTwitter.getId() + "'>" + tReply + "</a> | " +
-    				   				  "<a href='" + linkStr + "/remarks?removerss=" + tUserName + "&removersstwitterid=" + tTwitter.getId() + "'>" + tUnsubscribe + "</a></p>" +
-    				"<p align='center'><a href='" + linkStr + "'>" + linkStr + "</a></p>";
-    				
-    		if(email != null && email.indexOf("@") > 0 && email.indexOf(".", email.indexOf("@")) > 0){	//if it's valid.
-    			if(!email.equals(remark.getPublisher().getEmail()))										//if it's not the author himself.
-    				BigUtil.sendMessage("info@sharethegoodones.com", 
-    						tNewRemark + tTwitter.getTwtitle(), 
-    						email, 
-    						remark.getContent() + content);
-    		}
-    	}
     }
-    
-	//=====================================changing images on page=====================================
+
+    private void checkRss(
+            Remark remark) {
+        Twitter tTwitter = remark.getRemarkto();
+        List<RssTwitter> tList = RssTwitter.findAllListenersByTwitter(tTwitter);
+        Customize tCustomizeLink = Customize.findCustomizeByKey("RemarkSourceLinkStr");
+        Customize tCustomizeReplay = Customize.findCustomizeByKey("i18n_Replay");
+        Customize tCustomizeUnsubscribe = Customize.findCustomizeByKey("i18n_Unsubscribe");
+        Customize tCustomizeNewRemarkString = Customize.findCustomizeByKey("i18n_NewRemark");
+
+        String linkStr = tCustomizeLink != null ? tCustomizeLink.getCusValue() : "http://www.sharethegoodones.com";
+        String tReply = tCustomizeReplay != null ? tCustomizeReplay.getCusValue() : "Reply";
+        String tUnsubscribe = tCustomizeUnsubscribe != null ? tCustomizeUnsubscribe.getCusValue() : "Unsubscribe";
+        String tNewRemark =
+                tCustomizeNewRemarkString != null ? tCustomizeNewRemarkString.getCusValue() : "New remark: ";
+
+        for (int i = 0; i < tList.size(); i++) {
+            RssTwitter tRT = tList.get(i);
+            String tUserName = tRT.getUseraccount().getName();
+            if (remark.getAuthority() != 0 && !tUserName.equals(tTwitter.getPublisher().getName())) // if only visible
+                                                                                                    // to publisher,
+                                                                                                    // don't sent do
+                                                                                                    // others.
+                continue;
+            String email = tRT.getUseraccount().getEmail();
+            String content =
+                    "<p align='right'>---" + remark.getPublisher().getName() + " </p>" + "<p align='center'><a href='"
+                            + linkStr + "/remarks?twitterid=" + tTwitter.getId() + "'>" + tReply + "</a> | "
+                            + "<a href='" + linkStr + "/remarks?removerss=" + tUserName + "&removersstwitterid="
+                            + tTwitter.getId() + "'>" + tUnsubscribe + "</a></p>" + "<p align='center'><a href='"
+                            + linkStr + "'>" + linkStr + "</a></p>";
+
+            if (email != null && email.indexOf("@") > 0 && email.indexOf(".", email.indexOf("@")) > 0) { // if it's
+                                                                                                         // valid.
+                if (!email.equals(remark.getPublisher().getEmail())) // if it's not the author himself.
+                    BigUtil.sendMessage("info@sharethegoodones.com", tNewRemark + tTwitter.getTwtitle(), email,
+                            remark.getContent() + content);
+            }
+        }
+    }
+
+    // =====================================changing images on page=====================================
     @RequestMapping(value = "/getImage/{id}")
-    //when a user's theme was set to 9, then this method will be called to get his own images. if he's no image, then use admin's image.
-    public void getImage(@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
-    	PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class);
-    	tController.getImage(id, request, response);
+    // when a user's theme was set to 9, then this method will be called to get his own images. if he's no image, then
+    // use admin's image.
+            public
+            void getImage(
+                    @PathVariable("id")
+                    String id,
+                    HttpServletRequest request,
+                    HttpServletResponse response) {
+        PersonalController tController =
+                SpringApplicationContext.getApplicationContext()
+                        .getBean("personalController", PersonalController.class);
+        tController.getImage(id, request, response);
     }
 }

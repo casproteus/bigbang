@@ -43,32 +43,46 @@ public class Remark {
 
     @Transient
     private int refresh_time;
-    
+
     public int getRefresh_time() {
-		return refresh_time;
-	}
+        return refresh_time;
+    }
 
-	public void setRefresh_time(int refresh_time) {
-		this.refresh_time = refresh_time;
-	}
+    public void setRefresh_time(
+            int refresh_time) {
+        this.refresh_time = refresh_time;
+    }
 
-	public static List<com.aeiou.bigbang.domain.Remark> findRemarkByTwitter(Twitter pTwitter, Set<java.lang.Integer> pAuthSet, int firstResult, int maxResults) {
+    public static List<com.aeiou.bigbang.domain.Remark> findRemarkByTwitter(
+            Twitter pTwitter,
+            Set<java.lang.Integer> pAuthSet,
+            int firstResult,
+            int maxResults) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Remark> tQuery = tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet) ORDER BY o.id DESC", Remark.class);
+        TypedQuery<Remark> tQuery =
+                tEntityManager
+                        .createQuery(
+                                "SELECT o FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet) ORDER BY o.id DESC",
+                                Remark.class);
         tQuery = tQuery.setParameter("pTwitter", pTwitter);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
-        if(firstResult > -1 && maxResults > 0)
-        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        if (firstResult > -1 && maxResults > 0)
+            tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
 
-    public static long countRemarksByTwitter(Twitter pTwitter, Set<java.lang.Integer> pAuthSet) {
-        TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet)", Long.class);
+    public static long countRemarksByTwitter(
+            Twitter pTwitter,
+            Set<java.lang.Integer> pAuthSet) {
+        TypedQuery<Long> tQuery =
+                entityManager().createQuery(
+                        "SELECT COUNT(o) FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet)",
+                        Long.class);
         tQuery = tQuery.setParameter("pTwitter", pTwitter);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
         return tQuery.getSingleResult();
     }
-    
+
     /**
      * @called from RemarkController->list when not admin as logged user.
      * @param pPublisher
@@ -76,22 +90,33 @@ public class Remark {
      * @param maxResults
      * @return
      */
-    public static List<com.aeiou.bigbang.domain.Remark> findRemarkByPublisher(UserAccount pPublisher, int firstResult, int maxResults, String sortExpression) {
+    public static List<com.aeiou.bigbang.domain.Remark> findRemarkByPublisher(
+            UserAccount pPublisher,
+            int firstResult,
+            int maxResults,
+            String sortExpression) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Remark> tQuery = tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.publisher = :publisher ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Remark.class);
+        TypedQuery<Remark> tQuery =
+                tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.publisher = :publisher ORDER BY "
+                        + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression),
+                        Remark.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
-        if(firstResult > -1 && maxResults > 0)
-        	tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        if (firstResult > -1 && maxResults > 0)
+            tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
     }
 
-    public static long countRemarkByPublisher(UserAccount pPublisher) {
+    public static long countRemarkByPublisher(
+            UserAccount pPublisher) {
         if (pPublisher == null) {
-            LogFactory.getLog(Content.class).error("------received a null as param!(pPublisher is null)------Remark.countRemarkByPublisher()");
+            LogFactory.getLog(Content.class).error(
+                    "------received a null as param!(pPublisher is null)------Remark.countRemarkByPublisher()");
             Thread.dumpStack();
             return 0;
         } else {
-            TypedQuery<Long> tQuery = entityManager().createQuery("SELECT COUNT(o) FROM Remark AS o WHERE o.publisher = :pPublisher", Long.class);
+            TypedQuery<Long> tQuery =
+                    entityManager().createQuery("SELECT COUNT(o) FROM Remark AS o WHERE o.publisher = :pPublisher",
+                            Long.class);
             tQuery = tQuery.setParameter("pPublisher", pPublisher);
             return tQuery.getSingleResult();
         }
@@ -101,11 +126,21 @@ public class Remark {
         return content;
     }
 
-	public static List<Remark> findOrderedRemarkEntries(int firstResult, int maxResults, String sortExpression) {
-        return entityManager().createQuery("SELECT o FROM Remark o ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), Remark.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    public static List<Remark> findOrderedRemarkEntries(
+            int firstResult,
+            int maxResults,
+            String sortExpression) {
+        return entityManager()
+                .createQuery(
+                        "SELECT o FROM Remark o ORDER BY "
+                                + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression),
+                        Remark.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 
-	public static List<Remark> findRemarkEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM Remark o ORDER BY o.id DESC", Remark.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    public static List<Remark> findRemarkEntries(
+            int firstResult,
+            int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Remark o ORDER BY o.id DESC", Remark.class)
+                .setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 }

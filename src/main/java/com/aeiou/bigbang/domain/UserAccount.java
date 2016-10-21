@@ -59,49 +59,71 @@ public class UserAccount {
 
     private int newMessageAmount;
 
-    public static com.aeiou.bigbang.domain.UserAccount findUserAccountByName(String pUserName) {
-        TypedQuery<UserAccount> tQuery = entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)", UserAccount.class);
+    public static com.aeiou.bigbang.domain.UserAccount findUserAccountByName(
+            String pUserName) {
+        TypedQuery<UserAccount> tQuery =
+                entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)",
+                        UserAccount.class);
         tQuery = tQuery.setParameter("tname", pUserName);
         List<UserAccount> tList = tQuery.getResultList();
-        if (tList != null && tList.size() == 1) return (UserAccount) tList.get(0); else return null;
+        if (tList != null && tList.size() == 1)
+            return (UserAccount) tList.get(0);
+        else
+            return null;
     }
-    
-    public static com.aeiou.bigbang.domain.UserAccount findUserAccountByNameAndPassword(String pUserNameAndPassword) {
-    	int p = pUserNameAndPassword.indexOf(BigUtil.SEP_ITEM);
-    	if(p < 0) return null;
-    	
-    	String pUserName = pUserNameAndPassword.substring(0, p);
-    	String pPassword = pUserNameAndPassword.substring(p);
-        TypedQuery<UserAccount> tQuery = entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)", UserAccount.class);
+
+    public static com.aeiou.bigbang.domain.UserAccount findUserAccountByNameAndPassword(
+            String pUserNameAndPassword) {
+        int p = pUserNameAndPassword.indexOf(BigUtil.SEP_ITEM);
+        if (p < 0)
+            return null;
+
+        String pUserName = pUserNameAndPassword.substring(0, p);
+        String pPassword = pUserNameAndPassword.substring(p);
+        TypedQuery<UserAccount> tQuery =
+                entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)",
+                        UserAccount.class);
         tQuery = tQuery.setParameter("tname", pUserName);
         List<UserAccount> tList = tQuery.getResultList();
-        if (tList != null && tList.size() == 1){ 
-        	UserAccount tUserAccount = (UserAccount) tList.get(0); 
-        	if (tUserAccount.getPassword().equals(pPassword))
-        		return tUserAccount;
+        if (tList != null && tList.size() == 1) {
+            UserAccount tUserAccount = (UserAccount) tList.get(0);
+            if (tUserAccount.getPassword().equals(pPassword))
+                return tUserAccount;
         }
         return null;
     }
-    
+
     public String toString() {
         return this.getName();
     }
 
-    public static List<com.aeiou.bigbang.domain.UserAccount> findOrderedUserAccountEntries(int firstResult, int maxResults, String sortExpression) {
-    	TypedQuery<UserAccount> tQuery =  entityManager().createQuery("SELECT o FROM UserAccount o ORDER BY " + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression), UserAccount.class);
-    	if(firstResult >= 0 && maxResults > 0)
-    		tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
-    	return tQuery.getResultList();
+    public static List<com.aeiou.bigbang.domain.UserAccount> findOrderedUserAccountEntries(
+            int firstResult,
+            int maxResults,
+            String sortExpression) {
+        TypedQuery<UserAccount> tQuery =
+                entityManager()
+                        .createQuery(
+                                "SELECT o FROM UserAccount o ORDER BY "
+                                        + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC"
+                                                : sortExpression), UserAccount.class);
+        if (firstResult >= 0 && maxResults > 0)
+            tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        return tQuery.getResultList();
     }
 
-    public static List<com.aeiou.bigbang.domain.UserAccount> findUserAccountEntries(int firstResult, int maxResults) {
-    	TypedQuery<UserAccount> tQuery =  entityManager().createQuery("SELECT o FROM UserAccount o ORDER BY o.id DESC", UserAccount.class);
-    	if(firstResult >= 0 && maxResults > 0)
-    		tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
-    	return tQuery.getResultList();
+    public static List<com.aeiou.bigbang.domain.UserAccount> findUserAccountEntries(
+            int firstResult,
+            int maxResults) {
+        TypedQuery<UserAccount> tQuery =
+                entityManager().createQuery("SELECT o FROM UserAccount o ORDER BY o.id DESC", UserAccount.class);
+        if (firstResult >= 0 && maxResults > 0)
+            tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        return tQuery.getResultList();
     }
 
-	public static String toJsonArray(Collection<UserAccount> collection) {
+    public static String toJsonArray(
+            Collection<UserAccount> collection) {
         return new JSONSerializer().include("listento").exclude("*.class").serialize(collection);
     }
 }

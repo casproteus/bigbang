@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RooWebScaffold(path = "useraccounts", formBackingObject = UserAccount.class)
 @RooWebJson(jsonObject = UserAccount.class)
-public class UserAccountController extends BaseController{
+public class UserAccountController extends BaseController {
 
     @Inject
     private UserContextService userContextService;
@@ -50,7 +50,9 @@ public class UserAccountController extends BaseController{
     private MessageSource messageSource;
 
     @RequestMapping(params = "form", produces = "text/html")
-    public String createForm(Model uiModel, HttpServletRequest httpServletRequest) {
+    public String createForm(
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         UserAccount tUserAccount = new UserAccount();
         tUserAccount.setPrice(1);
         tUserAccount.setBalance(1000);
@@ -59,7 +61,12 @@ public class UserAccountController extends BaseController{
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
-    public String create(@Valid UserAccount userAccount, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+    public String create(
+            @Valid
+            UserAccount userAccount,
+            BindingResult bindingResult,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, userAccount, httpServletRequest);
             return "useraccounts/create";
@@ -69,7 +76,7 @@ public class UserAccountController extends BaseController{
             uiModel.asMap().clear();
             userAccount.setBalance(1000);
             userAccount.persist();
-            //add default messsage.
+            // add default messsage.
             addDefaultMessageTwitter(userAccount, httpServletRequest.getLocale());
             return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
         } else {
@@ -78,8 +85,12 @@ public class UserAccountController extends BaseController{
         }
     }
 
-	@RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String updateForm(@PathVariable("id") Long id, Model uiModel, HttpServletRequest httpServletRequest) {
+    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
+    public String updateForm(
+            @PathVariable("id")
+            Long id,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         UserAccount tOwner = UserAccount.findUserAccount(id);
         populateEditForm(uiModel, tOwner, httpServletRequest);
         uiModel.addAttribute("returnPath", id);
@@ -87,8 +98,13 @@ public class UserAccountController extends BaseController{
         return "useraccounts/update";
     }
 
-	@RequestMapping(method = RequestMethod.PUT, produces = "text/html")
-    public String update(@Valid UserAccount userAccount, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
+    @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
+    public String update(
+            @Valid
+            UserAccount userAccount,
+            BindingResult bindingResult,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, userAccount, httpServletRequest);
             return "useraccounts/update";
@@ -102,35 +118,44 @@ public class UserAccountController extends BaseController{
             }
         }
         uiModel.asMap().clear();
-        
-    	//if name changed, need to update the image paths.
-        if(!tUserAccount.getName().equals(userAccount.getName())){
-            if(MediaUpload.countMediaUploadsByKey(tUserAccount.getName()) > 0){
-            	MediaUpload tMH = MediaUpload.findMediaByKey(tUserAccount.getName() + "_headimg");
-            	if(tMH != null){
-            		tMH.setFilepath(userAccount.getName() + "_headimg");
-            		tMH.merge();
-            	}
-            	MediaUpload tMB = MediaUpload.findMediaByKey(tUserAccount.getName() + "_bg");
-            	if(tMB != null){
-            		tMB.setFilepath(userAccount.getName() + "_bg");
-            		tMB.merge();
-            	}
+
+        // if name changed, need to update the image paths.
+        if (!tUserAccount.getName().equals(userAccount.getName())) {
+            if (MediaUpload.countMediaUploadsByKey(tUserAccount.getName()) > 0) {
+                MediaUpload tMH = MediaUpload.findMediaByKey(tUserAccount.getName() + "_headimg");
+                if (tMH != null) {
+                    tMH.setFilepath(userAccount.getName() + "_headimg");
+                    tMH.merge();
+                }
+                MediaUpload tMB = MediaUpload.findMediaByKey(tUserAccount.getName() + "_bg");
+                if (tMB != null) {
+                    tMB.setFilepath(userAccount.getName() + "_bg");
+                    tMB.merge();
+                }
             }
         }
-        
+
         tUserAccount.setName(userAccount.getName());
         tUserAccount.setPassword(userAccount.getPassword());
         tUserAccount.setEmail(userAccount.getEmail());
         tUserAccount.setDescription(userAccount.getDescription());
-        if(StringUtils.isNotBlank(userAccount.getLayout())) //because when user modify his useraccount info, the layout field doesn't display,
-        	tUserAccount.setLayout(userAccount.getLayout());//then the layout will be null. and we don't want it be save into db.
+        if (StringUtils.isNotBlank(userAccount.getLayout())) // because when user modify his useraccount info, the
+                                                             // layout field doesn't display,
+            tUserAccount.setLayout(userAccount.getLayout());// then the layout will be null. and we don't want it be
+                                                            // save into db.
         tUserAccount.persist();
         return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
-    public String delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+    public String delete(
+            @PathVariable("id")
+            Long id,
+            @RequestParam(value = "page", required = false)
+            Integer page,
+            @RequestParam(value = "size", required = false)
+            Integer size,
+            Model uiModel) {
         UserAccount userAccount = UserAccount.findUserAccount(id);
         List<BigTag> tBigTags = BigTag.findTagsByPublisher(userAccount.getName(), 0, 1000, null);
         for (int i = tBigTags.size() - 1; i > -1; i--) {
@@ -144,15 +169,25 @@ public class UserAccountController extends BaseController{
     }
 
     @RequestMapping(produces = "text/html")
-    public String list(@RequestParam(value = "sortExpression", required = false) String sortExpression, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+    public String list(
+            @RequestParam(value = "sortExpression", required = false)
+            String sortExpression,
+            @RequestParam(value = "page", required = false)
+            Integer page,
+            @RequestParam(value = "size", required = false)
+            Integer size,
+            Model uiModel) {
         String tCurName = userContextService.getCurrentUserName();
-        if (tCurName == null) return "login";
+        if (tCurName == null)
+            return "login";
         if (tCurName.equalsIgnoreCase("admin")) {
             int sizeNo = size == null ? 10 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("useraccounts", UserAccount.findOrderedUserAccountEntries(firstResult, sizeNo, sortExpression));
+            uiModel.addAttribute("useraccounts",
+                    UserAccount.findOrderedUserAccountEntries(firstResult, sizeNo, sortExpression));
             float nrOfPages = (float) UserAccount.countUserAccounts() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
+                    : nrOfPages));
         } else {
             List<UserAccount> tList = new ArrayList<UserAccount>();
             tList.add(UserAccount.findUserAccountByName(tCurName));
@@ -161,8 +196,10 @@ public class UserAccountController extends BaseController{
         }
         return "useraccounts/list";
     }
-    
-    private void addDefaultMessageTwitter(UserAccount pPublisher, Locale pLocale) {
+
+    private void addDefaultMessageTwitter(
+            UserAccount pPublisher,
+            Locale pLocale) {
         Message tMessage = new Message();
         tMessage.setReceiver(pPublisher);
         tMessage.setPublisher(UserAccount.findUserAccountByName("admin"));
@@ -174,127 +211,172 @@ public class UserAccountController extends BaseController{
 
     @RequestMapping(value = "/getImage/{id}")
     /**this method should be called only when user has logged in, and user's cliking the useraccount button on top-right corner.  */
-    public void getImage(@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
-	    response.setContentType("image/jpeg");
-	    //@TODO(delete):I added chenck in checkTheme method, to add the spaceOwner property again, so here, shouldn't be uc__...", must have value.
-//	    if("uc__headimage".equals(id) || "uc__bg".equals(id)){
-//	    	if(userContextService.getCurrentUserName() != null){
-//	    		id = userContextService.getCurrentUserName().toLowerCase() + (id.endsWith("_bg") ? "_bg" : "_headimage");
-//    			id = "uc_" + id;
-//	    	}
-//	    }
-	    
-	    //NOTE: can not reuse personalController's method, because here, if fond no image, will leave it empty not using admin's image.
-	    MediaUpload tMedia = MediaUpload.findMediaByKey(id);
-	    try{
-		    if(tMedia != null && tMedia.getContent() != null){
-		    	byte[] imageBytes = tMedia.getContent();
-		    	response.getOutputStream().write(imageBytes);
-		    	response.getOutputStream().flush();
-		    }else{	
-		    	//leave empty. this method will only be called when displaying the updateForm of useraccount to display the image in the dialog, 
-		    	//so shall not display admin's default image.		    	
-		    }
-	    }catch(Exception e){
-	    	System.out.println("Exception occured when fetching img of ID:" + id + "! " + e);
-	    }
+    public void getImage(
+            @PathVariable("id")
+            String id,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        response.setContentType("image/jpeg");
+        // @TODO(delete):I added chenck in checkTheme method, to add the spaceOwner property again, so here, shouldn't
+        // be uc__...", must have value.
+        // if("uc__headimage".equals(id) || "uc__bg".equals(id)){
+        // if(userContextService.getCurrentUserName() != null){
+        // id = userContextService.getCurrentUserName().toLowerCase() + (id.endsWith("_bg") ? "_bg" : "_headimage");
+        // id = "uc_" + id;
+        // }
+        // }
+
+        // NOTE: can not reuse personalController's method, because here, if fond no image, will leave it empty not
+        // using admin's image.
+        MediaUpload tMedia = MediaUpload.findMediaByKey(id);
+        try {
+            if (tMedia != null && tMedia.getContent() != null) {
+                byte[] imageBytes = tMedia.getContent();
+                response.getOutputStream().write(imageBytes);
+                response.getOutputStream().flush();
+            } else {
+                // leave empty. this method will only be called when displaying the updateForm of useraccount to display
+                // the image in the dialog,
+                // so shall not display admin's default image.
+            }
+        } catch (Exception e) {
+            System.out.println("Exception occured when fetching img of ID:" + id + "! " + e);
+        }
     }
 
-	void populateEditForm(Model uiModel, UserAccount userAccount, HttpServletRequest httpServletRequest) {
+    void populateEditForm(
+            Model uiModel,
+            UserAccount userAccount,
+            HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("userAccount", userAccount);
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
         BigUtil.checkTheme(userAccount, httpServletRequest);
     }
 
-	@RequestMapping(value = "/1210_syncdb", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> createFromJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			if(tList.size() == 6)
-				tSyncManager.saveContentIntoLocalDB(tList, "1210_syncdb");
-    	}
-        
+    @RequestMapping(value = "/1210_syncdb", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> createFromJsonArray(
+            @RequestBody
+            String json) {
+        SynchnizationManager tSyncManager = new SynchnizationManager();
+        if (json != null && json.length() > 0) {
+            List<String> tList =
+                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
+                            .deserialize(json);
+            if (tList.size() == 6)
+                tSyncManager.saveContentIntoLocalDB(tList, "1210_syncdb");
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb"), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb"), headers,
+                HttpStatus.OK);
     }
 
-	@RequestMapping(value = "/1210_syncdb_bg", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> createFromBGJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			tSyncManager.saveBlogsToLocalDB(tList.get(0));
-    	}
-        
+    @RequestMapping(value = "/1210_syncdb_bg", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> createFromBGJsonArray(
+            @RequestBody
+            String json) {
+        SynchnizationManager tSyncManager = new SynchnizationManager();
+        if (json != null && json.length() > 0) {
+            List<String> tList =
+                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
+                            .deserialize(json);
+            tSyncManager.saveBlogsToLocalDB(tList.get(0));
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_bg"), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_bg"), headers,
+                HttpStatus.OK);
     }
 
-	@RequestMapping(value = "/1210_syncdb_ua", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> createFromUAJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			tSyncManager.saveUserAccountToLocalDB(tList.get(0));
-    	}
-        
+    @RequestMapping(value = "/1210_syncdb_ua", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> createFromUAJsonArray(
+            @RequestBody
+            String json) {
+        SynchnizationManager tSyncManager = new SynchnizationManager();
+        if (json != null && json.length() > 0) {
+            List<String> tList =
+                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
+                            .deserialize(json);
+            tSyncManager.saveUserAccountToLocalDB(tList.get(0));
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_ua"), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_ua"), headers,
+                HttpStatus.OK);
     }
 
-	@RequestMapping(value = "/1210_syncdb_tg", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> createFromTGJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			tSyncManager.saveTagsToLocalDB(tList.get(0));
-    	}
-        
+    @RequestMapping(value = "/1210_syncdb_tg", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> createFromTGJsonArray(
+            @RequestBody
+            String json) {
+        SynchnizationManager tSyncManager = new SynchnizationManager();
+        if (json != null && json.length() > 0) {
+            List<String> tList =
+                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
+                            .deserialize(json);
+            tSyncManager.saveTagsToLocalDB(tList.get(0));
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_tg"), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_tg"), headers,
+                HttpStatus.OK);
     }
 
-	@RequestMapping(value = "/1210_syncdb_ms", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> createFromMSJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			tSyncManager.saveMessagesToLocalDB(tList.get(0));
-    	}
-        
+    @RequestMapping(value = "/1210_syncdb_ms", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> createFromMSJsonArray(
+            @RequestBody
+            String json) {
+        SynchnizationManager tSyncManager = new SynchnizationManager();
+        if (json != null && json.length() > 0) {
+            List<String> tList =
+                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
+                            .deserialize(json);
+            tSyncManager.saveMessagesToLocalDB(tList.get(0));
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_ms"), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_ms"), headers,
+                HttpStatus.OK);
     }
 
-	@RequestMapping(value = "/1210_syncdb_rm", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> createFromRMJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			tSyncManager.saveRemarksToLocalDB(tList.get(0));
-    	}
-        
+    @RequestMapping(value = "/1210_syncdb_rm", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> createFromRMJsonArray(
+            @RequestBody
+            String json) {
+        SynchnizationManager tSyncManager = new SynchnizationManager();
+        if (json != null && json.length() > 0) {
+            List<String> tList =
+                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
+                            .deserialize(json);
+            tSyncManager.saveRemarksToLocalDB(tList.get(0));
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_rm"), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_rm"), headers,
+                HttpStatus.OK);
     }
 
-	@RequestMapping(value = "/1210_syncdb_bm", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> createFromBMJsonArray(@RequestBody String json) {
-    	SynchnizationManager tSyncManager = new SynchnizationManager();
-    	if(json != null && json.length() > 0){
-    		List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class).deserialize(json);
-			tSyncManager.saveBookmarksToLocalDB(tList.get(0));
-    	}
-        
+    @RequestMapping(value = "/1210_syncdb_bm", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> createFromBMJsonArray(
+            @RequestBody
+            String json) {
+        SynchnizationManager tSyncManager = new SynchnizationManager();
+        if (json != null && json.length() > 0) {
+            List<String> tList =
+                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
+                            .deserialize(json);
+            tSyncManager.saveBookmarksToLocalDB(tList.get(0));
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_bm"), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_bm"), headers,
+                HttpStatus.OK);
     }
 }

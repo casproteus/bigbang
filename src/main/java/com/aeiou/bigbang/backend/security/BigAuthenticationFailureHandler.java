@@ -20,16 +20,19 @@ import org.springframework.web.util.WebUtils;
 @Configurable
 public class BigAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-	private static final Logger log = LoggerFactory.getLogger(BigAuthenticationFailureHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(BigAuthenticationFailureHandler.class);
 
-	@Override
-	public void onAuthenticationFailure(HttpServletRequest req,	HttpServletResponse rep, AuthenticationException e) throws IOException, ServletException {
+    @Override
+    public void onAuthenticationFailure(
+            HttpServletRequest req,
+            HttpServletResponse rep,
+            AuthenticationException e) throws IOException, ServletException {
 
-		log.debug("Login failure", e);
+        log.debug("Login failure", e);
 
-		SimpleUrlAuthenticationFailureHandler handler = new SimpleUrlAuthenticationFailureHandler();
-		handler.setDefaultFailureUrl("/login?login_error=t");
-		handler.onAuthenticationFailure(req, rep, e);
-	}
+        SimpleUrlAuthenticationFailureHandler handler = new SimpleUrlAuthenticationFailureHandler();
+        handler.setDefaultFailureUrl("/login?login_error=t");
+        handler.onAuthenticationFailure(req, rep, e);
+    }
 
 }

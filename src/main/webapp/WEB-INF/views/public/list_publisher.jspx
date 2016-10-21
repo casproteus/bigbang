@@ -29,10 +29,10 @@
 	<br />
 	<!-- display the diary of the user  @NOTE: might not a good idea to display diary together with bookmarks. because when you are navigation twitter,
 	 the bookmar will also be effected. or you have to use more parameters..-->
-	<spring:message code="label_com_aeiou_bigbang_publicspace"
-		var="publicspace" htmlEscape="false" />
-	<spring:message code="label_com_aeiou_bigbang_personalspace"
-		var="personalspace" htmlEscape="false" />
+	<spring:message code="label_com_aeiou_bigbang_domain_customizes_commonTag"
+		var="publicTag" htmlEscape="false" />
+	<spring:message code="label_com_aeiou_bigbang_domain_content_uncommonbigtag"
+		var="personalTag" htmlEscape="false" />
 	<spring:message code="label_com_aeiou_bigbang_title" var="title"
 		htmlEscape="false" />
 	<page:contentPane id="pl_com_aeiou_bigbang_domain_Content"
@@ -44,10 +44,10 @@
 			<table:column id="c_com_aeiou_bigbang_domain_Content_title"
 				property="title" label="${title}" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />
 			<table:column id="c_com_aeiou_bigbang_domain_Content_commonBigTag"
-				property="commonBigTag" label="${publicspace}" maxLength="600"
+				property="commonBigTag" label="${publicTag}" maxLength="600"
 				z="054H0l7u1U7D14UvHgTdwqh3sy4=" />
 			<table:column id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag"
-				property="uncommonBigTag" label="${personalspace}"
+				property="uncommonBigTag" label="${personalTag}"
 				z="kDjPyZY8s59nSnA4ASrIOJGmeps=" />
 		</table:contentlist>
 	</page:contentPane>

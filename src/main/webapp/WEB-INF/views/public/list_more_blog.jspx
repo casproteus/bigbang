@@ -8,7 +8,6 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
-	<spring:message code="public" htmlEscape="false" var="publicspace" />
 	<spring:message code="publicDescription" htmlEscape="false"
 		var="publicDescription" />
 	<c:choose>

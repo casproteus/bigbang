@@ -17,8 +17,6 @@
 
 <util:load-scripts />
 
-<spring:message code="application_name" var="app_name"
-	htmlEscape="false" />
 <title>${app_name}</title>
 </head>
 

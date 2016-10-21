@@ -53,6 +53,5 @@ know bugs:
 
 OTHERS
 1/the difference between each header.jspx is that the booklet.jspx pointing to different url, and save current webpage to different website.
-2/the difference between each crate.jspx  is that the help information are different.
-3/the difference between each [number].css is that the headImgArea and body class are different.(have different back ground)
+2/the difference between each [number].css is that the headImgArea and body class are different.(have different back ground)
 

@@ -53,7 +53,7 @@
 				<menu:item id="i_customize_new" messageCode="global_menu_new"
 					url="/customizes?form" z="oAoMLHN1McEd/aulC0IE5SF7+qo=" />
 				<menu:item id="i_customize_list" messageCode="global_menu_list"
-					url="/customizes?page=1&amp;size=${empty param.size ? 100 : param.size}"
+					url="/customizes?size=${empty param.size ? 100 : param.size}&amp;sortFieldName=cusKey&amp;sortOrder=ASC"
 					z="user-managed" />
 			</menu:category>
 			<menu:category id="c_circle" z="MP9TMib6mksKE5TN71FuP+Isfac=">

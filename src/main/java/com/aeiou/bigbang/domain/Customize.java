@@ -57,8 +57,38 @@ public class Customize {
         }
     }
 
+    public static List<Customize> findCustomizeEntries(
+            int firstResult,
+            int maxResults,
+            String sortFieldName,
+            String sortOrder) {
+        String jpaQuery = "SELECT o FROM Customize o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY o." + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, Customize.class).setFirstResult(firstResult)
+                .setMaxResults(maxResults).getResultList();
+    }
+
+    public static List<Customize> findAllCustomizes(
+            String sortFieldName,
+            String sortOrder) {
+        String jpaQuery = "SELECT o FROM Customize o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY o." + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, Customize.class).getResultList();
+    }
+
     /**
      */
     @ManyToOne
     private UserAccount useraccount;
+
 }

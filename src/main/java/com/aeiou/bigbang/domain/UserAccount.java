@@ -67,7 +67,7 @@ public class UserAccount {
         tQuery = tQuery.setParameter("tname", pUserName);
         List<UserAccount> tList = tQuery.getResultList();
         if (tList != null && tList.size() == 1)
-            return (UserAccount) tList.get(0);
+            return tList.get(0);
         else
             return null;
     }
@@ -86,13 +86,14 @@ public class UserAccount {
         tQuery = tQuery.setParameter("tname", pUserName);
         List<UserAccount> tList = tQuery.getResultList();
         if (tList != null && tList.size() == 1) {
-            UserAccount tUserAccount = (UserAccount) tList.get(0);
+            UserAccount tUserAccount = tList.get(0);
             if (tUserAccount.getPassword().equals(pPassword))
                 return tUserAccount;
         }
         return null;
     }
 
+    @Override
     public String toString() {
         return this.getName();
     }

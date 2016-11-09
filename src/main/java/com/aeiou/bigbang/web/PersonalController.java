@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.servlet.theme.CookieThemeResolver;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
@@ -65,11 +64,43 @@ public class PersonalController extends BaseController {
         }
 
         swithCurrentOwner(tOwner, uiModel, request);
-        BigUtil.checkTheme(tOwner, request);
 
         spaceOwner = tOwner.getName(); // this name has no utf8 string issue. is a readable one.
 
-        List<String[]> tagsAndNumbers = BigUtil.fetchTagAndNumberInListOfArrayFormat(tOwner);
+        Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
+
+        // Determine if the add_as_friend/unfollow links should be displayed.
+        if (tCurUser != null && tCurUser.getListento() != null) {
+            boolean isFriend = tCurUser.getListento().contains(tOwner);
+            uiModel.addAttribute("nothireable", isFriend ? "true" : "false");
+            uiModel.addAttribute("notfireable", isFriend ? "false" : "true");
+        }
+
+        prepareBookmarks(spaceOwner, uiModel, request, tCurUser, tOwner, tAuthSet);
+        // not ready yet! prepareNotes(spaceOwner, uiModel, request, tCurUser, tOwner, tAuthSet);
+        prepareNotesInStyle1(uiModel, tCurUser, tOwner, tAuthSet);
+        // ---------------------------------------------------------------------------------
+        // to save the reqeust to requestCache;
+        /**
+         * If I add @ModelAttribute(), and add HttpServletRequest and HttpServletResponse in params, then will throw out
+         * exception (can not resolve a view with name tao), and this method will be called twice. in the second time,
+         * the spaceOwner is null, so return a null....so can not use this way.
+         */
+        // BigAuthenticationSuccessHandler tHandler =
+        // SpringApplicationContext.getApplicationContext().getBean("authenticationSuccessHandler",
+        // BigAuthenticationSuccessHandler.class);
+        // tHandler.getRequestCache().saveRequest(request, response);
+        return "public/index";
+    }
+
+    private void prepareBookmarks(
+            String spaceOwner,
+            Model uiModel,
+            HttpServletRequest request,
+            UserAccount tCurUser,
+            UserAccount tOwner,
+            Set<Integer> tAuthSet) {
+        List<String[]> tagsAndNumbers = BigUtil.fetchBookMarkTagAndNumberInListOfArrayFormat(tOwner);
         String[] tBigTagStrsLeft = tagsAndNumbers.get(0);
         String[] tBigTagStrsRight = tagsAndNumbers.get(1);
         String[] tNumStrsLeft = tagsAndNumbers.get(2);
@@ -86,6 +117,8 @@ public class PersonalController extends BaseController {
             tBigTagsRight = lists.get(1);
             tTagIdsLeft = lists.get(2);
             tTagIdsRight = lists.get(3);
+            tNumStrsLeft = null;
+            tNumStrsRight = null;
         } else { // prepare the info for view base on the string in db:
             tBigTagsLeft = BigUtil.convertTagArrayToList(tBigTagStrsLeft, spaceOwner);
             tBigTagsRight = BigUtil.convertTagArrayToList(tBigTagStrsRight, spaceOwner);
@@ -100,10 +133,9 @@ public class PersonalController extends BaseController {
             }
         }
 
-        filterTagsWithAithenticationCheck(tBigTagsLeft, tBigTagsRight, tTagIdsLeft, tTagIdsRight, tCurName, tCurUser,
-                spaceOwner, tOwner);
+        filterTagsWithAithenticationCheck(tBigTagsLeft, tBigTagsRight, tTagIdsLeft, tTagIdsRight, tCurUser, spaceOwner,
+                tOwner);
 
-        Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
         List<List> tContentListsLeft = new ArrayList<List>(); // prepare the contentList for each tag.
         List<List> tContentListsRight = new ArrayList<List>(); // prepare the contentList for each tag.
         for (int i = 0; i < tBigTagsLeft.size(); i++) {
@@ -123,12 +155,77 @@ public class PersonalController extends BaseController {
         uiModel.addAttribute("tagIdsRight", tTagIdsRight);
         uiModel.addAttribute("contentsLeft", tContentListsLeft);
         uiModel.addAttribute("contentsRight", tContentListsRight);
+    }
 
-        // Determine if the add_as_friend/unfollow links should be displayed.
-        boolean isFriend = tCurUser.getListento().contains(tOwner);
-        uiModel.addAttribute("nothireable", isFriend ? "true" : "false");
-        uiModel.addAttribute("notfireable", isFriend ? "false" : "true");
+    private void prepareNotes(
+            String spaceOwner,
+            Model uiModel,
+            HttpServletRequest request,
+            UserAccount tCurUser,
+            UserAccount tOwner,
+            Set<Integer> tAuthSet) {
+        List<String[]> tagsAndNumbers = BigUtil.fetchNoteTagAndNumberInListOfArrayFormat(tOwner);
+        String[] tBigTagStrsLeft = tagsAndNumbers.get(0);
+        String[] tBigTagStrsRight = tagsAndNumbers.get(1);
+        String[] tNumStrsLeft = tagsAndNumbers.get(2);
+        String[] tNumStrsRight = tagsAndNumbers.get(3);
 
+        List<BigTag> tBigTagsLeft = new ArrayList<BigTag>();
+        List<BigTag> tBigTagsRight = new ArrayList<BigTag>();
+        List<Long> tTagIdsLeft = new ArrayList<Long>();
+        List<Long> tTagIdsRight = new ArrayList<Long>();
+        // if the layout info in DB is not correct, create it from beginning.
+        if (BigUtil.notCorrect(tagsAndNumbers)) {
+            List<List> lists = BigUtil.resetTagsForOwner(tOwner, request);
+            tBigTagsLeft = lists.get(0);
+            tBigTagsRight = lists.get(1);
+            tTagIdsLeft = lists.get(2);
+            tTagIdsRight = lists.get(3);
+            tNumStrsLeft = null;
+            tNumStrsRight = null;
+        } else { // prepare the info for view base on the string in db:
+            tBigTagsLeft = BigUtil.convertTagArrayToList(tBigTagStrsLeft, spaceOwner);
+            tBigTagsRight = BigUtil.convertTagArrayToList(tBigTagStrsRight, spaceOwner);
+
+            for (BigTag tag : tBigTagsLeft) {
+                tTagIdsLeft.add(tag.getId()); // it can not be null, even if admin changed the name of the tags, cause
+                                              // it's handled in BigtUtil
+            }
+            for (BigTag tag : tBigTagsRight) {
+                tTagIdsRight.add(tag.getId()); // it can not be null, even if admin changed the name of the tags, cause
+                                               // it's handled in BigtUtil
+            }
+        }
+
+        filterTagsWithAithenticationCheck(tBigTagsLeft, tBigTagsRight, tTagIdsLeft, tTagIdsRight, tCurUser, spaceOwner,
+                tOwner);
+
+        List<List> tContentListsLeft = new ArrayList<List>(); // prepare the contentList for each tag.
+        List<List> tContentListsRight = new ArrayList<List>(); // prepare the contentList for each tag.
+        for (int i = 0; i < tBigTagsLeft.size(); i++) {
+            tContentListsLeft.add(Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, tAuthSet, 0,
+                    tNumStrsLeft == null || tNumStrsLeft[i] == null ? 8 : Integer.valueOf(tNumStrsLeft[i]).intValue(),
+                    null));
+        }
+        for (int i = 0; i < tBigTagsRight.size(); i++) {
+            tContentListsRight.add(Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, tAuthSet, 0,
+                    tNumStrsRight == null || tNumStrsRight[i] == null ? 8 : Integer.valueOf(tNumStrsRight[i])
+                            .intValue(), null));
+        }
+
+        uiModel.addAttribute("bigTagsLeft", tBigTagsLeft);
+        uiModel.addAttribute("bigTagsRight", tBigTagsRight);
+        uiModel.addAttribute("tagIdsLeft", tTagIdsLeft);
+        uiModel.addAttribute("tagIdsRight", tTagIdsRight);
+        uiModel.addAttribute("contentsLeft", tContentListsLeft);
+        uiModel.addAttribute("contentsRight", tContentListsRight);
+    }
+
+    private void prepareNotesInStyle1(
+            Model uiModel,
+            UserAccount tCurUser,
+            UserAccount tOwner,
+            Set<Integer> tAuthSet) {
         // ====================prepare content for twitter area ============================
         List<Twitter> twitterLeft = Twitter.findTwitterByPublisher(tOwner, tAuthSet, 0, 8, null);
         // for this part it's a little complex: it's about to display the twitters of the owner's friends. not the
@@ -150,18 +247,6 @@ public class PersonalController extends BaseController {
         uiModel.addAttribute("twitterLeft", twitterLeft);
         uiModel.addAttribute("twitterRight", twitterRight);
         uiModel.addAttribute("twitterRightFix", twitterRightFix);
-        // ---------------------------------------------------------------------------------
-        // to save the reqeust to requestCache;
-        /**
-         * If I add @ModelAttribute(), and add HttpServletRequest and HttpServletResponse in params, then will throw out
-         * exception (can not resolve a view with name tao), and this method will be called twice. in the second time,
-         * the spaceOwner is null, so return a null....so can not use this way.
-         */
-        // BigAuthenticationSuccessHandler tHandler =
-        // SpringApplicationContext.getApplicationContext().getBean("authenticationSuccessHandler",
-        // BigAuthenticationSuccessHandler.class);
-        // tHandler.getRequestCache().saveRequest(request, response);
-        return "public/index";
     }
 
     private void filterTagsWithAithenticationCheck(
@@ -169,12 +254,11 @@ public class PersonalController extends BaseController {
             List<BigTag> tBigTagsRight,
             List<Long> tTagIdsLeft,
             List<Long> tTagIdsRight,
-            String tCurName,
             UserAccount tCurUser,
             String spaceOwner,
             UserAccount tOwner) {
         // final adjust---not all tags should be shown to curUser:
-        if (tCurName == null) { // not logged in
+        if (tCurUser == null) { // not logged in
             for (int i = tBigTagsLeft.size() - 1; i >= 0; i--) {
                 if (tBigTagsLeft.get(i).getAuthority() != 0) {
                     tBigTagsLeft.remove(i);
@@ -188,9 +272,9 @@ public class PersonalController extends BaseController {
                 }
             }
         } else {
-            tCurName = tCurUser.getName(); // to avoid the Capital issue.
-                                           // tCurName are not capital
-                                           // sensitive.
+            String tCurName = tCurUser.getName(); // to avoid the Capital issue.
+            // tCurName are not capital
+            // sensitive.
             if (!tCurName.equals(spaceOwner)) { // has logged in but not self.
                 if (tOwner.getListento().contains(tCurUser)) { // it's team
                                                                // member
@@ -328,6 +412,8 @@ public class PersonalController extends BaseController {
             isSpecial = tFileName.indexOf("stgos.com") >= 0;
             if (tFileName.indexOf("sharethegoodones.com") >= 0) { // check if it is a delete command
                 tMedia.remove();
+                // change user's them to 0.css
+                BigUtil.changeUserTheme(ownerID, 0);
                 UserAccountController tController =
                         SpringApplicationContext.getApplicationContext().getBean("userAccountController",
                                 UserAccountController.class);
@@ -375,9 +461,7 @@ public class PersonalController extends BaseController {
         tMedia.persist();
 
         // change user's them to 9.css
-        UserAccount tUser = UserAccount.findUserAccount(ownerID);
-        tUser.setTheme(9);
-        tUser.persist();
+        BigUtil.changeUserTheme(ownerID, 9);
 
         UserAccountController tController =
                 SpringApplicationContext.getApplicationContext().getBean("userAccountController",

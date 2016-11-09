@@ -49,7 +49,7 @@ public class ContentController {
         BigUtil.checkTheme(tOwner, httpServletRequest);
 
         List<BigTag> tTags = null;
-        List<String[]> tTagsAndNums = BigUtil.fetchTagAndNumberInListOfArrayFormat(tOwner);
+        List<String[]> tTagsAndNums = BigUtil.fetchBookMarkTagAndNumberInListOfArrayFormat(tOwner);
         if (BigUtil.notCorrect(tTagsAndNums)) {
             List<List> lists = BigUtil.resetTagsForOwner(tOwner, httpServletRequest);
             tTags = lists.get(0);

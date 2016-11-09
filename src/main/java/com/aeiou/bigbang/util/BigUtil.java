@@ -3,7 +3,6 @@ package com.aeiou.bigbang.util;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -11,8 +10,6 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.FileAppender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailSender;
@@ -485,6 +482,10 @@ public class BigUtil {
     public static void checkTheme(
             UserAccount tOwner,
             HttpServletRequest httpServletRequest) {
+        // check If Its New Created User;
+        if (tOwner.getName() == null) {
+            tOwner = UserAccount.findUserAccountByName("admin");
+        }
         httpServletRequest.setAttribute("spaceOwner", tOwner.getName());
         // if the owner has theme already, then use the theme! (will effect only on this request)
         int tTheme = tOwner.getTheme();
@@ -497,7 +498,46 @@ public class BigUtil {
      * @param tOwner
      * @return
      */
-    public static List<String[]> fetchTagAndNumberInListOfArrayFormat(
+    public static List<String[]> fetchBookMarkTagAndNumberInListOfArrayFormat(
+            UserAccount tOwner) {
+
+        String[] tBigTagStrsLeft = null;
+        String[] tBigTagStrsRight = null;
+        String[] tNumStrsLeft = null;
+        String[] tNumStrsRight = null;
+
+        String tLayout = tOwner.getLayout(); // get the layout info from DB.
+        int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
+        if (p > -1) {
+            String tTagStr = tLayout.substring(0, p);
+            String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
+
+            p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
+            if (p >= 0) {
+                tBigTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
+                tBigTagStrsRight = tTagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
+            }
+            p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
+            if (p >= 0) {
+                tNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
+                tNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
+            }
+        }
+
+        List<String[]> listForReturn = new ArrayList<String[]>();
+        listForReturn.add(tBigTagStrsLeft);
+        listForReturn.add(tBigTagStrsRight);
+        listForReturn.add(tNumStrsLeft);
+        listForReturn.add(tNumStrsRight);
+        return listForReturn;
+    }
+
+    /**
+     * @NOTE: can not use the string[] as parameter, it's not like list objects.
+     * @param tOwner
+     * @return
+     */
+    public static List<String[]> fetchNoteTagAndNumberInListOfArrayFormat(
             UserAccount tOwner) {
 
         String[] tBigTagStrsLeft = null;
@@ -625,6 +665,31 @@ public class BigUtil {
 
         List<Long> tTagIdsAdmin = new ArrayList<Long>();
         List<Long> tTagIdsAdministrator = new ArrayList<Long>();
+        fetchAllSuggestedTags(bigTagsAdmin, bigTagsAdministrator, session);
+
+        for (BigTag bigTag : bigTagsAdmin) {
+            tTagIdsAdmin.add(bigTag.getId());
+        }
+        for (BigTag bigTag : bigTagsAdministrator) {
+            tTagIdsAdministrator.add(bigTag.getId());
+        }
+
+        // set to front end model.
+        uiModel.addAttribute("bigTagsLeft", bigTagsAdmin);
+        uiModel.addAttribute("bigTagsRight", bigTagsAdministrator);
+        uiModel.addAttribute("tagIdsLeft", tTagIdsAdmin);
+        uiModel.addAttribute("tagIdsRight", tTagIdsAdministrator);
+    }
+
+    /**
+     * @param bigTagsAdmin
+     * @param bigTagsAdministrator
+     * @param session
+     */
+    private static void fetchAllSuggestedTags(
+            List<BigTag> bigTagsAdmin,
+            List<BigTag> bigTagsAdministrator,
+            HttpSession session) {
         // get out admin and administrator's tags in string.
         List<String> tBigTagStrsOfAdmin = new ArrayList<String>();
         List<String> tBigTagStrsOfAdministrator = new ArrayList<String>();
@@ -642,24 +707,11 @@ public class BigUtil {
             tBigTagStrsOfAdministrator.add(tTagStr.toString());
         }
 
-        for (BigTag bigTag : bigTagsAdmin) {
-            tTagIdsAdmin.add(bigTag.getId());
-        }
-        for (BigTag bigTag : bigTagsAdministrator) {
-            tTagIdsAdministrator.add(bigTag.getId());
-        }
-
         String[] tags = new String[tBigTagStrsOfAdmin.size()];
         bigTagsAdmin.addAll(BigUtil.convertTagArrayToList(tBigTagStrsOfAdmin.toArray(tags), "admin"));
         tags = new String[tBigTagStrsOfAdministrator.size()];
         bigTagsAdministrator.addAll(BigUtil.convertTagArrayToList(tBigTagStrsOfAdministrator.toArray(tags),
                 "administrator"));
-
-        // set to front end model.
-        uiModel.addAttribute("bigTagsLeft", bigTagsAdmin);
-        uiModel.addAttribute("bigTagsRight", bigTagsAdministrator);
-        uiModel.addAttribute("tagIdsLeft", tTagIdsAdmin);
-        uiModel.addAttribute("tagIdsRight", tTagIdsAdministrator);
     }
 
     public static void prepareAdminContents(
@@ -683,5 +735,13 @@ public class BigUtil {
         // set to front end model.
         uiModel.addAttribute("contentsLeft", tContentListsLeft);
         uiModel.addAttribute("contentsRight", tContentListsRight);
+    }
+
+    public static void changeUserTheme(
+            Long ownerID,
+            int themeNumber) {
+        UserAccount tUser = UserAccount.findUserAccount(ownerID);
+        tUser.setTheme(themeNumber);
+        tUser.persist();
     }
 }

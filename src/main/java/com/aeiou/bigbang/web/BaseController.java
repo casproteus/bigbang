@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import com.aeiou.bigbang.domain.Customize;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigUtil;
 
 @Controller
 public class BaseController {
@@ -34,12 +35,13 @@ public class BaseController {
 
     protected void swithCurrentOwner(
             UserAccount pOwner,
-            Model model,
+            Model uiModel,
             HttpServletRequest request) {
-        model.addAttribute("spaceOwner", pOwner.getName());
-        model.addAttribute("description", pOwner.getDescription());
-        checkIfCusTextNeedTobeReInit(pOwner, model, request);
+        uiModel.addAttribute("spaceOwner", pOwner.getName());
+        uiModel.addAttribute("description", pOwner.getDescription());
+        checkIfCusTextNeedTobeReInit(pOwner, uiModel, request);
         request.getSession().setAttribute("CurrentOwnerID", pOwner.getId());
+        BigUtil.checkTheme(pOwner, request);
     }
 
     /**

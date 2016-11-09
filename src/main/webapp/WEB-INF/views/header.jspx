@@ -10,7 +10,7 @@
 	<spring:url value="/resources/j_spring_security_check" var="form_url" />
 	<form id="headloginform" name="f" modelAttribute="${login}"
 		action="${fn:escapeXml(form_url)}" method="POST"
-		style="height: 20px; color: #AAAAAA">
+		style="height: 20px; background-color:#${background_head}; color:#${foreground_head};">
 		<c:choose>
 			<c:when test="${pageContext['request'].userPrincipal != null}">
 				<c:choose>
@@ -131,7 +131,7 @@
 	        if(r){
 	          return
 	        }
-	        var%20i="http://localhost/bigbang/contents?form",s=n.createElement("iframe");
+	        var%20i="http://www."+n.title+".com/contents?form",s=n.createElement("iframe");
 	        s.id=t;
 	        s.src=i+"&amp;url="+encodeURIComponent(e.location.href)
 	        +"&amp;title="+encodeURIComponent(n.title)
@@ -155,7 +155,7 @@
 	      },1)
 	    }
 	  )(window)'
-			title="${Tit_AddOnNotice}"> <!-- spring:message code="AddOnName" htmlEscape="false"/-->
+			title="${Tit_AddOnNotice}">
 				${Btn_Booklet}
 		</a> <c:if test="${pageContext['request'].userPrincipal != null}">
 				<c:out value=" || " />

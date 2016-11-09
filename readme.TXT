@@ -10,6 +10,7 @@
     	key: i18n_NewRemark		value:New remark:			新的评论
 6/when Admin modifys a user's layout string, don't use the null, because if layout string is null, then the layout string will be egnored.(have no choice, because when user modify his useraccount, the layoutstring field doesn't show, so controller always get a null as layout string, and controller
  have to ignore it.
+
 ------------------------
 	public static final String SEP_TAG_NUMBER = "zSTNz";
 	public static final String SEP_LEFT_RIGHT = "zSLRz";
@@ -21,6 +22,8 @@
 ------------------------
 7/add a customize with key:stgo, value:
 http://food-thebest.rhcloud.com,http://draw-thebest.rhcloud.com,http://test-rightnow.rhcloud.com,http://spa-rightnow.rhcloud.com @notice: 不能用顶级域名，只能用openshift的域名，否则返回400号错误。
+8/ there's a lot other stuff to add into customizes, which are related with the interface texts. 
+
 ========================
 dev:
 1/get the source code, unzip it, then import it as eclipse project.

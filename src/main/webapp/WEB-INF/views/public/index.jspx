@@ -13,11 +13,11 @@
 	<spring:message code="NotesAndPraysOfFriend" htmlEscape="false"
 		arguments="${spaceOwner}" var="NotesAndPraysFromFriend" />
 
-	<!-- If this file changed in any line, don't forget to change the three file under deploy folder -->
+	<!-- If this file changed in any line, don't forget to change the other files with same name under deploy folder -->
 
 	<!-- The Title Area, including owner info, butttons for adding blog, adding bookmark, leaving message and addon. -->
-	<div style="background: #efefef; padding: 5px; margin-bottom: 3px">
-		<div style="text-align: center; padding-bottom: 5px">
+	<div style="background: #${background_title}; padding: 5px; margin-bottom: 3px">
+		<div style="text-align: center; padding-bottom: 5px; color:#${foreground_title};">
 			<b>${txt_welcome}</b>
 		</div>
 		<span> <!-- don't use "new" style here, because it make a right align, and will make the line height too low.-->

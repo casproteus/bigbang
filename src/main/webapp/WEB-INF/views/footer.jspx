@@ -11,7 +11,7 @@
 	<!-- util:websiteSwitch/>
   	 -->
 	<!-- language bar -->
-	<span class="new" style="color: #AAAAAA;"> <c:if
+	<span class="new" style="background-color:#${background_foot}; color:#${foreground_foot};"> <c:if
 			test="${zh == true}">
 			<util:language label="Chinese" locale="zh" />
 		</c:if> <c:if test="${en == true}">
@@ -28,6 +28,6 @@
 			<util:language label="Italian" locale="it" />
 		</c:if>
 	</span> <br />
-	<div style="color: #AAAAAA; text-align: right;">
+	<div style="background-color:#${background_foot}; color:#${foreground_foot}; text-align: right;">
 		${txt_footer_line2}</div>
 </div>

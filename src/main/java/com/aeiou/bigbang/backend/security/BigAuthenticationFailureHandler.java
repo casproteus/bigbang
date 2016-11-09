@@ -1,9 +1,7 @@
 package com.aeiou.bigbang.backend.security;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,8 +12,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.web.util.UriUtils;
-import org.springframework.web.util.WebUtils;
 
 @Configurable
 public class BigAuthenticationFailureHandler implements AuthenticationFailureHandler {

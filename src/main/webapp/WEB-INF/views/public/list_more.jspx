@@ -22,7 +22,7 @@
 		</c:otherwise>
 	</c:choose>
 
-	<div style="background: #efefef; padding: 5px; margin-bottom: 3px">
+	<div style="background: #${background_title}; padding: 5px; margin-bottom: 3px">
 		<div style="text-align: center; padding-bottom: 5px">
 			<b>${title}</b>
 		</div>

@@ -86,6 +86,10 @@
 				<c:otherwise>
 					<!-- not logged in -->
 					<c:if test="${empty spaceOwner or 'admin' eq spaceOwner}">
+					
+					
+					<spring:theme code="styleSheet" var="roo_css" />
+					  <c:if test="${'resources/styles/9.css' ne roo_css}">
 						<spring:message code="global_theme" />
 
 						<c:out value=": " />
@@ -135,6 +139,7 @@
 						<spring:message code="global_theme_stone" var="theme_6"
 							htmlEscape="false" />
 						<a href="${url_theme6}" title="${fn:escapeXml(theme_6)}">${fn:escapeXml(theme_6)}</a>
+					  </c:if>
 					</c:if>
 				</c:otherwise>
 			</c:choose>

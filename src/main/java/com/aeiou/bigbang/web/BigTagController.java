@@ -75,7 +75,7 @@ public class BigTagController {
                 String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
                 StringBuilder tStrB = new StringBuilder();
                 tStrB.append(tTagStr).append(BigUtil.SEP_ITEM);
-                tStrB.append(BigUtil.getTagInLayoutString(bigTag));
+                tStrB.append(BigUtil.getLayoutFormatTagString(bigTag));
                 tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tSizeStr).append(BigUtil.SEP_ITEM).append("8");
                 tUserAccount.setLayout(tStrB.toString());
                 tUserAccount.persist();
@@ -122,8 +122,8 @@ public class BigTagController {
                 if (BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)) {
                     BigUtil.resetLayoutString(tUserAccount);
                 } else {
-                    tTagStr = BigUtil.getTagInLayoutString(tBigTag);
-                    String tTagStrNEW = BigUtil.getTagInLayoutString(bigTag);
+                    tTagStr = BigUtil.getLayoutFormatTagString(tBigTag);
+                    String tTagStrNEW = BigUtil.getLayoutFormatTagString(bigTag);
                     boolean tIsInLeftColumn = false;
                     int tPos;
                     for (tPos = 0; tPos < tAryTagStrsLeft.length; tPos++) {
@@ -236,7 +236,7 @@ public class BigTagController {
                 if (BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)) {
                     BigUtil.resetLayoutString(tUserAccount);
                 } else {
-                    tTagStr = BigUtil.getTagInLayoutString(bigTag);
+                    tTagStr = BigUtil.getLayoutFormatTagString(bigTag);
                     boolean tIsInLeftColumn = false;
                     int tPos;
                     for (tPos = 0; tPos < tAryTagStrsLeft.length; tPos++) {

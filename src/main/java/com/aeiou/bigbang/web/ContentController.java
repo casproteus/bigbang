@@ -57,8 +57,8 @@ public class ContentController {
             tTags = lists.get(0);
             tTags.addAll(lists.get(1));
         } else {
-            tTags = BigUtil.convertTagArrayToList(tTagsAndNums.get(0), tCurName);
-            tTags.addAll(BigUtil.convertTagArrayToList(tTagsAndNums.get(1), tCurName));
+            tTags = BigUtil.convertTagStringListToObjList(tTagsAndNums.get(0), tCurName);
+            tTags.addAll(BigUtil.convertTagStringListToObjList(tTagsAndNums.get(1), tCurName));
         }
 
         uiModel.addAttribute("mytags", tTags);
@@ -142,7 +142,7 @@ public class ContentController {
         UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
         tCurName = tUserAccount.getName();
         // get the tag have created. if it's already ceated then do nothing.
-        BigTag tBT = BigTag.findBMTagByNameAndOwner(bigTag.getTagName(), tCurName);
+        BigTag tBT = BigTag.findTagByNameAndOwner(bigTag.getTagName(), tCurName);
         if (tBT == null) {
             bigTag.setType(tCurName);
             uiModel.asMap().clear();
@@ -154,7 +154,7 @@ public class ContentController {
                 String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
                 StringBuilder tStrB = new StringBuilder();
                 tStrB.append(tTagStr).append(BigUtil.SEP_ITEM);
-                tStrB.append(BigUtil.getTagInLayoutString(bigTag));
+                tStrB.append(BigUtil.getLayoutFormatTagString(bigTag));
                 tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tSizeStr).append(BigUtil.SEP_ITEM).append("8");
                 tUserAccount.setLayout(tStrB.toString());
                 tUserAccount.persist();

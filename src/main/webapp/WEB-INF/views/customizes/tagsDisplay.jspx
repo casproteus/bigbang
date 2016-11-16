@@ -41,6 +41,19 @@
 			var="uncommonTagsText" />
 		<util:panel id="uncommonTags" title="${uncommonTagsText}"
 			openPane="${true}">
+			<c:forEach items="${uncommonCheckedNoteTags}" var="uncommontag"
+				varStatus="num">
+				<input type="checkbox" name="${uncommontag}"
+					style="vertical-align: middle;" checked="checked">${uncommontag}</input>
+				<c:out value=" || " />
+			</c:forEach>
+			<c:forEach items="${uncommonUnCheckedNoteTags}" var="uncommontag"
+				varStatus="num">
+				<input type="checkbox" name="${uncommontag}"
+					style="vertical-align: middle;">${uncommontag}</input>
+				<c:out value=" || " />
+			</c:forEach>
+			
 			<c:forEach items="${uncommonCheckedBMTags}" var="uncommontag"
 				varStatus="num">
 				<input type="checkbox" name="${uncommontag}"

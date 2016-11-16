@@ -19,9 +19,10 @@
 		<field:input field="sourceURL"
 			id="c_com_aeiou_bigbang_domain_Content_sourceURL" required="true"
 			z="Hk2QDdFCnal0PPA/nrv6B/Kw28U=" />
-		<field:select field="commonBigTag"
+		<!-- <field:select field="commonBigTag"
 			id="c_com_aeiou_bigbang_domain_Content_commonBigTag" itemValue="id"
 			items="${bigtags}" path="/bigtags" z="WKNnUnIysaWMajTikzigpbQOZYE=" />
+			 -->
 		<field:selectPriTag field="uncommonBigTag"
 			id="c_com_aeiou_bigbang_domain_Content_uncommonBigTag" itemValue="id"
 			items="${mytags}" path="/bigtags" type="0" z="user-managed" />

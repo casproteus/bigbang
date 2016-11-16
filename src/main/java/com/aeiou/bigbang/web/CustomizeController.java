@@ -54,35 +54,45 @@ public class CustomizeController {
 
         List<BigTag> commonCheckedBMTags = tBigTagsAdmin; // the tags created by admin and administrators
         List<BigTag> commonUnCheckedBMTags = new ArrayList<BigTag>();
-        String layoutString = tOwner.getLayout();
-        for (int i = commonCheckedBMTags.size() - 1; i >= 0; i--) {
-            String tTagStr = BigUtil.getTagInLayoutString(commonCheckedBMTags.get(i));
-            if (layoutString != null && layoutString.indexOf(tTagStr) < 0) {
-                commonUnCheckedBMTags.add(commonCheckedBMTags.get(i));
-                commonCheckedBMTags.remove(i);
-            }
-        }
+        pickoutUncheckedTags(tOwner.getLayout(), commonCheckedBMTags, commonUnCheckedBMTags);
 
-        // prepare uncommon tags.
-        List<BigTag> uncommonCheckedBMTags = BigTag.findTagsByOwner(tCurName, 0); // the tags created by user and user's
-                                                                                  // friends.
+        // prepare uncommon Note tags.
+        List<BigTag> uncommonCheckedNoteTags = BigTag.findTagsByOwner(tCurName, 1); // tags by user and user's friends.
+        List<BigTag> uncommonUnCheckedNoteTags = new ArrayList<BigTag>();
+        pickoutUncheckedTags(tOwner.getNoteLayout(), uncommonCheckedNoteTags, uncommonUnCheckedNoteTags);
+
+        // prepare uncommon BM tags.
+        List<BigTag> uncommonCheckedBMTags = BigTag.findTagsByOwner(tCurName, 0); // tags by user and user's friends.
         List<BigTag> uncommonUnCheckedBMTags = new ArrayList<BigTag>();
-        for (int i = uncommonCheckedBMTags.size() - 1; i >= 0; i--) {
-            String tTagStr = BigUtil.getTagInLayoutString(uncommonCheckedBMTags.get(i));
-            if (layoutString != null && layoutString.indexOf(tTagStr) < 0) {
-                uncommonUnCheckedBMTags.add(uncommonCheckedBMTags.get(i));
-                uncommonCheckedBMTags.remove(i);
-            }
-        }
+        pickoutUncheckedTags(tOwner.getLayout(), uncommonCheckedBMTags, uncommonUnCheckedBMTags);
 
         uiModel.addAttribute("commonCheckedBMTags", commonCheckedBMTags);
-        uiModel.addAttribute("uncommonCheckedBMTags", uncommonCheckedBMTags);
-
         uiModel.addAttribute("commonUnCheckedBMTags", commonUnCheckedBMTags);
+
+        uiModel.addAttribute("uncommonCheckedNoteTags", uncommonCheckedNoteTags);
+        uiModel.addAttribute("uncommonUnCheckedNoteTags", uncommonUnCheckedNoteTags);
+        uiModel.addAttribute("uncommonCheckedBMTags", uncommonCheckedBMTags);
         uiModel.addAttribute("uncommonUnCheckedBMTags", uncommonUnCheckedBMTags);
 
         BigUtil.checkTheme(tOwner, request);
         return "customizes/tagsDisplay";
+    }
+
+    private void pickoutUncheckedTags(
+            String layoutString,
+            List<BigTag> commonCheckedTags,
+            List<BigTag> commonUnCheckedTags) {
+        List<BigTag> tmpList = new ArrayList<BigTag>();
+        for (int i = commonCheckedTags.size() - 1; i >= 0; i--) {
+            String tTagStr = BigUtil.getLayoutFormatTagString(commonCheckedTags.get(i));
+            if (layoutString != null && layoutString.indexOf(tTagStr) < 0) {
+                tmpList.add(commonCheckedTags.get(i));
+                commonCheckedTags.remove(i);
+            }
+        }
+        for (int i = tmpList.size() - 1; i >= 0; i--) {
+            commonUnCheckedTags.add(tmpList.get(i));
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -101,11 +111,32 @@ public class CustomizeController {
         tCurName = tOwner.getName();
 
         // get the layout info from DB. and split them into string[]
+
+        String layout = reBuildLayoutString(request, tCurName, tOwner.getLayout(), 0);
+        tOwner.setLayout(layout);
+        layout = reBuildLayoutString(request, tCurName, tOwner.getNoteLayout(), 1);
+        tOwner.setNoteLayout(layout);
+
+        tOwner.persist();
+
+        // go to personal page;
+        PersonalController tController =
+                SpringApplicationContext.getApplicationContext()
+                        .getBean("personalController", PersonalController.class);
+        return tController.index(tCurName, -1, -1, uiModel, request);
+    }
+
+    private String reBuildLayoutString(
+            HttpServletRequest request,
+            String tCurName,
+            String tLayout,
+            int type) {
+
         String[] tBigTagStrsLeft = null;
         String[] tBigTagStrsRight = null;
         String[] tNumStrsLeft = null;
         String[] tNumStrsRight = null;
-        String tLayout = tOwner.getLayout();
+
         int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
         if (p > -1) {
             String tTagStr = tLayout.substring(0, p);
@@ -161,7 +192,7 @@ public class CustomizeController {
         tmpFlag = false;
         tLayoutStrBuilder.append(BigUtil.SEP_LEFT_RIGHT);
         tNumStrBuilder.append(BigUtil.SEP_LEFT_RIGHT);
-        if (tBigTagStrsLeft != null) {
+        if (tBigTagStrsRight != null) {
             for (int i = 0; i < tBigTagStrsRight.length; i++) {
                 if (tBigTagStrsRight[i].length() > 0
                         && tMap.get(BigUtil.getTagNameFromLayoutStr(tBigTagStrsRight[i])) != null) {
@@ -183,35 +214,23 @@ public class CustomizeController {
         Object[] tKeys = tMap.keySet().toArray();
         for (int i = 0; i < tKeys.length; i++) {
             if ("on".equals(((String[]) tMap.get(tKeys[i]))[0])) {
+                BigTag bigTag = BigTag.findTagByNameAndOwner((String) tKeys[i], tCurName);
+                if (bigTag.getOwner() != type) {
+                    continue;
+                }
                 if (tmpFlag == true) {
                     tLayoutStrBuilder.append(BigUtil.SEP_ITEM);
-                    tLayoutStrBuilder.append(BigUtil.getTagInLayoutString(BigTag.findBMTagByNameAndOwner(
-                            (String) tKeys[i], tCurName)));
+                    tLayoutStrBuilder.append(BigUtil.getLayoutFormatTagString(bigTag));
                     tNumStrBuilder.append(BigUtil.SEP_ITEM);
                     tNumStrBuilder.append("8");
                 } else {
-                    tLayoutStrBuilder.append(BigUtil.getTagInLayoutString(BigTag.findBMTagByNameAndOwner(
-                            (String) tKeys[i], tCurName)));
+                    tLayoutStrBuilder.append(BigUtil.getLayoutFormatTagString(bigTag));
                     tNumStrBuilder.append("8");
                     tmpFlag = true;
                 }
             }
         }
-
-        // save the new layout string into DB
-        tOwner.setLayout(tLayoutStrBuilder.append(BigUtil.SEP_TAG_NUMBER).append(tNumStrBuilder).toString()); // save
-                                                                                                              // the
-                                                                                                              // correct
-                                                                                                              // layout
-                                                                                                              // string
-                                                                                                              // back to
-                                                                                                              // DB
-        tOwner.persist();
-
-        // go to personal page;
-        PersonalController tController =
-                SpringApplicationContext.getApplicationContext()
-                        .getBean("personalController", PersonalController.class);
-        return tController.index(tCurName, -1, -1, uiModel, request);
+        String layout = tLayoutStrBuilder.append(BigUtil.SEP_TAG_NUMBER).append(tNumStrBuilder).toString();
+        return layout;
     }
 }

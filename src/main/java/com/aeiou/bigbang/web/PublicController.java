@@ -117,36 +117,91 @@ public class PublicController extends BaseController {
                 return null;
             }
         }
+
+        String path = null;
         if (page != null || size != null) {
             int sizeNo = size == null ? 20 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            if ("admin".equals(spaceOwner) || "".equals(spaceOwner)) {
-                uiModel.addAttribute("spaceOwner", "admin");
-                uiModel.addAttribute("contents",
-                        Content.findContentsByTag(tBigTag, firstResult, sizeNo, sortExpression));
-                float nrOfPages = (float) Content.countContentsByTag(tBigTag) / sizeNo;
-                uiModel.addAttribute("maxPages",
-                        (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+            if (tBigTag.getOwner() == 0) {
+                prepareMoreContents(uiModel, sortExpression, tBigTag, tOwner, sizeNo, firstResult);
+                path = "public/list_more";
             } else {
-                String tCurName = userContextService.getCurrentUserName();
-                UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
-                Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
-                uiModel.addAttribute("spaceOwner", spaceOwner);
-                uiModel.addAttribute("spaceOwnerId", tOwner.getId());
-                uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet,
-                        firstResult, sizeNo, sortExpression));
-                float nrOfPages = (float) Content.countContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet) / sizeNo;
-                uiModel.addAttribute("maxPages",
-                        (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+                prepareMoreTwitters(uiModel, sortExpression, tBigTag, tOwner, sizeNo, firstResult);
+                path = "public/list_more_blog";
             }
         }
 
+        uiModel.addAttribute("spaceOwner", tOwner.getName());
+        uiModel.addAttribute("spaceOwnerId", tOwner.getId());
         uiModel.addAttribute("tag", tBigTag.getTagName());
         uiModel.addAttribute("tagId", tagId);
         uiModel.addAttribute("description", tOwner.getDescription());
 
         BigUtil.checkTheme(tOwner, request);
-        return "public/list_more";
+        return path;
+    }
+
+    private void prepareMoreContents(
+            Model uiModel,
+            String sortExpression,
+            BigTag tBigTag,
+            UserAccount tOwner,
+            int sizeNo,
+            final int firstResult) {
+        if ("admin".equals(tOwner.getName())) {
+            uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, firstResult, sizeNo, sortExpression));
+            float nrOfPages = (float) Content.countContentsByTag(tBigTag) / sizeNo;
+            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
+                    : nrOfPages));
+        } else {
+            String tCurName = userContextService.getCurrentUserName();
+            UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+            Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
+            uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet,
+                    firstResult, sizeNo, sortExpression));
+            float nrOfPages =
+                    tBigTag.getOwner() == 0 ? (float) Content
+                            .countContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet) / sizeNo : (float) Content
+                            .countContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet) / sizeNo;
+            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
+                    : nrOfPages));
+        }
+    }
+
+    private void prepareMoreTwitters(
+            Model uiModel,
+            String sortExpression,
+            BigTag bigTag,
+            UserAccount owner,
+            int sizeNo,
+            final int firstResult) {
+
+        float nrOfPages;
+
+        String tCurName = userContextService.getCurrentUserName();
+        UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+
+        Set<Integer> tAuthSet = tCurUser != null ? BigAuthority.getAuthSet(tCurUser, owner) : null;
+        List<Twitter> blogList =
+                Twitter.findTwittersByTagAndSpaceOwner(bigTag, owner, tAuthSet, firstResult, sizeNo, sortExpression);
+        uiModel.addAttribute("blogs", blogList);
+
+        uiModel.addAttribute("balance", owner.getBalance());
+        if (tCurName != null) {
+            tCurName = tCurUser.getName();
+            if (owner.getName().equals(tCurName)) {
+                uiModel.addAttribute("nothireable", "true");
+                uiModel.addAttribute("notfireable", "true");
+            } else if (tCurUser.getListento().contains(owner)) {
+                uiModel.addAttribute("nothireable", "true");
+            } else {
+                uiModel.addAttribute("notfireable", "true");
+            }
+        }
+        uiModel.addAttribute("maxPages", sizeNo);
+        uiModel.addAttribute("type", "friend");
+        uiModel.addAttribute("twitter_twitdate_date_format",
+                DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
 
     @RequestMapping(params = "twitterid", produces = "text/html")
@@ -490,6 +545,7 @@ public class PublicController extends BaseController {
         // interface for add/remve tags on screen.//@?while I just saw there's a set to default link in that page.
         if ("reset".equals(relayouttype)) {
             tOwner.setLayout(null);
+            tOwner.setNoteLayout(null);
             tOwner.persist();
             return tController.index(tCurName, 0, 8, uiModel, request);
         }
@@ -501,7 +557,9 @@ public class PublicController extends BaseController {
         String[] tAryNumStrsLeft = null;
         String[] tAryNumStrsRight = null;
 
-        String tLayout = tOwner.getLayout(); // get the layout info from DB.and separate it into the array
+        String tLayout = tBigTag.getOwner() == 0 ? tOwner.getLayout() : tOwner.getNoteLayout(); // get the layout info
+                                                                                                // from DB.and separate
+                                                                                                // it into the array
         int p = tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
         String tTagStr = tLayout.substring(0, p);
         String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
@@ -528,7 +586,7 @@ public class PublicController extends BaseController {
 
         // ---------adjusting the Sting Arys-------------
         // to find out the column and position
-        tTagStr = BigUtil.getTagInLayoutString(tBigTag);
+        tTagStr = BigUtil.getLayoutFormatTagString(tBigTag);
 
         boolean tIsInLeftColumn = false;
         int tPos;
@@ -789,7 +847,11 @@ public class PublicController extends BaseController {
         }
         tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
 
-        tOwner.setLayout(tStrB.toString()); // save the new layout string to DB
+        if (tBigTag.getOwner() == 0) {
+            tOwner.setLayout(tStrB.toString()); // save the new layout string to DB
+        } else {
+            tOwner.setNoteLayout(tStrB.toString());
+        }
         tOwner.persist();
 
         // ----------------prepare for show-------------------

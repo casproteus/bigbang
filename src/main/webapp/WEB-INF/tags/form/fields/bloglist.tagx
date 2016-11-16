@@ -104,8 +104,11 @@
 						</spring:url> <a href="${readDetail_url}"> <c:out
 								value="${item['twtitle']}" />
 					</a></td>
-					<td class="tWireless namebox"><c:out
-							value="${item['twittertag']}" /></td>
+					<c:if test="${empty tag}">
+						<td class="tWireless namebox">
+							<c:out value="${item['twittertag']}" />
+						</td>
+					</c:if>
 					<c:choose>
 						<c:when test="${fn:containsIgnoreCase(type, 'friend')}">
 							<td class="tWireless namebox"><c:out
@@ -118,10 +121,12 @@
 								</spring:escapeBody></td>
 						</c:otherwise>
 					</c:choose>
-					<td class="tWireless namebox"><spring:escapeBody>
+					<td class="tWireless namebox">
+					    <spring:escapeBody>
 							<fmt:formatDate value="${item['twitDate']}"
 								pattern="${fn:escapeXml(dateTimePattern)}" />
-						</spring:escapeBody></td>
+						</spring:escapeBody>
+					</td>
 				</tr>
 			</c:forEach>
 

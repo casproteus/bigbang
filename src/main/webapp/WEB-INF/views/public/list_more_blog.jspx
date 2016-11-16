@@ -67,19 +67,28 @@
 	</div>
 	<br />
 
-	<spring:message code="label_com_aeiou_bigbang_domain_twitter"
-		var="title" htmlEscape="false" />
+	
+	<c:choose>
+		<c:when test="${empty tag}">
+			<spring:message code="label_com_aeiou_bigbang_domain_twitter" var="title" htmlEscape="false" />
+		</c:when>
+		<c:otherwise>
+			<spring:url value="${tag}" var="title"/>
+		</c:otherwise>
+	</c:choose>
 	<page:contentPane id="pl_com_aeiou_bigbang_domain_Twitter"
 		items="${blogs}" label="${title}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
-		<table:bloglist data="${blogs}"
+		<table:bloglist data="${blogs}" tag="${tag}"
 			id="l_com_aeiou_bigbang_domain_Twitter" path="/twitters"
 			dateTimePattern="${twitter_twitdate_date_format}" type="${type}"
 			spaceOwner="${spaceOwner}" publisher="${publisher}"
 			z="lLVLIzUb5uufSIaV72f5pNvyScI=">
 			<table:column id="c_com_aeiou_bigbang_domain_twitter_twtitle"
 				property="twtitle" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />
-			<table:column id="c_com_aeiou_bigbang_domain_twitter_twittertag"
+			<c:if test="${empty tag}">
+				<table:column id="c_com_aeiou_bigbang_domain_twitter_twittertag"
 				property="twittertag" z="kDjPyZY8s59nSnA4ASrIOJGmeps=" />
+			</c:if>
 			<c:choose>
 				<c:when test="${fn:containsIgnoreCase(type, 'friend')}">
 					<table:column id="c_com_aeiou_bigbang_domain_twitter_publisher"

@@ -344,7 +344,7 @@ public class BigTag {
         return tListFR;
     }
 
-    public static com.aeiou.bigbang.domain.BigTag findBMTagByNameAndOwner(
+    public static com.aeiou.bigbang.domain.BigTag findTagByNameAndOwner(
             String pTagName,
             String pOwnerName) {
         pTagName = pTagName.trim();

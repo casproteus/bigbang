@@ -515,7 +515,7 @@ public class SynchnizationManager {
             BigTag pTag) {
         if (pTag == null)
             return null;
-        return BigTag.findBMTagByNameAndOwner(pTag.getTagName(), pTag.getType());
+        return BigTag.findTagByNameAndOwner(pTag.getTagName(), pTag.getType());
     }
 
     private Twitter findBlogInLocalDB(

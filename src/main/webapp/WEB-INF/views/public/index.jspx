@@ -111,11 +111,11 @@
 					<!-- don't need these two params anymore: begin="0" end="${tagsize/2 - 1}" -->
 					<page:contentPane id="twitterlistleft${(num.count - 1)}"
 						items="${twitter}" label="${twitterTagsLeft[num.count - 1]}"
-						tagId="${twitterIdsLeft[num.count - 1]}"
+						tagId="${twitterTagIdsLeft[num.count - 1]}"
 						z="hnfyfk7YNdTBdBza4/mViLT4aos=">
 						<table:notebox data="${twitter}"
-							id="l_com_aeiou_bigbang_domain_Content" type="friendFix" path="/public"
-							spaceOwner="${spaceOwner}"
+							id="l_com_aeiou_bigbang_domain_Content" path="/public" type="friendFix"
+							tagId="${twitterTagIdsLeft[num.count - 1]}" spaceOwner="${spaceOwner}"
 							z="lLVLIzUb5uufSIaV72f5pNvyScI=">
 							<table:column id="c_com_aeiou_bigbang_domain_Content_title"
 								property="twtitle" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />
@@ -131,11 +131,11 @@
 			    <c:forEach items="${twittersRight}" var="twitter" varStatus="num">
 					<page:contentPane id="twitterlistright${(num.count - 1)}"
 						items="${twitter}" label="${twitterTagsRight[num.count - 1]}"
-						tagId="${twitterIdsRight[num.count - 1]}"
+						tagId="${twitterTagIdsRight[num.count - 1]}"
 						z="hnfyfk7YNdTBdBza4/mViLT4aos=">
 						<table:notebox data="${twitter}"
 							id="l_com_aeiou_bigbang_domain_Content" path="/public" type="friendFix" 
-							spaceOwner="${spaceOwner}"
+							tagId="${twitterTagIdsRight[num.count - 1]}" spaceOwner="${spaceOwner}"
 							z="lLVLIzUb5uufSIaV72f5pNvyScI=">
 							<table:column id="c_com_aeiou_bigbang_domain_Content_title"
 								property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />

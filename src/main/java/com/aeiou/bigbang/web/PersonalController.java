@@ -120,8 +120,8 @@ public class PersonalController extends BaseController {
             tNumStrsLeft = null;
             tNumStrsRight = null;
         } else { // prepare the info for view base on the string in db:
-            tBigTagsLeft = BigUtil.convertTagArrayToList(tBigTagStrsLeft, spaceOwner);
-            tBigTagsRight = BigUtil.convertTagArrayToList(tBigTagStrsRight, spaceOwner);
+            tBigTagsLeft = BigUtil.convertTagStringListToObjList(tBigTagStrsLeft, spaceOwner);
+            tBigTagsRight = BigUtil.convertTagStringListToObjList(tBigTagStrsRight, spaceOwner);
 
             for (BigTag tag : tBigTagsLeft) {
                 tTagIdsLeft.add(tag.getId()); // it can not be null, even if admin changed the name of the tags, cause
@@ -184,8 +184,8 @@ public class PersonalController extends BaseController {
             tNumStrsLeft = null;
             tNumStrsRight = null;
         } else { // prepare the info for view base on the string in db:
-            tBigTagsLeft = BigUtil.convertTagArrayToList(tBigTagStrsLeft, spaceOwner);
-            tBigTagsRight = BigUtil.convertTagArrayToList(tBigTagStrsRight, spaceOwner);
+            tBigTagsLeft = BigUtil.convertTagStringListToObjList(tBigTagStrsLeft, spaceOwner);
+            tBigTagsRight = BigUtil.convertTagStringListToObjList(tBigTagStrsRight, spaceOwner);
 
             for (BigTag tag : tBigTagsLeft) {
                 tTagIdsLeft.add(tag.getId()); // it can not be null, even if admin changed the name of the tags, cause
@@ -200,15 +200,15 @@ public class PersonalController extends BaseController {
         filterTagsWithAithenticationCheck(tBigTagsLeft, tBigTagsRight, tTagIdsLeft, tTagIdsRight, tCurUser, spaceOwner,
                 tOwner);
 
-        List<List> tContentListsLeft = new ArrayList<List>(); // prepare the contentList for each tag.
-        List<List> tContentListsRight = new ArrayList<List>(); // prepare the contentList for each tag.
+        List<List> blogListsLeft = new ArrayList<List>(); // prepare the contentList for each tag.
+        List<List> blogListsRight = new ArrayList<List>(); // prepare the contentList for each tag.
         for (int i = 0; i < tBigTagsLeft.size(); i++) {
-            tContentListsLeft.add(Twitter.findTwittersByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, tAuthSet, 0,
+            blogListsLeft.add(Twitter.findTwittersByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, tAuthSet, 0,
                     tNumStrsLeft == null || tNumStrsLeft[i] == null ? 8 : Integer.valueOf(tNumStrsLeft[i]).intValue(),
                     null));
         }
         for (int i = 0; i < tBigTagsRight.size(); i++) {
-            tContentListsRight.add(Twitter.findTwittersByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, tAuthSet, 0,
+            blogListsRight.add(Twitter.findTwittersByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, tAuthSet, 0,
                     tNumStrsRight == null || tNumStrsRight[i] == null ? 8 : Integer.valueOf(tNumStrsRight[i])
                             .intValue(), null));
         }
@@ -217,8 +217,8 @@ public class PersonalController extends BaseController {
         uiModel.addAttribute("twitterTagsRight", tBigTagsRight);
         uiModel.addAttribute("twitterTagIdsLeft", tTagIdsLeft);
         uiModel.addAttribute("twitterTagIdsRight", tTagIdsRight);
-        uiModel.addAttribute("twittersLeft", tContentListsLeft);
-        uiModel.addAttribute("twittersRight", tContentListsRight);
+        uiModel.addAttribute("twittersLeft", blogListsLeft);
+        uiModel.addAttribute("twittersRight", blogListsRight);
     }
 
     private void prepareNotesInStyle1(

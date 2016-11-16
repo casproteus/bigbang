@@ -20,6 +20,7 @@ import org.springframework.web.servlet.theme.CookieThemeResolver;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.Customize;
 import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
@@ -104,7 +105,7 @@ public class BigUtil {
                         tBM.setPublisher(tGhostUA);
                         if (tBM.getUncommonBigTag() != null) {
                             BigTag tTag =
-                                    BigTag.findBMTagByNameAndOwner(tBM.getUncommonBigTag().getTagName(),
+                                    BigTag.findTagByNameAndOwner(tBM.getUncommonBigTag().getTagName(),
                                             tGhostUA.getName());
                             if (tTag != null)
                                 tBM.setUncommonBigTag(tTag);
@@ -129,7 +130,7 @@ public class BigUtil {
         return false;
     }
 
-    public static List<BigTag> convertTagArrayToList(
+    public static List<BigTag> convertTagStringListToObjList(
             String[] tAryTagStrs,
             String pOwnerName) {
         List<BigTag> tBigTags = new ArrayList<BigTag>();
@@ -141,16 +142,16 @@ public class BigUtil {
                 tagStr = tagStr.substring(0, tagStr.length() - MARK_SEP_LENGTH);
 
             if (tagStr.startsWith(MARK_PUBLIC_TAG)) {
-                BigTag tTag = BigTag.findBMTagByNameAndOwner(tagStr.substring(MARK_SEP_LENGTH), "admin");
+                BigTag tTag = BigTag.findTagByNameAndOwner(tagStr.substring(MARK_SEP_LENGTH), "admin");
                 if (tTag != null) {
                     tBigTags.add(tTag);
                 } else {
-                    tTag = BigTag.findBMTagByNameAndOwner(tagStr.substring(MARK_SEP_LENGTH), "administrator");
+                    tTag = BigTag.findTagByNameAndOwner(tagStr.substring(MARK_SEP_LENGTH), "administrator");
                     if (tTag != null)
                         tBigTags.add(tTag);
                 }
             } else {
-                BigTag tTag = BigTag.findBMTagByNameAndOwner(tagStr, pOwnerName);
+                BigTag tTag = BigTag.findTagByNameAndOwner(tagStr, pOwnerName);
                 if (tTag != null)
                     tBigTags.add(tTag);
             }
@@ -185,7 +186,7 @@ public class BigUtil {
         StringBuilder tStrB = new StringBuilder();
         StringBuilder tStrB_Num = new StringBuilder();
         for (int j = 0; j < tSize / 2; j++) {
-            tStrB.append(getTagInLayoutString(tBigTags.get(j)));
+            tStrB.append(getLayoutFormatTagString(tBigTags.get(j)));
 
             tStrB_Num.append("8");
 
@@ -199,7 +200,7 @@ public class BigUtil {
         tStrB_Num.append(SEP_LEFT_RIGHT);
 
         for (int j = tSize / 2; j < tSize; j++) {
-            tStrB.append(getTagInLayoutString(tBigTags.get(j)));
+            tStrB.append(getLayoutFormatTagString(tBigTags.get(j)));
 
             tStrB_Num.append("8");
 
@@ -214,7 +215,7 @@ public class BigUtil {
         pUser.persist();
     }
 
-    public static String getTagInLayoutString(
+    public static String getLayoutFormatTagString(
             BigTag pTag) {
 
         StringBuilder tStrB = new StringBuilder();
@@ -535,7 +536,7 @@ public class BigUtil {
     }
 
     /**
-     * @ Note the list works as reference.
+     * @ Note the list works as reference. By default, we display admin suggested tags, and user customised tags.
      * 
      * @param tOwner
      * @param tBigTagsLeft
@@ -552,8 +553,27 @@ public class BigUtil {
         List<Long> tTagIdsLeft = new ArrayList<Long>();
         List<Long> tTagIdsRight = new ArrayList<Long>();
 
-        List<BigTag> tBigTags = BigTag.findTagsByOwner(tOwner.getName(), type); // fetch out all tags owner's and his
-                                                                                // team's,
+        List<BigTag> tBigTags = new ArrayList<BigTag>();
+        if (!tOwner.getName().equals("admin")) {
+            List<Customize> list = Customize.findCustomizesByOwner(UserAccount.findUserAccountByName("admin"));
+            List<Customize> list2 = new ArrayList<Customize>();
+            HttpSession session = httpServletRequest.getSession();
+            String suffix = "_" + (String) session.getAttribute("lang");
+            for (Customize customize : list) {
+                String key = customize.getCusKey();
+                if (key.startsWith("suggested_tag") && key.endsWith(suffix)) {
+                    list2.add(customize);
+                }
+            }
+            for (Customize customize : list2) {
+                BigTag bigTag = BigTag.findTagByNameAndOwner(customize.getCusValue(), "owner");
+                if (bigTag.getOwner() == type) {
+                    tBigTags.add(bigTag);
+                }
+            }
+        }
+        tBigTags.addAll(BigTag.findTagsByOwner(tOwner.getName(), type)); // fetch out all tags owner's and his
+                                                                         // team's,
         List<Long> tTagIds = new ArrayList<Long>(); // then adjust it. @note: don't know if we can use AthenSet to move
                                                     // this into JPQL, because
         for (int i = 0; i < tBigTags.size(); i++) { // here, we need to compare the tag names, to avoid duplication.
@@ -571,7 +591,7 @@ public class BigUtil {
             tBigTagsLeft.add(tBigTags.get(j));
             tTagIdsLeft.add(tTagIds.get(j));
 
-            tStrB.append(BigUtil.getTagInLayoutString(tTag));
+            tStrB.append(BigUtil.getLayoutFormatTagString(tTag));
 
             tNumStrsLeft[j] = "8";
             tStrB_Num.append(tNumStrsLeft[j]);
@@ -590,7 +610,7 @@ public class BigUtil {
             tBigTagsRight.add(tBigTags.get(j));
             tTagIdsRight.add(tTagIds.get(j));
 
-            tStrB.append(BigUtil.getTagInLayoutString(tTag));
+            tStrB.append(BigUtil.getLayoutFormatTagString(tTag));
 
             tNumStrsRight[j - tSize / 2] = "8";
             tStrB_Num.append(tNumStrsRight[j - tSize / 2]);
@@ -602,7 +622,11 @@ public class BigUtil {
         }
         tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
 
-        tOwner.setLayout(tStrB.toString()); // save the correct layout string back to DB
+        if (type == 0)
+            tOwner.setLayout(tStrB.toString()); // save the correct layout string back to DB
+        else
+            tOwner.setNoteLayout(tStrB.toString()); // save the correct layout2 string back to DB
+
         tOwner.persist();
 
         List<List> listForReturn = new ArrayList<List>();
@@ -672,9 +696,9 @@ public class BigUtil {
         }
 
         String[] tags = new String[tBigTagStrsOfAdmin.size()];
-        bigTagsAdmin.addAll(BigUtil.convertTagArrayToList(tBigTagStrsOfAdmin.toArray(tags), "admin"));
+        bigTagsAdmin.addAll(BigUtil.convertTagStringListToObjList(tBigTagStrsOfAdmin.toArray(tags), "admin"));
         tags = new String[tBigTagStrsOfAdministrator.size()];
-        bigTagsAdministrator.addAll(BigUtil.convertTagArrayToList(tBigTagStrsOfAdministrator.toArray(tags),
+        bigTagsAdministrator.addAll(BigUtil.convertTagStringListToObjList(tBigTagStrsOfAdministrator.toArray(tags),
                 "administrator"));
     }
 

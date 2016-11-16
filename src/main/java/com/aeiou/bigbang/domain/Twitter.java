@@ -3,6 +3,7 @@ package com.aeiou.bigbang.domain;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -10,6 +11,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
+
 import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -174,6 +176,46 @@ public class Twitter {
         return tQuery.getSingleResult();
     }
 
+    public static List<com.aeiou.bigbang.domain.Twitter> findTwittersByTagAndSpaceOwner(
+            BigTag pTag,
+            UserAccount pOwner,
+            Set<java.lang.Integer> pAuthSet,
+            int firstResult,
+            int maxResults,
+            String sortExpression) {
+
+        Set<UserAccount> tTeamSet = pOwner.getListento();
+        String tTagName = pTag.getTagName();
+        EntityManager tEntityManager = entityManager();
+        TypedQuery<Twitter> tQuery = null;
+        if (tTeamSet.isEmpty()) {
+            tQuery =
+                    tEntityManager
+                            .createQuery(
+                                    "SELECT o FROM Twitter AS o WHERE (o.twittertag.tagName = :tTagName) and (o.publisher = :pOwner) and (o.authority in :pAuthSet) ORDER BY "
+                                            + (sortExpression == null || sortExpression.length() < 1 ? "o.lastupdate DESC"
+                                                    : sortExpression), Twitter.class);
+            tQuery = tQuery.setParameter("tTagName", tTagName);
+            tQuery = tQuery.setParameter("pOwner", pOwner);
+        } else {
+            tQuery =
+                    tEntityManager
+                            .createQuery(
+                                    "SELECT o FROM Twitter AS o WHERE (o.twittertag.tagName = :tTagName and o.publisher = :pOwner and o.authority in :pAuthSet) or "
+                                            + "(o.twittertag.tagName = :tTagName and o.publisher in :tTeamSet and o.authority = 0) ORDER BY "
+                                            + (sortExpression == null || sortExpression.length() < 1 ? "o.lastupdate DESC"
+                                                    : sortExpression), Twitter.class);
+            tQuery = tQuery.setParameter("tTagName", tTagName);
+            tQuery = tQuery.setParameter("pOwner", pOwner);
+            tQuery = tQuery.setParameter("tTeamSet", tTeamSet);
+        }
+
+        tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
+        if (firstResult > -1 && maxResults > 0)
+            tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
+        return tQuery.getResultList();
+    }
+
     public String getAddingTagFlag() {
         return addingTagFlag;
     }
@@ -183,6 +225,7 @@ public class Twitter {
         this.addingTagFlag = addingTagFlag;
     }
 
+    @Override
     public String toString() {
         return twtitle;
     }

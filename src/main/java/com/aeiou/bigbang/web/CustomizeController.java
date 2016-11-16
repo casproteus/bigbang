@@ -64,8 +64,8 @@ public class CustomizeController {
         }
 
         // prepare uncommon tags.
-        List<BigTag> uncommonCheckedBMTags = BigTag.findBMTagsByOwner(tCurName); // the tags created by user and user's
-                                                                                 // friends.
+        List<BigTag> uncommonCheckedBMTags = BigTag.findTagsByOwner(tCurName, 0); // the tags created by user and user's
+                                                                                  // friends.
         List<BigTag> uncommonUnCheckedBMTags = new ArrayList<BigTag>();
         for (int i = uncommonCheckedBMTags.size() - 1; i >= 0; i--) {
             String tTagStr = BigUtil.getTagInLayoutString(uncommonCheckedBMTags.get(i));

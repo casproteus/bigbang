@@ -40,14 +40,6 @@ privileged aspect UserAccount_Roo_JavaBean {
         this.description = description;
     }
     
-    public Set<UserAccount> UserAccount.getListento() {
-        return this.listento;
-    }
-    
-    public void UserAccount.setListento(Set<UserAccount> listento) {
-        this.listento = listento;
-    }
-    
     public int UserAccount.getPrice() {
         return this.price;
     }
@@ -94,6 +86,22 @@ privileged aspect UserAccount_Roo_JavaBean {
     
     public void UserAccount.setNewMessageAmount(int newMessageAmount) {
         this.newMessageAmount = newMessageAmount;
+    }
+    
+    public String UserAccount.getNoteLayout() {
+        return this.noteLayout;
+    }
+    
+    public void UserAccount.setNoteLayout(String noteLayout) {
+        this.noteLayout = noteLayout;
+    }
+    
+    public Set<UserAccount> UserAccount.getListento() {
+        return this.listento;
+    }
+    
+    public void UserAccount.setListento(Set<UserAccount> listento) {
+        this.listento = listento;
     }
     
 }

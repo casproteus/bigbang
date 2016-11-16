@@ -177,8 +177,9 @@ public class BigUtil {
         if (pUser == null)
             return;
 
-        List<BigTag> tBigTags = BigTag.findBMTagsByOwner(pUser.getName()); // fetch out all tags of admin's or owner's
-                                                                           // and his team's,
+        List<BigTag> tBigTags = BigTag.findTagsByOwner(pUser.getName(), 0); // fetch out all tags of admin's or
+                                                                            // owner's
+                                                                            // and his team's,
         int tSize = tBigTags.size(); // Separate tags and IDs into 2 columns and prepare the Layout String.
 
         StringBuilder tStrB = new StringBuilder();
@@ -498,54 +499,16 @@ public class BigUtil {
      * @param tOwner
      * @return
      */
-    public static List<String[]> fetchBookMarkTagAndNumberInListOfArrayFormat(
-            UserAccount tOwner) {
+    public static List<String[]> fetchTagAndNumberInListOfArrayFormat(
+            UserAccount tOwner,
+            int type) {
 
         String[] tBigTagStrsLeft = null;
         String[] tBigTagStrsRight = null;
         String[] tNumStrsLeft = null;
         String[] tNumStrsRight = null;
 
-        String tLayout = tOwner.getLayout(); // get the layout info from DB.
-        int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
-        if (p > -1) {
-            String tTagStr = tLayout.substring(0, p);
-            String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
-
-            p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
-            if (p >= 0) {
-                tBigTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
-                tBigTagStrsRight = tTagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
-            }
-            p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
-            if (p >= 0) {
-                tNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
-                tNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
-            }
-        }
-
-        List<String[]> listForReturn = new ArrayList<String[]>();
-        listForReturn.add(tBigTagStrsLeft);
-        listForReturn.add(tBigTagStrsRight);
-        listForReturn.add(tNumStrsLeft);
-        listForReturn.add(tNumStrsRight);
-        return listForReturn;
-    }
-
-    /**
-     * @NOTE: can not use the string[] as parameter, it's not like list objects.
-     * @param tOwner
-     * @return
-     */
-    public static List<String[]> fetchNoteTagAndNumberInListOfArrayFormat(
-            UserAccount tOwner) {
-
-        String[] tBigTagStrsLeft = null;
-        String[] tBigTagStrsRight = null;
-        String[] tNumStrsLeft = null;
-        String[] tNumStrsRight = null;
-
-        String tLayout = tOwner.getLayout(); // get the layout info from DB.
+        String tLayout = type == 0 ? tOwner.getLayout() : tOwner.getNoteLayout(); // get the layout info from DB.
         int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
         if (p > -1) {
             String tTagStr = tLayout.substring(0, p);
@@ -582,14 +545,15 @@ public class BigUtil {
      */
     public static List<List> resetTagsForOwner(
             UserAccount tOwner,
+            int type,
             HttpServletRequest httpServletRequest) {
         List<BigTag> tBigTagsLeft = new ArrayList<BigTag>();
         List<BigTag> tBigTagsRight = new ArrayList<BigTag>();
         List<Long> tTagIdsLeft = new ArrayList<Long>();
         List<Long> tTagIdsRight = new ArrayList<Long>();
 
-        List<BigTag> tBigTags = BigTag.findBMTagsByOwner(tOwner.getName()); // fetch out all tags owner's and his
-                                                                            // team's,
+        List<BigTag> tBigTags = BigTag.findTagsByOwner(tOwner.getName(), type); // fetch out all tags owner's and his
+                                                                                // team's,
         List<Long> tTagIds = new ArrayList<Long>(); // then adjust it. @note: don't know if we can use AthenSet to move
                                                     // this into JPQL, because
         for (int i = 0; i < tBigTags.size(); i++) { // here, we need to compare the tag names, to avoid duplication.

@@ -1,19 +1,13 @@
 package com.aeiou.bigbang.web;
 
-import com.aeiou.bigbang.domain.BigTag;
-import com.aeiou.bigbang.domain.Content;
-import com.aeiou.bigbang.domain.Twitter;
-import com.aeiou.bigbang.domain.UserAccount;
-import com.aeiou.bigbang.services.secutiry.UserContextService;
-import com.aeiou.bigbang.util.BigAuthority;
-import com.aeiou.bigbang.util.BigUtil;
-import com.aeiou.bigbang.util.SpringApplicationContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
@@ -25,6 +19,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.aeiou.bigbang.domain.BigTag;
+import com.aeiou.bigbang.domain.Content;
+import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.BigUtil;
+import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/contents")
 @Controller
@@ -49,9 +51,9 @@ public class ContentController {
         BigUtil.checkTheme(tOwner, httpServletRequest);
 
         List<BigTag> tTags = null;
-        List<String[]> tTagsAndNums = BigUtil.fetchBookMarkTagAndNumberInListOfArrayFormat(tOwner);
+        List<String[]> tTagsAndNums = BigUtil.fetchTagAndNumberInListOfArrayFormat(tOwner, 0);
         if (BigUtil.notCorrect(tTagsAndNums)) {
-            List<List> lists = BigUtil.resetTagsForOwner(tOwner, httpServletRequest);
+            List<List> lists = BigUtil.resetTagsForOwner(tOwner, 0, httpServletRequest);
             tTags = lists.get(0);
             tTags.addAll(lists.get(1));
         } else {

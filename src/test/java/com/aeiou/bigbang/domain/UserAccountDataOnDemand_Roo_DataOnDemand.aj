@@ -30,6 +30,7 @@ privileged aspect UserAccountDataOnDemand_Roo_DataOnDemand {
         setLayout(obj, index);
         setName(obj, index);
         setNewMessageAmount(obj, index);
+        setNoteLayout(obj, index);
         setPassword(obj, index);
         setPrice(obj, index);
         setStatus(obj, index);
@@ -65,6 +66,11 @@ privileged aspect UserAccountDataOnDemand_Roo_DataOnDemand {
     public void UserAccountDataOnDemand.setNewMessageAmount(UserAccount obj, int index) {
         int newMessageAmount = index;
         obj.setNewMessageAmount(newMessageAmount);
+    }
+    
+    public void UserAccountDataOnDemand.setNoteLayout(UserAccount obj, int index) {
+        String noteLayout = "noteLayout_" + index;
+        obj.setNoteLayout(noteLayout);
     }
     
     public void UserAccountDataOnDemand.setPassword(UserAccount obj, int index) {

@@ -41,9 +41,6 @@ public class UserAccount {
 
     private String description;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<com.aeiou.bigbang.domain.UserAccount> listento = new HashSet<com.aeiou.bigbang.domain.UserAccount>();
-
     @Min(0L)
     @Max(9L)
     private int price;
@@ -77,7 +74,6 @@ public class UserAccount {
         int p = pUserNameAndPassword.indexOf(BigUtil.SEP_ITEM);
         if (p < 0)
             return null;
-
         String pUserName = pUserNameAndPassword.substring(0, p);
         String pPassword = pUserNameAndPassword.substring(p);
         TypedQuery<UserAccount> tQuery =
@@ -127,4 +123,11 @@ public class UserAccount {
             Collection<UserAccount> collection) {
         return new JSONSerializer().include("listento").exclude("*.class").serialize(collection);
     }
+
+    /**
+     */
+    private String noteLayout;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<UserAccount> listento = new HashSet<UserAccount>();
 }

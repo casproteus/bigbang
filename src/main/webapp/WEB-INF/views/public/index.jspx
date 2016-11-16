@@ -64,12 +64,12 @@
 								<table:column id="c_com_aeiou_bigbang_domain_Content_publisher"
 									property="type" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
 							</table:twitterbox>
-						</page:contentPane></td>
+						</page:contentPane>
+					</td>
 				</c:if>
 				<c:if test="${not empty twitterRightFix}">
-					<td class="tWireless nopaddingleft" valign="top"><page:contentPane
-							id="twitterRightFix" items="${twitterRightFix}"
-							label="${NotesAndPraysFromFriend}" bottom="8">
+					<td class="tWireless nopaddingleft" valign="top">
+					    <page:contentPane id="twitterRightFix" items="${twitterRightFix}" label="${NotesAndPraysFromFriend}" bottom="8">
 							<table:twitterbox data="${twitterRightFix}"
 								id="l_com_aeiou_bigbang_domain_Content" type="friendFix"
 								path="/public" spaceOwner="${spaceOwner}">
@@ -80,7 +80,8 @@
 								<table:column id="c_com_aeiou_bigbang_domain_Content_publisher"
 									property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
 							</table:twitterbox>
-						</page:contentPane></td>
+						</page:contentPane>
+					</td>
 				</c:if>
 				<c:if test="${not empty twitterRight}">
 					<td class="tWireless nopaddingright" valign="top"><page:contentPane
@@ -101,13 +102,60 @@
 			</tr>
 		</table>
 	</c:if>
-
+	
+	<!-- display the note in tag group format -->
+	<table class="tWireless">
+		<tr>
+			<td class="tWireless nopaddingleft" valign="top">
+			    <c:forEach items="${twittersLeft}" var="twitter" varStatus="num">
+					<!-- don't need these two params anymore: begin="0" end="${tagsize/2 - 1}" -->
+					<page:contentPane id="twitterlistleft${(num.count - 1)}"
+						items="${twitter}" label="${twitterTagsLeft[num.count - 1]}"
+						tagId="${twitterIdsLeft[num.count - 1]}"
+						z="hnfyfk7YNdTBdBza4/mViLT4aos=">
+						<table:notebox data="${twitter}"
+							id="l_com_aeiou_bigbang_domain_Content" type="friendFix" path="/public"
+							spaceOwner="${spaceOwner}"
+							z="lLVLIzUb5uufSIaV72f5pNvyScI=">
+							<table:column id="c_com_aeiou_bigbang_domain_Content_title"
+								property="twtitle" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />
+							<table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL"
+								property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc=" />
+							<table:column id="c_com_aeiou_bigbang_domain_Content_publisher"
+								property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
+						</table:notebox>
+					</page:contentPane>
+				</c:forEach>
+			</td>
+			<td class="tWireless nopaddingright" valign="top">
+			    <c:forEach items="${twittersRight}" var="twitter" varStatus="num">
+					<page:contentPane id="twitterlistright${(num.count - 1)}"
+						items="${twitter}" label="${twitterTagsRight[num.count - 1]}"
+						tagId="${twitterIdsRight[num.count - 1]}"
+						z="hnfyfk7YNdTBdBza4/mViLT4aos=">
+						<table:notebox data="${twitter}"
+							id="l_com_aeiou_bigbang_domain_Content" path="/public" type="friendFix" 
+							spaceOwner="${spaceOwner}"
+							z="lLVLIzUb5uufSIaV72f5pNvyScI=">
+							<table:column id="c_com_aeiou_bigbang_domain_Content_title"
+								property="title" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />
+							<table:column id="c_com_aeiou_bigbang_domain_Content_sourceURL"
+								property="id" z="s58Apv8PkSRyKzF8JLn0IqIrTNc=" />
+							<table:column id="c_com_aeiou_bigbang_domain_Content_publisher"
+								property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
+						</table:notebox>
+					</page:contentPane>
+				</c:forEach>
+		    </td>
+		</tr>
+	</table>
+	
 	<!-- display the bookmarks of the user. -->
 	<!-- c:set var="tagsize" value="${bigTags.size()}" scope="request" /> -->
 	<table class="tWireless">
 		<tr>
-			<td class="tWireless nopaddingleft" valign="top"><c:forEach
-					items="${contentsLeft}" var="content" varStatus="num">
+			<td class="tWireless nopaddingleft" valign="top">
+			    <c:forEach items="${contentsLeft}" var="content" varStatus="num">
 					<!-- don't need these two params anymore: begin="0" end="${tagsize/2 - 1}" -->
 					<page:contentPane id="contentlistleft${(num.count - 1)}"
 						items="${content}" label="${bigTagsLeft[num.count - 1]}"
@@ -125,9 +173,10 @@
 								property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
 						</table:contentbox>
 					</page:contentPane>
-				</c:forEach></td>
-			<td class="tWireless nopaddingright" valign="top"><c:forEach
-					items="${contentsRight}" var="content" varStatus="num">
+				</c:forEach>
+			</td>
+			<td class="tWireless nopaddingright" valign="top">
+			    <c:forEach items="${contentsRight}" var="content" varStatus="num">
 					<page:contentPane id="contentlistright${(num.count - 1)}"
 						items="${content}" label="${bigTagsRight[num.count - 1]}"
 						tagId="${tagIdsRight[num.count - 1]}"
@@ -144,7 +193,8 @@
 								property="publisher" z="JoA6rckfK+Yqfnqa1ScNuIgPZBg=" />
 						</table:contentbox>
 					</page:contentPane>
-				</c:forEach></td>
+				</c:forEach>
+			</td>
 		</tr>
 	</table>
 	<!-- for sharethis,  while seems no effect -->

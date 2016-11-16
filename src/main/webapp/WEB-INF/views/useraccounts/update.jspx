@@ -59,6 +59,9 @@
 							<field:input field="layout"
 								id="c_com_aeiou_bigbang_domain_UserAccount_layout"
 								z="DZP4oppDs9iitXlz6zafXsQ860o=" />
+							<field:input field="noteLayout"
+								id="c_com_aeiou_bigbang_domain_UserAccount_noteLayout"
+								z="DZP4oppDs9iitXlz6zafXsQ860o=" />
 							<field:input field="balance"
 								id="c_com_aeiou_bigbang_domain_UserAccount_balance"
 								required="true" z="iGBZ2hYbTCMyVVJ+abO7tKBIjIM=" />

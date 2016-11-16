@@ -77,8 +77,8 @@ public class PersonalController extends BaseController {
         }
 
         prepareBookmarks(spaceOwner, uiModel, request, tCurUser, tOwner, tAuthSet);
-        // not ready yet! prepareNotes(spaceOwner, uiModel, request, tCurUser, tOwner, tAuthSet);
-        prepareNotesInStyle1(uiModel, tCurUser, tOwner, tAuthSet);
+        prepareNotes(spaceOwner, uiModel, request, tCurUser, tOwner, tAuthSet);
+        // prepareNotesInStyle1(uiModel, tCurUser, tOwner, tAuthSet);
         // ---------------------------------------------------------------------------------
         // to save the reqeust to requestCache;
         /**
@@ -100,7 +100,7 @@ public class PersonalController extends BaseController {
             UserAccount tCurUser,
             UserAccount tOwner,
             Set<Integer> tAuthSet) {
-        List<String[]> tagsAndNumbers = BigUtil.fetchBookMarkTagAndNumberInListOfArrayFormat(tOwner);
+        List<String[]> tagsAndNumbers = BigUtil.fetchTagAndNumberInListOfArrayFormat(tOwner, 0);
         String[] tBigTagStrsLeft = tagsAndNumbers.get(0);
         String[] tBigTagStrsRight = tagsAndNumbers.get(1);
         String[] tNumStrsLeft = tagsAndNumbers.get(2);
@@ -112,7 +112,7 @@ public class PersonalController extends BaseController {
         List<Long> tTagIdsRight = new ArrayList<Long>();
         // if the layout info in DB is not correct, create it from beginning.
         if (BigUtil.notCorrect(tagsAndNumbers)) {
-            List<List> lists = BigUtil.resetTagsForOwner(tOwner, request);
+            List<List> lists = BigUtil.resetTagsForOwner(tOwner, 0, request);
             tBigTagsLeft = lists.get(0);
             tBigTagsRight = lists.get(1);
             tTagIdsLeft = lists.get(2);
@@ -164,7 +164,7 @@ public class PersonalController extends BaseController {
             UserAccount tCurUser,
             UserAccount tOwner,
             Set<Integer> tAuthSet) {
-        List<String[]> tagsAndNumbers = BigUtil.fetchNoteTagAndNumberInListOfArrayFormat(tOwner);
+        List<String[]> tagsAndNumbers = BigUtil.fetchTagAndNumberInListOfArrayFormat(tOwner, 1);
         String[] tBigTagStrsLeft = tagsAndNumbers.get(0);
         String[] tBigTagStrsRight = tagsAndNumbers.get(1);
         String[] tNumStrsLeft = tagsAndNumbers.get(2);
@@ -176,7 +176,7 @@ public class PersonalController extends BaseController {
         List<Long> tTagIdsRight = new ArrayList<Long>();
         // if the layout info in DB is not correct, create it from beginning.
         if (BigUtil.notCorrect(tagsAndNumbers)) {
-            List<List> lists = BigUtil.resetTagsForOwner(tOwner, request);
+            List<List> lists = BigUtil.resetTagsForOwner(tOwner, 1, request);
             tBigTagsLeft = lists.get(0);
             tBigTagsRight = lists.get(1);
             tTagIdsLeft = lists.get(2);
@@ -203,22 +203,22 @@ public class PersonalController extends BaseController {
         List<List> tContentListsLeft = new ArrayList<List>(); // prepare the contentList for each tag.
         List<List> tContentListsRight = new ArrayList<List>(); // prepare the contentList for each tag.
         for (int i = 0; i < tBigTagsLeft.size(); i++) {
-            tContentListsLeft.add(Content.findContentsByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, tAuthSet, 0,
+            tContentListsLeft.add(Twitter.findTwittersByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, tAuthSet, 0,
                     tNumStrsLeft == null || tNumStrsLeft[i] == null ? 8 : Integer.valueOf(tNumStrsLeft[i]).intValue(),
                     null));
         }
         for (int i = 0; i < tBigTagsRight.size(); i++) {
-            tContentListsRight.add(Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, tAuthSet, 0,
+            tContentListsRight.add(Twitter.findTwittersByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, tAuthSet, 0,
                     tNumStrsRight == null || tNumStrsRight[i] == null ? 8 : Integer.valueOf(tNumStrsRight[i])
                             .intValue(), null));
         }
 
-        uiModel.addAttribute("bigTagsLeft", tBigTagsLeft);
-        uiModel.addAttribute("bigTagsRight", tBigTagsRight);
-        uiModel.addAttribute("tagIdsLeft", tTagIdsLeft);
-        uiModel.addAttribute("tagIdsRight", tTagIdsRight);
-        uiModel.addAttribute("contentsLeft", tContentListsLeft);
-        uiModel.addAttribute("contentsRight", tContentListsRight);
+        uiModel.addAttribute("twitterTagsLeft", tBigTagsLeft);
+        uiModel.addAttribute("twitterTagsRight", tBigTagsRight);
+        uiModel.addAttribute("twitterTagIdsLeft", tTagIdsLeft);
+        uiModel.addAttribute("twitterTagIdsRight", tTagIdsRight);
+        uiModel.addAttribute("twittersLeft", tContentListsLeft);
+        uiModel.addAttribute("twittersRight", tContentListsRight);
     }
 
     private void prepareNotesInStyle1(

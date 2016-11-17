@@ -344,25 +344,23 @@ public class PersonalController extends BaseController {
                     HttpServletResponse response) {
         response.setContentType("image/jpeg");
         MediaUpload tMedia = MediaUpload.findMediaByKey(id);
-        try {
-            if (tMedia != null && tMedia.getContent() != null) {
+        if (tMedia == null || tMedia.getContent() == null) {
+            if (id.endsWith("_bg"))
+                tMedia = MediaUpload.findMediaByKey("uc_admin_bg");
+            if (id.endsWith("_headimage"))
+                tMedia = MediaUpload.findMediaByKey("uc_admin_headimage");
+        }
+
+        if (tMedia != null && tMedia.getContent() != null) {
+            try {
                 byte[] imageBytes = tMedia.getContent();
                 response.getOutputStream().write(imageBytes);
                 response.getOutputStream().flush();
-            } else {
-                String tName = userContextService.getCurrentUserName();
-                if (tName == null)
-                    tName = "admin";
-                tName = "uc_" + tName.toLowerCase();
-                tMedia = MediaUpload.findMediaByKey(id.endsWith("_bg") ? tName + "_bg" : tName + "_headimage");
-                if (tMedia != null && tMedia.getContent() != null) {
-                    byte[] imageBytes = tMedia.getContent();
-                    response.getOutputStream().write(imageBytes);
-                    response.getOutputStream().flush();
-                }
+            } catch (Exception e) {
+                System.out.println("Exception occured when fetching img of ID:" + id + "! " + e);
             }
-        } catch (Exception e) {
-            System.out.println("Exception occured when fetching img of ID:" + id + "! " + e);
+        } else {
+            System.out.println("found no immage with id:" + id);
         }
     }
 

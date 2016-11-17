@@ -482,17 +482,18 @@ public class BigUtil {
     }
 
     public static void checkTheme(
-            UserAccount tOwner,
+            UserAccount owner,
             HttpServletRequest httpServletRequest) {
         // check If Its New Created User;
-        if (tOwner.getName() == null) {
-            tOwner = UserAccount.findUserAccountByName("admin");
-        }
-        httpServletRequest.setAttribute("spaceOwner", tOwner.getName());
+        UserAccount adminAcccount = UserAccount.findUserAccountByName("admin");
+        if (owner.getName() == null)
+            owner = adminAcccount;
+        httpServletRequest.setAttribute("spaceOwner", owner.getName());
         // if the owner has theme already, then use the theme! (will effect only on this request)
-        int tTheme = tOwner.getTheme();
-        if (tTheme != 0)
-            httpServletRequest.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME, String.valueOf(tTheme));
+        int adminTheme = adminAcccount.getTheme();
+        int theme = owner.getTheme();
+        httpServletRequest.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME,
+                String.valueOf(adminTheme == 9 && theme == 0 ? adminTheme : theme));
     }
 
     /**

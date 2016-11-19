@@ -105,7 +105,7 @@ public class MessageController {
         PersonalController tController =
                 SpringApplicationContext.getApplicationContext()
                         .getBean("personalController", PersonalController.class);
-        return tController.index(pReceiverName, -1, -1, uiModel, httpServletRequest);
+        return tController.index(pReceiverName, uiModel, httpServletRequest);
     }
 
     @RequestMapping(produces = "text/html")

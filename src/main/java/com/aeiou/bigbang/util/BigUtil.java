@@ -60,29 +60,29 @@ public class BigUtil {
         return pString;
     }
 
-    public static boolean isSystemCommand(
-            String pCommand,
-            UserAccount pCurUser) {
-        if ("5203_setDefaultValueForContents".equals(pCommand)) {
+    public static boolean checkIfItsSystemCommand(
+            String command,
+            UserAccount curUser) {
+        if ("5203_setDefaultValueForContents".equals(command)) {
             setDefaultValueForContents();
             return true;
-        } else if ("2745_setDefaultValueForTags".equals(pCommand)) {
+        } else if ("2745_setDefaultValueForTags".equals(command)) {
             setDefaultValueForTags();
             return true;
-        } else if ("1214_updateUserBalances".equals(pCommand)) {
+        } else if ("1214_updateUserBalances".equals(command)) {
             SpringApplicationContext.getApplicationContext()
                     .getBean("updatingBalanceJobProcessor", UpdatingBalanceJobProcessor.class).updateBalance();
             return true;
-        } else if (("1210_syncdb".equals(pCommand) || "1210_syncdb_ua".equals(pCommand)
-                || "1210_syncdb_tg".equals(pCommand) || "1210_syncdb_ms".equals(pCommand)
-                || "1210_syncdb_bg".equals(pCommand) || "1210_syncdb_rm".equals(pCommand) || "1210_syncdb_bm"
-                    .equals(pCommand)) && pCurUser != null) { // Looks like first run will see exception of line 137,
-                                                              // SynchizationManager(persistant rool back). will be OK
-                                                              // when run it the second time or the third time.
-            new ClientSyncTool().startToSynch(pCurUser, pCommand);
+        } else if (("1210_syncdb".equals(command) || "1210_syncdb_ua".equals(command)
+                || "1210_syncdb_tg".equals(command) || "1210_syncdb_ms".equals(command)
+                || "1210_syncdb_bg".equals(command) || "1210_syncdb_rm".equals(command) || "1210_syncdb_bm"
+                    .equals(command)) && curUser != null) { // Looks like first run will see exception of line 137,
+                                                            // SynchizationManager(persistant rool back). will be OK
+                                                            // when run it the second time or the third time.
+            new ClientSyncTool().startToSynch(curUser, command);
             return true;
-        } else if (pCommand != null && pCommand.startsWith("20130818_shufful") && pCurUser != null) {
-            String tName = pCommand.substring("20130818_shufful".length()).trim();
+        } else if (command != null && command.startsWith("20130818_shufful") && curUser != null) {
+            String tName = command.substring("20130818_shufful".length()).trim();
             String tTagName = null; // if there's a space in param, means, user specify not only a username but also a
                                     // tag.
             int tPos = tName.indexOf(' '); // that also means if the username contains a space, then his bookmark can
@@ -114,8 +114,8 @@ public class BigUtil {
                     }
                 }
             }
-        } else if (pCommand != null && pCommand.startsWith("tianjiaceshishuju")) {
-            String a = pCommand.substring("tianjiaceshishuju".length() + 1);
+        } else if (command != null && command.startsWith("tianjiaceshishuju")) {
+            String a = command.substring("tianjiaceshishuju".length() + 1);
             int count = Integer.valueOf(a);
             for (int i = 1342; i < count; i++) {
                 MediaUpload tMedia = new MediaUpload();
@@ -145,10 +145,6 @@ public class BigUtil {
                 BigTag tTag = BigTag.findTagByNameAndOwner(tagStr.substring(MARK_SEP_LENGTH), "admin");
                 if (tTag != null) {
                     tBigTags.add(tTag);
-                } else {
-                    tTag = BigTag.findTagByNameAndOwner(tagStr.substring(MARK_SEP_LENGTH), "administrator");
-                    if (tTag != null)
-                        tBigTags.add(tTag);
                 }
             } else {
                 BigTag tTag = BigTag.findTagByNameAndOwner(tagStr, pOwnerName);
@@ -171,56 +167,12 @@ public class BigUtil {
         tTwitter.merge();
     }
 
-    // reset the columns to be displayed on personal space, by default, we display only user's own and his friends tags.
-    // if user want to display more tags, he can customize it later easily.
-    public static void resetLayoutString(
-            UserAccount pUser) {
-        if (pUser == null)
-            return;
-
-        List<BigTag> tBigTags = BigTag.findTagsByOwner(pUser.getName(), 0); // fetch out all tags of admin's or
-                                                                            // owner's
-                                                                            // and his team's,
-        int tSize = tBigTags.size(); // Separate tags and IDs into 2 columns and prepare the Layout String.
-
-        StringBuilder tStrB = new StringBuilder();
-        StringBuilder tStrB_Num = new StringBuilder();
-        for (int j = 0; j < tSize / 2; j++) {
-            tStrB.append(getLayoutFormatTagString(tBigTags.get(j)));
-
-            tStrB_Num.append("8");
-
-            if (j + 1 < tSize / 2) {
-                tStrB.append(SEP_ITEM);
-                tStrB_Num.append(SEP_ITEM);
-            }
-        }
-
-        tStrB.append(SEP_LEFT_RIGHT);
-        tStrB_Num.append(SEP_LEFT_RIGHT);
-
-        for (int j = tSize / 2; j < tSize; j++) {
-            tStrB.append(getLayoutFormatTagString(tBigTags.get(j)));
-
-            tStrB_Num.append("8");
-
-            if (j + 1 < tSize) {
-                tStrB.append(SEP_ITEM);
-                tStrB_Num.append(SEP_ITEM);
-            }
-        }
-        tStrB.append(SEP_TAG_NUMBER).append(tStrB_Num);
-
-        pUser.setLayout(tStrB.toString()); // save to DB
-        pUser.persist();
-    }
-
     public static String getLayoutFormatTagString(
             BigTag pTag) {
 
         StringBuilder tStrB = new StringBuilder();
 
-        if ("admin".equals(pTag.getType()) || "administrator".equals(pTag.getType()))
+        if ("admin".equals(pTag.getType()))
             tStrB.append(MARK_PUBLIC_TAG);
 
         tStrB.append(pTag.getTagName());
@@ -498,11 +450,11 @@ public class BigUtil {
 
     /**
      * @NOTE: can not use the string[] as parameter, it's not like list objects.
-     * @param tOwner
+     * @param owner
      * @return
      */
     public static List<String[]> fetchTagAndNumberInListOfArrayFormat(
-            UserAccount tOwner,
+            UserAccount owner,
             int type) {
 
         String[] tBigTagStrsLeft = null;
@@ -510,21 +462,21 @@ public class BigUtil {
         String[] tNumStrsLeft = null;
         String[] tNumStrsRight = null;
 
-        String tLayout = type == 0 ? tOwner.getLayout() : tOwner.getNoteLayout(); // get the layout info from DB.
-        int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
+        String layoutString = type == 0 ? owner.getLayout() : owner.getNoteLayout(); // get the layout info from DB.
+        int p = layoutString == null ? -1 : layoutString.indexOf(BigUtil.SEP_TAG_NUMBER);
         if (p > -1) {
-            String tTagStr = tLayout.substring(0, p);
-            String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
+            String tagStr = layoutString.substring(0, p);
+            String sizeStr = layoutString.substring(p + BigUtil.MARK_SEP_LENGTH);
 
-            p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
+            p = tagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
             if (p >= 0) {
-                tBigTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
-                tBigTagStrsRight = tTagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
+                tBigTagStrsLeft = tagStr.substring(0, p).split(BigUtil.SEP_ITEM);
+                tBigTagStrsRight = tagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
             }
-            p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
+            p = sizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
             if (p >= 0) {
-                tNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
-                tNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
+                tNumStrsLeft = sizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
+                tNumStrsRight = sizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
             }
         }
 
@@ -539,186 +491,212 @@ public class BigUtil {
     /**
      * @ Note the list works as reference. By default, we display admin suggested tags, and user customised tags.
      * 
-     * @param tOwner
+     * @param owner
      * @param tBigTagsLeft
      * @param tBigTagsRight
      * @param tTagIdsLeft
      * @param tTagIdsRight
      */
-    public static List<List> resetTagsForOwner(
-            UserAccount tOwner,
-            int type,
-            HttpServletRequest httpServletRequest) {
-        List<BigTag> tBigTagsLeft = new ArrayList<BigTag>();
-        List<BigTag> tBigTagsRight = new ArrayList<BigTag>();
-        List<Long> tTagIdsLeft = new ArrayList<Long>();
-        List<Long> tTagIdsRight = new ArrayList<Long>();
+    @SuppressWarnings("rawtypes")
+    public static List<List> generateDefaultTagsForOwner(
+            HttpServletRequest httpServletRequest,
+            UserAccount owner,
+            int type) {
 
-        List<BigTag> tBigTags = new ArrayList<BigTag>();
-        if (!tOwner.getName().equals("admin")) {
-            List<Customize> list = Customize.findCustomizesByOwner(UserAccount.findUserAccountByName("admin"));
-            List<Customize> list2 = new ArrayList<Customize>();
-            HttpSession session = httpServletRequest.getSession();
-            String suffix = "_" + (String) session.getAttribute("lang");
-            for (Customize customize : list) {
-                String key = customize.getCusKey();
-                if (key.startsWith("suggested_tag") && key.endsWith(suffix)) {
-                    list2.add(customize);
-                }
-            }
-            for (Customize customize : list2) {
-                BigTag bigTag = BigTag.findTagByNameAndOwner(customize.getCusValue(), "owner");
-                if (bigTag.getOwner() == type) {
-                    tBigTags.add(bigTag);
-                }
-            }
-        }
-        tBigTags.addAll(BigTag.findTagsByOwner(tOwner.getName(), type)); // fetch out all tags owner's and his
-                                                                         // team's,
-        List<Long> tTagIds = new ArrayList<Long>(); // then adjust it. @note: don't know if we can use AthenSet to move
-                                                    // this into JPQL, because
-        for (int i = 0; i < tBigTags.size(); i++) { // here, we need to compare the tag names, to avoid duplication.
-            tTagIds.add(tBigTags.get(i).getId());
+        List<BigTag> bigTagList = findLangMatchedTagsOfAdmin(httpServletRequest, owner, type);
+        if (!owner.getName().equals("admin")) {
+            bigTagList.addAll(BigTag.findTagsFromOwnerAndFriend(owner.getName(), type));
         }
 
-        int tSize = tBigTags.size(); // Separate tags and IDs into 2 columns and prepare the Layout String.
-        String[] tNumStrsLeft = new String[tSize / 2];
-        String[] tNumStrsRight = new String[tSize - tSize / 2];
+        List<Long> tagIdList = new ArrayList<Long>();
+        for (BigTag bigTag : bigTagList) {
+            tagIdList.add(bigTag.getId());
+        }
 
-        StringBuilder tStrB = new StringBuilder();
-        StringBuilder tStrB_Num = new StringBuilder();
-        for (int j = 0; j < tSize / 2; j++) {
-            BigTag tTag = tBigTags.get(j);
-            tBigTagsLeft.add(tBigTags.get(j));
-            tTagIdsLeft.add(tTagIds.get(j));
+        int size = bigTagList.size(); // Separate tags and IDs into 2 columns and prepare the Layout String.
 
-            tStrB.append(BigUtil.getLayoutFormatTagString(tTag));
+        StringBuilder strB = new StringBuilder();
+        StringBuilder strB_Num = new StringBuilder();
+        List<BigTag> bigTagListLeft = new ArrayList<BigTag>();
+        List<BigTag> bigTagListRight = new ArrayList<BigTag>();
+        List<Long> tagIdListLeft = new ArrayList<Long>();
+        List<Long> tagIdListRight = new ArrayList<Long>();
 
-            tNumStrsLeft[j] = "8";
-            tStrB_Num.append(tNumStrsLeft[j]);
+        for (int j = 0; j < size / 2; j++) {
+            BigTag tTag = bigTagList.get(j);
+            bigTagListLeft.add(bigTagList.get(j));
+            tagIdListLeft.add(tagIdList.get(j));
 
-            if (j + 1 < tSize / 2) {
-                tStrB.append(BigUtil.SEP_ITEM);
-                tStrB_Num.append(BigUtil.SEP_ITEM);
+            strB.append(BigUtil.getLayoutFormatTagString(tTag));
+            strB_Num.append("8");
+
+            if (j + 1 < size / 2) {
+                strB.append(BigUtil.SEP_ITEM);
+                strB_Num.append(BigUtil.SEP_ITEM);
             }
         }
 
-        tStrB.append(BigUtil.SEP_LEFT_RIGHT);
-        tStrB_Num.append(BigUtil.SEP_LEFT_RIGHT);
+        strB.append(BigUtil.SEP_LEFT_RIGHT);
+        strB_Num.append(BigUtil.SEP_LEFT_RIGHT);
 
-        for (int j = tSize / 2; j < tSize; j++) {
-            BigTag tTag = tBigTags.get(j);
-            tBigTagsRight.add(tBigTags.get(j));
-            tTagIdsRight.add(tTagIds.get(j));
+        for (int j = size / 2; j < size; j++) {
+            BigTag tTag = bigTagList.get(j);
+            bigTagListRight.add(bigTagList.get(j));
+            tagIdListRight.add(tagIdList.get(j));
 
-            tStrB.append(BigUtil.getLayoutFormatTagString(tTag));
+            strB.append(BigUtil.getLayoutFormatTagString(tTag));
+            strB_Num.append("8");
 
-            tNumStrsRight[j - tSize / 2] = "8";
-            tStrB_Num.append(tNumStrsRight[j - tSize / 2]);
-
-            if (j + 1 < tSize) {
-                tStrB.append(BigUtil.SEP_ITEM);
-                tStrB_Num.append(BigUtil.SEP_ITEM);
+            if (j + 1 < size) {
+                strB.append(BigUtil.SEP_ITEM);
+                strB_Num.append(BigUtil.SEP_ITEM);
             }
         }
-        tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
+        strB.append(SEP_TAG_NUMBER).append(strB_Num);
 
         if (type == 0)
-            tOwner.setLayout(tStrB.toString()); // save the correct layout string back to DB
+            owner.setLayout(strB.toString()); // save the correct layout string back to DB
         else
-            tOwner.setNoteLayout(tStrB.toString()); // save the correct layout2 string back to DB
+            owner.setNoteLayout(strB.toString()); // save the correct layout2 string back to DB
 
-        tOwner.persist();
+        owner.persist();
 
         List<List> listForReturn = new ArrayList<List>();
-        listForReturn.add(tBigTagsLeft);
-        listForReturn.add(tBigTagsRight);
-        listForReturn.add(tTagIdsLeft);
-        listForReturn.add(tTagIdsRight);
+        listForReturn.add(bigTagListLeft);
+        listForReturn.add(bigTagListRight);
+        listForReturn.add(tagIdListLeft);
+        listForReturn.add(tagIdListRight);
         return listForReturn;
     }
 
+    private static List<BigTag> findLangMatchedTagsOfAdmin(
+            HttpServletRequest httpServletRequest,
+            UserAccount tOwner,
+            int type) {
+        List<BigTag> tBigTags = new ArrayList<BigTag>();
+        List<Customize> list = Customize.findCustomizesByOwner(UserAccount.findUserAccountByName("admin"));
+        List<Customize> list2 = new ArrayList<Customize>();
+        HttpSession session = httpServletRequest.getSession();
+        String suffix = "_" + (String) session.getAttribute("lang");
+        for (Customize customize : list) {
+            String key = customize.getCusKey();
+            if (key.startsWith("suggested_tag") && key.endsWith(suffix)) {
+                list2.add(customize);
+            }
+        }
+        for (Customize customize : list2) {
+            BigTag bigTag = BigTag.findTagByNameAndOwner(customize.getCusValue(), "owner");
+            if (bigTag.getOwner() == type) {
+                tBigTags.add(bigTag);
+            }
+        }
+        return tBigTags;
+    }
+
     /**
-     * @param bigTagsAdmin
+     * @param suggestedTagList
      *            must be an empty list, it is used to be filled in with default tags.
-     * @param bigTagsAdministrator
+     * @param selectableTagList
      *            must be an empty list, it is used to be filled in with default tags.
      * @param uiModel
      * @param session
      */
-    public static void prepareAdminTags(
-            List<BigTag> bigTagsAdmin,
-            List<BigTag> bigTagsAdministrator,
+    private static List<List<BigTag>> prepareAdminTagsOnMainPage(
+            List<BigTag> suggestedTagList,
+            List<BigTag> selectableTagList,
             Model uiModel,
-            HttpSession session) {
+            HttpServletRequest request) {
 
-        List<Long> tTagIdsAdmin = new ArrayList<Long>();
-        List<Long> tTagIdsAdministrator = new ArrayList<Long>();
-        fetchAllSuggestedTags(bigTagsAdmin, bigTagsAdministrator, session);
+        List<List<BigTag>> list = fetchAllCustomizedAdminTags(request);
+        suggestedTagList.addAll(list.get(0));
+        selectableTagList.addAll(list.get(1));
 
-        for (BigTag bigTag : bigTagsAdmin) {
-            tTagIdsAdmin.add(bigTag.getId());
+        List<BigTag> bigTagsLeft = new ArrayList<BigTag>();
+        List<BigTag> bigTagsRight = new ArrayList<BigTag>();
+        for (int index = 0; index < suggestedTagList.size() / 2; index++) {
+            bigTagsLeft.add(suggestedTagList.get(index));
         }
-        for (BigTag bigTag : bigTagsAdministrator) {
-            tTagIdsAdministrator.add(bigTag.getId());
+        for (int index = suggestedTagList.size() / 2; index < suggestedTagList.size(); index++) {
+            bigTagsRight.add(suggestedTagList.get(index));
+        }
+
+        List<Long> tagIdsLeft = new ArrayList<Long>();
+        List<Long> tagIdsRight = new ArrayList<Long>();
+        for (BigTag bigTag : bigTagsLeft) {
+            tagIdsLeft.add(bigTag.getId());
+        }
+        for (BigTag bigTag : bigTagsRight) {
+            tagIdsRight.add(bigTag.getId());
         }
 
         // set to front end model.
-        uiModel.addAttribute("bigTagsLeft", bigTagsAdmin);
-        uiModel.addAttribute("bigTagsRight", bigTagsAdministrator);
-        uiModel.addAttribute("tagIdsLeft", tTagIdsAdmin);
-        uiModel.addAttribute("tagIdsRight", tTagIdsAdministrator);
+        uiModel.addAttribute("bigTagsLeft", bigTagsLeft);
+        uiModel.addAttribute("bigTagsRight", bigTagsRight);
+        uiModel.addAttribute("tagIdsLeft", tagIdsLeft);
+        uiModel.addAttribute("tagIdsRight", tagIdsRight);
+
+        List<List<BigTag>> listOfTagList = new ArrayList<List<BigTag>>();
+        listOfTagList.add(bigTagsLeft);
+        listOfTagList.add(bigTagsLeft);
+        return listOfTagList;
     }
 
     /**
-     * @param bigTagsAdmin
-     * @param bigTagsAdministrator
+     * @param suggestedTagList
+     * @param selectableTagList
      * @param session
      */
-    private static void fetchAllSuggestedTags(
-            List<BigTag> bigTagsAdmin,
-            List<BigTag> bigTagsAdministrator,
-            HttpSession session) {
-        // get out admin and administrator's tags in string.
-        List<String> tBigTagStrsOfAdmin = new ArrayList<String>();
-        List<String> tBigTagStrsOfAdministrator = new ArrayList<String>();
+    public static List<List<BigTag>> fetchAllCustomizedAdminTags(
+            HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        // get out admin's tags in string.
+        List<String> suggestedTagNameList = new ArrayList<String>();
+        List<String> selectableTagNameList = new ArrayList<String>();
 
         for (int i = 1; i < 100; i++) {
             Object tTagStr = session.getAttribute("suggested_tag" + i);
             if (tTagStr == null)
                 break;
-            tBigTagStrsOfAdmin.add(tTagStr.toString());
+            suggestedTagNameList.add(tTagStr.toString());
         }
         for (int i = 1; i < 100; i++) {
             Object tTagStr = session.getAttribute("selectable_tag" + i);
             if (tTagStr == null)
                 break;
-            tBigTagStrsOfAdministrator.add(tTagStr.toString());
+            selectableTagNameList.add(tTagStr.toString());
         }
 
-        String[] tags = new String[tBigTagStrsOfAdmin.size()];
-        bigTagsAdmin.addAll(BigUtil.convertTagStringListToObjList(tBigTagStrsOfAdmin.toArray(tags), "admin"));
-        tags = new String[tBigTagStrsOfAdministrator.size()];
-        bigTagsAdministrator.addAll(BigUtil.convertTagStringListToObjList(tBigTagStrsOfAdministrator.toArray(tags),
-                "administrator"));
+        List<BigTag> suggestedTagList = new ArrayList<BigTag>();
+        String[] tags = new String[suggestedTagNameList.size()];
+        suggestedTagList.addAll(BigUtil.convertTagStringListToObjList(suggestedTagNameList.toArray(tags), "admin"));
+
+        List<BigTag> selectableTagList = new ArrayList<BigTag>();
+        tags = new String[selectableTagNameList.size()];
+        selectableTagList.addAll(BigUtil.convertTagStringListToObjList(selectableTagNameList.toArray(tags), "admin"));
+
+        List<List<BigTag>> listFR = new ArrayList<List<BigTag>>();
+        listFR.add(suggestedTagList);
+        listFR.add(selectableTagList);
+
+        return listFR;
     }
 
-    public static void prepareAdminContents(
-            List<BigTag> bigTagsAdmin,
-            List<BigTag> bigTagsAdministrator,
+    private static void prepareAdminContents(
+            List<BigTag> suggestedTagList,
+            List<BigTag> selectableTagList,
             Model uiModel,
-            HttpSession session) {
-
+            HttpServletRequest request) {
+        HttpSession session = request.getSession();
         // get out relevant content (urls)
         Object cus_items_per_page = session.getAttribute("items_per_page");
         int items_per_page = cus_items_per_page == null ? 8 : Integer.valueOf(cus_items_per_page.toString());
         List<List> tContentListsLeft = new ArrayList<List>(); // prepare the contentList for each tag.
         List<List> tContentListsRight = new ArrayList<List>(); // prepare the contentList for each tag.
-        for (int i = 0; i < bigTagsAdmin.size(); i++) {
-            tContentListsLeft.add(Content.findContentsByTag(bigTagsAdmin.get(i), 0, items_per_page, null));
+        for (BigTag bigTag : suggestedTagList) {
+            tContentListsLeft.add(Content.findContentsByTag(bigTag, 0, items_per_page, null));
         }
-        for (int i = 0; i < bigTagsAdministrator.size(); i++) {
-            tContentListsRight.add(Content.findContentsByTag(bigTagsAdministrator.get(i), 0, items_per_page, null));
+        for (BigTag bigTag : selectableTagList) {
+            tContentListsRight.add(Content.findContentsByTag(bigTag, 0, items_per_page, null));
         }
 
         // set to front end model.

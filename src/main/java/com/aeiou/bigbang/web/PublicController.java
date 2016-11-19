@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.format.DateTimeFormat;
@@ -65,21 +64,12 @@ public class PublicController extends BaseController {
             Model uiModel,
             HttpServletRequest request) {
 
-        // init if needed
-        UserAccount tOwner = UserAccount.findUserAccountByName("admin");
-        swithCurrentOwner(tOwner, uiModel, request);
+        LogFactory
+                .getLog(PublicController.class)
+                .info("Shouldn't have been called! PublicController.index() is dumpted, and all request should point to personalController.index()! "
+                        + Thread.getAllStackTraces().toString());
+        return null;
 
-        // translate the tag into object.
-        HttpSession session = request.getSession();
-
-        // public page is actually admin's personal page, while tags of admin's are all public. and come from also
-        // administrator, so it's different from personal tags.
-        List<BigTag> bigTagsAdmin = new ArrayList<BigTag>();
-        List<BigTag> bigTagsAdministrator = new ArrayList<BigTag>();
-        BigUtil.prepareAdminTags(bigTagsAdmin, bigTagsAdministrator, uiModel, session);
-        BigUtil.prepareAdminContents(bigTagsAdmin, bigTagsAdministrator, uiModel, session);
-
-        return "public/index";
     }
 
     /**
@@ -462,7 +452,7 @@ public class PublicController extends BaseController {
         PersonalController tController =
                 SpringApplicationContext.getApplicationContext()
                         .getBean("personalController", PersonalController.class);
-        return (tController.index(tCurName, page, size, uiModel, request));
+        return (tController.index(tCurName, uiModel, request));
     }
 
     /**
@@ -508,7 +498,7 @@ public class PublicController extends BaseController {
         tPublisher.persist();
 
         return (SpringApplicationContext.getApplicationContext()
-                .getBean("personalController", PersonalController.class).index(tCurName, page, size, uiModel, request));
+                .getBean("personalController", PersonalController.class).index(tCurName, uiModel, request));
     }
 
     /**
@@ -547,7 +537,7 @@ public class PublicController extends BaseController {
             tOwner.setLayout(null);
             tOwner.setNoteLayout(null);
             tOwner.persist();
-            return tController.index(tCurName, 0, 8, uiModel, request);
+            return tController.index(tCurName, uiModel, request);
         }
 
         BigTag tBigTag = BigTag.findBigTag(tagId);
@@ -855,6 +845,6 @@ public class PublicController extends BaseController {
         tOwner.persist();
 
         // ----------------prepare for show-------------------
-        return (tController.index(tCurName, 0, 8, uiModel, request));
+        return (tController.index(tCurName, uiModel, request));
     }
 }

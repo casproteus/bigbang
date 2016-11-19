@@ -21,13 +21,13 @@
 			var="commonTagsText" />
 		<util:panel id="commonTags" title="${commonTagsText}"
 			openPane="${true}">
-			<c:forEach items="${commonCheckedBMTags}" var="commontag"
+			<c:forEach items="${visibleNoteTagList}" var="commontag"
 				varStatus="num">
 				<input type="checkbox" name="${commontag}"
 					style="vertical-align: middle;" checked="checked">${commontag}</input>
 				<c:out value=" || " />
 			</c:forEach>
-			<c:forEach items="${commonUnCheckedBMTags}" var="commontag"
+			<c:forEach items="${availableNoteTagList}" var="commontag"
 				varStatus="num">
 				<input type="checkbox" name="${commontag}"
 					style="vertical-align: middle;">${commontag}</input>
@@ -41,26 +41,13 @@
 			var="uncommonTagsText" />
 		<util:panel id="uncommonTags" title="${uncommonTagsText}"
 			openPane="${true}">
-			<c:forEach items="${uncommonCheckedNoteTags}" var="uncommontag"
+			<c:forEach items="${visibleBMTagList}" var="uncommontag"
 				varStatus="num">
 				<input type="checkbox" name="${uncommontag}"
 					style="vertical-align: middle;" checked="checked">${uncommontag}</input>
 				<c:out value=" || " />
 			</c:forEach>
-			<c:forEach items="${uncommonUnCheckedNoteTags}" var="uncommontag"
-				varStatus="num">
-				<input type="checkbox" name="${uncommontag}"
-					style="vertical-align: middle;">${uncommontag}</input>
-				<c:out value=" || " />
-			</c:forEach>
-			
-			<c:forEach items="${uncommonCheckedBMTags}" var="uncommontag"
-				varStatus="num">
-				<input type="checkbox" name="${uncommontag}"
-					style="vertical-align: middle;" checked="checked">${uncommontag}</input>
-				<c:out value=" || " />
-			</c:forEach>
-			<c:forEach items="${uncommonUnCheckedBMTags}" var="uncommontag"
+			<c:forEach items="${availableBMTagList}" var="uncommontag"
 				varStatus="num">
 				<input type="checkbox" name="${uncommontag}"
 					style="vertical-align: middle;">${uncommontag}</input>

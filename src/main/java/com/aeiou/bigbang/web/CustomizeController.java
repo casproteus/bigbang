@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
@@ -42,57 +41,55 @@ public class CustomizeController {
         if (tCurName == null) {
             return ("login");
         }
-        UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);
-        tCurName = tOwner.getName();
+        UserAccount curUser = UserAccount.findUserAccountByName(tCurName);
 
-        // prepare the common tags.
-        HttpSession session = request.getSession();
-        List<BigTag> tBigTagsAdmin = new ArrayList<BigTag>();
-        List<BigTag> tBigTagsAdministrator = new ArrayList<BigTag>();
-        BigUtil.prepareAdminTags(tBigTagsAdmin, tBigTagsAdministrator, uiModel, session);
-        tBigTagsAdmin.addAll(tBigTagsAdministrator);
+        List<String[]> visibleNoteTagNameList = BigUtil.fetchTagAndNumberInListOfArrayFormat(curUser, 1);
+        List<BigTag> visibleNoteTagList =
+                BigUtil.convertTagStringListToObjList(visibleNoteTagNameList.get(0), tCurName);
+        visibleNoteTagList.addAll(BigUtil.convertTagStringListToObjList(visibleNoteTagNameList.get(1), tCurName));
 
-        List<BigTag> commonCheckedBMTags = tBigTagsAdmin; // the tags created by admin and administrators
-        List<BigTag> commonUnCheckedBMTags = new ArrayList<BigTag>();
-        pickoutUncheckedTags(tOwner.getLayout(), commonCheckedBMTags, commonUnCheckedBMTags);
+        List<String[]> visibleBMTagNameList = BigUtil.fetchTagAndNumberInListOfArrayFormat(curUser, 0);
+        List<BigTag> visibleBMTagList = BigUtil.convertTagStringListToObjList(visibleBMTagNameList.get(0), tCurName);
+        visibleBMTagList.addAll(BigUtil.convertTagStringListToObjList(visibleBMTagNameList.get(1), tCurName));
 
-        // prepare uncommon Note tags.
-        List<BigTag> uncommonCheckedNoteTags = BigTag.findTagsByOwner(tCurName, 1); // tags by user and user's friends.
-        List<BigTag> uncommonUnCheckedNoteTags = new ArrayList<BigTag>();
-        pickoutUncheckedTags(tOwner.getNoteLayout(), uncommonCheckedNoteTags, uncommonUnCheckedNoteTags);
+        List<BigTag> allNoteTags = BigTag.findTagsFromOwnerAndFriend(tCurName, 1);
+        List<BigTag> allBMTags = BigTag.findTagsFromOwnerAndFriend(tCurName, 0);
+        if (tCurName != "admin") {
+            List<List<BigTag>> list = BigUtil.fetchAllCustomizedAdminTags(request);
+            List<BigTag> tagList = list.get(0);
+            tagList.addAll(list.get(1));
+            for (BigTag tag : tagList) {
+                if (tag.getOwner() == 0) {
+                    allBMTags.add(tag);
+                } else {
+                    allNoteTags.add(tag);
+                }
+            }
+        }
+        List<BigTag> availableNoteTagList = pickoutUncheckedTags(curUser.getNoteLayout(), allNoteTags);
+        List<BigTag> availableBMTagList = pickoutUncheckedTags(curUser.getLayout(), allBMTags);
 
-        // prepare uncommon BM tags.
-        List<BigTag> uncommonCheckedBMTags = BigTag.findTagsByOwner(tCurName, 0); // tags by user and user's friends.
-        List<BigTag> uncommonUnCheckedBMTags = new ArrayList<BigTag>();
-        pickoutUncheckedTags(tOwner.getLayout(), uncommonCheckedBMTags, uncommonUnCheckedBMTags);
+        uiModel.addAttribute("visibleNoteTagList", visibleNoteTagList);
+        uiModel.addAttribute("availableNoteTagList", availableNoteTagList);
+        uiModel.addAttribute("visibleBMTagList", visibleBMTagList);
+        uiModel.addAttribute("availableBMTagList", availableBMTagList);
 
-        uiModel.addAttribute("commonCheckedBMTags", commonCheckedBMTags);
-        uiModel.addAttribute("commonUnCheckedBMTags", commonUnCheckedBMTags);
-
-        uiModel.addAttribute("uncommonCheckedNoteTags", uncommonCheckedNoteTags);
-        uiModel.addAttribute("uncommonUnCheckedNoteTags", uncommonUnCheckedNoteTags);
-        uiModel.addAttribute("uncommonCheckedBMTags", uncommonCheckedBMTags);
-        uiModel.addAttribute("uncommonUnCheckedBMTags", uncommonUnCheckedBMTags);
-
-        BigUtil.checkTheme(tOwner, request);
+        BigUtil.checkTheme(curUser, request);
         return "customizes/tagsDisplay";
     }
 
-    private void pickoutUncheckedTags(
+    private List<BigTag> pickoutUncheckedTags(
             String layoutString,
-            List<BigTag> commonCheckedTags,
-            List<BigTag> commonUnCheckedTags) {
-        List<BigTag> tmpList = new ArrayList<BigTag>();
-        for (int i = commonCheckedTags.size() - 1; i >= 0; i--) {
-            String tTagStr = BigUtil.getLayoutFormatTagString(commonCheckedTags.get(i));
+            List<BigTag> allTags) {
+        List<BigTag> availableUnCheckedTags = new ArrayList<BigTag>();
+        for (int i = allTags.size() - 1; i >= 0; i--) {
+            String tTagStr = BigUtil.getLayoutFormatTagString(allTags.get(i));
             if (layoutString != null && layoutString.indexOf(tTagStr) < 0) {
-                tmpList.add(commonCheckedTags.get(i));
-                commonCheckedTags.remove(i);
+                availableUnCheckedTags.add(allTags.get(i));
+                allTags.remove(i);
             }
         }
-        for (int i = tmpList.size() - 1; i >= 0; i--) {
-            commonUnCheckedTags.add(tmpList.get(i));
-        }
+        return availableUnCheckedTags;
     }
 
     @SuppressWarnings("unchecked")
@@ -123,7 +120,7 @@ public class CustomizeController {
         PersonalController tController =
                 SpringApplicationContext.getApplicationContext()
                         .getBean("personalController", PersonalController.class);
-        return tController.index(tCurName, -1, -1, uiModel, request);
+        return tController.index(tCurName, uiModel, request);
     }
 
     private String reBuildLayoutString(
@@ -215,7 +212,7 @@ public class CustomizeController {
         for (int i = 0; i < tKeys.length; i++) {
             if ("on".equals(((String[]) tMap.get(tKeys[i]))[0])) {
                 BigTag bigTag = BigTag.findTagByNameAndOwner((String) tKeys[i], tCurName);
-                if (bigTag.getOwner() != type) {
+                if (bigTag == null || bigTag.getOwner() != type) {
                     continue;
                 }
                 if (tmpFlag == true) {

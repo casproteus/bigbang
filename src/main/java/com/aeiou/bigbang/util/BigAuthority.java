@@ -71,16 +71,16 @@ public class BigAuthority {
     }
 
     public static Set<Integer> getAuthSet(
-            UserAccount pCurUser,
-            UserAccount pOwner) {
+            UserAccount curUser,
+            UserAccount owner) {
         Set<Integer> tAuthSetFR = new HashSet<Integer>();
         tAuthSetFR.add(Integer.valueOf(SHOW_TO_EVERY_ONE));
-        if (pOwner.equals(pCurUser)) {
+        if (owner.equals(curUser)) {
             tAuthSetFR.add(Integer.valueOf(ONLY_MYSELF_CAN_SEE));
             tAuthSetFR.add(Integer.valueOf(ALL_MY_TEAM_CAN_SEE));
             tAuthSetFR.add(Integer.valueOf(ONLY_FOR_SELECTED_PERSON));
             tAuthSetFR.add(Integer.valueOf(ONLY_FOR_RECEIVER));
-        } else if (pOwner.getListento().contains(pCurUser)) {
+        } else if (owner.getListento().contains(curUser)) {
             tAuthSetFR.add(Integer.valueOf(ALL_MY_TEAM_CAN_SEE));
         } else {// TODO: consider the case that visible to specific person.
 

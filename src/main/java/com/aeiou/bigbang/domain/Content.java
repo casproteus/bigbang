@@ -3,6 +3,7 @@ package com.aeiou.bigbang.domain;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -10,6 +11,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
+
 import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -146,7 +148,7 @@ public class Content {
         EntityManager tEntityManager = entityManager();
         Set<UserAccount> tTeamSet = pOwner.getListento();
         TypedQuery<Content> tQuery = null;
-        if ("admin".equals(pTag.getType()) || "administrator".equals(pTag.getType())) {
+        if ("admin".equals(pTag.getType())) {
             if (tTeamSet.isEmpty()) {
                 tQuery =
                         tEntityManager
@@ -210,7 +212,7 @@ public class Content {
         EntityManager tEntityManager = entityManager();
         Set<UserAccount> tTeamSet = pOwner.getListento();
         TypedQuery<Long> tQuery = null;
-        if ("admin".equals(pTag.getType()) || "administrator".equals(pTag.getType())) {
+        if ("admin".equals(pTag.getType())) {
             if (tTeamSet.isEmpty()) {
                 tQuery =
                         tEntityManager

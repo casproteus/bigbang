@@ -47,13 +47,13 @@ public class ContentController {
         uiModel.addAttribute("content", content);
 
         String tCurName = userContextService.getCurrentUserName();
-        UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);
-        BigUtil.checkTheme(tOwner, httpServletRequest);
+        UserAccount userAccount = UserAccount.findUserAccountByName(tCurName);
+        BigUtil.checkTheme(userAccount, httpServletRequest);
 
         List<BigTag> tTags = null;
-        List<String[]> tTagsAndNums = BigUtil.fetchTagAndNumberInListOfArrayFormat(tOwner, 0);
+        List<String[]> tTagsAndNums = BigUtil.fetchTagAndNumberInListOfArrayFormat(userAccount, 0);
         if (BigUtil.notCorrect(tTagsAndNums)) {
-            List<List> lists = BigUtil.resetTagsForOwner(tOwner, 0, httpServletRequest);
+            List<List> lists = BigUtil.generateDefaultTagsForOwner(httpServletRequest, userAccount, 0);
             tTags = lists.get(0);
             tTags.addAll(lists.get(1));
         } else {
@@ -139,15 +139,15 @@ public class ContentController {
             HttpServletRequest httpServletRequest) {
         bigTag.setOwner(0);
         String tCurName = userContextService.getCurrentUserName();
-        UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
-        tCurName = tUserAccount.getName();
+        UserAccount userAccount = UserAccount.findUserAccountByName(tCurName);
+        tCurName = userAccount.getName();
         // get the tag have created. if it's already ceated then do nothing.
         BigTag tBT = BigTag.findTagByNameAndOwner(bigTag.getTagName(), tCurName);
         if (tBT == null) {
             bigTag.setType(tCurName);
             uiModel.asMap().clear();
             bigTag.persist();
-            String tLayout = tUserAccount.getLayout();
+            String tLayout = userAccount.getLayout();
             int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
             if (p > -1) {
                 String tTagStr = tLayout.substring(0, p);
@@ -156,10 +156,10 @@ public class ContentController {
                 tStrB.append(tTagStr).append(BigUtil.SEP_ITEM);
                 tStrB.append(BigUtil.getLayoutFormatTagString(bigTag));
                 tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tSizeStr).append(BigUtil.SEP_ITEM).append("8");
-                tUserAccount.setLayout(tStrB.toString());
-                tUserAccount.persist();
+                userAccount.setLayout(tStrB.toString());
+                userAccount.persist();
             } else {
-                BigUtil.resetLayoutString(tUserAccount);
+                BigUtil.generateDefaultTagsForOwner(httpServletRequest, userAccount, 0);
             }
         }
         Long tContentID = bigTag.getContentID();
@@ -199,7 +199,7 @@ public class ContentController {
                 PersonalController tController =
                         SpringApplicationContext.getApplicationContext().getBean("personalController",
                                 PersonalController.class);
-                return tController.index(tUserAccount.getName(), -1, -1, uiModel, httpServletRequest);
+                return tController.index(tUserAccount.getName(), uiModel, httpServletRequest);
             } else {
                 populateEditForm(uiModel, content, httpServletRequest);
                 return "contents/create";

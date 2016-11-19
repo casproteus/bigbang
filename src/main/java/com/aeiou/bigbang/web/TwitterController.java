@@ -1,24 +1,15 @@
 package com.aeiou.bigbang.web;
 
-import com.aeiou.bigbang.domain.BigTag;
-import com.aeiou.bigbang.domain.Content;
-import com.aeiou.bigbang.domain.Remark;
-import com.aeiou.bigbang.domain.Twitter;
-import com.aeiou.bigbang.domain.UserAccount;
-import com.aeiou.bigbang.model.MediaUpload;
-import com.aeiou.bigbang.services.secutiry.UserContextService;
-import com.aeiou.bigbang.util.BigAuthority;
-import com.aeiou.bigbang.util.BigType;
-import com.aeiou.bigbang.util.BigUtil;
-import com.aeiou.bigbang.util.SpringApplicationContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
@@ -30,7 +21,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.theme.CookieThemeResolver;
+
+import com.aeiou.bigbang.domain.BigTag;
+import com.aeiou.bigbang.domain.Remark;
+import com.aeiou.bigbang.domain.Twitter;
+import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.BigUtil;
+import com.aeiou.bigbang.util.SpringApplicationContext;
 
 @RequestMapping("/twitters")
 @Controller
@@ -49,17 +48,28 @@ public class TwitterController {
             Twitter twitter,
             HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("twitter", twitter);
-        List<BigTag> tList_Tag = new ArrayList<BigTag>();
-        UserAccount tCurUser = UserAccount.findUserAccountByName(userContextService.getCurrentUserName());
-        String tCurName = tCurUser.getName();
-        tList_Tag.addAll(BigTag.findTWTagsByPublisher(tCurName));
-        uiModel.addAttribute("mytags", tList_Tag);
+
+        UserAccount userAccount = UserAccount.findUserAccountByName(userContextService.getCurrentUserName());
+        String tCurName = userAccount.getName();
+
+        List<BigTag> tags = null;
+        List<String[]> tTagsAndNums = BigUtil.fetchTagAndNumberInListOfArrayFormat(userAccount, 1);
+        if (BigUtil.notCorrect(tTagsAndNums)) {
+            List<List> lists = BigUtil.generateDefaultTagsForOwner(httpServletRequest, userAccount, 1);
+            tags = lists.get(0);
+            tags.addAll(lists.get(1));
+        } else {
+            tags = BigUtil.convertTagStringListToObjList(tTagsAndNums.get(0), tCurName);
+            tags.addAll(BigUtil.convertTagStringListToObjList(tTagsAndNums.get(1), tCurName));
+        }
+
+        uiModel.addAttribute("mytags", tags);
         List<UserAccount> tList = new ArrayList<UserAccount>();
         tList.add(UserAccount.findUserAccountByName(tCurName));
         uiModel.addAttribute("useraccounts", tList);
         uiModel.addAttribute("authorities", BigAuthority.getAllOptions(messageSource, httpServletRequest.getLocale()));
 
-        BigUtil.checkTheme(tCurUser, httpServletRequest);
+        BigUtil.checkTheme(userAccount, httpServletRequest);
     }
 
     void populateEditForm_Tag(
@@ -97,12 +107,31 @@ public class TwitterController {
             HttpServletRequest httpServletRequest) {
         bigTag.setOwner(1);
         String tCurName = userContextService.getCurrentUserName();
-        UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
-        tCurName = tUserAccount.getName();
-        bigTag.setType(tCurName);
-        uiModel.asMap().clear();
-        bigTag.persist();
+        UserAccount userAccount = UserAccount.findUserAccountByName(tCurName);
+        tCurName = userAccount.getName();
 
+        // get the tag have created. if it's already ceated then do nothing.
+        BigTag tBT = BigTag.findTagByNameAndOwner(bigTag.getTagName(), tCurName);
+        if (tBT == null) {
+            bigTag.setType(tCurName);
+            uiModel.asMap().clear();
+            bigTag.persist();
+
+            String tLayout = userAccount.getNoteLayout();
+            int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
+            if (p > -1) {
+                String tTagStr = tLayout.substring(0, p);
+                String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
+                StringBuilder tStrB = new StringBuilder();
+                tStrB.append(tTagStr).append(BigUtil.SEP_ITEM);
+                tStrB.append(BigUtil.getLayoutFormatTagString(bigTag));
+                tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tSizeStr).append(BigUtil.SEP_ITEM).append("8");
+                userAccount.setLayout(tStrB.toString());
+                userAccount.persist();
+            } else {
+                BigUtil.generateDefaultTagsForOwner(httpServletRequest, userAccount, 1);
+            }
+        }
         Long tWitterID = bigTag.getTwitterID();
         Twitter twitter = tWitterID == null ? new Twitter() : Twitter.findTwitter(tWitterID);
         twitter.setTwtitle(bigTag.getTwitterTitle());

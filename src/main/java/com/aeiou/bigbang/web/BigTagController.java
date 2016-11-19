@@ -1,16 +1,9 @@
 package com.aeiou.bigbang.web;
 
-import com.aeiou.bigbang.domain.BigTag;
-import com.aeiou.bigbang.domain.Content;
-import com.aeiou.bigbang.domain.Twitter;
-import com.aeiou.bigbang.domain.UserAccount;
-import com.aeiou.bigbang.services.secutiry.UserContextService;
-import com.aeiou.bigbang.util.BigAuthority;
-import com.aeiou.bigbang.util.BigType;
-import com.aeiou.bigbang.util.BigUtil;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
@@ -22,6 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.aeiou.bigbang.domain.BigTag;
+import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.util.BigAuthority;
+import com.aeiou.bigbang.util.BigType;
+import com.aeiou.bigbang.util.BigUtil;
 
 @RequestMapping("/bigtags")
 @Controller
@@ -67,8 +67,8 @@ public class BigTagController {
         }
         uiModel.asMap().clear();
         bigTag.persist();
-        if (bigTag.getOwner() != null && bigTag.getOwner() == 0) {
-            String tLayout = tUserAccount.getLayout();
+        if (bigTag.getOwner() != null) {
+            String tLayout = bigTag.getOwner() == 0 ? tUserAccount.getLayout() : tUserAccount.getNoteLayout();
             int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
             if (p > -1) {
                 String tTagStr = tLayout.substring(0, p);
@@ -77,10 +77,13 @@ public class BigTagController {
                 tStrB.append(tTagStr).append(BigUtil.SEP_ITEM);
                 tStrB.append(BigUtil.getLayoutFormatTagString(bigTag));
                 tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tSizeStr).append(BigUtil.SEP_ITEM).append("8");
-                tUserAccount.setLayout(tStrB.toString());
+                if (bigTag.getOwner() == 0)
+                    tUserAccount.setLayout(tStrB.toString());
+                else
+                    tUserAccount.setNoteLayout(tStrB.toString());
                 tUserAccount.persist();
             } else {
-                BigUtil.resetLayoutString(tUserAccount);
+                BigUtil.generateDefaultTagsForOwner(httpServletRequest, tUserAccount, bigTag.getOwner());
             }
         }
         return "redirect:/bigtags/" + encodeUrlPathSegment(bigTag.getId().toString(), httpServletRequest);
@@ -97,10 +100,12 @@ public class BigTagController {
             populateEditForm(uiModel, bigTag, httpServletRequest);
             return "bigtags/update";
         }
-        if (bigTag.getOwner() != null && bigTag.getOwner() == 0) {
+        if (bigTag.getOwner() != null) {
             BigTag tBigTag = BigTag.findBigTag(bigTag.getId());
-            UserAccount tUserAccount = UserAccount.findUserAccountByName(tBigTag.getType());
-            String tLayout = tUserAccount == null ? null : tUserAccount.getLayout();
+            UserAccount userAccount = UserAccount.findUserAccountByName(tBigTag.getType());
+            String tLayout =
+                    userAccount == null ? null : (bigTag.getOwner() == 0 ? userAccount.getLayout() : userAccount
+                            .getNoteLayout());
             int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
             if (p > -1) {
                 String[] tAryTagStrsLeft = null;
@@ -120,7 +125,7 @@ public class BigTagController {
                     tAryNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
                 }
                 if (BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)) {
-                    BigUtil.resetLayoutString(tUserAccount);
+                    BigUtil.generateDefaultTagsForOwner(httpServletRequest, userAccount, bigTag.getOwner());
                 } else {
                     tTagStr = BigUtil.getLayoutFormatTagString(tBigTag);
                     String tTagStrNEW = BigUtil.getLayoutFormatTagString(bigTag);
@@ -168,32 +173,37 @@ public class BigTagController {
                         tAryTagStrsRight = tAryTagStrsRight2;
                         tAryNumStrsRight = tAryNumStrsRight2;
                     }
-                    StringBuilder tStrB = new StringBuilder();
+                    StringBuilder strB = new StringBuilder();
                     StringBuilder tStrB_Num = new StringBuilder();
                     for (int j = 0; j < tAryTagStrsLeft.length; j++) {
-                        tStrB.append(tAryTagStrsLeft[j]);
+                        strB.append(tAryTagStrsLeft[j]);
                         tStrB_Num.append(tAryNumStrsLeft[j]);
                         if (j + 1 < tAryTagStrsLeft.length) {
-                            tStrB.append(BigUtil.SEP_ITEM);
+                            strB.append(BigUtil.SEP_ITEM);
                             tStrB_Num.append(BigUtil.SEP_ITEM);
                         }
                     }
-                    tStrB.append(BigUtil.SEP_LEFT_RIGHT);
+                    strB.append(BigUtil.SEP_LEFT_RIGHT);
                     tStrB_Num.append(BigUtil.SEP_LEFT_RIGHT);
                     for (int j = 0; j < tAryTagStrsRight.length; j++) {
-                        tStrB.append(tAryTagStrsRight[j]);
+                        strB.append(tAryTagStrsRight[j]);
                         tStrB_Num.append(tAryNumStrsRight[j]);
                         if (j + 1 < tAryTagStrsRight.length) {
-                            tStrB.append(BigUtil.SEP_ITEM);
+                            strB.append(BigUtil.SEP_ITEM);
                             tStrB_Num.append(BigUtil.SEP_ITEM);
                         }
                     }
-                    tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
-                    tUserAccount.setLayout(tStrB.toString());
-                    tUserAccount.persist();
+                    strB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
+
+                    if (bigTag.getOwner() == 0)
+                        userAccount.setLayout(strB.toString());
+                    else
+                        userAccount.setNoteLayout(strB.toString());
+
+                    userAccount.persist();
                 }
             } else {
-                BigUtil.resetLayoutString(tUserAccount);
+                BigUtil.generateDefaultTagsForOwner(httpServletRequest, userAccount, bigTag.getOwner());
             }
         }
         uiModel.asMap().clear();
@@ -209,108 +219,116 @@ public class BigTagController {
             Integer page,
             @RequestParam(value = "size", required = false)
             Integer size,
-            Model uiModel) {
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
         BigTag bigTag = BigTag.findBigTag(id);
         bigTag.remove();
-        if (bigTag.getOwner() != null && bigTag.getOwner() == 0) {
-            UserAccount tUserAccount = UserAccount.findUserAccountByName(bigTag.getType());
-            String tLayout = tUserAccount == null ? null : tUserAccount.getLayout();
+        if (bigTag.getOwner() != null) {
+            UserAccount userAccount = UserAccount.findUserAccountByName(bigTag.getType());
+            String tLayout =
+                    userAccount == null ? null : (bigTag.getOwner() == 0 ? userAccount.getLayout() : userAccount
+                            .getNoteLayout());
             int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
             if (p > -1) {
-                String[] tAryTagStrsLeft = null;
-                String[] tAryTagStrsRight = null;
-                String[] tAryNumStrsLeft = null;
-                String[] tAryNumStrsRight = null;
-                String tTagStr = tLayout.substring(0, p);
-                String tSizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
-                p = tTagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
+                String[] tagStrAryLeft = null;
+                String[] tagStrAryRight = null;
+                String[] numStrAryLeft = null;
+                String[] numStrAryRight = null;
+                String tagStr = tLayout.substring(0, p);
+                String sizeStr = tLayout.substring(p + BigUtil.MARK_SEP_LENGTH);
+                p = tagStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
                 if (p >= 0) {
-                    tAryTagStrsLeft = tTagStr.substring(0, p).split(BigUtil.SEP_ITEM);
-                    tAryTagStrsRight = tTagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
+                    tagStrAryLeft = tagStr.substring(0, p).split(BigUtil.SEP_ITEM);
+                    tagStrAryRight = tagStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
                 }
-                p = tSizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
+                p = sizeStr.indexOf(BigUtil.SEP_LEFT_RIGHT);
                 if (p >= 0) {
-                    tAryNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
-                    tAryNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
+                    numStrAryLeft = sizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
+                    numStrAryRight = sizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
                 }
-                if (BigUtil.notCorrect(tAryTagStrsLeft, tAryTagStrsRight, tAryNumStrsLeft, tAryNumStrsRight)) {
-                    BigUtil.resetLayoutString(tUserAccount);
+                if (BigUtil.notCorrect(tagStrAryLeft, tagStrAryRight, numStrAryLeft, numStrAryRight)) {
+                    BigUtil.generateDefaultTagsForOwner(httpServletRequest, userAccount, bigTag.getOwner());
                 } else {
-                    tTagStr = BigUtil.getLayoutFormatTagString(bigTag);
+                    tagStr = BigUtil.getLayoutFormatTagString(bigTag);
                     boolean tIsInLeftColumn = false;
                     int tPos;
-                    for (tPos = 0; tPos < tAryTagStrsLeft.length; tPos++) {
-                        if (tAryTagStrsLeft[tPos].equals(tTagStr)) {
+                    for (tPos = 0; tPos < tagStrAryLeft.length; tPos++) {
+                        if (tagStrAryLeft[tPos].equals(tagStr)) {
                             tIsInLeftColumn = true;
                             break;
                         }
                     }
                     if (!tIsInLeftColumn) {
-                        for (tPos = 0; tPos < tAryTagStrsRight.length; tPos++) {
-                            if (tAryTagStrsRight[tPos].equals(tTagStr)) {
+                        for (tPos = 0; tPos < tagStrAryRight.length; tPos++) {
+                            if (tagStrAryRight[tPos].equals(tagStr)) {
                                 break;
                             }
                         }
                     }
                     if (tIsInLeftColumn) {
-                        String[] tAryTagStrsLeft2 = new String[tAryTagStrsLeft.length - 1];
-                        String[] tAryNumStrsLeft2 = new String[tAryNumStrsLeft.length - 1];
-                        for (int j = 0; j < tAryTagStrsLeft.length; j++) {
+                        String[] tAryTagStrsLeft2 = new String[tagStrAryLeft.length - 1];
+                        String[] tAryNumStrsLeft2 = new String[numStrAryLeft.length - 1];
+                        for (int j = 0; j < tagStrAryLeft.length; j++) {
                             if (j < tPos) {
-                                tAryTagStrsLeft2[j] = tAryTagStrsLeft[j];
-                                tAryNumStrsLeft2[j] = tAryNumStrsLeft[j];
+                                tAryTagStrsLeft2[j] = tagStrAryLeft[j];
+                                tAryNumStrsLeft2[j] = numStrAryLeft[j];
                             } else if (j == tPos) {
                                 continue;
                             } else {
-                                tAryTagStrsLeft2[j - 1] = tAryTagStrsLeft[j];
-                                tAryNumStrsLeft2[j - 1] = tAryNumStrsLeft[j];
+                                tAryTagStrsLeft2[j - 1] = tagStrAryLeft[j];
+                                tAryNumStrsLeft2[j - 1] = numStrAryLeft[j];
                             }
                         }
-                        tAryTagStrsLeft = tAryTagStrsLeft2;
-                        tAryNumStrsLeft = tAryNumStrsLeft2;
+                        tagStrAryLeft = tAryTagStrsLeft2;
+                        numStrAryLeft = tAryNumStrsLeft2;
                     } else {
-                        String[] tAryTagStrsRight2 = new String[tAryTagStrsRight.length - 1];
-                        String[] tAryNumStrsRight2 = new String[tAryNumStrsRight.length - 1];
-                        for (int j = 0; j < tAryTagStrsRight.length; j++) {
+                        String[] tAryTagStrsRight2 = new String[tagStrAryRight.length - 1];
+                        String[] tAryNumStrsRight2 = new String[numStrAryRight.length - 1];
+                        for (int j = 0; j < tagStrAryRight.length; j++) {
                             if (j < tPos) {
-                                tAryTagStrsRight2[j] = tAryTagStrsRight[j];
-                                tAryNumStrsRight2[j] = tAryNumStrsRight[j];
+                                tAryTagStrsRight2[j] = tagStrAryRight[j];
+                                tAryNumStrsRight2[j] = numStrAryRight[j];
                             } else if (j == tPos) {
                                 continue;
                             } else {
-                                tAryTagStrsRight2[j - 1] = tAryTagStrsRight[j];
-                                tAryNumStrsRight2[j - 1] = tAryNumStrsRight[j];
+                                tAryTagStrsRight2[j - 1] = tagStrAryRight[j];
+                                tAryNumStrsRight2[j - 1] = numStrAryRight[j];
                             }
                         }
-                        tAryTagStrsRight = tAryTagStrsRight2;
-                        tAryNumStrsRight = tAryNumStrsRight2;
+                        tagStrAryRight = tAryTagStrsRight2;
+                        numStrAryRight = tAryNumStrsRight2;
                     }
-                    StringBuilder tStrB = new StringBuilder();
-                    StringBuilder tStrB_Num = new StringBuilder();
-                    for (int j = 0; j < tAryTagStrsLeft.length; j++) {
-                        tStrB.append(tAryTagStrsLeft[j]);
-                        tStrB_Num.append(tAryNumStrsLeft[j]);
-                        if (j + 1 < tAryTagStrsLeft.length) {
-                            tStrB.append(BigUtil.SEP_ITEM);
-                            tStrB_Num.append(BigUtil.SEP_ITEM);
+                    StringBuilder strB = new StringBuilder();
+                    StringBuilder strB_Num = new StringBuilder();
+                    for (int j = 0; j < tagStrAryLeft.length; j++) {
+                        strB.append(tagStrAryLeft[j]);
+                        strB_Num.append(numStrAryLeft[j]);
+                        if (j + 1 < tagStrAryLeft.length) {
+                            strB.append(BigUtil.SEP_ITEM);
+                            strB_Num.append(BigUtil.SEP_ITEM);
                         }
                     }
-                    tStrB.append(BigUtil.SEP_LEFT_RIGHT);
-                    tStrB_Num.append(BigUtil.SEP_LEFT_RIGHT);
-                    for (int j = 0; j < tAryTagStrsRight.length; j++) {
-                        tStrB.append(tAryTagStrsRight[j]);
-                        tStrB_Num.append(tAryNumStrsRight[j]);
-                        if (j + 1 < tAryTagStrsRight.length) {
-                            tStrB.append(BigUtil.SEP_ITEM);
-                            tStrB_Num.append(BigUtil.SEP_ITEM);
+                    strB.append(BigUtil.SEP_LEFT_RIGHT);
+                    strB_Num.append(BigUtil.SEP_LEFT_RIGHT);
+                    for (int j = 0; j < tagStrAryRight.length; j++) {
+                        strB.append(tagStrAryRight[j]);
+                        strB_Num.append(numStrAryRight[j]);
+                        if (j + 1 < tagStrAryRight.length) {
+                            strB.append(BigUtil.SEP_ITEM);
+                            strB_Num.append(BigUtil.SEP_ITEM);
                         }
                     }
-                    tStrB.append(BigUtil.SEP_TAG_NUMBER).append(tStrB_Num);
-                    tUserAccount.setLayout(tStrB.toString());
-                    tUserAccount.persist();
+                    strB.append(BigUtil.SEP_TAG_NUMBER).append(strB_Num);
+
+                    if (bigTag.getOwner() == 0)
+                        userAccount.setLayout(strB.toString());
+                    else
+                        userAccount.setNoteLayout(strB.toString());
+
+                    userAccount.persist();
                 }
             } else {
-                BigUtil.resetLayoutString(tUserAccount);
+                BigUtil.generateDefaultTagsForOwner(httpServletRequest, userAccount, bigTag.getOwner());
             }
         }
         uiModel.asMap().clear();

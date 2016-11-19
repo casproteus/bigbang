@@ -42,42 +42,37 @@ public class PersonalController extends BaseController {
     @Inject
     private UserContextService userContextService;
 
-    @RequestMapping(value = "/{spaceOwner}", produces = "text/html")
+    @RequestMapping(value = "/{ownerName}", produces = "text/html")
     public String index(
-            @PathVariable("spaceOwner")
-            String spaceOwner,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @PathVariable("ownerName")
+            String ownerName,
             Model uiModel,
             HttpServletRequest request) {
-        String tCurName = userContextService.getCurrentUserName(); // the current user.
-        UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
+        String curName = userContextService.getCurrentUserName(); // the current user.
+        UserAccount curUser = curName == null ? null : UserAccount.findUserAccountByName(curName);
 
-        if (BigUtil.isSystemCommand(spaceOwner, tCurUser)) // secrete commands goes here.
+        if (BigUtil.checkIfItsSystemCommand(ownerName, curUser)) // secrete commands goes here.
             return "public/index";
 
-        UserAccount tOwner = convertUserNameToUserAccount(spaceOwner);
-        if (tOwner == null) {
+        UserAccount owner = convertUserNameToUserAccount(ownerName);
+        if (owner == null)
             return null;
-        }
 
-        swithCurrentOwner(tOwner, uiModel, request);
+        swithCurrentOwner(owner, uiModel, request);
 
-        spaceOwner = tOwner.getName(); // this name has no utf8 string issue. is a readable one.
+        ownerName = owner.getName(); // this name has no utf8 string issue. is a readable one.
 
-        Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
+        Set<Integer> tAuthSet = BigAuthority.getAuthSet(curUser, owner);
 
         // Determine if the add_as_friend/unfollow links should be displayed.
-        if (tCurUser != null && tCurUser.getListento() != null) {
-            boolean isFriend = tCurUser.getListento().contains(tOwner);
-            uiModel.addAttribute("nothireable", isFriend ? "true" : "false");
-            uiModel.addAttribute("notfireable", isFriend ? "false" : "true");
+        if (curUser != null && curUser.getListento() != null & !ownerName.equals("admin")) {
+            boolean isAlreadyFriend = curUser.getListento().contains(owner);
+            uiModel.addAttribute("nothireable", isAlreadyFriend ? "true" : "false");
+            uiModel.addAttribute("notfireable", isAlreadyFriend ? "false" : "true");
         }
 
-        prepareBookmarks(spaceOwner, uiModel, request, tCurUser, tOwner, tAuthSet);
-        prepareNotes(spaceOwner, uiModel, request, tCurUser, tOwner, tAuthSet);
+        prepareBookmarks(ownerName, uiModel, request, curUser, owner, tAuthSet);
+        prepareNotes(ownerName, uiModel, request, curUser, owner, tAuthSet);
         // prepareNotesInStyle1(uiModel, tCurUser, tOwner, tAuthSet);
         // ---------------------------------------------------------------------------------
         // to save the reqeust to requestCache;
@@ -112,7 +107,7 @@ public class PersonalController extends BaseController {
         List<Long> tTagIdsRight = new ArrayList<Long>();
         // if the layout info in DB is not correct, create it from beginning.
         if (BigUtil.notCorrect(tagsAndNumbers)) {
-            List<List> lists = BigUtil.resetTagsForOwner(tOwner, 0, request);
+            List<List> lists = BigUtil.generateDefaultTagsForOwner(request, tOwner, 0);
             tBigTagsLeft = lists.get(0);
             tBigTagsRight = lists.get(1);
             tTagIdsLeft = lists.get(2);
@@ -176,7 +171,7 @@ public class PersonalController extends BaseController {
         List<Long> tTagIdsRight = new ArrayList<Long>();
         // if the layout info in DB is not correct, create it from beginning.
         if (BigUtil.notCorrect(tagsAndNumbers)) {
-            List<List> lists = BigUtil.resetTagsForOwner(tOwner, 1, request);
+            List<List> lists = BigUtil.generateDefaultTagsForOwner(request, tOwner, 1);
             tBigTagsLeft = lists.get(0);
             tBigTagsRight = lists.get(1);
             tTagIdsLeft = lists.get(2);

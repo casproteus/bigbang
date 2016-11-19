@@ -117,11 +117,6 @@ public class BaseController {
         List<Customize> customizesOfAdmin = reloadCustomizesToSession(admin, session);
         replaceValuesWithLang(customizesOfAdmin, suffix, session);
 
-        // load administrator's customizations.
-        UserAccount administrator = UserAccount.findUserAccountByName("administrator");
-        List<Customize> customizesOfAdministrator = reloadCustomizesToSession(administrator, session);
-        replaceValuesWithLang(customizesOfAdministrator, suffix, session);
-
         if (pOwner != null && !"admin".equals(pOwner.getName())) {
             List<Customize> customizesOfGeneralUser = reloadCustomizesToSession(pOwner, session);
             replaceValuesWithLang(customizesOfGeneralUser, suffix, session);

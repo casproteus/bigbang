@@ -55,7 +55,7 @@ public class CustomizeController {
         List<BigTag> allNoteTags = BigTag.findTagsFromOwnerAndFriend(tCurName, 1);
         List<BigTag> allBMTags = BigTag.findTagsFromOwnerAndFriend(tCurName, 0);
         if (tCurName != "admin") {
-            List<List<BigTag>> list = BigUtil.fetchAllCustomizedAdminTags(request);
+            List<List<BigTag>> list = BigUtil.fetchAdminSuggestedAndSelectableTags(request);
             List<BigTag> tagList = list.get(0);
             tagList.addAll(list.get(1));
             for (BigTag tag : tagList) {
@@ -66,8 +66,8 @@ public class CustomizeController {
                 }
             }
         }
-        List<BigTag> availableNoteTagList = pickoutUncheckedTags(curUser.getNoteLayout(), allNoteTags);
-        List<BigTag> availableBMTagList = pickoutUncheckedTags(curUser.getLayout(), allBMTags);
+        List<BigTag> availableNoteTagList = pickoutUncheckedTagsFromGivenList(curUser.getNoteLayout(), allNoteTags);
+        List<BigTag> availableBMTagList = pickoutUncheckedTagsFromGivenList(curUser.getLayout(), allBMTags);
 
         uiModel.addAttribute("visibleNoteTagList", visibleNoteTagList);
         uiModel.addAttribute("availableNoteTagList", availableNoteTagList);
@@ -78,11 +78,11 @@ public class CustomizeController {
         return "customizes/tagsDisplay";
     }
 
-    private List<BigTag> pickoutUncheckedTags(
+    private List<BigTag> pickoutUncheckedTagsFromGivenList(
             String layoutString,
             List<BigTag> allTags) {
         List<BigTag> availableUnCheckedTags = new ArrayList<BigTag>();
-        for (int i = allTags.size() - 1; i >= 0; i--) {
+        for (int i = allTags.size() - 1; i >= 0; i--) {// use back order, because will remove element from list.
             String tTagStr = BigUtil.getLayoutFormatTagString(allTags.get(i));
             if (layoutString != null && layoutString.indexOf(tTagStr) < 0) {
                 availableUnCheckedTags.add(allTags.get(i));

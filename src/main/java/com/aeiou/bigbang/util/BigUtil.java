@@ -601,44 +601,84 @@ public class BigUtil {
      * @param uiModel
      * @param session
      */
-    private static List<List<BigTag>> prepareAdminTagsOnMainPage(
-            List<BigTag> suggestedTagList,
-            List<BigTag> selectableTagList,
+    public static List<List<BigTag>> prepareAdminSuggestedTagsOnMainPage(
             Model uiModel,
             HttpServletRequest request) {
 
-        List<List<BigTag>> list = fetchAllCustomizedAdminTags(request);
+        List<BigTag> suggestedTagList = new ArrayList<BigTag>();
+        List<List<BigTag>> list = fetchAdminSuggestedAndSelectableTags(request);
         suggestedTagList.addAll(list.get(0));
-        selectableTagList.addAll(list.get(1));
 
-        List<BigTag> bigTagsLeft = new ArrayList<BigTag>();
-        List<BigTag> bigTagsRight = new ArrayList<BigTag>();
-        for (int index = 0; index < suggestedTagList.size() / 2; index++) {
-            bigTagsLeft.add(suggestedTagList.get(index));
+        List<BigTag> suggestedBMTagList = new ArrayList<BigTag>();
+        List<BigTag> suggestedNoteTagList = new ArrayList<BigTag>();
+        for (BigTag bigTag : suggestedTagList) {
+            if (bigTag.getOwner() == 0) {
+                suggestedBMTagList.add(bigTag);
+            } else {
+                suggestedNoteTagList.add(bigTag);
+            }
         }
-        for (int index = suggestedTagList.size() / 2; index < suggestedTagList.size(); index++) {
-            bigTagsRight.add(suggestedTagList.get(index));
-        }
+
+        // bookmarks.
+        List<BigTag> bigBMTagsLeft = new ArrayList<BigTag>();
+        List<BigTag> bigBMTagsRight = new ArrayList<BigTag>();
+        devideListIntoLeftAndRight(suggestedBMTagList, bigBMTagsLeft, bigBMTagsRight);
 
         List<Long> tagIdsLeft = new ArrayList<Long>();
         List<Long> tagIdsRight = new ArrayList<Long>();
-        for (BigTag bigTag : bigTagsLeft) {
-            tagIdsLeft.add(bigTag.getId());
-        }
-        for (BigTag bigTag : bigTagsRight) {
-            tagIdsRight.add(bigTag.getId());
-        }
+        prepareLeftAndRightIds(bigBMTagsLeft, bigBMTagsRight, tagIdsLeft, tagIdsRight);
 
-        // set to front end model.
-        uiModel.addAttribute("bigTagsLeft", bigTagsLeft);
-        uiModel.addAttribute("bigTagsRight", bigTagsRight);
+        uiModel.addAttribute("bigTagsLeft", bigBMTagsLeft);
+        uiModel.addAttribute("bigTagsRight", bigBMTagsRight);
         uiModel.addAttribute("tagIdsLeft", tagIdsLeft);
         uiModel.addAttribute("tagIdsRight", tagIdsRight);
 
+        // notes
+        List<BigTag> bigNoteTagsLeft = new ArrayList<BigTag>();
+        List<BigTag> bigNoteTagsRight = new ArrayList<BigTag>();
+        devideListIntoLeftAndRight(suggestedNoteTagList, bigNoteTagsLeft, bigNoteTagsRight);
+
+        List<Long> tagNoteIdsLeft = new ArrayList<Long>();
+        List<Long> tagNoteIdsRight = new ArrayList<Long>();
+        prepareLeftAndRightIds(bigNoteTagsLeft, bigNoteTagsRight, tagNoteIdsLeft, tagNoteIdsRight);
+
+        // set to front end model.
+        uiModel.addAttribute("twitterTagsLeft", bigNoteTagsLeft);
+        uiModel.addAttribute("twitterTagsRight", bigNoteTagsRight);
+        uiModel.addAttribute("twitterTagIdsLeft", tagNoteIdsLeft);
+        uiModel.addAttribute("twitterTagIdsRight", tagNoteIdsRight);
+
         List<List<BigTag>> listOfTagList = new ArrayList<List<BigTag>>();
-        listOfTagList.add(bigTagsLeft);
-        listOfTagList.add(bigTagsLeft);
+        listOfTagList.add(bigBMTagsLeft);
+        listOfTagList.add(bigBMTagsRight);
+        listOfTagList.add(bigNoteTagsLeft);
+        listOfTagList.add(bigNoteTagsRight);
         return listOfTagList;
+    }
+
+    private static void prepareLeftAndRightIds(
+            List<BigTag> bigBMTagsLeft,
+            List<BigTag> bigBMTagsRight,
+            List<Long> tagIdsLeft,
+            List<Long> tagIdsRight) {
+        for (BigTag bigTag : bigBMTagsLeft) {
+            tagIdsLeft.add(bigTag.getId());
+        }
+        for (BigTag bigTag : bigBMTagsRight) {
+            tagIdsRight.add(bigTag.getId());
+        }
+    }
+
+    private static void devideListIntoLeftAndRight(
+            List<BigTag> suggestedBMTagList,
+            List<BigTag> bigBMTagsLeft,
+            List<BigTag> bigBMTagsRight) {
+        for (int index = 0; index < suggestedBMTagList.size() / 2; index++) {
+            bigBMTagsLeft.add(suggestedBMTagList.get(index));
+        }
+        for (int index = suggestedBMTagList.size() / 2; index < suggestedBMTagList.size(); index++) {
+            bigBMTagsRight.add(suggestedBMTagList.get(index));
+        }
     }
 
     /**
@@ -646,7 +686,7 @@ public class BigUtil {
      * @param selectableTagList
      * @param session
      */
-    public static List<List<BigTag>> fetchAllCustomizedAdminTags(
+    public static List<List<BigTag>> fetchAdminSuggestedAndSelectableTags(
             HttpServletRequest request) {
         HttpSession session = request.getSession();
         // get out admin's tags in string.

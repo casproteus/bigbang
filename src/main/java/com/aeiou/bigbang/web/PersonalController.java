@@ -70,9 +70,22 @@ public class PersonalController extends BaseController {
             uiModel.addAttribute("nothireable", isAlreadyFriend ? "true" : "false");
             uiModel.addAttribute("notfireable", isAlreadyFriend ? "false" : "true");
         }
+        if (!"admin".equals(ownerName)) {
+            prepareBookmarks(ownerName, uiModel, request, curUser, owner, tAuthSet);
+            prepareNotes(ownerName, uiModel, request, curUser, owner, tAuthSet);
+        } else {
+            List<List<BigTag>> list = BigUtil.prepareAdminSuggestedTagsOnMainPage(uiModel, request);
+            List<BigTag> bigBMTagsLeft = list.get(0);
+            List<BigTag> bigBMTagsRight = list.get(1);
+            List<BigTag> bigNoteTagsLeft = list.get(2);
+            List<BigTag> bigNoteTagsRight = list.get(3);
 
-        prepareBookmarks(ownerName, uiModel, request, curUser, owner, tAuthSet);
-        prepareNotes(ownerName, uiModel, request, curUser, owner, tAuthSet);
+            uiModel.addAttribute("contentsLeft", getContentListByTagList(owner, tAuthSet, bigBMTagsLeft));
+            uiModel.addAttribute("contentsRight", getContentListByTagList(owner, tAuthSet, bigBMTagsRight));
+
+            uiModel.addAttribute("twittersLeft", getBlogListByTagList(owner, tAuthSet, bigNoteTagsLeft));
+            uiModel.addAttribute("twittersRight", getBlogListByTagList(owner, tAuthSet, bigNoteTagsRight));
+        }
         // prepareNotesInStyle1(uiModel, tCurUser, tOwner, tAuthSet);
         // ---------------------------------------------------------------------------------
         // to save the reqeust to requestCache;
@@ -86,6 +99,28 @@ public class PersonalController extends BaseController {
         // BigAuthenticationSuccessHandler.class);
         // tHandler.getRequestCache().saveRequest(request, response);
         return "public/index";
+    }
+
+    private List<List> getContentListByTagList(
+            UserAccount owner,
+            Set<Integer> authSet,
+            List<BigTag> bigBMTags) {
+        List<List> contentLists = new ArrayList<List>(); // prepare the contentList for each tag.
+        for (BigTag bigTag : bigBMTags) {
+            contentLists.add(Content.findContentsByTagAndSpaceOwner(bigTag, owner, authSet, 0, 8, null));
+        }
+        return contentLists;
+    }
+
+    private List<List> getBlogListByTagList(
+            UserAccount owner,
+            Set<Integer> authSet,
+            List<BigTag> bigNoteTags) {
+        List<List> blogLists = new ArrayList<List>(); // prepare the contentList for each tag.
+        for (BigTag bigTag : bigNoteTags) {
+            blogLists.add(Twitter.findTwittersByTagAndSpaceOwner(bigTag, owner, authSet, 0, 8, null));
+        }
+        return blogLists;
     }
 
     private void prepareBookmarks(
@@ -153,13 +188,13 @@ public class PersonalController extends BaseController {
     }
 
     private void prepareNotes(
-            String spaceOwner,
+            String ownerName,
             Model uiModel,
             HttpServletRequest request,
-            UserAccount tCurUser,
-            UserAccount tOwner,
+            UserAccount curUser,
+            UserAccount owner,
             Set<Integer> tAuthSet) {
-        List<String[]> tagsAndNumbers = BigUtil.fetchTagAndNumberInListOfArrayFormat(tOwner, 1);
+        List<String[]> tagsAndNumbers = BigUtil.fetchTagAndNumberInListOfArrayFormat(owner, 1);
         String[] tBigTagStrsLeft = tagsAndNumbers.get(0);
         String[] tBigTagStrsRight = tagsAndNumbers.get(1);
         String[] tNumStrsLeft = tagsAndNumbers.get(2);
@@ -171,7 +206,7 @@ public class PersonalController extends BaseController {
         List<Long> tTagIdsRight = new ArrayList<Long>();
         // if the layout info in DB is not correct, create it from beginning.
         if (BigUtil.notCorrect(tagsAndNumbers)) {
-            List<List> lists = BigUtil.generateDefaultTagsForOwner(request, tOwner, 1);
+            List<List> lists = BigUtil.generateDefaultTagsForOwner(request, owner, 1);
             tBigTagsLeft = lists.get(0);
             tBigTagsRight = lists.get(1);
             tTagIdsLeft = lists.get(2);
@@ -179,8 +214,8 @@ public class PersonalController extends BaseController {
             tNumStrsLeft = null;
             tNumStrsRight = null;
         } else { // prepare the info for view base on the string in db:
-            tBigTagsLeft = BigUtil.convertTagStringListToObjList(tBigTagStrsLeft, spaceOwner);
-            tBigTagsRight = BigUtil.convertTagStringListToObjList(tBigTagStrsRight, spaceOwner);
+            tBigTagsLeft = BigUtil.convertTagStringListToObjList(tBigTagStrsLeft, ownerName);
+            tBigTagsRight = BigUtil.convertTagStringListToObjList(tBigTagStrsRight, ownerName);
 
             for (BigTag tag : tBigTagsLeft) {
                 tTagIdsLeft.add(tag.getId()); // it can not be null, even if admin changed the name of the tags, cause
@@ -192,18 +227,18 @@ public class PersonalController extends BaseController {
             }
         }
 
-        filterTagsWithAithenticationCheck(tBigTagsLeft, tBigTagsRight, tTagIdsLeft, tTagIdsRight, tCurUser, spaceOwner,
-                tOwner);
+        filterTagsWithAithenticationCheck(tBigTagsLeft, tBigTagsRight, tTagIdsLeft, tTagIdsRight, curUser, ownerName,
+                owner);
 
         List<List> blogListsLeft = new ArrayList<List>(); // prepare the contentList for each tag.
         List<List> blogListsRight = new ArrayList<List>(); // prepare the contentList for each tag.
         for (int i = 0; i < tBigTagsLeft.size(); i++) {
-            blogListsLeft.add(Twitter.findTwittersByTagAndSpaceOwner(tBigTagsLeft.get(i), tOwner, tAuthSet, 0,
+            blogListsLeft.add(Twitter.findTwittersByTagAndSpaceOwner(tBigTagsLeft.get(i), owner, tAuthSet, 0,
                     tNumStrsLeft == null || tNumStrsLeft[i] == null ? 8 : Integer.valueOf(tNumStrsLeft[i]).intValue(),
                     null));
         }
         for (int i = 0; i < tBigTagsRight.size(); i++) {
-            blogListsRight.add(Twitter.findTwittersByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, tAuthSet, 0,
+            blogListsRight.add(Twitter.findTwittersByTagAndSpaceOwner(tBigTagsRight.get(i), owner, tAuthSet, 0,
                     tNumStrsRight == null || tNumStrsRight[i] == null ? 8 : Integer.valueOf(tNumStrsRight[i])
                             .intValue(), null));
         }

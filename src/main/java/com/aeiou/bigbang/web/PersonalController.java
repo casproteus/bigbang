@@ -65,7 +65,7 @@ public class PersonalController extends BaseController {
         Set<Integer> tAuthSet = BigAuthority.getAuthSet(curUser, owner);
 
         // Determine if the add_as_friend/unfollow links should be displayed.
-        if (curUser != null && curUser.getListento() != null & !ownerName.equals("admin")) {
+        if (curUser != null && curUser.getListento() != null && !ownerName.equals("admin")) {
             boolean isAlreadyFriend = curUser.getListento().contains(owner);
             uiModel.addAttribute("nothireable", isAlreadyFriend ? "true" : "false");
             uiModel.addAttribute("notfireable", isAlreadyFriend ? "false" : "true");
@@ -130,7 +130,7 @@ public class PersonalController extends BaseController {
             UserAccount tCurUser,
             UserAccount tOwner,
             Set<Integer> tAuthSet) {
-        List<String[]> tagsAndNumbers = BigUtil.fetchTagAndNumberInListOfArrayFormat(tOwner, 0);
+        List<String[]> tagsAndNumbers = BigUtil.fetchTagAndNumberFromLayoutStr(tOwner, 0);
         String[] tBigTagStrsLeft = tagsAndNumbers.get(0);
         String[] tBigTagStrsRight = tagsAndNumbers.get(1);
         String[] tNumStrsLeft = tagsAndNumbers.get(2);
@@ -194,7 +194,7 @@ public class PersonalController extends BaseController {
             UserAccount curUser,
             UserAccount owner,
             Set<Integer> tAuthSet) {
-        List<String[]> tagsAndNumbers = BigUtil.fetchTagAndNumberInListOfArrayFormat(owner, 1);
+        List<String[]> tagsAndNumbers = BigUtil.fetchTagAndNumberFromLayoutStr(owner, 1);
         String[] tBigTagStrsLeft = tagsAndNumbers.get(0);
         String[] tBigTagStrsRight = tagsAndNumbers.get(1);
         String[] tNumStrsLeft = tagsAndNumbers.get(2);

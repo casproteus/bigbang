@@ -51,7 +51,7 @@ public class ContentController {
         BigUtil.checkTheme(userAccount, httpServletRequest);
 
         List<BigTag> tTags = null;
-        List<String[]> tTagsAndNums = BigUtil.fetchTagAndNumberInListOfArrayFormat(userAccount, 0);
+        List<String[]> tTagsAndNums = BigUtil.fetchTagAndNumberFromLayoutStr(userAccount, 0);
         if (BigUtil.notCorrect(tTagsAndNums)) {
             List<List> lists = BigUtil.generateDefaultTagsForOwner(httpServletRequest, userAccount, 0);
             tTags = lists.get(0);

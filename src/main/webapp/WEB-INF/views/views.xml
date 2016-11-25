@@ -2,6 +2,9 @@
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
 
+	<definition extends="default" name="bigbang">
+		<put-attribute name="body" value="/WEB-INF/views/index.jspx" />
+	</definition>
 	<definition extends="default" name="index">
 		<put-attribute name="body" value="/WEB-INF/views/index.jspx" />
 	</definition>

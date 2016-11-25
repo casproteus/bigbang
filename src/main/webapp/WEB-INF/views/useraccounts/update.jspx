@@ -68,6 +68,9 @@
 							<field:input field="newMessageAmount"
 								id="c_com_aeiou_bigbang_domain_UserAccount_newMessageAmount"
 								required="true" z="" />
+							<field:input field="theme"
+								id="c_com_aeiou_bigbang_domain_UserAccount_theme"
+								required="true" z="" />
 						</c:if>
 					</form:update></td>
 				<td valign="middle" align="center" width="40%" height="217px">

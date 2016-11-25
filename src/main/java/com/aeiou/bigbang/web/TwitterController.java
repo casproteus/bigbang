@@ -53,7 +53,7 @@ public class TwitterController {
         String tCurName = userAccount.getName();
 
         List<BigTag> tags = null;
-        List<String[]> tTagsAndNums = BigUtil.fetchTagAndNumberInListOfArrayFormat(userAccount, 1);
+        List<String[]> tTagsAndNums = BigUtil.fetchTagAndNumberFromLayoutStr(userAccount, 1);
         if (BigUtil.notCorrect(tTagsAndNums)) {
             List<List> lists = BigUtil.generateDefaultTagsForOwner(httpServletRequest, userAccount, 1);
             tags = lists.get(0);

@@ -43,12 +43,12 @@ public class CustomizeController {
         }
         UserAccount curUser = UserAccount.findUserAccountByName(tCurName);
 
-        List<String[]> visibleNoteTagNameList = BigUtil.fetchTagAndNumberInListOfArrayFormat(curUser, 1);
+        List<String[]> visibleNoteTagNameList = BigUtil.fetchTagAndNumberFromLayoutStr(curUser, 1);
         List<BigTag> visibleNoteTagList =
                 BigUtil.convertTagStringListToObjList(visibleNoteTagNameList.get(0), tCurName);
         visibleNoteTagList.addAll(BigUtil.convertTagStringListToObjList(visibleNoteTagNameList.get(1), tCurName));
 
-        List<String[]> visibleBMTagNameList = BigUtil.fetchTagAndNumberInListOfArrayFormat(curUser, 0);
+        List<String[]> visibleBMTagNameList = BigUtil.fetchTagAndNumberFromLayoutStr(curUser, 0);
         List<BigTag> visibleBMTagList = BigUtil.convertTagStringListToObjList(visibleBMTagNameList.get(0), tCurName);
         visibleBMTagList.addAll(BigUtil.convertTagStringListToObjList(visibleBMTagNameList.get(1), tCurName));
 

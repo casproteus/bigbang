@@ -131,8 +131,10 @@ public class BaseController {
             UserAccount pOwner,
             HttpSession session) {
         List<Customize> customizes = Customize.findCustomizesByOwner(pOwner);
-        for (Customize customize : customizes) {
-            session.setAttribute(customize.getCusKey(), customize.getCusValue());
+        if (customizes != null) {
+            for (Customize customize : customizes) {
+                session.setAttribute(customize.getCusKey(), customize.getCusValue());
+            }
         }
         return customizes;
     }

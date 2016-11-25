@@ -131,28 +131,30 @@ public class BigUtil {
     }
 
     public static List<BigTag> convertTagStringListToObjList(
-            String[] tAryTagStrs,
+            String[] tagNames,
             String pOwnerName) {
-        List<BigTag> tBigTags = new ArrayList<BigTag>();
-        for (String tagStr : tAryTagStrs) {
-            // System.out.println("i:" + i);
-            // System.out.println("tAryTagStrs[i]:" + tAryTagStrs[i]);
-            if (tagStr.endsWith(MARK_PRIVATE_TAG) || tagStr.endsWith(MARK_MEMBERONLY_TAG)
-                    || tagStr.endsWith(MARK_TBD_TAG))
-                tagStr = tagStr.substring(0, tagStr.length() - MARK_SEP_LENGTH);
+        List<BigTag> bigTags = new ArrayList<BigTag>();
+        if (tagNames != null) {
+            for (String tagStr : tagNames) {
+                // System.out.println("i:" + i);
+                // System.out.println("tAryTagStrs[i]:" + tAryTagStrs[i]);
+                if (tagStr.endsWith(MARK_PRIVATE_TAG) || tagStr.endsWith(MARK_MEMBERONLY_TAG)
+                        || tagStr.endsWith(MARK_TBD_TAG))
+                    tagStr = tagStr.substring(0, tagStr.length() - MARK_SEP_LENGTH);
 
-            if (tagStr.startsWith(MARK_PUBLIC_TAG)) {
-                BigTag tTag = BigTag.findTagByNameAndOwner(tagStr.substring(MARK_SEP_LENGTH), "admin");
-                if (tTag != null) {
-                    tBigTags.add(tTag);
+                if (tagStr.startsWith(MARK_PUBLIC_TAG)) {
+                    BigTag tTag = BigTag.findTagByNameAndOwner(tagStr.substring(MARK_SEP_LENGTH), "admin");
+                    if (tTag != null) {
+                        bigTags.add(tTag);
+                    }
+                } else {
+                    BigTag tTag = BigTag.findTagByNameAndOwner(tagStr, pOwnerName);
+                    if (tTag != null)
+                        bigTags.add(tTag);
                 }
-            } else {
-                BigTag tTag = BigTag.findTagByNameAndOwner(tagStr, pOwnerName);
-                if (tTag != null)
-                    tBigTags.add(tTag);
             }
         }
-        return tBigTags;
+        return bigTags;
     }
 
     /**
@@ -453,7 +455,7 @@ public class BigUtil {
      * @param owner
      * @return
      */
-    public static List<String[]> fetchTagAndNumberInListOfArrayFormat(
+    public static List<String[]> fetchTagAndNumberFromLayoutStr(
             UserAccount owner,
             int type) {
 

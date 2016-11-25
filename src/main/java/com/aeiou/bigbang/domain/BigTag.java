@@ -176,18 +176,18 @@ public class BigTag {
     /**
      * called only by twitterController.populateEditForm().
      * 
-     * @param pUserAccount
+     * @param userName
      * @return
      */
     public static List<com.aeiou.bigbang.domain.BigTag> findTWTagsByPublisher(
-            String pUserAccount) {
+            String userName) {
         TypedQuery<BigTag> tQuery =
                 entityManager()
                         .createQuery(
                                 "SELECT o FROM BigTag AS o WHERE UPPER(o.type) = :type and o.owner = :owner ORDER BY o.id DESC",
                                 BigTag.class);
         tQuery =
-                tQuery.setParameter("type", pUserAccount.toUpperCase()).setParameter("owner", 1).setFirstResult(0)
+                tQuery.setParameter("type", userName.toUpperCase()).setParameter("owner", 1).setFirstResult(0)
                         .setMaxResults(1000);
         return tQuery.getResultList();
     }
@@ -245,35 +245,35 @@ public class BigTag {
 
     // used by no one for now,
     private static List<BigTag> findBMAllTagsByOwner(
-            String pOwnerName) {
+            String ownerName) {
         List<BigTag> tListFR = new ArrayList<BigTag>();
         tListFR.addAll(entityManager()
                 .createQuery("SELECT o FROM BigTag AS o WHERE LOWER(o.type) = :type and o.owner = 0", BigTag.class)
                 .setParameter("type", "admin").getResultList());
-        if (pOwnerName == null || "admin".equals(pOwnerName)) {
+        if (ownerName == null || "admin".equals(ownerName)) {
             return tListFR;
         } else {
             List<BigTag> tTagListOfPublisher =
                     entityManager()
                             .createQuery("SELECT o FROM BigTag AS o WHERE UPPER(o.type) = :type and o.owner = 0",
-                                    BigTag.class).setParameter("type", pOwnerName.toUpperCase()).getResultList();
+                                    BigTag.class).setParameter("type", ownerName.toUpperCase()).getResultList();
             List<String> tListOfTagNames = new ArrayList<String>(); // used for checking if the tags name from friends
                                                                     // are duplicated with tag of current user.
             for (int i = 0; i < tTagListOfPublisher.size(); i++) {
                 tListFR.add(tTagListOfPublisher.get(i));
                 tListOfTagNames.add(tTagListOfPublisher.get(i).getTagName());
             }
-            UserAccount tPublisher = UserAccount.findUserAccountByName(pOwnerName);
-            Object[] tPublishers = tPublisher.getListento().toArray();
+            UserAccount publisher = UserAccount.findUserAccountByName(ownerName);
+            Object[] tPublishers = publisher.getListento().toArray();
             for (int i = 0; i < tPublishers.length; i++) {
-                tPublisher = (UserAccount) tPublishers[i];
-                if ("admin".equals(tPublisher.getName()))
+                publisher = (UserAccount) tPublishers[i];
+                if ("admin".equals(publisher.getName()))
                     continue;
                 List<BigTag> tTagListOfListenedPublisher =
                         entityManager()
                                 .createQuery(
                                         "SELECT o FROM BigTag AS o WHERE UPPER(o.type) = :type and o.owner = 0 AND o.authority = 0",
-                                        BigTag.class).setParameter("type", tPublisher.getName().toUpperCase())
+                                        BigTag.class).setParameter("type", publisher.getName().toUpperCase())
                                 .getResultList();
                 for (int j = 0; j < tTagListOfListenedPublisher.size(); j++) {
                     String tTagName = tTagListOfListenedPublisher.get(j).getTagName();
@@ -333,37 +333,37 @@ public class BigTag {
     }
 
     public static com.aeiou.bigbang.domain.BigTag findTagByNameAndOwner(
-            String pTagName,
-            String pOwnerName) {
-        pTagName = pTagName.trim();
-        pOwnerName = pOwnerName.trim();
-        if (pTagName.length() < 1 || pOwnerName.length() < 1)
+            String tagName,
+            String ownerName) {
+        tagName = tagName.trim();
+        ownerName = ownerName.trim();
+        if (tagName.length() < 1 || ownerName.length() < 1)
             return null;
 
         BigTag tBigTag = null;
-        TypedQuery<BigTag> tQuery =
+        TypedQuery<BigTag> query =
                 entityManager().createQuery(
                         "SELECT o FROM BigTag AS o WHERE o.tagName = :tagName and LOWER(o.type) = :type", BigTag.class);
-        tQuery = tQuery.setParameter("tagName", pTagName);
-        tQuery = tQuery.setParameter("type", "admin");
+        query = query.setParameter("tagName", tagName);
+        query = query.setParameter("type", ownerName.toLowerCase());
 
         try {
-            tBigTag = tQuery.getSingleResult();
+            tBigTag = query.getSingleResult();
         } catch (Exception e) {
             Set<String> tOwnerNameSet = new HashSet<String>();
-            UserAccount tOwner = UserAccount.findUserAccountByName(pOwnerName);
+            UserAccount tOwner = UserAccount.findUserAccountByName(ownerName);
             if (tOwner.getListento() != null) {
                 Iterator<UserAccount> tList = tOwner.getListento().iterator();
                 while (tList.hasNext())
                     tOwnerNameSet.add(tList.next().getName().toLowerCase());
-                tQuery =
+                query =
                         entityManager()
                                 .createQuery(
                                         "SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and LOWER(o.type) in :tOwnerNameSet",
                                         BigTag.class);
-                tQuery = tQuery.setParameter("pTagName", pTagName).setParameter("tOwnerNameSet", tOwnerNameSet);
+                query = query.setParameter("pTagName", tagName).setParameter("tOwnerNameSet", tOwnerNameSet);
                 try {
-                    tBigTag = tQuery.getSingleResult();
+                    tBigTag = query.getSingleResult();
                 } catch (Exception eeee) {
                     // do nothing.
                 }

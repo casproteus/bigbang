@@ -439,9 +439,9 @@ public class BigUtil {
             UserAccount owner,
             HttpServletRequest httpServletRequest) {
         // check If Its New Created User;
-        UserAccount admin = UserAccount.findUserAccountByName("admin");
+
         if (owner.getName() == null)
-            owner = admin;
+            owner = UserAccount.findUserAccountByName("admin");
         httpServletRequest.setAttribute("spaceOwner", owner.getName());
 
         HttpSession session = httpServletRequest.getSession();
@@ -449,8 +449,10 @@ public class BigUtil {
         // if the owner has theme already, then use the theme! (will effect only on this request)
         int ownerTheme = owner.getTheme();
         if ("true".equals(displayTheme)) { // strategy1： if users are allowed to set his favourite theme.
-            if (ownerTheme != 0) { // and owner has set the theme for his web page, then use it. other wise, use the one
-                                   // from local cookie.
+            if (!"admin".equals(owner.getName()) && ownerTheme != 0) { // and the non-admin owner has set the theme for
+                                                                       // his web page,
+                                                                       // then use it. other wise, use the one
+                // from local cookie.
                 httpServletRequest.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME,
                         String.valueOf(ownerTheme));
             }

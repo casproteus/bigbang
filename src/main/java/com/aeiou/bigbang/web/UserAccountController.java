@@ -1,27 +1,15 @@
 package com.aeiou.bigbang.web;
 
-import com.aeiou.bigbang.domain.BigTag;
-import com.aeiou.bigbang.domain.Customize;
-import com.aeiou.bigbang.domain.Message;
-import com.aeiou.bigbang.domain.RssTwitter;
-import com.aeiou.bigbang.domain.Twitter;
-import com.aeiou.bigbang.domain.UserAccount;
-import com.aeiou.bigbang.model.MediaUpload;
-import com.aeiou.bigbang.services.secutiry.UserContextService;
-import com.aeiou.bigbang.services.synchronization.SynchnizationManager;
-import com.aeiou.bigbang.util.BigUtil;
-import flexjson.JSONDeserializer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
 import javax.inject.Inject;
-import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -36,6 +24,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.aeiou.bigbang.domain.BigTag;
+import com.aeiou.bigbang.domain.Message;
+import com.aeiou.bigbang.domain.UserAccount;
+import com.aeiou.bigbang.model.MediaUpload;
+import com.aeiou.bigbang.services.secutiry.UserContextService;
+import com.aeiou.bigbang.services.synchronization.SynchnizationManager;
+import com.aeiou.bigbang.util.BigUtil;
+
+import flexjson.JSONDeserializer;
 
 @RequestMapping("/useraccounts")
 @Controller
@@ -139,10 +137,13 @@ public class UserAccountController extends BaseController {
         tUserAccount.setPassword(userAccount.getPassword());
         tUserAccount.setEmail(userAccount.getEmail());
         tUserAccount.setDescription(userAccount.getDescription());
-        if (StringUtils.isNotBlank(userAccount.getLayout())) // because when user modify his useraccount info, the
-                                                             // layout field doesn't display,
-            tUserAccount.setLayout(userAccount.getLayout());// then the layout will be null. and we don't want it be
-                                                            // save into db.
+
+        if ("admin".equals(tUserAccount.getName())) {
+            tUserAccount.setLayout(userAccount.getLayout());
+            tUserAccount.setNoteLayout(userAccount.getNoteLayout());
+            tUserAccount.setTheme(userAccount.getTheme());
+        }
+
         tUserAccount.persist();
         return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
     }

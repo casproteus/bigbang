@@ -439,15 +439,26 @@ public class BigUtil {
             UserAccount owner,
             HttpServletRequest httpServletRequest) {
         // check If Its New Created User;
-        UserAccount adminAcccount = UserAccount.findUserAccountByName("admin");
+        UserAccount admin = UserAccount.findUserAccountByName("admin");
         if (owner.getName() == null)
-            owner = adminAcccount;
+            owner = admin;
         httpServletRequest.setAttribute("spaceOwner", owner.getName());
+
+        HttpSession session = httpServletRequest.getSession();
+        String displayTheme = (String) session.getAttribute("displayTheme");
         // if the owner has theme already, then use the theme! (will effect only on this request)
-        int adminTheme = adminAcccount.getTheme();
-        int theme = owner.getTheme();
-        httpServletRequest.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME,
-                String.valueOf(adminTheme == 9 && theme == 0 ? adminTheme : theme));
+        int ownerTheme = owner.getTheme();
+        if ("true".equals(displayTheme)) { // strategy1： if users are allowed to set his favourite theme.
+            if (ownerTheme != 0) { // and owner has set the theme for his web page, then use it. other wise, use the one
+                                   // from local cookie.
+                httpServletRequest.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME,
+                        String.valueOf(ownerTheme));
+            }
+        } else { // strategy2： if users are not allowed to set his favourite theme. then user's css should always be 0.
+                 // and shouldn't has any idea about theme.
+            httpServletRequest.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME,
+                    String.valueOf(ownerTheme));
+        }
     }
 
     /**
@@ -582,7 +593,8 @@ public class BigUtil {
         String suffix = "_" + (String) session.getAttribute("lang");
         for (Customize customize : list) {
             String key = customize.getCusKey();
-            if (key.startsWith("suggested_tag") && key.endsWith(suffix)) {
+            if (key.startsWith("suggested_tag")
+                    && (("_en".equals(suffix) && key.charAt(key.length() - 3) != '_') || key.endsWith(suffix))) {
                 list2.add(customize);
             }
         }

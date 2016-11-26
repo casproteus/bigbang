@@ -340,7 +340,7 @@ public class TwitterController {
 
     // =====================================changing images on page=====================================
     @RequestMapping(value = "/getImage/{id}")
-    // when a user's theme was set to 9, then this method will be called to get his own images. if he's no image, then
+    // when a user's theme was set to 0, then this method will be called to get his own images. if he's no image, then
     // use admin's image.
             public
             void getImage(

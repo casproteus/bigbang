@@ -7,141 +7,79 @@
 	<jsp:directive.attribute name="render" type="java.lang.Boolean"
 		required="false" rtexprvalue="true"
 		description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
-
-	<c:if test="${empty render or render}">
-		<span style="color: #AAAAAA;"> <c:choose>
-				<c:when test="${pageContext['request'].userPrincipal != null}">
-					<!-- logged in -->
-					<c:choose>
-						<c:when test="${spaceOwnerId eq currentUserID}">
-							<!-- on user's own space -->
-							<spring:message code="global_theme" />
-
-							<c:out value=": " />
-							<spring:url var="url_theme1" value="">
-								<spring:param name="theme" value="1" />
-							</spring:url>
-							<spring:message code="global_theme_default" var="theme_1"
-								htmlEscape="false" />
-							<a href="${url_theme1}" title="${fn:escapeXml(theme_1)}">${fn:escapeXml(theme_1)}</a>
-
-							<c:out value=" | " />
-							<spring:url var="url_theme2" value="">
-								<spring:param name="theme" value="2" />
-							</spring:url>
-							<spring:message code="global_theme_sky" var="theme_2"
-								htmlEscape="false" />
-							<a href="${url_theme2}" title="${fn:escapeXml(theme_2)}">${fn:escapeXml(theme_2)}</a>
-
-							<c:out value=" | " />
-							<spring:url var="url_theme3" value="">
-								<spring:param name="theme" value="3" />
-							</spring:url>
-							<spring:message code="global_theme_spot" var="theme_3"
-								htmlEscape="false" />
-							<a href="${url_theme3}" title="${fn:escapeXml(theme_3)}">${fn:escapeXml(theme_3)}</a>
-
-							<c:out value=" | " />
-							<spring:url var="url_theme4" value="">
-								<spring:param name="theme" value="4" />
-							</spring:url>
-							<spring:message code="global_theme_circle" var="theme_4"
-								htmlEscape="false" />
-							<a href="${url_theme4}" title="${fn:escapeXml(theme_4)}">${fn:escapeXml(theme_4)}</a>
-
-							<c:out value=" | " />
-							<spring:url var="url_theme5" value="">
-								<spring:param name="theme" value="5" />
-							</spring:url>
-							<spring:message code="global_theme_cements" var="theme_5"
-								htmlEscape="false" />
-							<a href="${url_theme5}" title="${fn:escapeXml(theme_5)}">${fn:escapeXml(theme_5)}</a>
-
-							<c:out value=" | " />
-							<spring:url var="url_theme6" value="">
-								<spring:param name="theme" value="6" />
-							</spring:url>
-							<spring:message code="global_theme_stone" var="theme_6"
-								htmlEscape="false" />
-							<a href="${url_theme6}" title="${fn:escapeXml(theme_6)}">${fn:escapeXml(theme_6)}</a>
-
-							<c:out value=" | " />
-							<spring:url var="url_theme9" value="">
-								<spring:param name="theme" value="9" />
-							</spring:url>
-							<spring:message code="global_theme_customize" var="theme_9"
-								htmlEscape="false" />
-							<a href="${url_theme9}" title="${fn:escapeXml(theme_9)}">${fn:escapeXml(theme_9)}</a>
-
-						</c:when>
-						<c:otherwise>
-							<spring:url value="/${pageContext['request'].userPrincipal.name}"
-								var="home" />
-							<a href="${home}"> <spring:message code="button_myhome"
-									arguments="${pageContext['request'].userPrincipal.name}" />
-							</a>
-						</c:otherwise>
-					</c:choose>
+	<c:if test="${empty render or render and displayTheme eq 'true'}">
+		<span style="color: #AAAAAA;">
+		    <c:choose>
+		    	<!-- if logged in and not in his own space, display back home link. -->
+				<c:when test="${pageContext['request'].userPrincipal != null and currentOwnerID ne currentUserID}">
+					<spring:url value="/${pageContext['request'].userPrincipal.name}" var="home" />
+					<a href="${home}"> <spring:message code="button_myhome"
+							arguments="${pageContext['request'].userPrincipal.name}" />
+					</a>
 				</c:when>
-				<c:otherwise>
-					<!-- not logged in -->
-					<c:if test="${empty spaceOwner or 'admin' eq spaceOwner}">
-					
-					
-					<spring:theme code="styleSheet" var="roo_css" />
-					  <c:if test="${'resources/styles/9.css' ne roo_css}">
-						<spring:message code="global_theme" />
+				<!-- if not logged in or logged in and in his own space -->
+		    	<c:otherwise>
+					<!-- on user's own space -->
+					<spring:message code="global_theme" />
 
-						<c:out value=": " />
-						<spring:url var="url_theme1" value="">
-							<spring:param name="theme" value="1" />
-						</spring:url>
-						<spring:message code="global_theme_default" var="theme_1"
-							htmlEscape="false" />
-						<a href="${url_theme1}" title="${fn:escapeXml(theme_1)}">${fn:escapeXml(theme_1)}</a>
+					<c:out value=": " />
+					<spring:url var="url_theme1" value="">
+						<spring:param name="theme" value="1" />
+					</spring:url>
+					<spring:message code="global_theme_default" var="theme_1"
+						htmlEscape="false" />
+					<a href="${url_theme1}" title="${fn:escapeXml(theme_1)}">${fn:escapeXml(theme_1)}</a>
 
+					<c:out value=" | " />
+					<spring:url var="url_theme2" value="">
+						<spring:param name="theme" value="2" />
+					</spring:url>
+					<spring:message code="global_theme_sky" var="theme_2"
+						htmlEscape="false" />
+					<a href="${url_theme2}" title="${fn:escapeXml(theme_2)}">${fn:escapeXml(theme_2)}</a>
+
+					<c:out value=" | " />
+					<spring:url var="url_theme3" value="">
+						<spring:param name="theme" value="3" />
+					</spring:url>
+					<spring:message code="global_theme_spot" var="theme_3"
+						htmlEscape="false" />
+					<a href="${url_theme3}" title="${fn:escapeXml(theme_3)}">${fn:escapeXml(theme_3)}</a>
+
+					<c:out value=" | " />
+					<spring:url var="url_theme4" value="">
+						<spring:param name="theme" value="4" />
+					</spring:url>
+					<spring:message code="global_theme_circle" var="theme_4"
+						htmlEscape="false" />
+					<a href="${url_theme4}" title="${fn:escapeXml(theme_4)}">${fn:escapeXml(theme_4)}</a>
+
+					<c:out value=" | " />
+					<spring:url var="url_theme5" value="">
+						<spring:param name="theme" value="5" />
+					</spring:url>
+					<spring:message code="global_theme_cements" var="theme_5"
+						htmlEscape="false" />
+					<a href="${url_theme5}" title="${fn:escapeXml(theme_5)}">${fn:escapeXml(theme_5)}</a>
+
+					<c:out value=" | " />
+					<spring:url var="url_theme6" value="">
+						<spring:param name="theme" value="6" />
+					</spring:url>
+					<spring:message code="global_theme_stone" var="theme_6"
+						htmlEscape="false" />
+					<a href="${url_theme6}" title="${fn:escapeXml(theme_6)}">${fn:escapeXml(theme_6)}</a>
+					<!-- when displaying, there's a case we should display the customize: logged in and in his own space. -->
+					<c:if test="${pageContext['request'].userPrincipal != null and currentOwnerID eq currentUserID}">
 						<c:out value=" | " />
-						<spring:url var="url_theme2" value="">
-							<spring:param name="theme" value="2" />
+						<spring:url var="url_theme0" value="">
+							<spring:param name="theme" value="0" />
 						</spring:url>
-						<spring:message code="global_theme_sky" var="theme_2"
+						<spring:message code="global_theme_customize" var="theme_0"
 							htmlEscape="false" />
-						<a href="${url_theme2}" title="${fn:escapeXml(theme_2)}">${fn:escapeXml(theme_2)}</a>
-
-						<c:out value=" | " />
-						<spring:url var="url_theme3" value="">
-							<spring:param name="theme" value="3" />
-						</spring:url>
-						<spring:message code="global_theme_spot" var="theme_3"
-							htmlEscape="false" />
-						<a href="${url_theme3}" title="${fn:escapeXml(theme_3)}">${fn:escapeXml(theme_3)}</a>
-
-						<c:out value=" | " />
-						<spring:url var="url_theme4" value="">
-							<spring:param name="theme" value="4" />
-						</spring:url>
-						<spring:message code="global_theme_circle" var="theme_4"
-							htmlEscape="false" />
-						<a href="${url_theme4}" title="${fn:escapeXml(theme_4)}">${fn:escapeXml(theme_4)}</a>
-
-						<c:out value=" | " />
-						<spring:url var="url_theme5" value="">
-							<spring:param name="theme" value="5" />
-						</spring:url>
-						<spring:message code="global_theme_cements" var="theme_5"
-							htmlEscape="false" />
-						<a href="${url_theme5}" title="${fn:escapeXml(theme_5)}">${fn:escapeXml(theme_5)}</a>
-
-						<c:out value=" | " />
-						<spring:url var="url_theme6" value="">
-							<spring:param name="theme" value="6" />
-						</spring:url>
-						<spring:message code="global_theme_stone" var="theme_6"
-							htmlEscape="false" />
-						<a href="${url_theme6}" title="${fn:escapeXml(theme_6)}">${fn:escapeXml(theme_6)}</a>
-					  </c:if>
+						<a href="${url_theme0}" title="${fn:escapeXml(theme_0)}">${fn:escapeXml(theme_0)}</a>
 					</c:if>
-				</c:otherwise>
+		    	</c:otherwise>				
 			</c:choose>
 		</span>
 	</c:if>

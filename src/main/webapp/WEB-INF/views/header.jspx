@@ -14,7 +14,7 @@
 		<c:choose>
 			<c:when test="${pageContext['request'].userPrincipal != null}">
 				<c:choose>
-					<c:when test="${spaceOwnerId eq currentUserID}">
+					<c:when test="${currentOwnerID eq currentUserID}">
 						<!-- on user's own space -->
 						<spring:url value="/" var="home" />
 						<a href="${home}"> <spring:message code="button_home" />
@@ -227,7 +227,7 @@
 		<a href="${home}" name="${fn:escapeXml(home_label)}" title="${fn:escapeXml(home_label)}"> 
 			<spring:theme code="styleSheet" var="roo_css" /> 
 			<c:choose>
-				<c:when test="${'resources/styles/9.css' eq roo_css}">
+				<c:when test="${'resources/styles/0.css' eq roo_css}">
 					<img src="getImage/uc_${fn:toLowerCase(spaceOwner)}_headimage" />
 				</c:when>
 				<c:otherwise>

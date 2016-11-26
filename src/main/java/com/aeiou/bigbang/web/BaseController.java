@@ -34,14 +34,15 @@ public class BaseController {
     }
 
     protected void swithCurrentOwner(
-            UserAccount pOwner,
+            UserAccount owner,
             Model uiModel,
             HttpServletRequest request) {
-        uiModel.addAttribute("spaceOwner", pOwner.getName());
-        uiModel.addAttribute("description", pOwner.getDescription());
-        checkIfCusTextNeedTobeReInit(pOwner, uiModel, request);
-        request.getSession().setAttribute("CurrentOwnerID", pOwner.getId());
-        BigUtil.checkTheme(pOwner, request);
+        uiModel.addAttribute("spaceOwner", owner.getName());
+        uiModel.addAttribute("description", owner.getDescription());
+
+        checkIfCusTextNeedTobeReInit(owner, uiModel, request);
+        request.getSession().setAttribute("currentOwnerID", owner.getId());
+        BigUtil.checkTheme(owner, request);
     }
 
     /**
@@ -63,7 +64,7 @@ public class BaseController {
         }
 
         Object tlang = request.getParameter("lang"); // language in request
-        if (!pOwner.getId().equals(session.getAttribute("CurrentOwnerID"))) { // first visit or user is visiting
+        if (!pOwner.getId().equals(session.getAttribute("currentOwnerID"))) { // first visit or user is visiting
                                                                               // different owner page.
             reInitCosText(pOwner, session, tlang);
         } else if (tlang != null) { // same owner page while user is clicking the language button

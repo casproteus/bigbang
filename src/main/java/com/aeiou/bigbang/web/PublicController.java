@@ -121,8 +121,6 @@ public class PublicController extends BaseController {
             }
         }
 
-        uiModel.addAttribute("spaceOwner", tOwner.getName());
-        uiModel.addAttribute("spaceOwnerId", tOwner.getId());
         uiModel.addAttribute("tag", tBigTag.getTagName());
         uiModel.addAttribute("tagId", tagId);
         uiModel.addAttribute("description", tOwner.getDescription());

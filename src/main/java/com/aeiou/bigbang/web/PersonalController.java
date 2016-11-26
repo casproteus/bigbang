@@ -364,7 +364,7 @@ public class PersonalController extends BaseController {
 
     // =====================================changing images on page=====================================
     @RequestMapping(value = "/getImage/{id}")
-    // when a user's theme was set to 9, then this method will be called to get his own images. if he's no image, then
+    // when a user's theme was set to 0, then this method will be called to get his own images. if he's no image, then
     // use admin's image.
             public
             void getImage(
@@ -488,8 +488,8 @@ public class PersonalController extends BaseController {
         uiModel.asMap().clear();
         tMedia.persist();
 
-        // change user's them to 9.css
-        BigUtil.changeUserTheme(ownerID, 9);
+        // change user's them to 0.css
+        BigUtil.changeUserTheme(ownerID, 0);
 
         UserAccountController tController =
                 SpringApplicationContext.getApplicationContext().getBean("userAccountController",

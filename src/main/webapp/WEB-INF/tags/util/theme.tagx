@@ -19,6 +19,7 @@
 				</c:when>
 				<!-- if not logged in or logged in and in his own space -->
 		    	<c:otherwise>
+		    	  <c:if test="${displayTheme}">
 					<!-- on user's own space -->
 					<spring:message code="global_theme" />
 
@@ -79,6 +80,7 @@
 							htmlEscape="false" />
 						<a href="${url_theme0}" title="${fn:escapeXml(theme_0)}">${fn:escapeXml(theme_0)}</a>
 					</c:if>
+				  </c:if>
 		    	</c:otherwise>				
 			</c:choose>
 		</span>

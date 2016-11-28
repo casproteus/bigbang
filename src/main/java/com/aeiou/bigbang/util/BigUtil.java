@@ -586,9 +586,9 @@ public class BigUtil {
 
     private static List<BigTag> findLangMatchedTagsOfAdmin(
             HttpServletRequest httpServletRequest,
-            UserAccount tOwner,
+            UserAccount owner,
             int type) {
-        List<BigTag> tBigTags = new ArrayList<BigTag>();
+        List<BigTag> bigTags = new ArrayList<BigTag>();
         List<Customize> list = Customize.findCustomizesByOwner(UserAccount.findUserAccountByName("admin"));
         List<Customize> list2 = new ArrayList<Customize>();
         HttpSession session = httpServletRequest.getSession();
@@ -601,12 +601,12 @@ public class BigUtil {
             }
         }
         for (Customize customize : list2) {
-            BigTag bigTag = BigTag.findTagByNameAndOwner(customize.getCusValue(), "owner");
-            if (bigTag.getOwner() == type) {
-                tBigTags.add(bigTag);
+            BigTag bigTag = BigTag.findTagByNameAndOwner(customize.getCusValue(), owner.getName());
+            if (bigTag != null && bigTag.getOwner() == type) {
+                bigTags.add(bigTag);
             }
         }
-        return tBigTags;
+        return bigTags;
     }
 
     /**

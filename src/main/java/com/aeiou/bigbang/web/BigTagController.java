@@ -223,7 +223,8 @@ public class BigTagController {
             HttpServletRequest httpServletRequest) {
         BigTag bigTag = BigTag.findBigTag(id);
         bigTag.remove();
-        if (bigTag.getOwner() != null) {
+        // admin don't has a layout, it get layout info from customizes.
+        if (bigTag.getOwner() != null && !bigTag.getOwner().equals("admin")) {
             UserAccount userAccount = UserAccount.findUserAccountByName(bigTag.getType());
             String tLayout =
                     userAccount == null ? null : (bigTag.getOwner() == 0 ? userAccount.getLayout() : userAccount

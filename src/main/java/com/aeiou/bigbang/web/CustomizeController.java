@@ -212,6 +212,10 @@ public class CustomizeController {
         for (int i = 0; i < tKeys.length; i++) {
             if ("on".equals(((String[]) tMap.get(tKeys[i]))[0])) {
                 BigTag bigTag = BigTag.findTagByNameAndOwner((String) tKeys[i], tCurName);
+                if (bigTag == null && !"admin".equals(tCurName)) {
+                    bigTag = BigTag.findTagByNameAndOwner((String) tKeys[i], "admin");
+                }
+
                 if (bigTag == null || bigTag.getOwner() != type) {
                     continue;
                 }

@@ -112,7 +112,7 @@
 		<span class="new"> ${AddOnNotice} 
 		   <spring:url value="/resources/images/addon.png" var="addon_img_url" />
 		   <img src="${addon_img_url}" style="vertical-align: bottom;" /> 
-		   <a href='javascript:(
+		   <a onclick="alert('Please drap me and drop onto favorate bar.'); return false" href='javascript:(
 			  function(e,t){
 			    var%20n=e.document;
 			    setTimeout(

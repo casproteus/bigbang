@@ -332,6 +332,13 @@ public class BigTag {
         return tListFR;
     }
 
+    /**
+     * will return owner's tag and owner's friends' tags, will not return admin's tags.
+     * 
+     * @param tagName
+     * @param ownerName
+     * @return
+     */
     public static com.aeiou.bigbang.domain.BigTag findTagByNameAndOwner(
             String tagName,
             String ownerName) {

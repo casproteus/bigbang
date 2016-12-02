@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,9 +72,17 @@ public class PersonalController extends BaseController {
             uiModel.addAttribute("notfireable", isAlreadyFriend ? "false" : "true");
         }
         if (!"admin".equals(ownerName)) {
+            String title = owner.getDescription();
+            if (!StringUtils.isBlank(title)) {
+                uiModel.addAttribute("txt_welcome", title);
+            } else {
+                uiModel.addAttribute("txt_welcome", request.getSession().getAttribute("default_welcome_text"));
+            }
+
             prepareBookmarks(ownerName, uiModel, request, curUser, owner, tAuthSet);
             prepareNotes(ownerName, uiModel, request, curUser, owner, tAuthSet);
         } else {
+            uiModel.addAttribute("txt_welcome", request.getSession().getAttribute("default_welcome_text"));
             List<List<BigTag>> list = BigUtil.prepareAdminSuggestedTagsOnMainPage(uiModel, request);
             List<BigTag> bigBMTagsLeft = list.get(0);
             List<BigTag> bigBMTagsRight = list.get(1);

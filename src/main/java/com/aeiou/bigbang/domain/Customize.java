@@ -1,5 +1,6 @@
 package com.aeiou.bigbang.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -54,6 +55,33 @@ public class Customize {
             return tQuery.getResultList();
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    public static List<Customize> findCustomizeEntriesByOwner(
+            int firstResult,
+            int maxResults,
+            String sortFieldName,
+            String sortOrder,
+            UserAccount userAccount) {
+
+        String jpaQuery = "SELECT o FROM Customize o WHERE o.useraccount = " + userAccount.getName();
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY o." + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        TypedQuery<Customize> typedQuery =
+                entityManager().createQuery(jpaQuery, Customize.class).setFirstResult(firstResult)
+                        .setMaxResults(maxResults);
+        List<Customize> customizes = new ArrayList<Customize>();
+        try {
+            customizes = typedQuery.getResultList();
+        } catch (Exception e) {
+            // there's no matching record, just ignore it, return empty arrayList.
+        } finally {
+            return customizes;
         }
     }
 

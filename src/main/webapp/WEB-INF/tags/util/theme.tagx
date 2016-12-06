@@ -8,7 +8,7 @@
 		required="false" rtexprvalue="true"
 		description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
 	<c:if test="${empty render or render and displayTheme eq 'true'}">
-		<span style="color: #AAAAAA;">
+		<span style="background-color:#${background_foot}; color:#${foreground_foot};">
 		    <c:choose>
 		    	<!-- if logged in and not in his own space, display back home link. -->
 				<c:when test="${pageContext['request'].userPrincipal != null and currentOwnerID ne currentUserID}">

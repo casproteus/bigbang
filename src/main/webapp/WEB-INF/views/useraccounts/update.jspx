@@ -15,29 +15,26 @@
 		style="border-width: 0px; background-color: #ddd;">
 		<tbody>
 			<tr>
-				<td valign="middle" align="center" colspan="2"><spring:message
-						code="useraccount_update_headimage" var="title_image"
-						htmlEscape="false" /> <util:panel title="${title_image}"
-						id="titleImagePanel">
+				<td valign="middle" align="center" colspan="2">
+					<spring:message code="useraccount_update_headimage" var="title_image" htmlEscape="false" /> 
+					<util:panel title="${title_image}" id="titleImagePanel">
 						<div style="text-align: center;">
 							<spring:url value="/mediauploads" var="form_url" />
-							<springform:form action="${form_url}" method="POST"
-								modelAttribute="mediaUpload" enctype="multipart/form-data">
-								<span> <input type="file" style="height: 24px"
-									name="content" /> <input type="hidden" name="position"
-									value="uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_headimage" />
+							<springform:form action="${form_url}" method="POST" modelAttribute="mediaUpload" enctype="multipart/form-data">
+								<span> 
+									<input type="file" style="height: 24px" name="content" /> 
+									<input type="hidden" name="position" value="uc_${fn:toLowerCase(pageContext['request'].userPrincipal.name)}_headimage" />
 									<input name="returnPath" type="hidden" value="${returnPath}" />
 									<button class="btn btn-primary" type="submit">Upload</button>
 								</span>
 							</springform:form>
 						</div>
-					</util:panel></td>
+					</util:panel>
+				</td>
 			</tr>
 			<tr height="217px">
-				<td align="center" width="60%"><form:update
-						id="fu_com_aeiou_bigbang_domain_UserAccount"
-						modelAttribute="userAccount" path="/useraccounts"
-						versionField="Version" z="0F8idzGSdxooYhrvOCp6vO/PSkM=">
+				<td align="center" width="60%">
+					<form:update id="fu_com_aeiou_bigbang_domain_UserAccount" modelAttribute="userAccount" path="/useraccounts" versionField="Version" z="0F8idzGSdxooYhrvOCp6vO/PSkM=">
 						<field:input field="name"
 							id="c_com_aeiou_bigbang_domain_UserAccount_name" min="2"
 							required="true" z="ivL1uj01/Ogki4rPE5I3PdFQud0=" />
@@ -72,7 +69,15 @@
 								id="c_com_aeiou_bigbang_domain_UserAccount_theme"
 								required="true" z="" />
 						</c:if>
-					</form:update></td>
+					</form:update>
+					<spring:url value="/customizes" var="advance_setting"/>
+					<a href="${advance_setting}"> 
+						<spring:message code="advance_setting" htmlEscape="false" />
+					</a>
+							
+					
+					
+				</td>
 				<td valign="middle" align="center" width="40%" height="217px">
 					<spring:message code="useraccount_update_bg" var="bg_image"
 						htmlEscape="false" /> <img
@@ -96,7 +101,7 @@
 	<script type="text/javascript">
 	    $(document).ready(
     		function(){
-    			document.getElementById('j_username').focus()
+    			document.getElementById('c_com_aeiou_bigbang_domain_UserAccount_name').focus()
     		}
 	    );
 	</script>

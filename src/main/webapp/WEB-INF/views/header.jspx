@@ -130,7 +130,7 @@
 			        if(r){
 			          return
 			        }
-			        var%20i="http://www.'+${app_name}+'.com/contents?form",s=n.createElement("iframe");
+			        var%20i="http://www.sharethegoodones.com/contents?form",s=n.createElement("iframe");
 			        s.id=t;
 			        s.src=i+"&amp;url="+encodeURIComponent(e.location.href)
 			        +"&amp;title="+encodeURIComponent(n.title)

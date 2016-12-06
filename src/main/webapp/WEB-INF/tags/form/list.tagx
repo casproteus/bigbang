@@ -23,7 +23,10 @@
 		description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
 	<jsp:directive.attribute name="openPane" type="java.lang.Boolean"
 		required="false" rtexprvalue="true"
-		description="Control if the title pane is opened or closed by default (default: true)" />
+		description="Control if the title pane is opened or closed by default (default: true)" />	
+	<jsp:directive.attribute name="create" type="java.lang.Boolean"
+		required="false" rtexprvalue="false"
+		description="Control if display body when there's no content" />
 	<jsp:directive.attribute name="z" type="java.lang.String"
 		required="false"
 		description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
@@ -48,6 +51,9 @@
 				</c:when>
 				<c:otherwise>
 					<spring:message arguments="${label}" code="entity_not_found" />
+					<c:if test="${create}">
+						<jsp:doBody />
+					</c:if>
 				</c:otherwise>
 			</c:choose>
 		</util:panel>

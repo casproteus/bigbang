@@ -7,12 +7,15 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aeiou.bigbang.domain.BigTag;
@@ -233,5 +236,79 @@ public class CustomizeController {
         }
         String layout = tLayoutStrBuilder.append(BigUtil.SEP_TAG_NUMBER).append(tNumStrBuilder).toString();
         return layout;
+    }
+
+    @RequestMapping(produces = "text/html")
+    public String list(
+            @RequestParam(value = "page", required = false)
+            Integer page,
+            @RequestParam(value = "size", required = false)
+            Integer size,
+            @RequestParam(value = "sortFieldName", required = false)
+            String sortFieldName,
+            @RequestParam(value = "sortOrder", required = false)
+            String sortOrder,
+            Model uiModel) {
+
+        String tCurName = userContextService.getCurrentUserName();
+        if (tCurName == null) {
+            tCurName = "admin";
+        }
+        UserAccount curUser = UserAccount.findUserAccountByName(tCurName);
+
+        if (page != null || size != null) {
+            int sizeNo = size == null ? 10 : size.intValue();
+            final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
+            uiModel.addAttribute(
+                    "customizes",
+                    "admin".equals(tCurName) ? Customize.findCustomizeEntries(firstResult, sizeNo, sortFieldName,
+                            sortOrder) : Customize.findCustomizeEntriesByOwner(firstResult, sizeNo, sortFieldName,
+                            sortOrder, curUser));
+            float nrOfPages = (float) Customize.countCustomizes() / sizeNo;
+            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
+                    : nrOfPages));
+        } else {
+            uiModel.addAttribute(
+                    "customizes",
+                    "admin".equals(tCurName) ? Customize.findAllCustomizes(sortFieldName, sortOrder) : Customize
+                            .findCustomizesByOwner(curUser));
+        }
+        return "customizes/list";
+    }
+
+    void populateEditForm(
+            Model uiModel,
+            Customize customize) {
+        String tCurName = userContextService.getCurrentUserName();
+        if (tCurName != null) {
+            UserAccount userAccount = UserAccount.findUserAccountByName(tCurName);
+            if (customize.getUseraccount() == null) {
+                customize.setUseraccount(userAccount);
+            }
+        }
+        uiModel.addAttribute("customize", customize);
+        if ("admin".equals(tCurName)) {
+            uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, produces = "text/html")
+    public String create(
+            @Valid
+            Customize customize,
+            BindingResult bindingResult,
+            Model uiModel,
+            HttpServletRequest httpServletRequest) {
+        if (bindingResult.hasErrors()) {
+            populateEditForm(uiModel, customize);
+            return "customizes/create";
+        }
+
+        uiModel.asMap().clear();
+        if (customize.getUseraccount() == null) {
+            customize.setUseraccount(UserAccount.findUserAccountByName(userContextService.getCurrentUserName()));
+        }
+        customize.persist();
+        return "redirect:/customizes/" + encodeUrlPathSegment(customize.getId().toString(), httpServletRequest);
     }
 }

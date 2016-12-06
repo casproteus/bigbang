@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"
 	xmlns:jsp="http://java.sun.com/JSP/Page"
-	xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+	xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	version="2.0">
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
 	<page:show id="ps_com_aeiou_bigbang_domain_Customize"
@@ -13,8 +15,11 @@
 		<field:display field="cusValue"
 			id="s_com_aeiou_bigbang_domain_Customize_cusValue"
 			object="${customize}" z="+aouao0Q2D8V745XQ+Rh2nm86N8=" />
-		<field:display field="useraccount"
-			id="s_com_aeiou_bigbang_domain_Customize_useraccount"
-			object="${customize}" z="vKdppaARcl4qgqBzlmbDxiEhSVc=" />
+			
+		<sec:authorize ifAllGranted="ROLE_ADMIN">
+			<field:display field="useraccount"
+				id="s_com_aeiou_bigbang_domain_Customize_useraccount"
+				object="${customize}" z="vKdppaARcl4qgqBzlmbDxiEhSVc=" />
+		</sec:authorize>
 	</page:show>
 </div>

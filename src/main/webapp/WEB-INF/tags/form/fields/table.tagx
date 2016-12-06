@@ -34,7 +34,6 @@
 	<jsp:directive.attribute name="z" type="java.lang.String"
 		required="false"
 		description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
-
 	<c:if test="${empty render or render}">
 
 		<c:set var="columnProperties" scope="request" />
@@ -181,24 +180,24 @@
 				</tr>
 			</c:forEach>
 			<tr class="footer">
-				<td colspan="${colCounter}"><c:if
-						test="${empty create or create}">
-						<span class="new"> <spring:url value="${path}"
-								var="create_url">
+				<td colspan="${colCounter}">
+					<c:if test="${empty create or create}">
+						<span class="new">
+							<spring:url value="${path}" var="create_url">
 								<spring:param name="form" />
-							</spring:url> <a href="${create_url}"> <spring:url
-									value="/resources/images/add.png" var="create_img_url" /> <spring:message
-									arguments="${typeName}" code="global_menu_new"
-									var="add_message" htmlEscape="false" /> <img
-								alt="${fn:escapeXml(add_message)}" src="${create_img_url}"
-								title="${fn:escapeXml(add_message)}" />
-						</a>
+							</spring:url> 
+							<a href="${create_url}"> 
+								<spring:url value="/resources/images/add.png" var="create_img_url" /> 
+								<spring:message arguments="${typeName}" code="global_menu_new" var="add_message" htmlEscape="false" /> 
+								<img alt="${fn:escapeXml(add_message)}" src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
+							</a>
 						</span>
 						<c:out value=" " />
-					</c:if> <c:if test="${not empty maxPages}">
-						<util:pagination maxPages="${maxPages}" page="${param.page}"
-							size="${param.size}" />
-					</c:if></td>
+					</c:if> 
+					<c:if test="${not empty maxPages}">
+						<util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}" />
+					</c:if>
+				</td>
 			</tr>
 		</table>
 

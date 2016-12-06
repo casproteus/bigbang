@@ -107,25 +107,36 @@ public class UserAccountController extends BaseController {
             populateEditForm(uiModel, userAccount, httpServletRequest);
             return "useraccounts/update";
         }
-        UserAccount tUserAccount = UserAccount.findUserAccount(userAccount.getId());
-        if (!tUserAccount.getName().equals(userAccount.getName())) {
-            List<BigTag> tBigTags = BigTag.findTagsByPublisher(tUserAccount.getName(), 0, 1000, null);
+
+        // if name changed, need to check if it's available, update the tags and update the image paths.
+
+        UserAccount oldAccount = UserAccount.findUserAccount(userAccount.getId());
+        String oldName = oldAccount.getName();
+        String newName = userAccount.getName();
+        if (!oldName.equals(newName)) {
+            if (UserAccount.findUserAccountByName(newName) != null) {
+                uiModel.addAttribute("create_error", "name used by others, please choose an other one.");
+                userAccount.setName("");
+                uiModel.addAttribute("userAccount", userAccount);
+                return "useraccounts/update";
+            }
+
+            List<BigTag> tBigTags = BigTag.findTagsByPublisher(oldName, 0, 1000, null);
             for (int i = tBigTags.size() - 1; i > -1; i--) {
-                tBigTags.get(i).setType(userAccount.getName());
+                tBigTags.get(i).setType(newName);
                 tBigTags.get(i).merge();
             }
         }
         uiModel.asMap().clear();
 
-        // if name changed, need to update the image paths.
-        if (!tUserAccount.getName().equals(userAccount.getName())) {
-            if (MediaUpload.countMediaUploadsByKey(tUserAccount.getName()) > 0) {
-                MediaUpload tMH = MediaUpload.findMediaByKey(tUserAccount.getName() + "_headimg");
+        if (!oldName.equals(newName)) {
+            if (MediaUpload.countMediaUploadsByKey(oldName) > 0) {
+                MediaUpload tMH = MediaUpload.findMediaByKey(oldName + "_headimg");
                 if (tMH != null) {
-                    tMH.setFilepath(userAccount.getName() + "_headimg");
+                    tMH.setFilepath(newName + "_headimg");
                     tMH.merge();
                 }
-                MediaUpload tMB = MediaUpload.findMediaByKey(tUserAccount.getName() + "_bg");
+                MediaUpload tMB = MediaUpload.findMediaByKey(oldName + "_bg");
                 if (tMB != null) {
                     tMB.setFilepath(userAccount.getName() + "_bg");
                     tMB.merge();
@@ -133,18 +144,18 @@ public class UserAccountController extends BaseController {
             }
         }
 
-        tUserAccount.setName(userAccount.getName());
-        tUserAccount.setPassword(userAccount.getPassword());
-        tUserAccount.setEmail(userAccount.getEmail());
-        tUserAccount.setDescription(userAccount.getDescription());
+        oldAccount.setName(newName);
+        oldAccount.setPassword(userAccount.getPassword());
+        oldAccount.setEmail(userAccount.getEmail());
+        oldAccount.setDescription(userAccount.getDescription());
 
-        if ("admin".equals(tUserAccount.getName())) {
-            tUserAccount.setLayout(userAccount.getLayout());
-            tUserAccount.setNoteLayout(userAccount.getNoteLayout());
-            tUserAccount.setTheme(userAccount.getTheme());
+        if ("admin".equals(oldName)) {
+            oldAccount.setLayout(userAccount.getLayout());
+            oldAccount.setNoteLayout(userAccount.getNoteLayout());
+            oldAccount.setTheme(userAccount.getTheme());
         }
 
-        tUserAccount.persist();
+        oldAccount.persist();
         return "redirect:/useraccounts/" + encodeUrlPathSegment(userAccount.getId().toString(), httpServletRequest);
     }
 

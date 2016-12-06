@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailSender;
@@ -766,5 +769,23 @@ public class BigUtil {
         UserAccount tUser = UserAccount.findUserAccount(ownerID);
         tUser.setTheme(themeNumber);
         tUser.persist();
+    }
+
+    public static String getEmailOutFromUser(
+            UserAccount user) {// toLowerCaseIfEmail(String emailString) {
+        String emailString = user.getEmail();
+        if (StringUtils.isBlank(emailString)) {
+            emailString = user.getName();
+        }
+        try {
+            new InternetAddress(emailString, true);
+        } catch (AddressException e) {
+            return null;
+        }
+        int lastAt = emailString.lastIndexOf('@');
+        if (lastAt == -1 || emailString.lastIndexOf(']') > lastAt || emailString.lastIndexOf(')') > lastAt) {
+            return null;
+        }
+        return emailString.substring(0, lastAt) + emailString.substring(lastAt).toLowerCase();
     }
 }

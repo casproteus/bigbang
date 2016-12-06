@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.context.MessageSource;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.aeiou.bigbang.domain.Customize;
 import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.RssTwitter;
 import com.aeiou.bigbang.domain.Twitter;
@@ -114,7 +114,7 @@ public class RemarkController {
 
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
 
-        checkRss(remark); // to check if need to send out notice email.
+        checkRss(remark, httpServletRequest); // to check if need to send out notice email.
 
         return "redirect:/remarks/" + encodeUrlPathSegment(remark.getId().toString(), httpServletRequest);
     }
@@ -288,7 +288,7 @@ public class RemarkController {
         remark.persist();
 
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);
-        checkRss(remark); // to check if need to send out notice email.
+        checkRss(remark, httpServletRequest); // to check if need to send out notice email.
 
         return "redirect:/remarks?twitterid="
                 + encodeUrlPathSegment(remark.getRemarkto().getId().toString(), httpServletRequest) + "&refresh_time="
@@ -364,41 +364,46 @@ public class RemarkController {
     }
 
     private void checkRss(
-            Remark remark) {
+            Remark remark,
+            HttpServletRequest httpServletRequest) {
         Twitter tTwitter = remark.getRemarkto();
-        List<RssTwitter> tList = RssTwitter.findAllListenersByTwitter(tTwitter);
-        Customize tCustomizeLink = Customize.findCustomizeByKey("RemarkSourceLinkStr");
-        Customize tCustomizeReplay = Customize.findCustomizeByKey("i18n_Replay");
-        Customize tCustomizeUnsubscribe = Customize.findCustomizeByKey("i18n_Unsubscribe");
-        Customize tCustomizeNewRemarkString = Customize.findCustomizeByKey("i18n_NewRemark");
+        List<RssTwitter> rssTwitters = RssTwitter.findAllListenersByTwitter(tTwitter);
+        HttpSession session = httpServletRequest.getSession();
+        Object tlink = session.getAttribute("RemarkSourceLinkStr");
+        Object tReply = session.getAttribute("i18n_Replay");
+        Object tUnsubscribe = session.getAttribute("i18n_Unsubscribe");
+        Object tRemark = session.getAttribute("i18n_NewRemark");
 
-        String linkStr = tCustomizeLink != null ? tCustomizeLink.getCusValue() : "http://www.sharethegoodones.com";
-        String tReply = tCustomizeReplay != null ? tCustomizeReplay.getCusValue() : "Reply";
-        String tUnsubscribe = tCustomizeUnsubscribe != null ? tCustomizeUnsubscribe.getCusValue() : "Unsubscribe";
-        String tNewRemark =
-                tCustomizeNewRemarkString != null ? tCustomizeNewRemarkString.getCusValue() : "New remark: ";
+        String link = tlink != null ? (String) tlink : "http://www.sharethegoodones.com";
+        String reply = tReply != null ? (String) tReply : "Reply";
+        String unsubscribe = tUnsubscribe != null ? (String) tUnsubscribe : "Unsubscribe";
+        String newRemark = tRemark != null ? (String) tRemark : "New remark: ";
 
-        for (int i = 0; i < tList.size(); i++) {
-            RssTwitter tRT = tList.get(i);
-            String tUserName = tRT.getUseraccount().getName();
-            if (remark.getAuthority() != 0 && !tUserName.equals(tTwitter.getPublisher().getName())) // if only visible
-                                                                                                    // to publisher,
-                                                                                                    // don't sent do
-                                                                                                    // others.
+        StringBuilder part1 =
+                new StringBuilder("<p align='right'>---").append(remark.getPublisher().getName())
+                        .append(" </p><p align='center'><a href='").append(link).append("/remarks?twitterid=")
+                        .append(tTwitter.getId()).append("'>").append(reply).append("</a> | <a href='").append(link)
+                        .append("/remarks?removerss=");
+        StringBuilder part2 =
+                new StringBuilder("&removersstwitterid=").append(tTwitter.getId()).append("'>").append(unsubscribe)
+                        .append("</a></p><p align='center'><a href='").append(link).append("'>").append(link)
+                        .append("</a></p>");
+        for (int i = 0; i < rssTwitters.size(); i++) {
+            RssTwitter rssTwitter = rssTwitters.get(i);
+            String userName = rssTwitter.getUseraccount().getName();
+            // if only visible to publisher, don't sent to others.
+            if (remark.getAuthority() != 0 && !userName.equals(tTwitter.getPublisher().getName())) {
                 continue;
-            String email = tRT.getUseraccount().getEmail();
-            String content =
-                    "<p align='right'>---" + remark.getPublisher().getName() + " </p>" + "<p align='center'><a href='"
-                            + linkStr + "/remarks?twitterid=" + tTwitter.getId() + "'>" + tReply + "</a> | "
-                            + "<a href='" + linkStr + "/remarks?removerss=" + tUserName + "&removersstwitterid="
-                            + tTwitter.getId() + "'>" + tUnsubscribe + "</a></p>" + "<p align='center'><a href='"
-                            + linkStr + "'>" + linkStr + "</a></p>";
+            }
+            String email = BigUtil.getEmailOutFromUser(rssTwitter.getUseraccount());
 
-            if (email != null && email.indexOf("@") > 0 && email.indexOf(".", email.indexOf("@")) > 0) { // if it's
-                                                                                                         // valid.
-                if (!email.equals(remark.getPublisher().getEmail())) // if it's not the author himself.
-                    BigUtil.sendMessage("info@sharethegoodones.com", tNewRemark + tTwitter.getTwtitle(), email,
+            if (email != null) { // if it's
+                if (!email.equals(BigUtil.getEmailOutFromUser(remark.getPublisher()))) { // if it's not the author
+                                                                                         // himself.
+                    String content = part1.append(userName).append(part2).toString();
+                    BigUtil.sendMessage("info@sharethegoodones.com", newRemark + tTwitter.getTwtitle(), email,
                             remark.getContent() + content);
+                }
             }
         }
     }

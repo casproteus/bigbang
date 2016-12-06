@@ -98,8 +98,14 @@ public class BaseController {
         return defaultLang;
     }
 
-    // load all customizes into session to allow the webpage costomizable.
-    // when visiting public page, the
+    /**
+     * load all customizes into session to allow the webpage costomizable. when visiting a non-public page, the admin's
+     * customizes will be load first then the users customizes will be loaed and replace the admin's customizes.
+     * 
+     * @param pOwner
+     * @param session
+     * @param pLang
+     */
     private void reInitCosText(
             UserAccount pOwner,
             HttpSession session,

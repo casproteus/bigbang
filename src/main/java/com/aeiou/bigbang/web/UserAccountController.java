@@ -149,7 +149,7 @@ public class UserAccountController extends BaseController {
         oldAccount.setEmail(userAccount.getEmail());
         oldAccount.setDescription(userAccount.getDescription());
 
-        if ("admin".equals(oldName)) {
+        if ("admin".equals(userContextService.getCurrentUserName())) {
             oldAccount.setLayout(userAccount.getLayout());
             oldAccount.setNoteLayout(userAccount.getNoteLayout());
             oldAccount.setTheme(userAccount.getTheme());

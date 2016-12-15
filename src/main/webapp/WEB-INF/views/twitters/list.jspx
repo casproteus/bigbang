@@ -13,8 +13,6 @@
 			z="cYCbdZX2dPibClNCvaX+Sv/y2a0=">
 			<table:column id="c_com_aeiou_bigbang_domain_Twitter_twtitle"
 				property="twtitle" z="znDzR2exbTQ46ygK4oITCZTkf7A=" />
-			<table:column id="c_com_aeiou_bigbang_domain_Twitter_twitent"
-				property="twitent" z="vO9zdqfnwHkQErllpK/b7ReFK+8=" />
 			<table:column id="c_com_aeiou_bigbang_domain_Twitter_twittertag"
 				property="twittertag" z="rgD6X1OfH48ZJjgsSjMv3zjVoNI=" />
 			<table:column date="true"

@@ -521,7 +521,7 @@ public class BigUtil {
             UserAccount owner,
             int type) {
 
-        List<BigTag> bigTagList = findLangMatchedTagsOfAdmin(httpServletRequest, owner, type);
+        List<BigTag> bigTagList = findLangMatchedTagsOfAdmin(httpServletRequest, type);
         if (!owner.getName().equals("admin")) {
             bigTagList.addAll(BigTag.findTagsFromOwnerAndFriend(owner.getName(), type));
         }
@@ -587,9 +587,8 @@ public class BigUtil {
         return listForReturn;
     }
 
-    private static List<BigTag> findLangMatchedTagsOfAdmin(
+    public static List<BigTag> findLangMatchedTagsOfAdmin(
             HttpServletRequest httpServletRequest,
-            UserAccount owner,
             int type) {
         List<BigTag> bigTags = new ArrayList<BigTag>();
         List<Customize> list = Customize.findCustomizesByOwner(UserAccount.findUserAccountByName("admin"));
@@ -604,7 +603,7 @@ public class BigUtil {
             }
         }
         for (Customize customize : list2) {
-            BigTag bigTag = BigTag.findTagByNameAndOwner(customize.getCusValue(), owner.getName());
+            BigTag bigTag = BigTag.findTagByNameAndOwner(customize.getCusValue(), "admin");
             if (bigTag != null && bigTag.getOwner() == type) {
                 bigTags.add(bigTag);
             }

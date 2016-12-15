@@ -60,6 +60,9 @@ public class ContentController {
             tTags = BigUtil.convertTagStringListToObjList(tTagsAndNums.get(0), tCurName);
             tTags.addAll(BigUtil.convertTagStringListToObjList(tTagsAndNums.get(1), tCurName));
         }
+        // add tags from main page.
+        List<BigTag> bigTagList = BigUtil.findLangMatchedTagsOfAdmin(httpServletRequest, 0);
+        tTags.addAll(bigTagList);
 
         uiModel.addAttribute("mytags", tTags);
         List<UserAccount> tList = new ArrayList<UserAccount>();

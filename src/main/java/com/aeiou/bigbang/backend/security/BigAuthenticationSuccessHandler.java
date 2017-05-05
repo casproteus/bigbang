@@ -40,7 +40,7 @@ public class BigAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
             // by getRedirectStrategy().sendRedirect. so we dare not to use the personal space as default login success
             // page.
             String targetUrl = "/" + userContextService.getCurrentUserName();
-            logger.debug("Redirecting to psersonal Url: " + targetUrl);
+            logger.info("Redirecting to psersonal Url: " + targetUrl);
             // to change the code of targetUrl back to "ISO-8859-1", other wise the chinese user name will be lost by
             // method sendRedirect
             byte tByteAry[];
@@ -70,7 +70,7 @@ public class BigAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
 
         // Use the DefaultSavedRequest URL
         String targetUrl = savedRequest.getRedirectUrl();
-        logger.debug("Redirecting to DefaultSavedRequest Url: " + targetUrl);
+        logger.info("Redirecting to DefaultSavedRequest Url: " + targetUrl);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 }

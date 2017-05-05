@@ -443,8 +443,12 @@ public class BigUtil {
             HttpServletRequest httpServletRequest) {
         // check If Its New Created User;
 
-        if (owner.getName() == null)
+        if (owner.getName() == null) {
             owner = UserAccount.findUserAccountByName("admin");
+            if (owner == null) { // this happens when first use. admin not registered yet.
+                return;
+            }
+        }
         httpServletRequest.setAttribute("spaceOwner", owner.getName());
 
         HttpSession session = httpServletRequest.getSession();

@@ -43,6 +43,8 @@ public class BaseController {
         checkIfCusTextNeedTobeReInit(owner, uiModel, request);
         request.getSession().setAttribute("currentOwnerID", owner.getId());
         BigUtil.checkTheme(owner, request);
+
+        request.getSession().setMaxInactiveInterval(-1);
     }
 
     /**

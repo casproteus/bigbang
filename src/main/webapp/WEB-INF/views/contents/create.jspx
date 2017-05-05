@@ -10,10 +10,9 @@
 	<jsp:output omit-xml-declaration="yes" />
 	<table class="tWireless">
 		<tr>
-			<td class="tWireless" valign="top"><form:create
-					id="fc_com_aeiou_bigbang_domain_Content" modelAttribute="content"
-					path="/contents" render="${empty dependencies}"
-					z="mZcFXRVgd+YQsRIO+7SoQkhNsmo=">
+			<td class="tWireless" valign="top">
+				<form:create id="fc_com_aeiou_bigbang_domain_Content" modelAttribute="content"
+					path="/contents" render="${empty dependencies}" z="mZcFXRVgd+YQsRIO+7SoQkhNsmo=">
 					<springform:hidden path="addingTagFlag" id="addingTagFlag"
 						name="addingTagFlag" />
 					<field:BigContentTitle field="title"

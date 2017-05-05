@@ -44,7 +44,7 @@
 			nothireable="${nothireable}" notfireable="${notfireable}" />
 	</div>
 
-	<!-- display the blog of the user -->
+	<!-- display the blog of the user if it's not empty. -->
 	<c:if test="${not empty twitterLeft || not empty twitterRight}">
 		<table class="tWireless" style="margin-bottom: 0px">
 			<tr>

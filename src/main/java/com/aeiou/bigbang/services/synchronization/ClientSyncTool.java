@@ -26,14 +26,8 @@ public class ClientSyncTool {
         // ctx));
         Client client = Client.create(config); // if we need a ssh, can go on work in this part.
 
-        // WebResource webResource = client.resource("http://localhost/bigbang/useraccounts/" + pCommand); //have to add
-        // an value: /jsonArray, otherwise, the
-        WebResource webResource = client.resource("http://cn.sharethegoodones.com/useraccounts/" + pCommand); // have to
-                                                                                                              // add an
-                                                                                                              // value:
-                                                                                                              // /{pCommand},
-                                                                                                              // to
-                                                                                                              // distinguish
+        // have to add an value: /{pCommand}, to distinguish
+        WebResource webResource = client.resource("http://teamup.sharethegoodones.com/useraccounts/" + pCommand);
         webResource.accept("application/json"); // other methods in controller.
         // webResource.method("POST"); //this method will call onto the remote server, duplicated with
         // webResource.post();

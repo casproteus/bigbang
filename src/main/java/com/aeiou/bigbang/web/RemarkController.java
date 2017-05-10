@@ -374,7 +374,7 @@ public class RemarkController {
         Object tUnsubscribe = session.getAttribute("i18n_Unsubscribe");
         Object tRemark = session.getAttribute("i18n_NewRemark");
 
-        String link = tlink != null ? (String) tlink : "http://www.sharethegoodones.com";
+        String link = tlink != null ? (String) tlink : "http://teamup.sharethegoodones.com";
         String reply = tReply != null ? (String) tReply : "Reply";
         String unsubscribe = tUnsubscribe != null ? (String) tUnsubscribe : "Unsubscribe";
         String newRemark = tRemark != null ? (String) tRemark : "New remark: ";

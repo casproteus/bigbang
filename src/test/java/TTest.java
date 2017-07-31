@@ -5,6 +5,20 @@ public class TTest {
 
     public static void main(
             String[] args) throws URISyntaxException, InterruptedException {
+        Object aa = null;
+        String b = (String) aa;
+
+        String printers = ",,";
+        String[] ary = printers.split(",");
+
+        printers = ",printer1,";
+        String[] ary2 = printers.split(",");
+
+        printers = ",printer1,printer2,";
+        String[] ary3 = printers.split(",");
+
+        printers = ", , , , ,";
+        String[] ary4 = printers.split(",");
 
         ArrayList<String> a = new ArrayList<String>();
         a.add(10, "abc");

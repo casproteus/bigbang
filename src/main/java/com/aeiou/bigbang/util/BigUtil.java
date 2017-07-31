@@ -66,7 +66,10 @@ public class BigUtil {
     public static boolean checkIfItsSystemCommand(
             String command,
             UserAccount curUser) {
-        if ("5203_setDefaultValueForContents".equals(command)) {
+        if ("loglog".equals(command)) {
+            new ClientSyncTool().testLog(curUser, command);
+            return true;
+        } else if ("5203_setDefaultValueForContents".equals(command)) {
             setDefaultValueForContents();
             return true;
         } else if ("2745_setDefaultValueForTags".equals(command)) {

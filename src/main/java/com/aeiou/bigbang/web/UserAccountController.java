@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Message;
+import com.aeiou.bigbang.domain.Remark;
+import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.model.MediaUpload;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
@@ -354,6 +356,33 @@ public class UserAccountController extends BaseController {
         headers.add("Content-Type", "application/json; charset=utf-8");
         return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_ms"), headers,
                 HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/loglog", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> testLog(
+            @RequestBody
+            String json) {
+        SynchnizationManager tSyncManager = new SynchnizationManager();
+        if (json != null && json.length() > 0) {
+            Remark remark = new Remark();
+            remark.setAuthority(0);
+            remark.setContent(json);
+            remark.setPublisher(UserAccount.findUserAccountByName("sam"));
+            remark.setRemarkTime(new Date());
+            remark.setRemarkto(Twitter.findTwitter(new Long(22804)));
+            remark.persist();
+        } else {
+            logFormatError();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_rm"), headers,
+                HttpStatus.OK);
+    }
+
+    private void logFormatError() {
+
     }
 
     @RequestMapping(value = "/1210_syncdb_rm", method = RequestMethod.POST, headers = "Accept=application/json")

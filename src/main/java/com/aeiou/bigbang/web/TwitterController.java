@@ -353,4 +353,27 @@ public class TwitterController {
                         .getBean("personalController", PersonalController.class);
         tController.getImage(id, request, response);
     }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
+    public String delete(
+            @PathVariable("id")
+            Long id,
+            @RequestParam(value = "page", required = false)
+            Integer page,
+            @RequestParam(value = "size", required = false)
+            Integer size,
+            Model uiModel) {
+        Twitter twitter = Twitter.findTwitter(id);
+        UserAccount tOwner = twitter.getPublisher();
+        Set<Integer> authSet = BigAuthority.getAuthSet(tOwner, tOwner);
+        List<Remark> remarks = Remark.findRemarkByTwitter(twitter, authSet, 0, 0);
+        for (Remark remark : remarks) {
+            remark.remove();
+        }
+        twitter.remove();
+        uiModel.asMap().clear();
+        uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
+        uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
+        return "redirect:/twitters";
+    }
 }

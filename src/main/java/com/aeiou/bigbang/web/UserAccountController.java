@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,7 @@ import com.aeiou.bigbang.domain.UserAccount;
 import com.aeiou.bigbang.model.MediaUpload;
 import com.aeiou.bigbang.services.secutiry.UserContextService;
 import com.aeiou.bigbang.services.synchronization.SynchnizationManager;
+import com.aeiou.bigbang.util.BigAuthority;
 import com.aeiou.bigbang.util.BigUtil;
 
 import flexjson.JSONDeserializer;
@@ -363,14 +365,57 @@ public class UserAccountController extends BaseController {
             @RequestBody
             String json) {
         SynchnizationManager tSyncManager = new SynchnizationManager();
+
+        String userName = "JustPrint";
+        UserAccount userAccount = makeSureUserCreated(userName);
+
+        // to make sure twitter exist.
+        Set<Integer> authSet = BigAuthority.getAuthSet(userAccount, userAccount);
+        List<Twitter> twitters = Twitter.findTwitterByPublisher(userAccount, authSet, 0, 0, "o.lastupdate ASC");
+        Twitter twitter = null;
+        if (twitters != null && twitters.size() > 0) {
+            twitter = twitters.get(0);
+        } else {
+            twitter = new Twitter();
+            twitter.setLastupdate(new Date());
+            twitter.setPublisher(userAccount);
+            twitter.setTwitDate(new Date());
+            twitter.setTwtitle("JustPrint Logs");
+            twitter.setTwitent("This blog is used to record JustPrint Logs!");
+            twitter.persist();
+        }
+
+        // add the new remark base on content in param: {"tag":"OrderIdMarkViewHolder","msg":"item%3A+0select%3A+false"}
         if (json != null && json.length() > 0) {
+            UserAccount publisher = null;
+            int p = json.indexOf("\"tag\"");
+            if (p > -1) {
+                int startP = p + 7;
+                p = json.indexOf("\"msg\"");
+                if (p > -1) {
+                    int endP = p - 2;
+                    publisher = makeSureUserCreated(json.substring(startP, endP));
+                }
+            }
+            // get the content
+            if (p > -1) {
+                json = json.substring(p + 7);
+                json = json.substring(0, json.length() - 2);
+            }
+
             Remark remark = new Remark();
             remark.setAuthority(0);
             remark.setContent(json);
-            remark.setPublisher(UserAccount.findUserAccountByName("sam"));
+            remark.setPublisher(publisher);
             remark.setRemarkTime(new Date());
-            remark.setRemarkto(Twitter.findTwitter(new Long(22804)));
+            remark.setRemarkto(twitter);
             remark.persist();
+
+            // check if threre's too many:
+            List<Remark> remarks = Remark.findRemarkByTwitter(twitter, authSet, 0, 0);
+            if (remarks.size() > 100) {// keep only 100 logs.
+                remarks.get(100).remove();
+            }
         } else {
             logFormatError();
         }
@@ -379,6 +424,18 @@ public class UserAccountController extends BaseController {
         headers.add("Content-Type", "application/json; charset=utf-8");
         return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_rm"), headers,
                 HttpStatus.OK);
+    }
+
+    private UserAccount makeSureUserCreated(
+            String userName) {
+        UserAccount userAccount = UserAccount.findUserAccountByName(userName);
+        if (userAccount == null) {
+            userAccount = new UserAccount();
+            userAccount.setName(userName);
+            userAccount.setPassword("asdf");
+            userAccount.persist();
+        }
+        return userAccount;
     }
 
     private void logFormatError() {

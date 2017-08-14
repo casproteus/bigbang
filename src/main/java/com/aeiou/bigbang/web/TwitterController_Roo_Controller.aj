@@ -29,16 +29,7 @@ privileged aspect TwitterController_Roo_Controller {
         return "twitters/show";
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
-    public String TwitterController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        Twitter twitter = Twitter.findTwitter(id);
-        twitter.remove();
-        uiModel.asMap().clear();
-        uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
-        uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
-        return "redirect:/twitters";
-    }
-    
+        
     void TwitterController.addDateTimeFormatPatterns(Model uiModel) {
         uiModel.addAttribute("twitter_twitdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
         uiModel.addAttribute("twitter_lastupdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));

@@ -371,7 +371,7 @@ public class UserAccountController extends BaseController {
 
         // to make sure twitter exist.
         Set<Integer> authSet = BigAuthority.getAuthSet(userAccount, userAccount);
-        List<Twitter> twitters = Twitter.findTwitterByPublisher(userAccount, authSet, 0, 0, "o.lastupdate ASC");
+        List<Twitter> twitters = Twitter.findTwitterByPublisher(userAccount, authSet, 0, 0, null);
         Twitter twitter = null;
         if (twitters != null && twitters.size() > 0) {
             twitter = twitters.get(0);
@@ -381,6 +381,7 @@ public class UserAccountController extends BaseController {
             twitter.setPublisher(userAccount);
             twitter.setTwitDate(new Date());
             twitter.setTwtitle("JustPrint Logs");
+            twitter.setAuthority(0);
             twitter.setTwitent("This blog is used to record JustPrint Logs!");
             twitter.persist();
         }

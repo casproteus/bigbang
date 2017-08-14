@@ -167,7 +167,6 @@ public class TwitterController {
                         null);
         if (tList != null && tList.size() > 0) {
             Twitter tTwitter = tList.get(0);
-            System.out.println("---" + twitter.getTwitent() + "---");
             if (twitter.getTwitent().equals(tTwitter.getTwitent())) {
                 populateEditForm(uiModel, twitter, httpServletRequest);
                 return "twitters/create";

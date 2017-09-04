@@ -14,8 +14,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
@@ -29,7 +27,6 @@ privileged aspect TwitterController_Roo_Controller {
         return "twitters/show";
     }
     
-        
     void TwitterController.addDateTimeFormatPatterns(Model uiModel) {
         uiModel.addAttribute("twitter_twitdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
         uiModel.addAttribute("twitter_lastupdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));

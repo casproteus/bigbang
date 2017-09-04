@@ -1,5 +1,6 @@
 package com.aeiou.bigbang.web;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -406,7 +407,12 @@ public class UserAccountController extends BaseController {
 
             Remark remark = new Remark();
             remark.setAuthority(0);
-            remark.setContent(json);
+            String content = null;
+            try {
+                content = URLDecoder.decode(json, "UTF-8");
+            } catch (Exception e) {
+            }
+            remark.setContent(content);
             remark.setPublisher(publisher);
             remark.setRemarkTime(new Date());
             remark.setRemarkto(twitter);

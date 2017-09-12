@@ -4,16 +4,16 @@
 	<groupId>com.aeiou.bigbang</groupId>
 	<artifactId>bigbang</artifactId>
 	<packaging>war</packaging>
-	<version>0.1.0.BUILD-SNAPSHOT</version>
+	<version>0.1.1.BUILD-SNAPSHOT</version>
 	<name>bigbang</name>
 	<properties>
-		<aspectj.version>1.7.0.RC1</aspectj.version>
-		<java.version>1.6</java.version>
+		<aspectj.version>1.8.4</aspectj.version>
+		<java.version>8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<roo.version>1.3.1.RELEASE</roo.version>
-		<slf4j.version>1.6.4</slf4j.version>
-		<spring.version>3.1.1.RELEASE</spring.version>
-		<spring-security.version>3.1.0.RELEASE</spring-security.version>
+		<slf4j.version>1.7.2</slf4j.version>
+		<spring.version>4.3.9.RELEASE</spring.version>
+		<spring-security.version>4.2.3.RELEASE</spring-security.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -465,10 +465,10 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.12</version>
+				<version>2.4.2</version>
 				<configuration>
 					<printSummary>false</printSummary>
 					<redirectTestOutputToFile>true</redirectTestOutputToFile>
@@ -476,7 +476,7 @@
 						<exclude>**/*_Roo_*</exclude>
 					</excludes>
 				</configuration>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -544,7 +544,7 @@
 					</webAppConfig>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>openjpa-maven-plugin</artifactId>
 				<version>1.2</version>
@@ -579,7 +579,7 @@
 						</exclusions>
 					</dependency>
 				</dependencies>
-			</plugin>
+			</plugin>-->
 		</plugins>
 		<pluginManagement>
 			<plugins>

@@ -7,7 +7,7 @@
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
 	<menu:menu id="_menu" z="nZaf43BjUg1iM0v70HJVEsXDopc=">
-		<sec:authorize ifAllGranted="ROLE_ADMIN">
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<menu:category id="c_customize" z="d5dRFjWLmf/Meh0T8E7c82SoRjE=">
 				<menu:item id="i_customize_new" messageCode="global_menu_new"
 					url="/customizes?form" z="oAoMLHN1McEd/aulC0IE5SF7+qo=" />

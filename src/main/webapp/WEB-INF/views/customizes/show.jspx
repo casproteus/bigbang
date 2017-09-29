@@ -16,7 +16,7 @@
 			id="s_com_aeiou_bigbang_domain_Customize_cusValue"
 			object="${customize}" z="+aouao0Q2D8V745XQ+Rh2nm86N8=" />
 			
-		<sec:authorize ifAllGranted="ROLE_ADMIN">
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<field:display field="useraccount"
 				id="s_com_aeiou_bigbang_domain_Customize_useraccount"
 				object="${customize}" z="vKdppaARcl4qgqBzlmbDxiEhSVc=" />

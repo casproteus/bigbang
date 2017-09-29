@@ -14,7 +14,7 @@
 		<field:select field="authority"
 			id="c_com_aeiou_bigbang_domain_Twitter_authority" itemValue="id"
 			items="${authorities}" path="/bigtags" z="user-managed" />
-		<sec:authorize ifAllGranted="ROLE_ADMIN">
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<field:select field="publisher"
 				id="c_com_aeiou_bigbang_domain_Content_publisher" itemValue="id"
 				items="${useraccounts}" path="/useraccounts" required="true"

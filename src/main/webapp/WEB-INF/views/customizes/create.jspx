@@ -17,7 +17,7 @@
 		<field:input field="cusValue"
 			id="c_com_aeiou_bigbang_domain_Customize_cusValue" required="true"
 			z="MOcvgduXIUlASmNlHuNwrbU06ZM=" />
-		<sec:authorize ifAllGranted="ROLE_ADMIN">
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<field:select field="useraccount"
 				id="c_com_aeiou_bigbang_domain_Customize_useraccount" itemValue="id"
 				items="${useraccounts}" path="/useraccounts"

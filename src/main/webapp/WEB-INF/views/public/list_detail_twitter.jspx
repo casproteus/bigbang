@@ -67,7 +67,7 @@
 
 			<!-- set automatically refresh! -->
 			<spring:url value="/remarks" var="RefreshTimeSettingForm_url">
-				<spring:param name="refreshTime" value="${#refreshTime}" />
+				<spring:param name="refreshTime" value="${refreshTime}" />
 				<spring:param name="refreshTwitterid" value="${twitter['id']}" />
 			</spring:url>
 			<form id="RefreshTimeSettingForm"
@@ -105,7 +105,7 @@
 			<util:BigLoginNotice id="fc_com_aeiou_bigbang_domain_Remark">
 				<!-- set automatically refresh! -->
 				<spring:url value="/public" var="RefreshTimeSettingForm_url">
-					<spring:param name="refreshTime" value="${#refreshTime}" />
+					<spring:param name="refreshTime" value="${refreshTime}" />
 					<spring:param name="refreshTwitterid" value="${twitter['id']}" />
 				</spring:url>
 				<form id="RefreshTimeSettingForm_Anonymous"

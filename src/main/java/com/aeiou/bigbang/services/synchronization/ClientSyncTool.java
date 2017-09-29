@@ -45,7 +45,7 @@ public class ClientSyncTool {
 		Client client = Client.create(config); // if we need a ssh, can go on work in this part.
 
 		// have to add an value: /{pCommand}, to distinguish
-		WebResource webResource = client.resource("http://teamup.sharethegoodones.com/useraccounts/" + pCommand);
+		WebResource webResource = client.resource("http://my-bookmark.rhcloud.com/useraccounts/" + pCommand);
 		webResource.accept("application/json"); // other methods in controller.
 		// webResource.method("POST"); //this method will call onto the remote server,
 		// duplicated with

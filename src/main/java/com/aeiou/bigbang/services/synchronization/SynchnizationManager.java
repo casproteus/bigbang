@@ -28,7 +28,10 @@ public class SynchnizationManager {
 		Collection<String> collection = new ArrayList<String>();
 		if ("1210_syncdb".equals(pCommand) || "1210_syncdb_ua".equals(pCommand)) {
 			// useraccount
-			String tUserAccountJsonAryStr = UserAccount.toJsonArray(UserAccount.findAllUserAccounts());
+			List<UserAccount> list = UserAccount.findAllUserAccounts();
+			if (list == null || list.size() < 2) // means only admin was added. e.g. it's a new created empty db.
+				list = new ArrayList();
+			String tUserAccountJsonAryStr = UserAccount.toJsonArray(list);
 			collection.add(tUserAccountJsonAryStr);
 		}
 		if ("1210_syncdb".equals(pCommand) || "1210_syncdb_tg".equals(pCommand)) {

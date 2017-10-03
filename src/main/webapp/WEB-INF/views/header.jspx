@@ -13,21 +13,11 @@
 		style="height: 20px; background-color:#${background_head}; color:#${foreground_head};">
 		<c:choose>
 			<c:when test="${pageContext['request'].userPrincipal != null}">
-				<c:choose>
-					<c:when test="${currentOwnerID eq currentUserID}">
-						<!-- on user's own space -->
-						<spring:url value="/" var="home" />
-						<a href="${home}"> <spring:message code="button_home" />
-						</a>
-					</c:when>
-					<c:otherwise>
-						<spring:url value="/${pageContext['request'].userPrincipal.name}"
-							var="home" />
-						<a href="${home}"> <spring:message code="button_myhome"
-								arguments="${pageContext['request'].userPrincipal.name}" />
-						</a>
-					</c:otherwise>
-				</c:choose>
+				<spring:url value="/${pageContext['request'].userPrincipal.name}"
+					var="home" />
+				<a href="${home}"> <spring:message code="button_myhome"
+						arguments="${pageContext['request'].userPrincipal.name}" />
+				</a>
 
 				<c:out value=" || " />
 				<span> <spring:url

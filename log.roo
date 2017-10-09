@@ -125,3 +125,5 @@ field string --fieldName noteLayout --class ~.domain.UserAccount
 jpa setup --provider HIBERNATE --database MYSQL 
 exit
 // Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2017-09-21 22:52:46
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2017-10-07 09:47:53
+jpa setup --database MYSQL --provider HIBERNATE 

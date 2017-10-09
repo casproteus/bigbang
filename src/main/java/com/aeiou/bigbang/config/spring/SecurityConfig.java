@@ -56,14 +56,14 @@ public class SecurityConfig {
     @Bean
     @Scope("singleton")
     // We just need to set the default failure url here
-            AuthenticationFailureHandler authenticationFailureHandler() {
+    AuthenticationFailureHandler authenticationFailureHandler() {
         return new BigAuthenticationFailureHandler();
     }
 
     @Bean
     @Scope("singleton")
     // We just need to set the default success url here
-            AuthenticationSuccessHandler authenticationSuccessHandler() {
+    AuthenticationSuccessHandler authenticationSuccessHandler() {
         BigAuthenticationSuccessHandler handler = new BigAuthenticationSuccessHandler();
         return handler;
     }

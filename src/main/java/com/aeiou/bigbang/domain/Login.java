@@ -6,23 +6,24 @@ import javax.persistence.Id;
 import org.springframework.beans.factory.annotation.Configurable;
 
 /**
- * this class looks like is used by no other class, while you can not delete it,
- * because it's use through aspect. don't know by who.
+ * this class looks like is used by no other class, while you can not delete it, because it's use through aspect. don't
+ * know by who.
  */
 @Entity
 @Configurable
 public class Login {
 
-	@Id
-	private Long id;
+    @Id
+    private Long id;
 
-	private boolean rememberMe;
+    private boolean rememberMe;
 
-	public boolean getRememberMe() {
-		return rememberMe;
-	}
+    public boolean getRememberMe() {
+        return rememberMe;
+    }
 
-	public void setRememberMe(boolean rememberMe) {
-		this.rememberMe = rememberMe;
-	}
+    public void setRememberMe(
+            boolean rememberMe) {
+        this.rememberMe = rememberMe;
+    }
 }

@@ -7,10 +7,8 @@ import com.aeiou.bigbang.model.MediaUpload;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect MediaUpload_Roo_ToString {
-    
-    public String MediaUpload.toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-    
+privileged aspect MediaUpload_Roo_ToString{
+
+public String MediaUpload.toString(){return ReflectionToStringBuilder.toString(this,ToStringStyle.SHORT_PREFIX_STYLE);}
+
 }

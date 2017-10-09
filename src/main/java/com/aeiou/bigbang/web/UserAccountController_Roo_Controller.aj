@@ -13,29 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
-privileged aspect UserAccountController_Roo_Controller {
-    
-    @RequestMapping(value = "/{id}", produces = "text/html")
-    public String UserAccountController.show(@PathVariable("id") Long id, Model uiModel) {
-        uiModel.addAttribute("useraccount", UserAccount.findUserAccount(id));
-        uiModel.addAttribute("itemId", id);
-        return "useraccounts/show";
-    }
-    
-    void UserAccountController.populateEditForm(Model uiModel, UserAccount userAccount) {
-        uiModel.addAttribute("userAccount", userAccount);
-        uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
-    }
-    
-    String UserAccountController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
-        String enc = httpServletRequest.getCharacterEncoding();
-        if (enc == null) {
-            enc = WebUtils.DEFAULT_CHARACTER_ENCODING;
-        }
-        try {
-            pathSegment = UriUtils.encodePathSegment(pathSegment, enc);
-        } catch (UnsupportedEncodingException uee) {}
-        return pathSegment;
-    }
-    
+privileged aspect UserAccountController_Roo_Controller{
+
+@RequestMapping(value="/{id}",produces="text/html")public String UserAccountController.show(@PathVariable("id")Long id,Model uiModel){uiModel.addAttribute("useraccount",UserAccount.findUserAccount(id));uiModel.addAttribute("itemId",id);return"useraccounts/show";}
+
+void UserAccountController.populateEditForm(Model uiModel,UserAccount userAccount){uiModel.addAttribute("userAccount",userAccount);uiModel.addAttribute("useraccounts",UserAccount.findAllUserAccounts());}
+
+String UserAccountController.encodeUrlPathSegment(String pathSegment,HttpServletRequest httpServletRequest){String enc=httpServletRequest.getCharacterEncoding();if(enc==null){enc=WebUtils.DEFAULT_CHARACTER_ENCODING;}try{pathSegment=UriUtils.encodePathSegment(pathSegment,enc);}catch(UnsupportedEncodingException uee){}return pathSegment;}
+
 }

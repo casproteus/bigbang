@@ -17,57 +17,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
-privileged aspect CustomizeController_Roo_Controller {
-    
-    @RequestMapping(params = "form", produces = "text/html")
-    public String CustomizeController.createForm(Model uiModel) {
-        populateEditForm(uiModel, new Customize());
-        return "customizes/create";
-    }
-    
-    @RequestMapping(value = "/{id}", produces = "text/html")
-    public String CustomizeController.show(@PathVariable("id") Long id, Model uiModel) {
-        uiModel.addAttribute("customize", Customize.findCustomize(id));
-        uiModel.addAttribute("itemId", id);
-        return "customizes/show";
-    }
-    
-    @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
-    public String CustomizeController.update(@Valid Customize customize, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, customize);
-            return "customizes/update";
-        }
-        uiModel.asMap().clear();
-        customize.merge();
-        return "redirect:/customizes/" + encodeUrlPathSegment(customize.getId().toString(), httpServletRequest);
-    }
-    
-    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String CustomizeController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, Customize.findCustomize(id));
-        return "customizes/update";
-    }
-    
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
-    public String CustomizeController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        Customize customize = Customize.findCustomize(id);
-        customize.remove();
-        uiModel.asMap().clear();
-        uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
-        uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
-        return "redirect:/customizes";
-    }
-    
-    String CustomizeController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
-        String enc = httpServletRequest.getCharacterEncoding();
-        if (enc == null) {
-            enc = WebUtils.DEFAULT_CHARACTER_ENCODING;
-        }
-        try {
-            pathSegment = UriUtils.encodePathSegment(pathSegment, enc);
-        } catch (UnsupportedEncodingException uee) {}
-        return pathSegment;
-    }
-    
+privileged aspect CustomizeController_Roo_Controller{
+
+@RequestMapping(params="form",produces="text/html")public String CustomizeController.createForm(Model uiModel){populateEditForm(uiModel,new Customize());return"customizes/create";}
+
+@RequestMapping(value="/{id}",produces="text/html")public String CustomizeController.show(@PathVariable("id")Long id,Model uiModel){uiModel.addAttribute("customize",Customize.findCustomize(id));uiModel.addAttribute("itemId",id);return"customizes/show";}
+
+@RequestMapping(method=RequestMethod.PUT,produces="text/html")public String CustomizeController.update(@Valid Customize customize,BindingResult bindingResult,Model uiModel,HttpServletRequest httpServletRequest){if(bindingResult.hasErrors()){populateEditForm(uiModel,customize);return"customizes/update";}uiModel.asMap().clear();customize.merge();return"redirect:/customizes/"+encodeUrlPathSegment(customize.getId().toString(),httpServletRequest);}
+
+@RequestMapping(value="/{id}",params="form",produces="text/html")public String CustomizeController.updateForm(@PathVariable("id")Long id,Model uiModel){populateEditForm(uiModel,Customize.findCustomize(id));return"customizes/update";}
+
+@RequestMapping(value="/{id}",method=RequestMethod.DELETE,produces="text/html")public String CustomizeController.delete(@PathVariable("id")Long id,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="size",required=false)Integer size,Model uiModel){Customize customize=Customize.findCustomize(id);customize.remove();uiModel.asMap().clear();uiModel.addAttribute("page",(page==null)?"1":page.toString());uiModel.addAttribute("size",(size==null)?"10":size.toString());return"redirect:/customizes";}
+
+String CustomizeController.encodeUrlPathSegment(String pathSegment,HttpServletRequest httpServletRequest){String enc=httpServletRequest.getCharacterEncoding();if(enc==null){enc=WebUtils.DEFAULT_CHARACTER_ENCODING;}try{pathSegment=UriUtils.encodePathSegment(pathSegment,enc);}catch(UnsupportedEncodingException uee){}return pathSegment;}
+
 }

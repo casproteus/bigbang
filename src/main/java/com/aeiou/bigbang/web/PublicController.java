@@ -42,13 +42,12 @@ public class PublicController extends BaseController {
 
     @RequestMapping(method = RequestMethod.POST, value = "{id}")
     public void post(
-            @PathVariable
-            Long id,
+            @PathVariable Long id,
             ModelMap modelMap,
             HttpServletRequest request,
             HttpServletResponse response) {
-        LogFactory.getLog(PublicController.class).info(
-                "Called! PublicController.post is finally called from: " + Thread.getAllStackTraces().toString());
+        LogFactory.getLog(PublicController.class)
+                .info("Called! PublicController.post is finally called from: " + Thread.getAllStackTraces().toString());
     }
 
     /**
@@ -64,9 +63,8 @@ public class PublicController extends BaseController {
             Model uiModel,
             HttpServletRequest request) {
 
-        LogFactory
-                .getLog(PublicController.class)
-                .info("Shouldn't have been called! PublicController.index() is dumpted, and all request should point to personalController.index()! "
+        LogFactory.getLog(PublicController.class).info(
+                "Shouldn't have been called! PublicController.index() is dumpted, and all request should point to personalController.index()! "
                         + Thread.getAllStackTraces().toString());
         return null;
 
@@ -87,14 +85,10 @@ public class PublicController extends BaseController {
      */
     @RequestMapping(params = "spaceOwner", produces = "text/html")
     public String showMore(
-            @RequestParam(value = "tagId", required = false)
-            Long tagId,
-            @RequestParam(value = "spaceOwner", required = false)
-            String spaceOwner,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "tagId", required = false) Long tagId,
+            @RequestParam(value = "spaceOwner", required = false) String spaceOwner,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             String sortExpression,
             HttpServletRequest request) {
@@ -139,20 +133,19 @@ public class PublicController extends BaseController {
         if ("admin".equals(tOwner.getName())) {
             uiModel.addAttribute("contents", Content.findContentsByTag(tBigTag, firstResult, sizeNo, sortExpression));
             float nrOfPages = (float) Content.countContentsByTag(tBigTag) / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                    : nrOfPages));
+            uiModel.addAttribute("maxPages",
+                    (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
             String tCurName = userContextService.getCurrentUserName();
             UserAccount tCurUser = tCurName == null ? null : UserAccount.findUserAccountByName(tCurName);
             Set<Integer> tAuthSet = BigAuthority.getAuthSet(tCurUser, tOwner);
             uiModel.addAttribute("contents", Content.findContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet,
                     firstResult, sizeNo, sortExpression));
-            float nrOfPages =
-                    tBigTag.getOwner() == 0 ? (float) Content
-                            .countContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet) / sizeNo : (float) Content
-                            .countContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet) / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                    : nrOfPages));
+            float nrOfPages = tBigTag.getOwner() == 0
+                    ? (float) Content.countContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet) / sizeNo
+                    : (float) Content.countContentsByTagAndSpaceOwner(tBigTag, tOwner, tAuthSet) / sizeNo;
+            uiModel.addAttribute("maxPages",
+                    (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         }
     }
 
@@ -194,12 +187,9 @@ public class PublicController extends BaseController {
 
     @RequestMapping(params = "twitterid", produces = "text/html")
     public String showDetailTwitters(
-            @RequestParam(value = "twitterid", required = false)
-            Long twitterid,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "twitterid", required = false) Long twitterid,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             HttpServletRequest request) {
         RemarkController tController =
@@ -210,8 +200,7 @@ public class PublicController extends BaseController {
     @RequestMapping(params = "refreshTime", produces = "text/html")
     public String setRefreshTime(
             RefreshBean refreshBean,
-            @RequestParam(value = "refreshTwitterid", required = true)
-            Long refreshTwitterid,
+            @RequestParam(value = "refreshTwitterid", required = true) Long refreshTwitterid,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         int tTime = 120;
@@ -233,12 +222,9 @@ public class PublicController extends BaseController {
 
     @RequestMapping(params = "publisher", produces = "text/html")
     public String listContentByPublisher(
-            @RequestParam(value = "publisher", required = false)
-            String pPublisher,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "publisher", required = false) String pPublisher,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             String sortExpression) {
         UserAccount tPublisher = UserAccount.findUserAccountByName(pPublisher);
@@ -271,22 +257,18 @@ public class PublicController extends BaseController {
                 }
             }
             float nrOfPages = (float) Content.countContentsByPublisher(tPublisher, tAuthSet) / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                    : nrOfPages));
+            uiModel.addAttribute("maxPages",
+                    (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         }
         return "public/list_publisher";
     }
 
     @RequestMapping(params = "listmoreblog", produces = "text/html")
     public String listMoreBlogs(
-            @RequestParam(value = "listmoreblog", required = false)
-            String pPublisher,
-            @RequestParam(value = "twittertype", required = false)
-            String twittertype,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "listmoreblog", required = false) String pPublisher,
+            @RequestParam(value = "twittertype", required = false) String twittertype,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             String sortExpression,
             HttpServletRequest request) {
@@ -338,19 +320,19 @@ public class PublicController extends BaseController {
                                                                                                                // (non-fans)
 
                 // got the list from fans first.
-                List<Twitter> tListTwitter =
-                        Twitter.findTwitterByOwner(new HashSet<UserAccount>(tFansList), tAuthSetFans, firstResult,
-                                sizeNo, sortExpression);
-                // if not find, or not enough, then find from non-fans. be careful that the parameters are different.
+                List<Twitter> tListTwitter = Twitter.findTwitterByOwner(new HashSet<UserAccount>(tFansList),
+                        tAuthSetFans, firstResult, sizeNo, sortExpression);
+                // if not find, or not enough, then find from non-fans. be careful that the
+                // parameters are different.
                 if (tListTwitter == null) { // out of range
-                    // Let's say the second page should start from 20(suppose page size is 20), but because the first
+                    // Let's say the second page should start from 20(suppose page size is 20), but
+                    // because the first
                     // page has 5 blogs from fans, So, first result is 20 - 5.
                     int fanFullPageQt = (int) twittersFromFans / sizeNo;
                     int fanItemQtLeft = (int) twittersFromFans - (int) twittersFromFans / sizeNo * sizeNo;
                     firstResult = ((page.intValue() - 1) - fanFullPageQt) * sizeNo - fanItemQtLeft;
-                    tListTwitter =
-                            Twitter.findTwitterByOwner(new HashSet<UserAccount>(tNonfansList), tAuthSetNonFans,
-                                    firstResult, sizeNo, sortExpression);
+                    tListTwitter = Twitter.findTwitterByOwner(new HashSet<UserAccount>(tNonfansList), tAuthSetNonFans,
+                            firstResult, sizeNo, sortExpression);
                     uiModel.addAttribute("blogs", tListTwitter);
                 } else if (tListTwitter.size() < sizeNo) { // or on the last page of fans. so must be start from 0. size
                                                            // must be (sizeNo - tListTwitter.size())
@@ -358,9 +340,8 @@ public class PublicController extends BaseController {
                                                                             // a new one.
                     tListForReturn.addAll(tListTwitter);
 
-                    List<Twitter> tList =
-                            Twitter.findTwitterByOwner(new HashSet<UserAccount>(tNonfansList), tAuthSetNonFans, 0,
-                                    sizeNo - tListTwitter.size(), sortExpression);
+                    List<Twitter> tList = Twitter.findTwitterByOwner(new HashSet<UserAccount>(tNonfansList),
+                            tAuthSetNonFans, 0, sizeNo - tListTwitter.size(), sortExpression);
                     if (tList != null)
                         tListForReturn.addAll(tList);
 
@@ -394,8 +375,8 @@ public class PublicController extends BaseController {
                 uiModel.addAttribute("notfireable", "true");
             }
         }
-        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                : nrOfPages));
+        uiModel.addAttribute("maxPages",
+                (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         uiModel.addAttribute("type", twittertype);
         uiModel.addAttribute("twitter_twitdate_date_format",
                 DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
@@ -416,12 +397,9 @@ public class PublicController extends BaseController {
      */
     @RequestMapping(params = "hire", produces = "text/html")
     public String hirePublisher(
-            @RequestParam(value = "hire", required = false)
-            String publisher,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "hire", required = false) String publisher,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             HttpServletRequest request) {
 
@@ -447,9 +425,8 @@ public class PublicController extends BaseController {
         tOwner.persist();
         tPublisher.persist();
 
-        PersonalController tController =
-                SpringApplicationContext.getApplicationContext()
-                        .getBean("personalController", PersonalController.class);
+        PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController",
+                PersonalController.class);
         return (tController.index(tCurName, uiModel, request));
     }
 
@@ -464,12 +441,9 @@ public class PublicController extends BaseController {
      */
     @RequestMapping(params = "fire", produces = "text/html")
     public String firePublisher(
-            @RequestParam(value = "fire", required = false)
-            String publisher,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "fire", required = false) String publisher,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             HttpServletRequest request) {
 
@@ -495,8 +469,8 @@ public class PublicController extends BaseController {
         tOwner.persist();
         tPublisher.persist();
 
-        return (SpringApplicationContext.getApplicationContext()
-                .getBean("personalController", PersonalController.class).index(tCurName, uiModel, request));
+        return (SpringApplicationContext.getApplicationContext().getBean("personalController", PersonalController.class)
+                .index(tCurName, uiModel, request));
     }
 
     /**
@@ -510,27 +484,27 @@ public class PublicController extends BaseController {
      */
     @RequestMapping(params = "relayouttype", produces = "text/html")
     public String relayout(
-            @RequestParam(value = "relayouttype", required = true)
-            String relayouttype,
-            @RequestParam(value = "tagId", required = true)
-            Long tagId,
+            @RequestParam(value = "relayouttype", required = true) String relayouttype,
+            @RequestParam(value = "tagId", required = true) Long tagId,
             HttpServletRequest request,
             Model uiModel) {
         String tCurName = userContextService.getCurrentUserName();
-        // @Note:this method can be called by logoutfilter when click the logout link, don't know the reason yet. so for
+        // @Note:this method can be called by logoutfilter when click the logout link,
+        // don't know the reason yet. so for
         // now, just add a check of the curname.
         if (tCurName == null) {
             return (index(uiModel, request));
         }
 
-        PersonalController tController =
-                SpringApplicationContext.getApplicationContext()
-                        .getBean("personalController", PersonalController.class);
+        PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController",
+                PersonalController.class);
         UserAccount tOwner = UserAccount.findUserAccountByName(tCurName);
         tCurName = tOwner.getName();
 
-        // this command is not used for now, because we are using the icon for another function which display an
-        // interface for add/remve tags on screen.//@?while I just saw there's a set to default link in that page.
+        // this command is not used for now, because we are using the icon for another
+        // function which display an
+        // interface for add/remve tags on screen.//@?while I just saw there's a set to
+        // default link in that page.
         if ("reset".equals(relayouttype)) {
             tOwner.setLayout(null);
             tOwner.setNoteLayout(null);
@@ -561,7 +535,8 @@ public class PublicController extends BaseController {
             tAryNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
             tAryNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
         }
-        // for the case that when empty string split, it return a string[] which one element. which will the treated as
+        // for the case that when empty string split, it return a string[] which one
+        // element. which will the treated as
         // has meaningful element later.
         if (tAryTagStrsLeft.length == 1 && tAryTagStrsLeft[0].length() == 0)
             tAryTagStrsLeft = new String[0];
@@ -700,8 +675,8 @@ public class PublicController extends BaseController {
                 tAryTagStrsRight = tAryTagStrsRight2;
                 tAryNumStrsRight = tAryNumStrsRight2;
             }
-        } else if ("down".equals(relayouttype)
-                && ((tIsInLeftColumn && tPos < tAryTagStrsLeft.length - 1) || (!tIsInLeftColumn && tPos < tAryTagStrsRight.length - 1))) {
+        } else if ("down".equals(relayouttype) && ((tIsInLeftColumn && tPos < tAryTagStrsLeft.length - 1)
+                || (!tIsInLeftColumn && tPos < tAryTagStrsRight.length - 1))) {
 
             if (tIsInLeftColumn) {
                 String[] tAryTagStrsLeft2 = new String[tAryTagStrsLeft.length];

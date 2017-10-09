@@ -153,9 +153,8 @@ public class RemarkAppender extends JFrame implements ActionListener, ListSelect
             JSONDeserializer<List<String>> deserializer =
                     new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class);
             List<String> tList = deserializer.deserialize(responseEntity);
-            List<Twitter> tBlogList =
-                    new JSONDeserializer<List<Twitter>>().use(null, ArrayList.class).use("values", Twitter.class)
-                            .deserialize(tList.get(0));
+            List<Twitter> tBlogList = new JSONDeserializer<List<Twitter>>().use(null, ArrayList.class)
+                    .use("values", Twitter.class).deserialize(tList.get(0));
             SortableList sl = new SortableList(tBlogList);
             return sl.getTwitters();
         }
@@ -174,9 +173,8 @@ public class RemarkAppender extends JFrame implements ActionListener, ListSelect
             JSONDeserializer<List<String>> deserializer =
                     new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class);
             List<String> tList = deserializer.deserialize(responseEntity);
-            List<Remark> tRemarkList =
-                    new JSONDeserializer<List<Remark>>().use(null, ArrayList.class).use("values", Remark.class)
-                            .deserialize(tList.get(0));
+            List<Remark> tRemarkList = new JSONDeserializer<List<Remark>>().use(null, ArrayList.class)
+                    .use("values", Remark.class).deserialize(tList.get(0));
             return tRemarkList;
         }
         return null;
@@ -217,13 +215,11 @@ public class RemarkAppender extends JFrame implements ActionListener, ListSelect
         ArrayList<String> alc = new ArrayList<String>();
         alc.add(tRemarkJsonAryStr);
 
-        ClientResponse response =
-                webResource.type("application/json").post(ClientResponse.class,
-                        new JSONSerializer().exclude("*.class").serialize(alc));
+        ClientResponse response = webResource.type("application/json").post(ClientResponse.class,
+                new JSONSerializer().exclude("*.class").serialize(alc));
         if (200 == response.getStatus()) {
-            List<String> tList =
-                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
-                            .deserialize((String) response.getEntity(String.class));
+            List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class)
+                    .use("values", String.class).deserialize((String) response.getEntity(String.class));
             allRemark = getAllRemarks();
             valueChanged(new ListSelectionEvent(blogList, -1, -1, true));
 
@@ -260,7 +256,8 @@ public class RemarkAppender extends JFrame implements ActionListener, ListSelect
                     textPane.invalidate();
                     textPane.revalidate();
                     textPane.validate();
-                    // TODO: here don't know how to set to the right height, so some text will not be visible when
+                    // TODO: here don't know how to set to the right height, so some text will not
+                    // be visible when
                     // shrink.
                     textPane.setPreferredSize(new Dimension(remarkList.getWidth(), textPane.getPreferredSize().height));
                     textPane.setBackground(index % 2 == 0 ? Color.white : Color.lightGray);

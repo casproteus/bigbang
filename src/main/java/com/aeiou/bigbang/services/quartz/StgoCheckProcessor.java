@@ -27,7 +27,7 @@ public class StgoCheckProcessor {
     private final Log log = LogFactory.getLog(getClass());
 
     /** 
-	 */
+     */
     public synchronized void stgoCheck() {
         ClientConfig config = new DefaultClientConfig();
         Client client = Client.create(config); // if we need a ssh, can go on work in this part.
@@ -53,7 +53,8 @@ public class StgoCheckProcessor {
                 if (200 == response.getStatus()) {
                     // DO nothing.
                 } else {
-                    // @TDOO: what if the website not OK? can I catch all the case here? including server
+                    // @TDOO: what if the website not OK? can I catch all the case here? including
+                    // server
                     BigUtil.sendMessage("info@sharethegoodones.com", "SERVER STOPED!--" + tURL,
                             "tao@sharethegoodones.com", "just found the server not normal, please check it out!");
                 }

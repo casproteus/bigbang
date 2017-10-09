@@ -47,9 +47,8 @@ public class Customize {
             pOwner = UserAccount.findUserAccountByName("admin");
         }
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Customize> tQuery =
-                tEntityManager.createQuery(
-                        "SELECT o FROM Customize AS o WHERE o.useraccount = :owner ORDER BY o.cusKey", Customize.class);
+        TypedQuery<Customize> tQuery = tEntityManager.createQuery(
+                "SELECT o FROM Customize AS o WHERE o.useraccount = :owner ORDER BY o.cusKey", Customize.class);
         tQuery = tQuery.setParameter("owner", pOwner);
         try {
             return tQuery.getResultList();
@@ -72,9 +71,8 @@ public class Customize {
                 jpaQuery = jpaQuery + " " + sortOrder;
             }
         }
-        TypedQuery<Customize> typedQuery =
-                entityManager().createQuery(jpaQuery, Customize.class).setFirstResult(firstResult)
-                        .setMaxResults(maxResults);
+        TypedQuery<Customize> typedQuery = entityManager().createQuery(jpaQuery, Customize.class)
+                .setFirstResult(firstResult).setMaxResults(maxResults);
         List<Customize> customizes = new ArrayList<Customize>();
         try {
             customizes = typedQuery.getResultList();

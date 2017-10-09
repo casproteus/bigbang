@@ -3,6 +3,7 @@ package com.aeiou.bigbang.domain;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -10,8 +11,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -59,11 +59,9 @@ public class Remark {
             int firstResult,
             int maxResults) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Remark> tQuery =
-                tEntityManager
-                        .createQuery(
-                                "SELECT o FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet) ORDER BY o.id DESC",
-                                Remark.class);
+        TypedQuery<Remark> tQuery = tEntityManager.createQuery(
+                "SELECT o FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet) ORDER BY o.id DESC",
+                Remark.class);
         tQuery = tQuery.setParameter("pTwitter", pTwitter);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
         if (firstResult > -1 && maxResults > 0)
@@ -74,10 +72,9 @@ public class Remark {
     public static long countRemarksByTwitter(
             Twitter pTwitter,
             Set<java.lang.Integer> pAuthSet) {
-        TypedQuery<Long> tQuery =
-                entityManager().createQuery(
-                        "SELECT COUNT(o) FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet)",
-                        Long.class);
+        TypedQuery<Long> tQuery = entityManager().createQuery(
+                "SELECT COUNT(o) FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet)",
+                Long.class);
         tQuery = tQuery.setParameter("pTwitter", pTwitter);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
         return tQuery.getSingleResult();
@@ -96,10 +93,10 @@ public class Remark {
             int maxResults,
             String sortExpression) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Remark> tQuery =
-                tEntityManager.createQuery("SELECT o FROM Remark AS o WHERE o.publisher = :publisher ORDER BY "
+        TypedQuery<Remark> tQuery = tEntityManager.createQuery(
+                "SELECT o FROM Remark AS o WHERE o.publisher = :publisher ORDER BY "
                         + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression),
-                        Remark.class);
+                Remark.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
         if (firstResult > -1 && maxResults > 0)
             tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
@@ -109,19 +106,19 @@ public class Remark {
     public static long countRemarkByPublisher(
             UserAccount pPublisher) {
         if (pPublisher == null) {
-            LogFactory.getLog(Content.class).error(
-                    "------received a null as param!(pPublisher is null)------Remark.countRemarkByPublisher()");
+            LogFactory.getLog(Content.class)
+                    .error("------received a null as param!(pPublisher is null)------Remark.countRemarkByPublisher()");
             Thread.dumpStack();
             return 0;
         } else {
-            TypedQuery<Long> tQuery =
-                    entityManager().createQuery("SELECT COUNT(o) FROM Remark AS o WHERE o.publisher = :pPublisher",
-                            Long.class);
+            TypedQuery<Long> tQuery = entityManager()
+                    .createQuery("SELECT COUNT(o) FROM Remark AS o WHERE o.publisher = :pPublisher", Long.class);
             tQuery = tQuery.setParameter("pPublisher", pPublisher);
             return tQuery.getSingleResult();
         }
     }
 
+    @Override
     public String toString() {
         return content;
     }
@@ -130,11 +127,10 @@ public class Remark {
             int firstResult,
             int maxResults,
             String sortExpression) {
-        return entityManager()
-                .createQuery(
-                        "SELECT o FROM Remark o ORDER BY "
-                                + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression),
-                        Remark.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+        return entityManager().createQuery(
+                "SELECT o FROM Remark o ORDER BY "
+                        + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression),
+                Remark.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
 
     public static List<Remark> findRemarkEntries(

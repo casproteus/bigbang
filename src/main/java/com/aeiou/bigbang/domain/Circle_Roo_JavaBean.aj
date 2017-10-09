@@ -8,46 +8,26 @@ import com.aeiou.bigbang.domain.UserAccount;
 import java.util.Date;
 import java.util.Set;
 
-privileged aspect Circle_Roo_JavaBean {
-    
-    public String Circle.getCircleName() {
-        return this.circleName;
-    }
-    
-    public void Circle.setCircleName(String circleName) {
-        this.circleName = circleName;
-    }
-    
-    public String Circle.getDescription() {
-        return this.description;
-    }
-    
-    public void Circle.setDescription(String description) {
-        this.description = description;
-    }
-    
-    public UserAccount Circle.getOwner() {
-        return this.owner;
-    }
-    
-    public void Circle.setOwner(UserAccount owner) {
-        this.owner = owner;
-    }
-    
-    public Date Circle.getCreatedDate() {
-        return this.createdDate;
-    }
-    
-    public void Circle.setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-    
-    public Set<UserAccount> Circle.getMembers() {
-        return this.members;
-    }
-    
-    public void Circle.setMembers(Set<UserAccount> members) {
-        this.members = members;
-    }
-    
+privileged aspect Circle_Roo_JavaBean{
+
+public String Circle.getCircleName(){return this.circleName;}
+
+public void Circle.setCircleName(String circleName){this.circleName=circleName;}
+
+public String Circle.getDescription(){return this.description;}
+
+public void Circle.setDescription(String description){this.description=description;}
+
+public UserAccount Circle.getOwner(){return this.owner;}
+
+public void Circle.setOwner(UserAccount owner){this.owner=owner;}
+
+public Date Circle.getCreatedDate(){return this.createdDate;}
+
+public void Circle.setCreatedDate(Date createdDate){this.createdDate=createdDate;}
+
+public Set<UserAccount>Circle.getMembers(){return this.members;}
+
+public void Circle.setMembers(Set<UserAccount>members){this.members=members;}
+
 }

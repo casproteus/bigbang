@@ -36,8 +36,7 @@ public class CustomizeController {
 
     @RequestMapping(params = "relayouttype", produces = "text/html")
     public String displayTagStatus(
-            @RequestParam(value = "relayouttype", required = true)
-            String relayouttype,
+            @RequestParam(value = "relayouttype", required = true) String relayouttype,
             HttpServletRequest request,
             Model uiModel) {
         String tCurName = userContextService.getCurrentUserName();
@@ -98,8 +97,7 @@ public class CustomizeController {
     @SuppressWarnings("unchecked")
     @RequestMapping(params = "updateTagsToShow", produces = "text/html")
     public String updateTagsToShow(
-            @RequestParam(value = "updateTagsToShow", required = true)
-            String relayouttype,
+            @RequestParam(value = "updateTagsToShow", required = true) String relayouttype,
             HttpServletRequest request,
             Model uiModel) {
 
@@ -120,9 +118,8 @@ public class CustomizeController {
         tOwner.persist();
 
         // go to personal page;
-        PersonalController tController =
-                SpringApplicationContext.getApplicationContext()
-                        .getBean("personalController", PersonalController.class);
+        PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController",
+                PersonalController.class);
         return tController.index(tCurName, uiModel, request);
     }
 
@@ -154,13 +151,16 @@ public class CustomizeController {
                 tNumStrsLeft = tSizeStr.substring(0, p).split(BigUtil.SEP_ITEM);
                 tNumStrsRight = tSizeStr.substring(p + BigUtil.MARK_SEP_LENGTH).split(BigUtil.SEP_ITEM);
             }
-        }// ----------------------------------------
+        } // ----------------------------------------
 
-        // no need to check if the layout info in DB is good, because when log in, we display personal page, when
+        // no need to check if the layout info in DB is good, because when log in, we
+        // display personal page, when
         // display personal page, we'll check the layout string and fix it.
 
-        // if any one in existing list not checked, then remove it from list and number list
-        // also remove it from the tListAllTag list, because we'll check the tags left, to see if there's any one setted
+        // if any one in existing list not checked, then remove it from list and number
+        // list
+        // also remove it from the tListAllTag list, because we'll check the tags left,
+        // to see if there's any one setted
         // as checked, we'll add them to the end.
         // List<String> tListAllTag = BigTag.findBMAllTagsStringByOwner(tCurName);
         // List<BigTag> tListAllTag = BigTag.findBMAllTagsByOwner(tCurName);
@@ -240,14 +240,10 @@ public class CustomizeController {
 
     @RequestMapping(produces = "text/html")
     public String list(
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
-            @RequestParam(value = "sortFieldName", required = false)
-            String sortFieldName,
-            @RequestParam(value = "sortOrder", required = false)
-            String sortOrder,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
+            @RequestParam(value = "sortFieldName", required = false) String sortFieldName,
+            @RequestParam(value = "sortOrder", required = false) String sortOrder,
             Model uiModel) {
 
         String tCurName = userContextService.getCurrentUserName();
@@ -259,19 +255,16 @@ public class CustomizeController {
         if (page != null || size != null) {
             int sizeNo = size == null ? 10 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute(
-                    "customizes",
-                    "admin".equals(tCurName) ? Customize.findCustomizeEntries(firstResult, sizeNo, sortFieldName,
-                            sortOrder) : Customize.findCustomizeEntriesByOwner(firstResult, sizeNo, sortFieldName,
-                            sortOrder, curUser));
+            uiModel.addAttribute("customizes", "admin".equals(tCurName)
+                    ? Customize.findCustomizeEntries(firstResult, sizeNo, sortFieldName, sortOrder)
+                    : Customize.findCustomizeEntriesByOwner(firstResult, sizeNo, sortFieldName, sortOrder, curUser));
             float nrOfPages = (float) Customize.countCustomizes() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                    : nrOfPages));
+            uiModel.addAttribute("maxPages",
+                    (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-            uiModel.addAttribute(
-                    "customizes",
-                    "admin".equals(tCurName) ? Customize.findAllCustomizes(sortFieldName, sortOrder) : Customize
-                            .findCustomizesByOwner(curUser));
+            uiModel.addAttribute("customizes",
+                    "admin".equals(tCurName) ? Customize.findAllCustomizes(sortFieldName, sortOrder)
+                            : Customize.findCustomizesByOwner(curUser));
         }
         return "customizes/list";
     }
@@ -294,8 +287,7 @@ public class CustomizeController {
 
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(
-            @Valid
-            Customize customize,
+            @Valid Customize customize,
             BindingResult bindingResult,
             Model uiModel,
             HttpServletRequest httpServletRequest) {

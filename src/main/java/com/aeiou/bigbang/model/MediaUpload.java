@@ -28,13 +28,13 @@ public class MediaUpload {
 
     private byte[] content;
 
-    // to count how many pictures in database are using a filepath starts with this string.
+    // to count how many pictures in database are using a filepath starts with this
+    // string.
     public static long countMediaUploadsByKey(
             String pKey) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Long> tQuery =
-                tEntityManager.createQuery("SELECT COUNT(o) FROM MediaUpload AS o WHERE o.filepath LIKE :pKey",
-                        Long.class);
+        TypedQuery<Long> tQuery = tEntityManager
+                .createQuery("SELECT COUNT(o) FROM MediaUpload AS o WHERE o.filepath LIKE :pKey", Long.class);
         tQuery.setParameter("pKey", pKey + "%");
         long tCount = 0;
         try {
@@ -50,9 +50,8 @@ public class MediaUpload {
         EntityManager tEntityManager = entityManager();
         tEntityManager.setFlushMode(FlushModeType.COMMIT);
         MediaUpload tObeFR;
-        TypedQuery<MediaUpload> tQuery =
-                tEntityManager
-                        .createQuery("SELECT o FROM MediaUpload AS o WHERE o.filepath = :pKey", MediaUpload.class);
+        TypedQuery<MediaUpload> tQuery = tEntityManager
+                .createQuery("SELECT o FROM MediaUpload AS o WHERE o.filepath = :pKey", MediaUpload.class);
         tQuery = tQuery.setParameter("pKey", pKey);
         try {
             tObeFR = tQuery.getSingleResult();

@@ -54,11 +54,9 @@ public class Message {
             int firstResult,
             int maxResults) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Message> tQuery =
-                tEntityManager
-                        .createQuery(
-                                "SELECT o FROM Message AS o WHERE o.receiver = :pReceiver and o.publisher = :pPublisher ORDER BY o.id DESC",
-                                Message.class);
+        TypedQuery<Message> tQuery = tEntityManager.createQuery(
+                "SELECT o FROM Message AS o WHERE o.receiver = :pReceiver and o.publisher = :pPublisher ORDER BY o.id DESC",
+                Message.class);
         tQuery = tQuery.setParameter("pReceiver", pReceiver);
         tQuery = tQuery.setParameter("pPublisher", pSender);
         if (firstResult > -1 && maxResults > 0)
@@ -72,10 +70,10 @@ public class Message {
             int maxResults,
             String sortExpression) {
         EntityManager tEntityManager = entityManager();
-        TypedQuery<Message> tQuery =
-                tEntityManager.createQuery("SELECT o FROM Message AS o WHERE o.receiver = :pReceiver ORDER BY "
+        TypedQuery<Message> tQuery = tEntityManager.createQuery(
+                "SELECT o FROM Message AS o WHERE o.receiver = :pReceiver ORDER BY "
                         + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression),
-                        Message.class);
+                Message.class);
         tQuery = tQuery.setParameter("pReceiver", pReceiver);
         if (firstResult > -1 && maxResults > 0)
             tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
@@ -86,12 +84,10 @@ public class Message {
             int firstResult,
             int maxResults,
             String sortExpression) {
-        TypedQuery<Message> tQuery =
-                entityManager()
-                        .createQuery(
-                                "SELECT o FROM Message o ORDER BY "
-                                        + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC"
-                                                : sortExpression), Message.class);
+        TypedQuery<Message> tQuery = entityManager().createQuery(
+                "SELECT o FROM Message o ORDER BY "
+                        + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression),
+                Message.class);
         if (firstResult > -1 && maxResults > 0)
             tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();
@@ -105,9 +101,8 @@ public class Message {
             Thread.dumpStack();
             return 0;
         } else {
-            TypedQuery<Long> tQuery =
-                    entityManager().createQuery("SELECT COUNT(o) FROM Message AS o WHERE o.receiver = :pPublisher",
-                            Long.class);
+            TypedQuery<Long> tQuery = entityManager()
+                    .createQuery("SELECT COUNT(o) FROM Message AS o WHERE o.receiver = :pPublisher", Long.class);
             tQuery = tQuery.setParameter("pPublisher", pPublisher);
             return tQuery.getSingleResult();
         }

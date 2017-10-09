@@ -58,9 +58,8 @@ public class UserAccount {
 
     public static com.aeiou.bigbang.domain.UserAccount findUserAccountByName(
             String pUserName) {
-        TypedQuery<UserAccount> tQuery =
-                entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)",
-                        UserAccount.class);
+        TypedQuery<UserAccount> tQuery = entityManager()
+                .createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)", UserAccount.class);
         tQuery = tQuery.setParameter("tname", pUserName);
         List<UserAccount> tList = tQuery.getResultList();
         if (tList != null && tList.size() == 1)
@@ -76,9 +75,8 @@ public class UserAccount {
             return null;
         String pUserName = pUserNameAndPassword.substring(0, p);
         String pPassword = pUserNameAndPassword.substring(p);
-        TypedQuery<UserAccount> tQuery =
-                entityManager().createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)",
-                        UserAccount.class);
+        TypedQuery<UserAccount> tQuery = entityManager()
+                .createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)", UserAccount.class);
         tQuery = tQuery.setParameter("tname", pUserName);
         List<UserAccount> tList = tQuery.getResultList();
         if (tList != null && tList.size() == 1) {
@@ -98,12 +96,10 @@ public class UserAccount {
             int firstResult,
             int maxResults,
             String sortExpression) {
-        TypedQuery<UserAccount> tQuery =
-                entityManager()
-                        .createQuery(
-                                "SELECT o FROM UserAccount o ORDER BY "
-                                        + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC"
-                                                : sortExpression), UserAccount.class);
+        TypedQuery<UserAccount> tQuery = entityManager().createQuery(
+                "SELECT o FROM UserAccount o ORDER BY "
+                        + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression),
+                UserAccount.class);
         if (firstResult >= 0 && maxResults > 0)
             tQuery = tQuery.setFirstResult(firstResult).setMaxResults(maxResults);
         return tQuery.getResultList();

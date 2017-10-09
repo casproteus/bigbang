@@ -48,8 +48,7 @@ public class RemarkController {
     @RequestMapping(value = "/refreshRemarks", method = RequestMethod.GET)
     @ResponseBody
     public List<com.aeiou.bigbang.domain.Remark> refreshRemarks(
-            @RequestParam
-            String twitterid) {
+            @RequestParam String twitterid) {
         Twitter tTwitter = Twitter.findTwitter(Long.valueOf(twitterid));
         UserAccount tOwner = tTwitter.getPublisher();
         String tCurName = userContextService.getCurrentUserName();
@@ -77,11 +76,9 @@ public class RemarkController {
 
     @RequestMapping(params = "pTwitterId", method = RequestMethod.POST, produces = "text/html")
     public String create(
-            @Valid
-            Remark remark,
+            @Valid Remark remark,
             BindingResult bindingResult,
-            @RequestParam(value = "pTwitterId", required = false)
-            Long pTwitterId,
+            @RequestParam(value = "pTwitterId", required = false) Long pTwitterId,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         if (remark.getContent() == null || remark.getContent().length() < 1) {
@@ -121,8 +118,7 @@ public class RemarkController {
 
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String update(
-            @Valid
-            Remark remark,
+            @Valid Remark remark,
             BindingResult bindingResult,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
@@ -147,12 +143,9 @@ public class RemarkController {
 
     @RequestMapping(produces = "text/html")
     public String list(
-            @RequestParam(value = "sortExpression", required = false)
-            String sortExpression,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "sortExpression", required = false) String sortExpression,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
@@ -166,15 +159,15 @@ public class RemarkController {
         if (tCurName.equals("admin")) {
             uiModel.addAttribute("remarks", Remark.findOrderedRemarkEntries(firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Remark.countRemarks() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                    : nrOfPages));
+            uiModel.addAttribute("maxPages",
+                    (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
             uiModel.addAttribute("remarks",
                     Remark.findRemarkByPublisher(tPublisher, firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Remark.countRemarkByPublisher(tPublisher) / sizeNo;
         }
-        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                : nrOfPages));
+        uiModel.addAttribute("maxPages",
+                (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         addDateTimeFormatPatterns(uiModel);
 
         BigUtil.checkTheme(tPublisher, httpServletRequest);
@@ -196,13 +189,10 @@ public class RemarkController {
 
     @RequestMapping(params = "twitterid", produces = "text/html")
     public String showDetailTwitters(
-            @RequestParam(value = "twitterid", required = false)
-            Long twitterid,
+            @RequestParam(value = "twitterid", required = false) Long twitterid,
             Integer refresh_time,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             HttpServletRequest request) {
         Twitter tTwitter = Twitter.findTwitter(twitterid);
@@ -221,11 +211,12 @@ public class RemarkController {
         List<Remark> tRemarksList = Remark.findRemarkByTwitter(tTwitter, tAuthSet, firstResult, sizeNo);
         uiModel.addAttribute("remarks", tRemarksList);
         nrOfPages = (float) Remark.countRemarksByTwitter(tTwitter, tAuthSet) / sizeNo;
-        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                : nrOfPages));
+        uiModel.addAttribute("maxPages",
+                (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         Remark tRemark = new Remark();
-        if (refresh_time == null) // default refresh time. @NOTE: can not be null, or the webpage will report error.
-                                  // like" if (  >0){"
+        if (refresh_time == null) // default refresh time. @NOTE: can not be null, or the webpage will report
+                                  // error.
+                                  // like" if ( >0){"
             refresh_time = Integer.valueOf(0);
         tRemark.setRefresh_time(refresh_time.intValue());
         uiModel.addAttribute("newremark", tRemark);
@@ -236,7 +227,8 @@ public class RemarkController {
         uiModel.addAttribute("refresh_time", refresh_time);
 
         // check how many new remark since last remark.
-        // if it's not displaying the lastest ones, it's pagging up to previous page, then don't show new message
+        // if it's not displaying the lastest ones, it's pagging up to previous page,
+        // then don't show new message
         // account.
         if (tCurUser != null && (page == null || page.intValue() == 0)) {
             int i = 0;
@@ -252,11 +244,9 @@ public class RemarkController {
 
     @RequestMapping(params = "twitterid", method = RequestMethod.POST, produces = "text/html")
     public String createRemark(
-            @Valid
-            Remark remark,
+            @Valid Remark remark,
             BindingResult bindingResult,
-            @RequestParam(value = "twitterid", required = false)
-            Long pTwitterId,
+            @RequestParam(value = "twitterid", required = false) Long pTwitterId,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         if (remark.getContent() == null || remark.getContent().length() < 1) {
@@ -269,7 +259,8 @@ public class RemarkController {
             Remark tRemark = tList.get(0);
             if (tRemark.getContent().equals(remark.getContent()) && tRemark.getRemarkto().getId().equals(pTwitterId)) {
                 populateEditForm(uiModel, remark, httpServletRequest);
-                return showDetailTwitters(pTwitterId, remark.getRefresh_time(), null, null, uiModel, httpServletRequest);
+                return showDetailTwitters(pTwitterId, remark.getRefresh_time(), null, null, uiModel,
+                        httpServletRequest);
             }
         }
         if (bindingResult.hasErrors()) {
@@ -297,8 +288,7 @@ public class RemarkController {
 
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String updateForm(
-            @PathVariable("id")
-            Long id,
+            @PathVariable("id") Long id,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         populateEditForm(uiModel, Remark.findRemark(id), httpServletRequest);
@@ -308,8 +298,7 @@ public class RemarkController {
     @RequestMapping(params = "refreshTime", produces = "text/html")
     public String setRefreshTime(
             RefreshBean refreshBean,
-            @RequestParam(value = "refreshTwitterid", required = true)
-            Long refreshTwitterid,
+            @RequestParam(value = "refreshTwitterid", required = true) Long refreshTwitterid,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         int tTime;
@@ -327,10 +316,8 @@ public class RemarkController {
 
     @RequestMapping(params = "rss", produces = "text/html")
     public String setRssOrder(
-            @RequestParam(value = "rss", required = true)
-            int refresh_time,
-            @RequestParam(value = "rsstwitterid", required = false)
-            Long pTwitterId,
+            @RequestParam(value = "rss", required = true) int refresh_time,
+            @RequestParam(value = "rsstwitterid", required = false) Long pTwitterId,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
@@ -347,10 +334,8 @@ public class RemarkController {
 
     @RequestMapping(params = "removerss", produces = "text/html")
     public String removeRssOrder(
-            @RequestParam(value = "removerss", required = true)
-            String username,
-            @RequestParam(value = "removersstwitterid", required = true)
-            Long pTwitterId,
+            @RequestParam(value = "removerss", required = true) String username,
+            @RequestParam(value = "removersstwitterid", required = true) Long pTwitterId,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
 
@@ -379,15 +364,13 @@ public class RemarkController {
         String unsubscribe = tUnsubscribe != null ? (String) tUnsubscribe : "Unsubscribe";
         String newRemark = tRemark != null ? (String) tRemark : "New remark: ";
 
-        StringBuilder part1 =
-                new StringBuilder("<p align='right'>---").append(remark.getPublisher().getName())
-                        .append(" </p><p align='center'><a href='").append(link).append("/remarks?twitterid=")
-                        .append(tTwitter.getId()).append("'>").append(reply).append("</a> | <a href='").append(link)
-                        .append("/remarks?removerss=");
-        StringBuilder part2 =
-                new StringBuilder("&removersstwitterid=").append(tTwitter.getId()).append("'>").append(unsubscribe)
-                        .append("</a></p><p align='center'><a href='").append(link).append("'>").append(link)
-                        .append("</a></p>");
+        StringBuilder part1 = new StringBuilder("<p align='right'>---").append(remark.getPublisher().getName())
+                .append(" </p><p align='center'><a href='").append(link).append("/remarks?twitterid=")
+                .append(tTwitter.getId()).append("'>").append(reply).append("</a> | <a href='").append(link)
+                .append("/remarks?removerss=");
+        StringBuilder part2 = new StringBuilder("&removersstwitterid=").append(tTwitter.getId()).append("'>")
+                .append(unsubscribe).append("</a></p><p align='center'><a href='").append(link).append("'>")
+                .append(link).append("</a></p>");
         for (int i = 0; i < rssTwitters.size(); i++) {
             RssTwitter rssTwitter = rssTwitters.get(i);
             String userName = rssTwitter.getUseraccount().getName();
@@ -408,19 +391,18 @@ public class RemarkController {
         }
     }
 
-    // =====================================changing images on page=====================================
+    // =====================================changing images on
+    // page=====================================
     @RequestMapping(value = "/getImage/{id}")
-    // when a user's theme was set to 0, then this method will be called to get his own images. if he's no image, then
+    // when a user's theme was set to 0, then this method will be called to get his
+    // own images. if he's no image, then
     // use admin's image.
-            public
-            void getImage(
-                    @PathVariable("id")
-                    String id,
-                    HttpServletRequest request,
-                    HttpServletResponse response) {
-        PersonalController tController =
-                SpringApplicationContext.getApplicationContext()
-                        .getBean("personalController", PersonalController.class);
+    public void getImage(
+            @PathVariable("id") String id,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController",
+                PersonalController.class);
         tController.getImage(id, request, response);
     }
 }

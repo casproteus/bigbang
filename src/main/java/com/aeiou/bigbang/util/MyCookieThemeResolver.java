@@ -25,7 +25,8 @@ public class MyCookieThemeResolver extends CookieThemeResolver {
             request.setAttribute(THEME_REQUEST_ATTRIBUTE_NAME, themeName);
             // addCookie(response, themeName);
 
-            // if logged in user changes theme in his personal space, we modify only his personal space theme.
+            // if logged in user changes theme in his personal space, we modify only his
+            // personal space theme.
             // by saving the theme into account info.
             String tURLPath = request.getServletPath();
             String tCurName = userContextService.getCurrentUserName();
@@ -43,7 +44,8 @@ public class MyCookieThemeResolver extends CookieThemeResolver {
                     tUserAccount.persist();
                 }
             }
-            // save the theme into cookie anyway, so if user changed the them in his own space,
+            // save the theme into cookie anyway, so if user changed the them in his own
+            // space,
             // we bet he'd like to see the public space with this theme.
             final Cookie cookie = new Cookie("theme", themeName);
             cookie.setMaxAge(31536000); // One year

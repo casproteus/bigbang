@@ -9,93 +9,34 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 
-privileged aspect RssTwitter_Roo_Jpa_ActiveRecord {
-    
-    @PersistenceContext
-    transient EntityManager RssTwitter.entityManager;
-    
-    public static final List<String> RssTwitter.fieldNames4OrderClauseFilter = java.util.Arrays.asList("useraccount", "twitter");
-    
-    public static final EntityManager RssTwitter.entityManager() {
-        EntityManager em = new RssTwitter().entityManager;
-        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
-        return em;
-    }
-    
-    public static long RssTwitter.countRssTwitters() {
-        return entityManager().createQuery("SELECT COUNT(o) FROM RssTwitter o", Long.class).getSingleResult();
-    }
-    
-    public static List<RssTwitter> RssTwitter.findAllRssTwitters() {
-        return entityManager().createQuery("SELECT o FROM RssTwitter o", RssTwitter.class).getResultList();
-    }
-    
-    public static List<RssTwitter> RssTwitter.findAllRssTwitters(String sortFieldName, String sortOrder) {
-        String jpaQuery = "SELECT o FROM RssTwitter o";
-        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
-            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
-            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
-                jpaQuery = jpaQuery + " " + sortOrder;
-            }
-        }
-        return entityManager().createQuery(jpaQuery, RssTwitter.class).getResultList();
-    }
-    
-    public static RssTwitter RssTwitter.findRssTwitter(Long id) {
-        if (id == null) return null;
-        return entityManager().find(RssTwitter.class, id);
-    }
-    
-    public static List<RssTwitter> RssTwitter.findRssTwitterEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM RssTwitter o", RssTwitter.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-    }
-    
-    public static List<RssTwitter> RssTwitter.findRssTwitterEntries(int firstResult, int maxResults, String sortFieldName, String sortOrder) {
-        String jpaQuery = "SELECT o FROM RssTwitter o";
-        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
-            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
-            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
-                jpaQuery = jpaQuery + " " + sortOrder;
-            }
-        }
-        return entityManager().createQuery(jpaQuery, RssTwitter.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-    }
-    
-    @Transactional
-    public void RssTwitter.persist() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.persist(this);
-    }
-    
-    @Transactional
-    public void RssTwitter.remove() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        if (this.entityManager.contains(this)) {
-            this.entityManager.remove(this);
-        } else {
-            RssTwitter attached = RssTwitter.findRssTwitter(this.id);
-            this.entityManager.remove(attached);
-        }
-    }
-    
-    @Transactional
-    public void RssTwitter.flush() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.flush();
-    }
-    
-    @Transactional
-    public void RssTwitter.clear() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.clear();
-    }
-    
-    @Transactional
-    public RssTwitter RssTwitter.merge() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        RssTwitter merged = this.entityManager.merge(this);
-        this.entityManager.flush();
-        return merged;
-    }
-    
+privileged aspect RssTwitter_Roo_Jpa_ActiveRecord{
+
+@PersistenceContext transient EntityManager RssTwitter.entityManager;
+
+public static final List<String>RssTwitter.fieldNames4OrderClauseFilter=java.util.Arrays.asList("useraccount","twitter");
+
+public static final EntityManager RssTwitter.entityManager(){EntityManager em=new RssTwitter().entityManager;if(em==null)throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");return em;}
+
+public static long RssTwitter.countRssTwitters(){return entityManager().createQuery("SELECT COUNT(o) FROM RssTwitter o",Long.class).getSingleResult();}
+
+public static List<RssTwitter>RssTwitter.findAllRssTwitters(){return entityManager().createQuery("SELECT o FROM RssTwitter o",RssTwitter.class).getResultList();}
+
+public static List<RssTwitter>RssTwitter.findAllRssTwitters(String sortFieldName,String sortOrder){String jpaQuery="SELECT o FROM RssTwitter o";if(fieldNames4OrderClauseFilter.contains(sortFieldName)){jpaQuery=jpaQuery+" ORDER BY "+sortFieldName;if("ASC".equalsIgnoreCase(sortOrder)||"DESC".equalsIgnoreCase(sortOrder)){jpaQuery=jpaQuery+" "+sortOrder;}}return entityManager().createQuery(jpaQuery,RssTwitter.class).getResultList();}
+
+public static RssTwitter RssTwitter.findRssTwitter(Long id){if(id==null)return null;return entityManager().find(RssTwitter.class,id);}
+
+public static List<RssTwitter>RssTwitter.findRssTwitterEntries(int firstResult,int maxResults){return entityManager().createQuery("SELECT o FROM RssTwitter o",RssTwitter.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();}
+
+public static List<RssTwitter>RssTwitter.findRssTwitterEntries(int firstResult,int maxResults,String sortFieldName,String sortOrder){String jpaQuery="SELECT o FROM RssTwitter o";if(fieldNames4OrderClauseFilter.contains(sortFieldName)){jpaQuery=jpaQuery+" ORDER BY "+sortFieldName;if("ASC".equalsIgnoreCase(sortOrder)||"DESC".equalsIgnoreCase(sortOrder)){jpaQuery=jpaQuery+" "+sortOrder;}}return entityManager().createQuery(jpaQuery,RssTwitter.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();}
+
+@Transactional public void RssTwitter.persist(){if(this.entityManager==null)this.entityManager=entityManager();this.entityManager.persist(this);}
+
+@Transactional public void RssTwitter.remove(){if(this.entityManager==null)this.entityManager=entityManager();if(this.entityManager.contains(this)){this.entityManager.remove(this);}else{RssTwitter attached=RssTwitter.findRssTwitter(this.id);this.entityManager.remove(attached);}}
+
+@Transactional public void RssTwitter.flush(){if(this.entityManager==null)this.entityManager=entityManager();this.entityManager.flush();}
+
+@Transactional public void RssTwitter.clear(){if(this.entityManager==null)this.entityManager=entityManager();this.entityManager.clear();}
+
+@Transactional public RssTwitter RssTwitter.merge(){if(this.entityManager==null)this.entityManager=entityManager();RssTwitter merged=this.entityManager.merge(this);this.entityManager.flush();return merged;}
+
 }

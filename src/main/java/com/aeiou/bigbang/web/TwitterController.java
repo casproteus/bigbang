@@ -100,8 +100,7 @@ public class TwitterController {
 
     @RequestMapping(params = "twitle", produces = "text/html")
     public String createTag(
-            @Valid
-            BigTag bigTag,
+            @Valid BigTag bigTag,
             BindingResult bindingResult,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
@@ -149,8 +148,7 @@ public class TwitterController {
 
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(
-            @Valid
-            Twitter twitter,
+            @Valid Twitter twitter,
             BindingResult bindingResult,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
@@ -162,9 +160,8 @@ public class TwitterController {
         }
         String tCurName = userContextService.getCurrentUserName();
         UserAccount tUserAccount = UserAccount.findUserAccountByName(tCurName);
-        List<Twitter> tList =
-                Twitter.findTwitterByPublisher(tUserAccount, BigAuthority.getAuthSet(tUserAccount, tUserAccount), 0, 1,
-                        null);
+        List<Twitter> tList = Twitter.findTwitterByPublisher(tUserAccount,
+                BigAuthority.getAuthSet(tUserAccount, tUserAccount), 0, 1, null);
         if (tList != null && tList.size() > 0) {
             Twitter tTwitter = tList.get(0);
             if (twitter.getTwitent().equals(tTwitter.getTwitent())) {
@@ -193,17 +190,15 @@ public class TwitterController {
         uiModel.asMap().clear();
         twitter.setLastupdate(new Date());
         twitter.persist();
-        PersonalController tController =
-                SpringApplicationContext.getApplicationContext()
-                        .getBean("personalController", PersonalController.class);
+        PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController",
+                PersonalController.class);
         // return tController.index(tUserAccount.getName(), -1, -1, uiModel);
         return showDetailTwitters(twitter.getId(), null, null, uiModel, httpServletRequest);
     }
 
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String update(
-            @Valid
-            Twitter twitter,
+            @Valid Twitter twitter,
             BindingResult bindingResult,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
@@ -233,18 +228,16 @@ public class TwitterController {
         uiModel.asMap().clear();
         twitter.setLastupdate(new Date());
         twitter.merge();
-        // return "redirect:/twitters/" + encodeUrlPathSegment(twitter.getId().toString(), httpServletRequest);
+        // return "redirect:/twitters/" +
+        // encodeUrlPathSegment(twitter.getId().toString(), httpServletRequest);
         return showDetailTwitters(twitter.getId(), null, null, uiModel, httpServletRequest);
     }
 
     @RequestMapping(produces = "text/html")
     public String list(
-            @RequestParam(value = "sortExpression", required = false)
-            String sortExpression,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "sortExpression", required = false) String sortExpression,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
@@ -258,16 +251,16 @@ public class TwitterController {
         if (tCurName.equals("admin")) {
             uiModel.addAttribute("twitters", Twitter.findOrderedTwitterEntries(firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Twitter.countTwitters() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                    : nrOfPages));
+            uiModel.addAttribute("maxPages",
+                    (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
             Set<Integer> tAuthSet = BigAuthority.getAuthSet(tPublisher, tPublisher);
             uiModel.addAttribute("twitters",
                     Twitter.findTwitterByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Twitter.countTwitterByPublisher(tPublisher, tAuthSet) / sizeNo;
         }
-        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                : nrOfPages));
+        uiModel.addAttribute("maxPages",
+                (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         addDateTimeFormatPatterns(uiModel);
 
         BigUtil.checkTheme(tPublisher, httpServletRequest);
@@ -290,8 +283,7 @@ public class TwitterController {
 
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String updateForm(
-            @PathVariable("id")
-            Long id,
+            @PathVariable("id") Long id,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         populateEditForm(uiModel, Twitter.findTwitter(id), httpServletRequest);
@@ -300,12 +292,9 @@ public class TwitterController {
 
     @RequestMapping(params = "twitterid", produces = "text/html")
     public String showDetailTwitters(
-            @RequestParam(value = "twitterid", required = false)
-            Long twitterid,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "twitterid", required = false) Long twitterid,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             HttpServletRequest request) {
         Twitter tTwitter = Twitter.findTwitter(twitterid);
@@ -323,8 +312,8 @@ public class TwitterController {
         uiModel.addAttribute("twitter", tTwitter);
         uiModel.addAttribute("remarks", Remark.findRemarkByTwitter(tTwitter, tAuthSet, firstResult, sizeNo));
         nrOfPages = (float) Remark.countRemarksByTwitter(tTwitter, tAuthSet) / sizeNo;
-        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                : nrOfPages));
+        uiModel.addAttribute("maxPages",
+                (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         Remark tRemark = new Remark();
         uiModel.addAttribute("newremark", tRemark);
         uiModel.addAttribute("authorities", BigAuthority.getRemarkOptions(messageSource, request.getLocale()));
@@ -332,35 +321,32 @@ public class TwitterController {
         remarktos.add(tTwitter);
         uiModel.addAttribute("remarktos", remarktos);
         uiModel.addAttribute("refresh_time", 0);
-        // not need to check how many new remarks. because when not logged in, user can not set the refresh time.
+        // not need to check how many new remarks. because when not logged in, user can
+        // not set the refresh time.
         // so the new item number make no use to them.
         return "public/list_detail_twitter";
     }
 
-    // =====================================changing images on page=====================================
+    // =====================================changing images on
+    // page=====================================
     @RequestMapping(value = "/getImage/{id}")
-    // when a user's theme was set to 0, then this method will be called to get his own images. if he's no image, then
+    // when a user's theme was set to 0, then this method will be called to get his
+    // own images. if he's no image, then
     // use admin's image.
-            public
-            void getImage(
-                    @PathVariable("id")
-                    String id,
-                    HttpServletRequest request,
-                    HttpServletResponse response) {
-        PersonalController tController =
-                SpringApplicationContext.getApplicationContext()
-                        .getBean("personalController", PersonalController.class);
+    public void getImage(
+            @PathVariable("id") String id,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController",
+                PersonalController.class);
         tController.getImage(id, request, response);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String delete(
-            @PathVariable("id")
-            Long id,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @PathVariable("id") Long id,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel) {
         Twitter twitter = Twitter.findTwitter(id);
         UserAccount tOwner = twitter.getPublisher();

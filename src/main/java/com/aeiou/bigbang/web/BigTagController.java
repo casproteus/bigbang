@@ -50,8 +50,7 @@ public class BigTagController {
 
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(
-            @Valid
-            BigTag bigTag,
+            @Valid BigTag bigTag,
             BindingResult bindingResult,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
@@ -91,8 +90,7 @@ public class BigTagController {
 
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String update(
-            @Valid
-            BigTag bigTag,
+            @Valid BigTag bigTag,
             BindingResult bindingResult,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
@@ -103,9 +101,8 @@ public class BigTagController {
         if (bigTag.getOwner() != null) {
             BigTag tBigTag = BigTag.findBigTag(bigTag.getId());
             UserAccount userAccount = UserAccount.findUserAccountByName(tBigTag.getType());
-            String tLayout =
-                    userAccount == null ? null : (bigTag.getOwner() == 0 ? userAccount.getLayout() : userAccount
-                            .getNoteLayout());
+            String tLayout = userAccount == null ? null
+                    : (bigTag.getOwner() == 0 ? userAccount.getLayout() : userAccount.getNoteLayout());
             int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
             if (p > -1) {
                 String[] tAryTagStrsLeft = null;
@@ -213,12 +210,9 @@ public class BigTagController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String delete(
-            @PathVariable("id")
-            Long id,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @PathVariable("id") Long id,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         BigTag bigTag = BigTag.findBigTag(id);
@@ -226,9 +220,8 @@ public class BigTagController {
         // admin don't has a layout, it get layout info from customizes.
         if (bigTag.getOwner() != null && !bigTag.getOwner().equals("admin")) {
             UserAccount userAccount = UserAccount.findUserAccountByName(bigTag.getType());
-            String tLayout =
-                    userAccount == null ? null : (bigTag.getOwner() == 0 ? userAccount.getLayout() : userAccount
-                            .getNoteLayout());
+            String tLayout = userAccount == null ? null
+                    : (bigTag.getOwner() == 0 ? userAccount.getLayout() : userAccount.getNoteLayout());
             int p = tLayout == null ? -1 : tLayout.indexOf(BigUtil.SEP_TAG_NUMBER);
             if (p > -1) {
                 String[] tagStrAryLeft = null;
@@ -340,12 +333,9 @@ public class BigTagController {
 
     @RequestMapping(produces = "text/html")
     public String list(
-            @RequestParam(value = "sortExpression", required = false)
-            String sortExpression,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "sortExpression", required = false) String sortExpression,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         String tCurName = userContextService.getCurrentUserName();
@@ -359,14 +349,14 @@ public class BigTagController {
         if (tCurName.equals("admin")) {
             uiModel.addAttribute("bigtags", BigTag.findOrderedBigTagEntries(firstResult, sizeNo, sortExpression));
             nrOfPages = (float) BigTag.countBigTags() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                    : nrOfPages));
+            uiModel.addAttribute("maxPages",
+                    (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
             uiModel.addAttribute("bigtags", BigTag.findTagsByPublisher(tCurName, firstResult, sizeNo, sortExpression));
             nrOfPages = (float) BigTag.countTagsByPublisher(tCurName) / sizeNo;
         }
-        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                : nrOfPages));
+        uiModel.addAttribute("maxPages",
+                (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         BigUtil.checkTheme(tCurUser, httpServletRequest);
         return "bigtags/list";
     }
@@ -374,8 +364,7 @@ public class BigTagController {
     @RequestMapping(params = "form", produces = "text/html")
     public String createForm(
             Model uiModel,
-            @RequestParam(value = "type", required = false)
-            String type,
+            @RequestParam(value = "type", required = false) String type,
             HttpServletRequest httpServletRequest) {
         BigTag tBigTag = new BigTag();
         tBigTag.setOwner(("0".equals(type) || "1".equals(type)) ? Integer.valueOf(type) : null);
@@ -385,8 +374,7 @@ public class BigTagController {
 
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String updateForm(
-            @PathVariable("id")
-            Long id,
+            @PathVariable("id") Long id,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         populateEditForm(uiModel, BigTag.findBigTag(id), httpServletRequest);

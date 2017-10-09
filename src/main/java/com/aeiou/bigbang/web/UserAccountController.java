@@ -65,8 +65,7 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(
-            @Valid
-            UserAccount userAccount,
+            @Valid UserAccount userAccount,
             BindingResult bindingResult,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
@@ -90,8 +89,7 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String updateForm(
-            @PathVariable("id")
-            Long id,
+            @PathVariable("id") Long id,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         UserAccount tOwner = UserAccount.findUserAccount(id);
@@ -103,8 +101,7 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String update(
-            @Valid
-            UserAccount userAccount,
+            @Valid UserAccount userAccount,
             BindingResult bindingResult,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
@@ -113,7 +110,8 @@ public class UserAccountController extends BaseController {
             return "useraccounts/update";
         }
 
-        // if name changed, need to check if it's available, update the tags and update the image paths.
+        // if name changed, need to check if it's available, update the tags and update
+        // the image paths.
 
         UserAccount oldAccount = UserAccount.findUserAccount(userAccount.getId());
         String oldName = oldAccount.getName();
@@ -166,12 +164,9 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String delete(
-            @PathVariable("id")
-            Long id,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @PathVariable("id") Long id,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel) {
         UserAccount userAccount = UserAccount.findUserAccount(id);
         List<BigTag> tBigTags = BigTag.findTagsByPublisher(userAccount.getName(), 0, 1000, null);
@@ -187,12 +182,9 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(produces = "text/html")
     public String list(
-            @RequestParam(value = "sortExpression", required = false)
-            String sortExpression,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "sortExpression", required = false) String sortExpression,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel) {
         String tCurName = userContextService.getCurrentUserName();
         if (tCurName == null)
@@ -203,8 +195,8 @@ public class UserAccountController extends BaseController {
             uiModel.addAttribute("useraccounts",
                     UserAccount.findOrderedUserAccountEntries(firstResult, sizeNo, sortExpression));
             float nrOfPages = (float) UserAccount.countUserAccounts() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                    : nrOfPages));
+            uiModel.addAttribute("maxPages",
+                    (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
             List<UserAccount> tList = new ArrayList<UserAccount>();
             tList.add(UserAccount.findUserAccountByName(tCurName));
@@ -227,23 +219,28 @@ public class UserAccountController extends BaseController {
     }
 
     @RequestMapping(value = "/getImage/{id}")
-    /**this method should be called only when user has logged in, and user's cliking the useraccount button on top-right corner.  */
+    /**
+     * this method should be called only when user has logged in, and user's cliking the useraccount button on top-right
+     * corner.
+     */
     public void getImage(
-            @PathVariable("id")
-            String id,
+            @PathVariable("id") String id,
             HttpServletRequest request,
             HttpServletResponse response) {
         response.setContentType("image/jpeg");
-        // @TODO(delete):I added chenck in checkTheme method, to add the spaceOwner property again, so here, shouldn't
+        // @TODO(delete):I added chenck in checkTheme method, to add the spaceOwner
+        // property again, so here, shouldn't
         // be uc__...", must have value.
         // if("uc__headimage".equals(id) || "uc__bg".equals(id)){
         // if(userContextService.getCurrentUserName() != null){
-        // id = userContextService.getCurrentUserName().toLowerCase() + (id.endsWith("_bg") ? "_bg" : "_headimage");
+        // id = userContextService.getCurrentUserName().toLowerCase() +
+        // (id.endsWith("_bg") ? "_bg" : "_headimage");
         // id = "uc_" + id;
         // }
         // }
 
-        // NOTE: can not reuse personalController's method, because here, if fond no image, will leave it empty not
+        // NOTE: can not reuse personalController's method, because here, if fond no
+        // image, will leave it empty not
         // using admin's image.
         MediaUpload tMedia = MediaUpload.findMediaByKey(id);
         try {
@@ -252,7 +249,8 @@ public class UserAccountController extends BaseController {
                 response.getOutputStream().write(imageBytes);
                 response.getOutputStream().flush();
             } else {
-                // leave empty. this method will only be called when displaying the updateForm of useraccount to display
+                // leave empty. this method will only be called when displaying the updateForm
+                // of useraccount to display
                 // the image in the dialog,
                 // so shall not display admin's default image.
             }
@@ -272,13 +270,11 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(value = "/1210_syncdb", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> createFromJsonArray(
-            @RequestBody
-            String json) {
+            @RequestBody String json) {
         SynchnizationManager tSyncManager = new SynchnizationManager();
         if (json != null && json.length() > 0) {
-            List<String> tList =
-                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
-                            .deserialize(json);
+            List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class)
+                    .use("values", String.class).deserialize(json);
             if (tList.size() == 6)
                 tSyncManager.saveContentIntoLocalDB(tList, "1210_syncdb");
         }
@@ -291,13 +287,11 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(value = "/1210_syncdb_bg", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> createFromBGJsonArray(
-            @RequestBody
-            String json) {
+            @RequestBody String json) {
         SynchnizationManager tSyncManager = new SynchnizationManager();
         if (json != null && json.length() > 0) {
-            List<String> tList =
-                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
-                            .deserialize(json);
+            List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class)
+                    .use("values", String.class).deserialize(json);
             tSyncManager.saveBlogsToLocalDB(tList.get(0));
         }
 
@@ -309,13 +303,11 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(value = "/1210_syncdb_ua", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> createFromUAJsonArray(
-            @RequestBody
-            String json) {
+            @RequestBody String json) {
         SynchnizationManager tSyncManager = new SynchnizationManager();
         if (json != null && json.length() > 0) {
-            List<String> tList =
-                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
-                            .deserialize(json);
+            List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class)
+                    .use("values", String.class).deserialize(json);
             tSyncManager.saveUserAccountToLocalDB(tList.get(0));
         }
 
@@ -327,13 +319,11 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(value = "/1210_syncdb_tg", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> createFromTGJsonArray(
-            @RequestBody
-            String json) {
+            @RequestBody String json) {
         SynchnizationManager tSyncManager = new SynchnizationManager();
         if (json != null && json.length() > 0) {
-            List<String> tList =
-                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
-                            .deserialize(json);
+            List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class)
+                    .use("values", String.class).deserialize(json);
             tSyncManager.saveTagsToLocalDB(tList.get(0));
         }
 
@@ -345,13 +335,11 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(value = "/1210_syncdb_ms", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> createFromMSJsonArray(
-            @RequestBody
-            String json) {
+            @RequestBody String json) {
         SynchnizationManager tSyncManager = new SynchnizationManager();
         if (json != null && json.length() > 0) {
-            List<String> tList =
-                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
-                            .deserialize(json);
+            List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class)
+                    .use("values", String.class).deserialize(json);
             tSyncManager.saveMessagesToLocalDB(tList.get(0));
         }
 
@@ -363,8 +351,7 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(value = "/loglog", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> testLog(
-            @RequestBody
-            String json) {
+            @RequestBody String json) {
         SynchnizationManager tSyncManager = new SynchnizationManager();
 
         String userName = "JustPrint";
@@ -387,7 +374,8 @@ public class UserAccountController extends BaseController {
             twitter.persist();
         }
 
-        // add the new remark base on content in param: {"tag":"OrderIdMarkViewHolder","msg":"item%3A+0select%3A+false"}
+        // add the new remark base on content in param:
+        // {"tag":"OrderIdMarkViewHolder","msg":"item%3A+0select%3A+false"}
         if (json != null && json.length() > 0) {
             UserAccount publisher = null;
             int p = json.indexOf("\"tag\"");
@@ -451,13 +439,11 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(value = "/1210_syncdb_rm", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> createFromRMJsonArray(
-            @RequestBody
-            String json) {
+            @RequestBody String json) {
         SynchnizationManager tSyncManager = new SynchnizationManager();
         if (json != null && json.length() > 0) {
-            List<String> tList =
-                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
-                            .deserialize(json);
+            List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class)
+                    .use("values", String.class).deserialize(json);
             tSyncManager.saveRemarksToLocalDB(tList.get(0));
         }
 
@@ -469,13 +455,11 @@ public class UserAccountController extends BaseController {
 
     @RequestMapping(value = "/1210_syncdb_bm", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> createFromBMJsonArray(
-            @RequestBody
-            String json) {
+            @RequestBody String json) {
         SynchnizationManager tSyncManager = new SynchnizationManager();
         if (json != null && json.length() > 0) {
-            List<String> tList =
-                    new JSONDeserializer<List<String>>().use(null, ArrayList.class).use("values", String.class)
-                            .deserialize(json);
+            List<String> tList = new JSONDeserializer<List<String>>().use(null, ArrayList.class)
+                    .use("values", String.class).deserialize(json);
             tSyncManager.saveBookmarksToLocalDB(tList.get(0));
         }
 

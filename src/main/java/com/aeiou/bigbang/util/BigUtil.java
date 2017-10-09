@@ -37,9 +37,11 @@ public class BigUtil {
 
     public static String DEFAULT_IMAGE_TYPE = ".jpg";
 
-    // Can not use strange characters, because when the coding formmat of the IDE changes or are not same with database,
+    // Can not use strange characters, because when the coding formmat of the IDE
+    // changes or are not same with database,
     // will cause mismatch.
-    // Can neiter use "[","(","+".... because the string will be considered as an expression in split method, those
+    // Can neiter use "[","(","+".... because the string will be considered as an
+    // expression in split method, those
     // character have special
     // meaning and will cause splite
     public static final String SEP_TAG_NUMBER = "zSTNz";// "�";
@@ -81,15 +83,19 @@ public class BigUtil {
             return true;
         } else if (("1210_syncdb".equals(command) || "1210_syncdb_ua".equals(command)
                 || "1210_syncdb_tg".equals(command) || "1210_syncdb_ms".equals(command)
-                || "1210_syncdb_bg".equals(command) || "1210_syncdb_rm".equals(command) || "1210_syncdb_bm"
-                    .equals(command)) && curUser != null) { // Looks like first run will see exception of line 137,
-                                                            // SynchizationManager(persistant rool back). will be OK
-                                                            // when run it the second time or the third time.
+                || "1210_syncdb_bg".equals(command) || "1210_syncdb_rm".equals(command)
+                || "1210_syncdb_bm".equals(command)) && curUser != null) { // Looks like first run will see exception of
+                                                                           // line 137,
+                                                                           // SynchizationManager(persistant rool
+                                                                           // back). will be OK
+                                                                           // when run it the second time or the third
+                                                                           // time.
             new ClientSyncTool().startToSynch(curUser, command);
             return true;
         } else if (command != null && command.startsWith("20130818_shufful") && curUser != null) {
             String tName = command.substring("20130818_shufful".length()).trim();
-            String tTagName = null; // if there's a space in param, means, user specify not only a username but also a
+            String tTagName = null; // if there's a space in param, means, user specify not only a username but also
+                                    // a
                                     // tag.
             int tPos = tName.indexOf(' '); // that also means if the username contains a space, then his bookmark can
                                            // not be shuttled.
@@ -105,14 +111,14 @@ public class BigUtil {
                     for (int i = 0; i < tList.size(); i++) {
                         Content tBM = tList.get(i);
                         if (tTagName != null && !tTagName.equals(tBM.getCommonBigTag().getTagName()))
-                            continue; // if the content is not in the categray defined in parameter, then don't change.
+                            continue; // if the content is not in the categray defined in parameter, then don't
+                                      // change.
 
                         UserAccount tGhostUA = getGhostUA();
                         tBM.setPublisher(tGhostUA);
                         if (tBM.getUncommonBigTag() != null) {
-                            BigTag tTag =
-                                    BigTag.findTagByNameAndOwner(tBM.getUncommonBigTag().getTagName(),
-                                            tGhostUA.getName());
+                            BigTag tTag = BigTag.findTagByNameAndOwner(tBM.getUncommonBigTag().getTagName(),
+                                    tGhostUA.getName());
                             if (tTag != null)
                                 tBM.setUncommonBigTag(tTag);
                         }
@@ -202,7 +208,8 @@ public class BigUtil {
         return tStrB.toString();
     }
 
-    // transfer string form "in layout string" format to normal format (clean tag name format).
+    // transfer string form "in layout string" format to normal format (clean tag
+    // name format).
     public static String getTagNameFromLayoutStr(
             String pLayoutString) {
         StringBuilder tStrB = new StringBuilder(pLayoutString);
@@ -422,7 +429,8 @@ public class BigUtil {
         }
 
         BufferedImage inputbig = new BufferedImage(pToWidth, pToHeight, BufferedImage.TYPE_INT_BGR);
-        // inputbig.getGraphics().drawImage(im, 0, 0, pToWidth, pToHeight, null); //the created thum image is not clear
+        // inputbig.getGraphics().drawImage(im, 0, 0, pToWidth, pToHeight, null); //the
+        // created thum image is not clear
         // enough with this way.
         inputbig.getGraphics().drawImage(im.getScaledInstance(pToWidth, pToHeight, java.awt.Image.SCALE_SMOOTH), 0, 0,
                 null); // this way is better.
@@ -456,7 +464,8 @@ public class BigUtil {
 
         HttpSession session = httpServletRequest.getSession();
         String displayTheme = (String) session.getAttribute("displayTheme");
-        // if the owner has theme already, then use the theme! (will effect only on this request)
+        // if the owner has theme already, then use the theme! (will effect only on this
+        // request)
         int ownerTheme = owner.getTheme();
         if ("true".equals(displayTheme)) { // strategy1： if users are allowed to set his favourite theme.
             if (!"admin".equals(owner.getName()) && ownerTheme != 0) { // and the non-admin owner has set the theme for
@@ -466,7 +475,8 @@ public class BigUtil {
                 httpServletRequest.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME,
                         String.valueOf(ownerTheme));
             }
-        } else { // strategy2： if users are not allowed to set his favourite theme. then user's css should always be 0.
+        } else { // strategy2： if users are not allowed to set his favourite theme. then user's
+                 // css should always be 0.
                  // and shouldn't has any idea about theme.
             httpServletRequest.setAttribute(CookieThemeResolver.THEME_REQUEST_ATTRIBUTE_NAME,
                     String.valueOf(ownerTheme));

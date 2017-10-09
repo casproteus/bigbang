@@ -36,8 +36,7 @@ public class MessageController {
     @RequestMapping(params = "pReceiverName", produces = "text/html")
     public String createMessageForm(
             Model uiModel,
-            @RequestParam(value = "pReceiverName", required = false)
-            String pReceiverName,
+            @RequestParam(value = "pReceiverName", required = false) String pReceiverName,
             HttpServletRequest httpServletRequest) {
         UserAccount pReceiver = UserAccount.findUserAccountByName(pReceiverName);
         if (pReceiver == null) {
@@ -58,11 +57,9 @@ public class MessageController {
 
     @RequestMapping(params = "pReceiverName", method = RequestMethod.POST, produces = "text/html")
     public String create(
-            @Valid
-            Message message,
+            @Valid Message message,
             BindingResult bindingResult,
-            @RequestParam(value = "pReceiverName", required = false)
-            String pReceiverName,
+            @RequestParam(value = "pReceiverName", required = false) String pReceiverName,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         UserAccount tReceiver = UserAccount.findUserAccountByName(pReceiverName);
@@ -102,21 +99,17 @@ public class MessageController {
         int newMessageNumber = tReceiver.getNewMessageAmount();
         tReceiver.setNewMessageAmount(newMessageNumber + 1);
         tReceiver.persist();
-        PersonalController tController =
-                SpringApplicationContext.getApplicationContext()
-                        .getBean("personalController", PersonalController.class);
+        PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController",
+                PersonalController.class);
         return tController.index(pReceiverName, uiModel, httpServletRequest);
     }
 
     @RequestMapping(produces = "text/html")
     public String list(
             HttpSession session,
-            @RequestParam(value = "sortExpression", required = false)
-            String sortExpression,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "sortExpression", required = false) String sortExpression,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         int sizeNo = size == null ? 10 : size.intValue();
@@ -132,8 +125,8 @@ public class MessageController {
         if (tCurName.equals("admin")) {
             uiModel.addAttribute("messages", Message.findMessageEntries(firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Message.countMessages() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                    : nrOfPages));
+            uiModel.addAttribute("maxPages",
+                    (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
             addDateTimeFormatPatterns(uiModel);
             return "messages/list";
         } else {
@@ -143,8 +136,8 @@ public class MessageController {
             tUserAccount.setNewMessageAmount(0);
             tUserAccount.persist();
             session.setAttribute("newMessageAmount", 0);
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                    : nrOfPages));
+            uiModel.addAttribute("maxPages",
+                    (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
             addDateTimeFormatPatterns(uiModel);
 
             BigUtil.checkTheme(tReceiver, httpServletRequest);

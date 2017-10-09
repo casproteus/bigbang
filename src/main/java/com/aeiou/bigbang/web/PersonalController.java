@@ -45,8 +45,7 @@ public class PersonalController extends BaseController {
 
     @RequestMapping(value = "/{ownerName}", produces = "text/html")
     public String index(
-            @PathVariable("ownerName")
-            String ownerName,
+            @PathVariable("ownerName") String ownerName,
             Model uiModel,
             HttpServletRequest request) {
         String curName = userContextService.getCurrentUserName(); // the current user.
@@ -184,8 +183,9 @@ public class PersonalController extends BaseController {
         }
         for (int i = 0; i < tBigTagsRight.size(); i++) {
             tContentListsRight.add(Content.findContentsByTagAndSpaceOwner(tBigTagsRight.get(i), tOwner, tAuthSet, 0,
-                    tNumStrsRight == null || tNumStrsRight[i] == null ? 8 : Integer.valueOf(tNumStrsRight[i])
-                            .intValue(), null));
+                    tNumStrsRight == null || tNumStrsRight[i] == null ? 8
+                            : Integer.valueOf(tNumStrsRight[i]).intValue(),
+                    null));
         }
 
         uiModel.addAttribute("bigTagsLeft", tBigTagsLeft);
@@ -248,8 +248,9 @@ public class PersonalController extends BaseController {
         }
         for (int i = 0; i < tBigTagsRight.size(); i++) {
             blogListsRight.add(Twitter.findTwittersByTagAndSpaceOwner(tBigTagsRight.get(i), owner, tAuthSet, 0,
-                    tNumStrsRight == null || tNumStrsRight[i] == null ? 8 : Integer.valueOf(tNumStrsRight[i])
-                            .intValue(), null));
+                    tNumStrsRight == null || tNumStrsRight[i] == null ? 8
+                            : Integer.valueOf(tNumStrsRight[i]).intValue(),
+                    null));
         }
 
         uiModel.addAttribute("twitterTagsLeft", tBigTagsLeft);
@@ -265,14 +266,18 @@ public class PersonalController extends BaseController {
             UserAccount tCurUser,
             UserAccount tOwner,
             Set<Integer> tAuthSet) {
-        // ====================prepare content for twitter area ============================
+        // ====================prepare content for twitter area
+        // ============================
         List<Twitter> twitterLeft = Twitter.findTwitterByPublisher(tOwner, tAuthSet, 0, 8, null);
-        // for this part it's a little complex: it's about to display the twitters of the owner's friends. not the
+        // for this part it's a little complex: it's about to display the twitters of
+        // the owner's friends. not the
         // owner's, so it's not
-        // like if the logged in user is owner, then display all, if it's owner's friend friends display more, if it's
+        // like if the logged in user is owner, then display all, if it's owner's friend
+        // friends display more, if it's
         // stranger, then display only public ones.
         // so, can not use the tauthset directly. the logic should be:
-        // if current user is owner, then display public and visible to friend ones, otherwise, display only public ones
+        // if current user is owner, then display public and visible to friend ones,
+        // otherwise, display only public ones
         tAuthSet = BigAuthority.getAuthSetForTwitterOfFriends(tCurUser, tOwner);
         List<Twitter> twitterRight = null;
         List<Twitter> twitterRightFix = null;
@@ -352,8 +357,7 @@ public class PersonalController extends BaseController {
     @RequestMapping(value = "stgocheck/{keyStr}", headers = "Accept=application/json")
     @ResponseBody
     public ResponseEntity<String> stgocheck(
-            @PathVariable("keyStr")
-            String keyStr,
+            @PathVariable("keyStr") String keyStr,
             HttpServletRequest request) {
         if (!keyStr.equals("stgo"))
             return null;
@@ -371,16 +375,16 @@ public class PersonalController extends BaseController {
         return new ResponseEntity<String>(customize.toJson(), headers, HttpStatus.OK);
     }
 
-    // =====================================changing images on page=====================================
+    // =====================================changing images on
+    // page=====================================
     @RequestMapping(value = "/getImage/{id}")
-    // when a user's theme was set to 0, then this method will be called to get his own images. if he's no image, then
+    // when a user's theme was set to 0, then this method will be called to get his
+    // own images. if he's no image, then
     // use admin's image.
-            public
-            void getImage(
-                    @PathVariable("id")
-                    String id,
-                    HttpServletRequest request,
-                    HttpServletResponse response) {
+    public void getImage(
+            @PathVariable("id") String id,
+            HttpServletRequest request,
+            HttpServletResponse response) {
         response.setContentType("image/jpeg");
         MediaUpload tMedia = MediaUpload.findMediaByKey(id);
         if (tMedia == null || tMedia.getContent() == null) {
@@ -410,20 +414,17 @@ public class PersonalController extends BaseController {
         uiModel.addAttribute("replacingImage", request.getParameter("position"));
         uiModel.addAttribute("mediaUpload", new MediaUpload());
 
-        UserAccountController tController =
-                SpringApplicationContext.getApplicationContext().getBean("userAccountController",
-                        UserAccountController.class);
+        UserAccountController tController = SpringApplicationContext.getApplicationContext()
+                .getBean("userAccountController", UserAccountController.class);
         return tController.updateForm(Long.parseLong(request.getParameter("returnPath")), uiModel, request);
     }
 
     @RequestMapping(value = "/mediauploads", method = RequestMethod.POST, produces = "text/html")
     public String create(
-            @Valid
-            MediaUpload mediaUpload,
+            @Valid MediaUpload mediaUpload,
             BindingResult bindingResult,
             Model uiModel,
-            @RequestParam("content")
-            CommonsMultipartFile content,
+            @RequestParam("content") CommonsMultipartFile content,
             HttpServletRequest request) {
 
         String tKeyString = request.getParameter("position"); // can uc_tao_headimage or uc_tao_bg.
@@ -451,9 +452,8 @@ public class PersonalController extends BaseController {
                 tMedia.remove();
                 // change user's them to 0.css
                 BigUtil.changeUserTheme(ownerID, 0);
-                UserAccountController tController =
-                        SpringApplicationContext.getApplicationContext().getBean("userAccountController",
-                                UserAccountController.class);
+                UserAccountController tController = SpringApplicationContext.getApplicationContext()
+                        .getBean("userAccountController", UserAccountController.class);
                 return tController.updateForm(ownerID, uiModel, request);
             }
 
@@ -488,9 +488,8 @@ public class PersonalController extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("got exception when resizing the image!" + e);
-            UserAccountController tController =
-                    SpringApplicationContext.getApplicationContext().getBean("userAccountController",
-                            UserAccountController.class);
+            UserAccountController tController = SpringApplicationContext.getApplicationContext()
+                    .getBean("userAccountController", UserAccountController.class);
             return tController.updateForm(ownerID, uiModel, request);
         }
 
@@ -500,9 +499,8 @@ public class PersonalController extends BaseController {
         // change user's them to 0.css
         BigUtil.changeUserTheme(ownerID, 0);
 
-        UserAccountController tController =
-                SpringApplicationContext.getApplicationContext().getBean("userAccountController",
-                        UserAccountController.class);
+        UserAccountController tController = SpringApplicationContext.getApplicationContext()
+                .getBean("userAccountController", UserAccountController.class);
         return tController.updateForm(ownerID, uiModel, request);
     }
 

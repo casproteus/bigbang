@@ -73,12 +73,9 @@ public class ContentController {
 
     @RequestMapping(produces = "text/html")
     public String list(
-            @RequestParam(value = "sortExpression", required = false)
-            String sortExpression,
-            @RequestParam(value = "page", required = false)
-            Integer page,
-            @RequestParam(value = "size", required = false)
-            Integer size,
+            @RequestParam(value = "sortExpression", required = false) String sortExpression,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         int sizeNo = size == null ? 10 : size.intValue();
@@ -92,16 +89,16 @@ public class ContentController {
         if (tCurName.equals("admin")) {
             uiModel.addAttribute("contents", Content.findContentEntries(firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Content.countContents() / sizeNo;
-            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                    : nrOfPages));
+            uiModel.addAttribute("maxPages",
+                    (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
             Set<Integer> tAuthSet = BigAuthority.getAuthSet(tPublisher, tPublisher);
             uiModel.addAttribute("contents",
                     Content.findContentsByPublisher(tPublisher, tAuthSet, firstResult, sizeNo, sortExpression));
             nrOfPages = (float) Content.countContentsByPublisher(tPublisher, tAuthSet) / sizeNo;
         }
-        uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-                : nrOfPages));
+        uiModel.addAttribute("maxPages",
+                (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
 
         BigUtil.checkTheme(tPublisher, httpServletRequest);
         return "contents/list";
@@ -135,8 +132,7 @@ public class ContentController {
 
     @RequestMapping(params = "twitle", produces = "text/html")
     public String createTag(
-            @Valid
-            BigTag bigTag,
+            @Valid BigTag bigTag,
             BindingResult bindingResult,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
@@ -182,8 +178,7 @@ public class ContentController {
 
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(
-            @Valid
-            Content content,
+            @Valid Content content,
             BindingResult bindingResult,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
@@ -199,9 +194,8 @@ public class ContentController {
                 content.setPublisher(tUserAccount);
                 uiModel.asMap().clear();
                 content.persist();
-                PersonalController tController =
-                        SpringApplicationContext.getApplicationContext().getBean("personalController",
-                                PersonalController.class);
+                PersonalController tController = SpringApplicationContext.getApplicationContext()
+                        .getBean("personalController", PersonalController.class);
                 return tController.index(tUserAccount.getName(), uiModel, httpServletRequest);
             } else {
                 populateEditForm(uiModel, content, httpServletRequest);
@@ -235,8 +229,7 @@ public class ContentController {
 
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String update(
-            @Valid
-            Content content,
+            @Valid Content content,
             BindingResult bindingResult,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
@@ -257,8 +250,7 @@ public class ContentController {
 
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String updateForm(
-            @PathVariable("id")
-            Long id,
+            @PathVariable("id") Long id,
             Model uiModel,
             HttpServletRequest httpServletRequest) {
         populateEditForm(uiModel, Content.findContent(id), httpServletRequest);

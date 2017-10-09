@@ -10,26 +10,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-privileged aspect UserAccount_Roo_Json {
-    
-    public String UserAccount.toJson() {
-        return new JSONSerializer()
-        .exclude("*.class").serialize(this);
-    }
-    
-    public String UserAccount.toJson(String[] fields) {
-        return new JSONSerializer()
-        .include(fields).exclude("*.class").serialize(this);
-    }
-    
-    public static UserAccount UserAccount.fromJsonToUserAccount(String json) {
-        return new JSONDeserializer<UserAccount>()
-        .use(null, UserAccount.class).deserialize(json);
-    }
-    
-    public static Collection<UserAccount> UserAccount.fromJsonArrayToUserAccounts(String json) {
-        return new JSONDeserializer<List<UserAccount>>()
-        .use("values", UserAccount.class).deserialize(json);
-    }
-    
+privileged aspect UserAccount_Roo_Json{
+
+public String UserAccount.toJson(){return new JSONSerializer().exclude("*.class").serialize(this);}
+
+public String UserAccount.toJson(String[]fields){return new JSONSerializer().include(fields).exclude("*.class").serialize(this);}
+
+public static UserAccount UserAccount.fromJsonToUserAccount(String json){return new JSONDeserializer<UserAccount>().use(null,UserAccount.class).deserialize(json);}
+
+public static Collection<UserAccount>UserAccount.fromJsonArrayToUserAccounts(String json){return new JSONDeserializer<List<UserAccount>>().use("values",UserAccount.class).deserialize(json);}
+
 }

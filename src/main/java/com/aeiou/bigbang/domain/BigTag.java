@@ -347,7 +347,7 @@ public class BigTag {
                 while (tList.hasNext())
                     tOwnerNameSet.add(tList.next().getName().toLowerCase());
                 query = entityManager().createQuery(
-                        "SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and LOWER(o.type) in :tOwnerNameSet",
+                        "SELECT o FROM BigTag AS o WHERE o.tagName = :pTagName and LOWER(o.type) in (:tOwnerNameSet)",
                         BigTag.class);
                 query = query.setParameter("pTagName", tagName).setParameter("tOwnerNameSet", tOwnerNameSet);
                 try {

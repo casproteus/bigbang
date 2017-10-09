@@ -102,7 +102,7 @@ public class Content {
             String sortExpression) {
         EntityManager tEntityManager = entityManager();
         TypedQuery<Content> tQuery = tEntityManager.createQuery(
-                "SELECT o FROM Content AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY "
+                "SELECT o FROM Content AS o WHERE o.publisher = :publisher and (o.authority in (:pAuthSet)) ORDER BY "
                         + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression),
                 Content.class);
         tQuery = tQuery.setParameter("publisher", pPublisher);
@@ -122,7 +122,7 @@ public class Content {
             return 0;
         } else {
             TypedQuery<Long> tQuery = entityManager().createQuery(
-                    "SELECT COUNT(o) FROM Content AS o WHERE o.publisher = :pPublisher and (o.authority in :pAuthSet)",
+                    "SELECT COUNT(o) FROM Content AS o WHERE o.publisher = :pPublisher and (o.authority in (:pAuthSet))",
                     Long.class);
             tQuery = tQuery.setParameter("pPublisher", pPublisher);
             tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
@@ -143,7 +143,7 @@ public class Content {
         if (tTeamSet.isEmpty()) {
             String tTagName = pTag.getTagName();
             tQuery = tEntityManager.createQuery(
-                    "SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner) and (o.authority in :pAuthSet) ORDER BY "
+                    "SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner) and (o.authority in (:pAuthSet)) ORDER BY "
                             + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression),
                     Content.class);
             tQuery = tQuery.setParameter("tTagName", tTagName);
@@ -151,8 +151,8 @@ public class Content {
         } else {
             String tTagName = pTag.getTagName();
             tQuery = tEntityManager.createQuery(
-                    "SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName and o.publisher = :pOwner and o.authority in :pAuthSet) or "
-                            + "(o.uncommonBigTag.tagName = :tTagName and o.publisher in :tTeamSet and o.authority = 0) ORDER BY "
+                    "SELECT o FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName and o.publisher = :pOwner and o.authority in (:pAuthSet)) or "
+                            + "(o.uncommonBigTag.tagName = :tTagName and o.publisher in (:tTeamSet) and o.authority = 0) ORDER BY "
                             + (sortExpression == null || sortExpression.length() < 1 ? "o.id DESC" : sortExpression),
                     Content.class);
             tQuery = tQuery.setParameter("tTagName", tTagName);
@@ -180,13 +180,13 @@ public class Content {
         if ("admin".equals(pTag.getType())) {
             if (tTeamSet.isEmpty()) {
                 tQuery = tEntityManager.createQuery(
-                        "SELECT COUNT(o) FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner) and (o.authority in :pAuthSet)",
+                        "SELECT COUNT(o) FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner) and (o.authority in (:pAuthSet))",
                         Long.class);
                 tQuery = tQuery.setParameter("pTag", pTag);
                 tQuery = tQuery.setParameter("pOwner", pOwner);
             } else {
                 tQuery = tEntityManager.createQuery(
-                        "SELECT COUNT(o) FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner or o.publisher in :tTeamSet) and (o.authority in :pAuthSet)",
+                        "SELECT COUNT(o) FROM Content AS o WHERE (o.commonBigTag = :pTag) and (o.publisher = :pOwner or o.publisher in (:tTeamSet)) and (o.authority in (:pAuthSet))",
                         Long.class);
                 tQuery = tQuery.setParameter("pTag", pTag);
                 tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tTeamSet", tTeamSet);
@@ -195,14 +195,14 @@ public class Content {
             if (tTeamSet.isEmpty()) {
                 String tTagName = pTag.getTagName();
                 tQuery = tEntityManager.createQuery(
-                        "SELECT COUNT(o) FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner) and (o.authority in :pAuthSet)",
+                        "SELECT COUNT(o) FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner) and (o.authority in (:pAuthSet))",
                         Long.class);
                 tQuery = tQuery.setParameter("tTagName", tTagName);
                 tQuery = tQuery.setParameter("pOwner", pOwner);
             } else {
                 String tTagName = pTag.getTagName();
                 tQuery = tEntityManager.createQuery(
-                        "SELECT COUNT(o) FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner or o.publisher in :tTeamSet) and (o.authority in :pAuthSet)",
+                        "SELECT COUNT(o) FROM Content AS o WHERE (o.uncommonBigTag.tagName = :tTagName) and (o.publisher = :pOwner or o.publisher in (:tTeamSet)) and (o.authority in (:pAuthSet))",
                         Long.class);
                 tQuery = tQuery.setParameter("tTagName", tTagName);
                 tQuery = tQuery.setParameter("pOwner", pOwner).setParameter("tTeamSet", tTeamSet);

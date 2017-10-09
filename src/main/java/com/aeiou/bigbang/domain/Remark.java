@@ -60,7 +60,7 @@ public class Remark {
             int maxResults) {
         EntityManager tEntityManager = entityManager();
         TypedQuery<Remark> tQuery = tEntityManager.createQuery(
-                "SELECT o FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet) ORDER BY o.id DESC",
+                "SELECT o FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in (:pAuthSet)) ORDER BY o.id DESC",
                 Remark.class);
         tQuery = tQuery.setParameter("pTwitter", pTwitter);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
@@ -73,7 +73,7 @@ public class Remark {
             Twitter pTwitter,
             Set<java.lang.Integer> pAuthSet) {
         TypedQuery<Long> tQuery = entityManager().createQuery(
-                "SELECT COUNT(o) FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in :pAuthSet)",
+                "SELECT COUNT(o) FROM Remark AS o WHERE o.remarkto = :pTwitter and (o.authority in (:pAuthSet))",
                 Long.class);
         tQuery = tQuery.setParameter("pTwitter", pTwitter);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);

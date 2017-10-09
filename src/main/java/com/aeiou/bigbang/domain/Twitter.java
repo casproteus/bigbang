@@ -100,7 +100,7 @@ public class Twitter {
             String sortExpression) {
         EntityManager tEntityManager = entityManager();
         TypedQuery<Twitter> tQuery = tEntityManager.createQuery(
-                "SELECT o FROM Twitter AS o WHERE o.publisher = :publisher and (o.authority in :pAuthSet) ORDER BY "
+                "SELECT o FROM Twitter AS o WHERE o.publisher = :publisher and (o.authority in (:pAuthSet)) ORDER BY "
                         + (sortExpression == null || sortExpression.length() < 1 ? "o.lastupdate DESC"
                                 : sortExpression),
                 Twitter.class);
@@ -121,7 +121,7 @@ public class Twitter {
             return 0;
         } else {
             TypedQuery<Long> tQuery = entityManager().createQuery(
-                    "SELECT COUNT(o) FROM Twitter AS o WHERE o.publisher = :pPublisher and (o.authority in :pAuthSet)",
+                    "SELECT COUNT(o) FROM Twitter AS o WHERE o.publisher = :pPublisher and (o.authority in (:pAuthSet))",
                     Long.class);
             tQuery = tQuery.setParameter("pPublisher", pPublisher);
             tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
@@ -144,7 +144,7 @@ public class Twitter {
             return null;
         EntityManager tEntityManager = entityManager();
         TypedQuery<Twitter> tQuery = tEntityManager.createQuery(
-                "SELECT o FROM Twitter AS o WHERE (o.publisher in :tTeamSet) and (o.authority in :pAuthSet) ORDER BY "
+                "SELECT o FROM Twitter AS o WHERE (o.publisher in (:tTeamSet)) and (o.authority in (:pAuthSet)) ORDER BY "
                         + (sortExpression == null || sortExpression.length() < 1 ? "o.lastupdate DESC"
                                 : sortExpression),
                 Twitter.class);
@@ -162,7 +162,7 @@ public class Twitter {
             return 0;
         EntityManager tEntityManager = entityManager();
         TypedQuery<Long> tQuery = tEntityManager.createQuery(
-                "SELECT COUNT(o) FROM Twitter AS o WHERE (o.publisher in :tTeamSet) and (o.authority in :pAuthSet)",
+                "SELECT COUNT(o) FROM Twitter AS o WHERE (o.publisher in (:tTeamSet)) and (o.authority in (:pAuthSet))",
                 Long.class);
         tQuery = tQuery.setParameter("tTeamSet", tTeamSet);
         tQuery = tQuery.setParameter("pAuthSet", pAuthSet);
@@ -183,7 +183,7 @@ public class Twitter {
         TypedQuery<Twitter> tQuery = null;
         if (tTeamSet.isEmpty()) {
             tQuery = tEntityManager.createQuery(
-                    "SELECT o FROM Twitter AS o WHERE (o.twittertag.tagName = :tTagName) and (o.publisher = :pOwner) and (o.authority in :pAuthSet) ORDER BY "
+                    "SELECT o FROM Twitter AS o WHERE (o.twittertag.tagName = :tTagName) and (o.publisher = :pOwner) and (o.authority in (:pAuthSet)) ORDER BY "
                             + (sortExpression == null || sortExpression.length() < 1 ? "o.lastupdate DESC"
                                     : sortExpression),
                     Twitter.class);
@@ -191,8 +191,8 @@ public class Twitter {
             tQuery = tQuery.setParameter("pOwner", pOwner);
         } else {
             tQuery = tEntityManager.createQuery(
-                    "SELECT o FROM Twitter AS o WHERE (o.twittertag.tagName = :tTagName and o.publisher = :pOwner and o.authority in :pAuthSet) or "
-                            + "(o.twittertag.tagName = :tTagName and o.publisher in :tTeamSet and o.authority = 0) ORDER BY "
+                    "SELECT o FROM Twitter AS o WHERE (o.twittertag.tagName = :tTagName and o.publisher = :pOwner and o.authority in (:pAuthSet)) or "
+                            + "(o.twittertag.tagName = :tTagName and o.publisher in (:tTeamSet) and o.authority = 0) ORDER BY "
                             + (sortExpression == null || sortExpression.length() < 1 ? "o.lastupdate DESC"
                                     : sortExpression),
                     Twitter.class);

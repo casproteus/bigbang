@@ -16,4 +16,32 @@ public class ApplicationConversionServiceFactoryBean extends FormattingConversio
     // super.installFormatters(registry);
     // // Register application converters and formatters
     // }
+
+    public void installLabelConverters(
+            FormatterRegistry registry) {
+        // registry.addConverter(getBigTagToStringConverter());
+        registry.addConverter(getIdToBigTagConverter());
+        registry.addConverter(getStringToBigTagConverter());
+        registry.addConverter(getCircleToStringConverter());
+        registry.addConverter(getIdToCircleConverter());
+        registry.addConverter(getStringToCircleConverter());
+        registry.addConverter(getContentToStringConverter());
+        registry.addConverter(getIdToContentConverter());
+        registry.addConverter(getStringToContentConverter());
+        registry.addConverter(getCustomizeToStringConverter());
+        registry.addConverter(getIdToCustomizeConverter());
+        registry.addConverter(getStringToCustomizeConverter());
+        registry.addConverter(getMessageToStringConverter());
+        registry.addConverter(getIdToMessageConverter());
+        registry.addConverter(getStringToMessageConverter());
+        registry.addConverter(getRemarkToStringConverter());
+        registry.addConverter(getIdToRemarkConverter());
+        registry.addConverter(getStringToRemarkConverter());
+        registry.addConverter(getTwitterToStringConverter());
+        registry.addConverter(getIdToTwitterConverter());
+        registry.addConverter(getStringToTwitterConverter());
+        registry.addConverter(getUserAccountToStringConverter());
+        registry.addConverter(getIdToUserAccountConverter());
+        registry.addConverter(getStringToUserAccountConverter());
+    }
 }

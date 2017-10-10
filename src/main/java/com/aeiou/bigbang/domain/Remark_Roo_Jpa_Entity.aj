@@ -12,32 +12,34 @@ import javax.persistence.Id;
 import javax.persistence.Version;
 
 privileged aspect Remark_Roo_Jpa_Entity {
-    
+
     declare @type: Remark: @Entity;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long Remark.id;
-    
+
     @Version
     @Column(name = "version")
     private Integer Remark.version;
-    
+
     public Long Remark.getId() {
         return this.id;
     }
-    
-    public void Remark.setId(Long id) {
+
+    public void Remark.setId(
+            Long id) {
         this.id = id;
     }
-    
+
     public Integer Remark.getVersion() {
         return this.version;
     }
-    
-    public void Remark.setVersion(Integer version) {
+
+    public void Remark.setVersion(
+            Integer version) {
         this.version = version;
     }
-    
+
 }

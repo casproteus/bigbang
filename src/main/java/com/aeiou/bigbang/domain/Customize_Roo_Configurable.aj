@@ -7,7 +7,7 @@ import com.aeiou.bigbang.domain.Customize;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect Customize_Roo_Configurable {
-    
+
     declare @type: Customize: @Configurable;
-    
+
 }

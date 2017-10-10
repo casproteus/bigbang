@@ -10,18 +10,36 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-privileged aspect Circle_Roo_Json{
+privileged aspect Circle_Roo_Json {
 
-public String Circle.toJson(){return new JSONSerializer().exclude("*.class").serialize(this);}
+    public String Circle.toJson() {
+        return new JSONSerializer().exclude("*.class").serialize(this);
+    }
 
-public String Circle.toJson(String[]fields){return new JSONSerializer().include(fields).exclude("*.class").serialize(this);}
+    public String Circle.toJson(
+            String[] fields) {
+        return new JSONSerializer().include(fields).exclude("*.class").serialize(this);
+    }
 
-public static Circle Circle.fromJsonToCircle(String json){return new JSONDeserializer<Circle>().use(null,Circle.class).deserialize(json);}
+    public static Circle Circle.fromJsonToCircle(
+            String json) {
+        return new JSONDeserializer<Circle>().use(null, Circle.class).deserialize(json);
+    }
 
-public static String Circle.toJsonArray(Collection<Circle>collection){return new JSONSerializer().exclude("*.class").serialize(collection);}
+    public static String Circle.toJsonArray(
+            Collection<Circle> collection) {
+        return new JSONSerializer().exclude("*.class").serialize(collection);
+    }
 
-public static String Circle.toJsonArray(Collection<Circle>collection,String[]fields){return new JSONSerializer().include(fields).exclude("*.class").serialize(collection);}
+    public static String Circle.toJsonArray(
+            Collection<Circle> collection,
+            String[] fields) {
+        return new JSONSerializer().include(fields).exclude("*.class").serialize(collection);
+    }
 
-public static Collection<Circle>Circle.fromJsonArrayToCircles(String json){return new JSONDeserializer<List<Circle>>().use("values",Circle.class).deserialize(json);}
+    public static Collection<Circle>Circle.fromJsonArrayToCircles(
+            String json) {
+        return new JSONDeserializer<List<Circle>>().use("values", Circle.class).deserialize(json);
+    }
 
 }

@@ -12,32 +12,34 @@ import javax.persistence.Id;
 import javax.persistence.Version;
 
 privileged aspect Customize_Roo_Jpa_Entity {
-    
+
     declare @type: Customize: @Entity;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long Customize.id;
-    
+
     @Version
     @Column(name = "version")
     private Integer Customize.version;
-    
+
     public Long Customize.getId() {
         return this.id;
     }
-    
-    public void Customize.setId(Long id) {
+
+    public void Customize.setId(
+            Long id) {
         this.id = id;
     }
-    
+
     public Integer Customize.getVersion() {
         return this.version;
     }
-    
-    public void Customize.setVersion(Integer version) {
+
+    public void Customize.setVersion(
+            Integer version) {
         this.version = version;
     }
-    
+
 }

@@ -5,22 +5,42 @@ package com.aeiou.bigbang.domain;
 
 import com.aeiou.bigbang.domain.BigTag;
 
-privileged aspect BigTag_Roo_JavaBean{
+privileged aspect BigTag_Roo_JavaBean {
 
-public String BigTag.getTagName(){return this.tagName;}
+    public String BigTag.getTagName() {
+        return this.tagName;
+    }
 
-public void BigTag.setTagName(String tagName){this.tagName=tagName;}
+    public void BigTag.setTagName(
+            String tagName) {
+        this.tagName = tagName;
+    }
 
-public String BigTag.getType(){return this.type;}
+    public String BigTag.getType() {
+        return this.type;
+    }
 
-public void BigTag.setType(String type){this.type=type;}
+    public void BigTag.setType(
+            String type) {
+        this.type = type;
+    }
 
-public Integer BigTag.getAuthority(){return this.authority;}
+    public Integer BigTag.getAuthority() {
+        return this.authority;
+    }
 
-public void BigTag.setAuthority(Integer authority){this.authority=authority;}
+    public void BigTag.setAuthority(
+            Integer authority) {
+        this.authority = authority;
+    }
 
-public Integer BigTag.getOwner(){return this.owner;}
+    public Integer BigTag.getOwner() {
+        return this.owner;
+    }
 
-public void BigTag.setOwner(Integer owner){this.owner=owner;}
+    public void BigTag.setOwner(
+            Integer owner) {
+        this.owner = owner;
+    }
 
 }

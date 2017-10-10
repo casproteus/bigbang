@@ -7,7 +7,7 @@ import com.aeiou.bigbang.domain.RssTwitter;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect RssTwitter_Roo_Configurable {
-    
+
     declare @type: RssTwitter: @Configurable;
-    
+
 }

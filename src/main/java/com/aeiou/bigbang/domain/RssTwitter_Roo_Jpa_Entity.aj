@@ -12,32 +12,34 @@ import javax.persistence.Id;
 import javax.persistence.Version;
 
 privileged aspect RssTwitter_Roo_Jpa_Entity {
-    
+
     declare @type: RssTwitter: @Entity;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long RssTwitter.id;
-    
+
     @Version
     @Column(name = "version")
     private Integer RssTwitter.version;
-    
+
     public Long RssTwitter.getId() {
         return this.id;
     }
-    
-    public void RssTwitter.setId(Long id) {
+
+    public void RssTwitter.setId(
+            Long id) {
         this.id = id;
     }
-    
+
     public Integer RssTwitter.getVersion() {
         return this.version;
     }
-    
-    public void RssTwitter.setVersion(Integer version) {
+
+    public void RssTwitter.setVersion(
+            Integer version) {
         this.version = version;
     }
-    
+
 }

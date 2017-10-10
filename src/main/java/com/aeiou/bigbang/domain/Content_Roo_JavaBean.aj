@@ -8,38 +8,78 @@ import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.UserAccount;
 import java.util.Date;
 
-privileged aspect Content_Roo_JavaBean{
+privileged aspect Content_Roo_JavaBean {
 
-public String Content.getTitle(){return this.title;}
+    public String Content.getTitle() {
+        return this.title;
+    }
 
-public void Content.setTitle(String title){this.title=title;}
+    public void Content.setTitle(
+            String title) {
+        this.title = title;
+    }
 
-public String Content.getSourceURL(){return this.sourceURL;}
+    public String Content.getSourceURL() {
+        return this.sourceURL;
+    }
 
-public void Content.setSourceURL(String sourceURL){this.sourceURL=sourceURL;}
+    public void Content.setSourceURL(
+            String sourceURL) {
+        this.sourceURL = sourceURL;
+    }
 
-public String Content.getConentCache(){return this.conentCache;}
+    public String Content.getConentCache() {
+        return this.conentCache;
+    }
 
-public void Content.setConentCache(String conentCache){this.conentCache=conentCache;}
+    public void Content.setConentCache(
+            String conentCache) {
+        this.conentCache = conentCache;
+    }
 
-public UserAccount Content.getPublisher(){return this.publisher;}
+    public UserAccount Content.getPublisher() {
+        return this.publisher;
+    }
 
-public void Content.setPublisher(UserAccount publisher){this.publisher=publisher;}
+    public void Content.setPublisher(
+            UserAccount publisher) {
+        this.publisher = publisher;
+    }
 
-public BigTag Content.getCommonBigTag(){return this.commonBigTag;}
+    public BigTag Content.getCommonBigTag() {
+        return this.commonBigTag;
+    }
 
-public void Content.setCommonBigTag(BigTag commonBigTag){this.commonBigTag=commonBigTag;}
+    public void Content.setCommonBigTag(
+            BigTag commonBigTag) {
+        this.commonBigTag = commonBigTag;
+    }
 
-public Integer Content.getAuthority(){return this.authority;}
+    public Integer Content.getAuthority() {
+        return this.authority;
+    }
 
-public void Content.setAuthority(Integer authority){this.authority=authority;}
+    public void Content.setAuthority(
+            Integer authority) {
+        this.authority = authority;
+    }
 
-public BigTag Content.getUncommonBigTag(){return this.uncommonBigTag;}
+    public BigTag Content.getUncommonBigTag() {
+        return this.uncommonBigTag;
+    }
 
-public void Content.setUncommonBigTag(BigTag uncommonBigTag){this.uncommonBigTag=uncommonBigTag;}
+    public void Content.setUncommonBigTag(
+            BigTag uncommonBigTag) {
+        this.uncommonBigTag = uncommonBigTag;
+    }
 
-public Date Content.getMarkDate(){return this.markDate;}
+    public Date Content.getMarkDate() {
+        return this.markDate;
+    }
 
-public void Content.setMarkDate(Date markDate){this.markDate=markDate;}
+    public void Content.setMarkDate(
+            Date markDate) {
+        this.markDate = markDate;
+    }
 
 }

@@ -17,14 +17,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
-privileged aspect TwitterController_Roo_Controller{
+privileged aspect TwitterController_Roo_Controller {
 
-@RequestMapping(value="/{id}",produces="text/html")public String TwitterController.show(@PathVariable("id")Long id,Model uiModel){addDateTimeFormatPatterns(uiModel);uiModel.addAttribute("twitter",Twitter.findTwitter(id));uiModel.addAttribute("itemId",id);return"twitters/show";}
+    @RequestMapping(value = "/{id}", produces = "text/html")
+    public String TwitterController.show(
+            @PathVariable("id") Long id,
+            Model uiModel) {
+        addDateTimeFormatPatterns(uiModel);
+        uiModel.addAttribute("twitter", Twitter.findTwitter(id));
+        uiModel.addAttribute("itemId", id);
+        return "twitters/show";
+    }
 
-void TwitterController.addDateTimeFormatPatterns(Model uiModel){uiModel.addAttribute("twitter_twitdate_date_format",DateTimeFormat.patternForStyle("M-",LocaleContextHolder.getLocale()));uiModel.addAttribute("twitter_lastupdate_date_format",DateTimeFormat.patternForStyle("M-",LocaleContextHolder.getLocale()));}
+    void TwitterController.addDateTimeFormatPatterns(
+            Model uiModel) {
+        uiModel.addAttribute("twitter_twitdate_date_format",
+                DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("twitter_lastupdate_date_format",
+                DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+    }
 
-void TwitterController.populateEditForm(Model uiModel,Twitter twitter){uiModel.addAttribute("twitter",twitter);addDateTimeFormatPatterns(uiModel);uiModel.addAttribute("bigtags",BigTag.findAllBigTags());uiModel.addAttribute("useraccounts",UserAccount.findAllUserAccounts());}
+    void TwitterController.populateEditForm(
+            Model uiModel,
+            Twitter twitter) {
+        uiModel.addAttribute("twitter", twitter);
+        addDateTimeFormatPatterns(uiModel);
+        uiModel.addAttribute("bigtags", BigTag.findAllBigTags());
+        uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
+    }
 
-String TwitterController.encodeUrlPathSegment(String pathSegment,HttpServletRequest httpServletRequest){String enc=httpServletRequest.getCharacterEncoding();if(enc==null){enc=WebUtils.DEFAULT_CHARACTER_ENCODING;}try{pathSegment=UriUtils.encodePathSegment(pathSegment,enc);}catch(UnsupportedEncodingException uee){}return pathSegment;}
+    String TwitterController.encodeUrlPathSegment(
+            String pathSegment,
+            HttpServletRequest httpServletRequest) {
+        String enc = httpServletRequest.getCharacterEncoding();
+        if (enc == null) {
+            enc = WebUtils.DEFAULT_CHARACTER_ENCODING;
+        }
+        try {
+            pathSegment = UriUtils.encodePathSegment(pathSegment, enc);
+        } catch (UnsupportedEncodingException uee) {
+        }
+        return pathSegment;
+    }
 
 }

@@ -13,12 +13,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
-privileged aspect BigTagController_Roo_Controller{
+privileged aspect BigTagController_Roo_Controller {
 
-@RequestMapping(value="/{id}",produces="text/html")public String BigTagController.show(@PathVariable("id")Long id,Model uiModel){uiModel.addAttribute("bigtag",BigTag.findBigTag(id));uiModel.addAttribute("itemId",id);return"bigtags/show";}
+    @RequestMapping(value = "/{id}", produces = "text/html")
+    public String BigTagController.show(
+            @PathVariable("id") Long id,
+            Model uiModel) {
+        uiModel.addAttribute("bigtag", BigTag.findBigTag(id));
+        uiModel.addAttribute("itemId", id);
+        return "bigtags/show";
+    }
 
-void BigTagController.populateEditForm(Model uiModel,BigTag bigTag){uiModel.addAttribute("bigTag",bigTag);}
+    void BigTagController.populateEditForm(
+            Model uiModel,
+            BigTag bigTag) {
+        uiModel.addAttribute("bigTag", bigTag);
+    }
 
-String BigTagController.encodeUrlPathSegment(String pathSegment,HttpServletRequest httpServletRequest){String enc=httpServletRequest.getCharacterEncoding();if(enc==null){enc=WebUtils.DEFAULT_CHARACTER_ENCODING;}try{pathSegment=UriUtils.encodePathSegment(pathSegment,enc);}catch(UnsupportedEncodingException uee){}return pathSegment;}
+    String BigTagController.encodeUrlPathSegment(
+            String pathSegment,
+            HttpServletRequest httpServletRequest) {
+        String enc = httpServletRequest.getCharacterEncoding();
+        if (enc == null) {
+            enc = WebUtils.DEFAULT_CHARACTER_ENCODING;
+        }
+        try {
+            pathSegment = UriUtils.encodePathSegment(pathSegment, enc);
+        } catch (UnsupportedEncodingException uee) {
+        }
+        return pathSegment;
+    }
 
 }

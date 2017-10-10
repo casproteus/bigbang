@@ -10,18 +10,36 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-privileged aspect BigTag_Roo_Json{
+privileged aspect BigTag_Roo_Json {
 
-public String BigTag.toJson(){return new JSONSerializer().exclude("*.class").serialize(this);}
+    public String BigTag.toJson() {
+        return new JSONSerializer().exclude("*.class").serialize(this);
+    }
 
-public String BigTag.toJson(String[]fields){return new JSONSerializer().include(fields).exclude("*.class").serialize(this);}
+    public String BigTag.toJson(
+            String[] fields) {
+        return new JSONSerializer().include(fields).exclude("*.class").serialize(this);
+    }
 
-public static BigTag BigTag.fromJsonToBigTag(String json){return new JSONDeserializer<BigTag>().use(null,BigTag.class).deserialize(json);}
+    public static BigTag BigTag.fromJsonToBigTag(
+            String json) {
+        return new JSONDeserializer<BigTag>().use(null, BigTag.class).deserialize(json);
+    }
 
-public static String BigTag.toJsonArray(Collection<BigTag>collection){return new JSONSerializer().exclude("*.class").serialize(collection);}
+    public static String BigTag.toJsonArray(
+            Collection<BigTag> collection) {
+        return new JSONSerializer().exclude("*.class").serialize(collection);
+    }
 
-public static String BigTag.toJsonArray(Collection<BigTag>collection,String[]fields){return new JSONSerializer().include(fields).exclude("*.class").serialize(collection);}
+    public static String BigTag.toJsonArray(
+            Collection<BigTag> collection,
+            String[] fields) {
+        return new JSONSerializer().include(fields).exclude("*.class").serialize(collection);
+    }
 
-public static Collection<BigTag>BigTag.fromJsonArrayToBigTags(String json){return new JSONDeserializer<List<BigTag>>().use("values",BigTag.class).deserialize(json);}
+    public static Collection<BigTag>BigTag.fromJsonArrayToBigTags(
+            String json) {
+        return new JSONDeserializer<List<BigTag>>().use("values", BigTag.class).deserialize(json);
+    }
 
 }

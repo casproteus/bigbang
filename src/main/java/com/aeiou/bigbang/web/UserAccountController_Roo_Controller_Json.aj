@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 privileged aspect UserAccountController_Roo_Controller_Json {
-
+    
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<String>UserAccountController.showJson(
-            @PathVariable("id") Long id) {
+    public ResponseEntity<String> UserAccountController.showJson(@PathVariable("id") Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         try {
@@ -31,48 +30,40 @@ privileged aspect UserAccountController_Roo_Controller_Json {
             }
             return new ResponseEntity<String>(userAccount.toJson(), headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<String>UserAccountController.listJson() {
+    public ResponseEntity<String> UserAccountController.listJson() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         try {
             List<UserAccount> result = UserAccount.findAllUserAccounts();
             return new ResponseEntity<String>(UserAccount.toJsonArray(result), headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String>UserAccountController.createFromJson(
-            @RequestBody String json,
-            UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<String> UserAccountController.createFromJson(@RequestBody String json, UriComponentsBuilder uriBuilder) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         try {
             UserAccount userAccount = UserAccount.fromJsonToUserAccount(json);
             userAccount.persist();
             RequestMapping a = (RequestMapping) getClass().getAnnotation(RequestMapping.class);
-            headers.add("Location",
-                    uriBuilder.path(a.value()[0] + "/" + userAccount.getId().toString()).build().toUriString());
+            headers.add("Location",uriBuilder.path(a.value()[0]+"/"+userAccount.getId().toString()).build().toUriString());
             return new ResponseEntity<String>(headers, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String>UserAccountController.updateFromJson(
-            @RequestBody String json,
-            @PathVariable("id") Long id) {
+    public ResponseEntity<String> UserAccountController.updateFromJson(@RequestBody String json, @PathVariable("id") Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         try {
@@ -83,14 +74,12 @@ privileged aspect UserAccountController_Roo_Controller_Json {
             }
             return new ResponseEntity<String>(headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<String>UserAccountController.deleteFromJson(
-            @PathVariable("id") Long id) {
+    public ResponseEntity<String> UserAccountController.deleteFromJson(@PathVariable("id") Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         try {
@@ -101,9 +90,8 @@ privileged aspect UserAccountController_Roo_Controller_Json {
             userAccount.remove();
             return new ResponseEntity<String>(headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
 }

@@ -7,7 +7,7 @@ import com.aeiou.bigbang.domain.Content;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect Content_Roo_Configurable {
-
+    
     declare @type: Content: @Configurable;
-
+    
 }

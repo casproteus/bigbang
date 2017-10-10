@@ -10,32 +10,27 @@ import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 
 privileged aspect Remark_Roo_Jpa_ActiveRecord {
-
+    
     @PersistenceContext
     transient EntityManager Remark.entityManager;
-
-    public static final List<String>Remark.fieldNames4OrderClauseFilter =
-            java.util.Arrays.asList("content", "publisher", "remarkTime", "authority", "remarkto", "refresh_time");
-
+    
+    public static final List<String> Remark.fieldNames4OrderClauseFilter = java.util.Arrays.asList("content", "publisher", "remarkTime", "authority", "remarkto", "refresh_time");
+    
     public static final EntityManager Remark.entityManager() {
         EntityManager em = new Remark().entityManager;
-        if (em == null)
-            throw new IllegalStateException(
-                    "Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
         return em;
     }
-
+    
     public static long Remark.countRemarks() {
         return entityManager().createQuery("SELECT COUNT(o) FROM Remark o", Long.class).getSingleResult();
     }
-
-    public static List<Remark>Remark.findAllRemarks() {
+    
+    public static List<Remark> Remark.findAllRemarks() {
         return entityManager().createQuery("SELECT o FROM Remark o", Remark.class).getResultList();
     }
-
-    public static List<Remark>Remark.findAllRemarks(
-            String sortFieldName,
-            String sortOrder) {
+    
+    public static List<Remark> Remark.findAllRemarks(String sortFieldName, String sortOrder) {
         String jpaQuery = "SELECT o FROM Remark o";
         if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
             jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
@@ -45,19 +40,13 @@ privileged aspect Remark_Roo_Jpa_ActiveRecord {
         }
         return entityManager().createQuery(jpaQuery, Remark.class).getResultList();
     }
-
-    public static Remark Remark.findRemark(
-            Long id) {
-        if (id == null)
-            return null;
+    
+    public static Remark Remark.findRemark(Long id) {
+        if (id == null) return null;
         return entityManager().find(Remark.class, id);
     }
-
-    public static List<Remark>Remark.findRemarkEntries(
-            int firstResult,
-            int maxResults,
-            String sortFieldName,
-            String sortOrder) {
+    
+    public static List<Remark> Remark.findRemarkEntries(int firstResult, int maxResults, String sortFieldName, String sortOrder) {
         String jpaQuery = "SELECT o FROM Remark o";
         if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
             jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
@@ -65,21 +54,18 @@ privileged aspect Remark_Roo_Jpa_ActiveRecord {
                 jpaQuery = jpaQuery + " " + sortOrder;
             }
         }
-        return entityManager().createQuery(jpaQuery, Remark.class).setFirstResult(firstResult).setMaxResults(maxResults)
-                .getResultList();
+        return entityManager().createQuery(jpaQuery, Remark.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
-
+    
     @Transactional
     public void Remark.persist() {
-        if (this.entityManager == null)
-            this.entityManager = entityManager();
+        if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.persist(this);
     }
-
+    
     @Transactional
     public void Remark.remove() {
-        if (this.entityManager == null)
-            this.entityManager = entityManager();
+        if (this.entityManager == null) this.entityManager = entityManager();
         if (this.entityManager.contains(this)) {
             this.entityManager.remove(this);
         } else {
@@ -87,28 +73,25 @@ privileged aspect Remark_Roo_Jpa_ActiveRecord {
             this.entityManager.remove(attached);
         }
     }
-
+    
     @Transactional
     public void Remark.flush() {
-        if (this.entityManager == null)
-            this.entityManager = entityManager();
+        if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.flush();
     }
-
+    
     @Transactional
     public void Remark.clear() {
-        if (this.entityManager == null)
-            this.entityManager = entityManager();
+        if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.clear();
     }
-
+    
     @Transactional
     public Remark Remark.merge() {
-        if (this.entityManager == null)
-            this.entityManager = entityManager();
+        if (this.entityManager == null) this.entityManager = entityManager();
         Remark merged = this.entityManager.merge(this);
         this.entityManager.flush();
         return merged;
     }
-
+    
 }

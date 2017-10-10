@@ -12,34 +12,32 @@ import javax.persistence.Id;
 import javax.persistence.Version;
 
 privileged aspect UserAccount_Roo_Jpa_Entity {
-
+    
     declare @type: UserAccount: @Entity;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long UserAccount.id;
-
+    
     @Version
     @Column(name = "version")
     private Integer UserAccount.version;
-
+    
     public Long UserAccount.getId() {
         return this.id;
     }
-
-    public void UserAccount.setId(
-            Long id) {
+    
+    public void UserAccount.setId(Long id) {
         this.id = id;
     }
-
+    
     public Integer UserAccount.getVersion() {
         return this.version;
     }
-
-    public void UserAccount.setVersion(
-            Integer version) {
+    
+    public void UserAccount.setVersion(Integer version) {
         this.version = version;
     }
-
+    
 }

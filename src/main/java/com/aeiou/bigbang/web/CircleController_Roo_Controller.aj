@@ -23,13 +23,9 @@ import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
 privileged aspect CircleController_Roo_Controller {
-
+    
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
-    public String CircleController.create(
-            @Valid Circle circle,
-            BindingResult bindingResult,
-            Model uiModel,
-            HttpServletRequest httpServletRequest) {
+    public String CircleController.create(@Valid Circle circle, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, circle);
             return "circles/create";
@@ -38,10 +34,9 @@ privileged aspect CircleController_Roo_Controller {
         circle.persist();
         return "redirect:/circles/" + encodeUrlPathSegment(circle.getId().toString(), httpServletRequest);
     }
-
+    
     @RequestMapping(params = "form", produces = "text/html")
-    public String CircleController.createForm(
-            Model uiModel) {
+    public String CircleController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Circle());
         List<String[]> dependencies = new ArrayList<String[]>();
         if (UserAccount.countUserAccounts() == 0) {
@@ -50,44 +45,32 @@ privileged aspect CircleController_Roo_Controller {
         uiModel.addAttribute("dependencies", dependencies);
         return "circles/create";
     }
-
+    
     @RequestMapping(value = "/{id}", produces = "text/html")
-    public String CircleController.show(
-            @PathVariable("id") Long id,
-            Model uiModel) {
+    public String CircleController.show(@PathVariable("id") Long id, Model uiModel) {
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("circle", Circle.findCircle(id));
         uiModel.addAttribute("itemId", id);
         return "circles/show";
     }
-
+    
     @RequestMapping(produces = "text/html")
-    public String CircleController.list(
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "size", required = false) Integer size,
-            @RequestParam(value = "sortFieldName", required = false) String sortFieldName,
-            @RequestParam(value = "sortOrder", required = false) String sortOrder,
-            Model uiModel) {
+    public String CircleController.list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "sortFieldName", required = false) String sortFieldName, @RequestParam(value = "sortOrder", required = false) String sortOrder, Model uiModel) {
         if (page != null || size != null) {
             int sizeNo = size == null ? 10 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
             uiModel.addAttribute("circles", Circle.findCircleEntries(firstResult, sizeNo, sortFieldName, sortOrder));
             float nrOfPages = (float) Circle.countCircles() / sizeNo;
-            uiModel.addAttribute("maxPages",
-                    (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+            uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
             uiModel.addAttribute("circles", Circle.findAllCircles(sortFieldName, sortOrder));
         }
         addDateTimeFormatPatterns(uiModel);
         return "circles/list";
     }
-
+    
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
-    public String CircleController.update(
-            @Valid Circle circle,
-            BindingResult bindingResult,
-            Model uiModel,
-            HttpServletRequest httpServletRequest) {
+    public String CircleController.update(@Valid Circle circle, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, circle);
             return "circles/update";
@@ -96,21 +79,15 @@ privileged aspect CircleController_Roo_Controller {
         circle.merge();
         return "redirect:/circles/" + encodeUrlPathSegment(circle.getId().toString(), httpServletRequest);
     }
-
+    
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String CircleController.updateForm(
-            @PathVariable("id") Long id,
-            Model uiModel) {
+    public String CircleController.updateForm(@PathVariable("id") Long id, Model uiModel) {
         populateEditForm(uiModel, Circle.findCircle(id));
         return "circles/update";
     }
-
+    
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
-    public String CircleController.delete(
-            @PathVariable("id") Long id,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "size", required = false) Integer size,
-            Model uiModel) {
+    public String CircleController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
         Circle circle = Circle.findCircle(id);
         circle.remove();
         uiModel.asMap().clear();
@@ -118,33 +95,26 @@ privileged aspect CircleController_Roo_Controller {
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
         return "redirect:/circles";
     }
-
-    void CircleController.addDateTimeFormatPatterns(
-            Model uiModel) {
-        uiModel.addAttribute("circle_createddate_date_format",
-                DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+    
+    void CircleController.addDateTimeFormatPatterns(Model uiModel) {
+        uiModel.addAttribute("circle_createddate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
-
-    void CircleController.populateEditForm(
-            Model uiModel,
-            Circle circle) {
+    
+    void CircleController.populateEditForm(Model uiModel, Circle circle) {
         uiModel.addAttribute("circle", circle);
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
     }
-
-    String CircleController.encodeUrlPathSegment(
-            String pathSegment,
-            HttpServletRequest httpServletRequest) {
+    
+    String CircleController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
         String enc = httpServletRequest.getCharacterEncoding();
         if (enc == null) {
             enc = WebUtils.DEFAULT_CHARACTER_ENCODING;
         }
         try {
             pathSegment = UriUtils.encodePathSegment(pathSegment, enc);
-        } catch (UnsupportedEncodingException uee) {
-        }
+        } catch (UnsupportedEncodingException uee) {}
         return pathSegment;
     }
-
+    
 }

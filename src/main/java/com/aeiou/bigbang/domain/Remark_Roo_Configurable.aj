@@ -7,7 +7,7 @@ import com.aeiou.bigbang.domain.Remark;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect Remark_Roo_Configurable {
-
+    
     declare @type: Remark: @Configurable;
-
+    
 }

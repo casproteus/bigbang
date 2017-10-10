@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 privileged aspect TwitterController_Roo_Controller_Json {
-
+    
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<String>TwitterController.showJson(
-            @PathVariable("id") Long id) {
+    public ResponseEntity<String> TwitterController.showJson(@PathVariable("id") Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         try {
@@ -31,64 +30,54 @@ privileged aspect TwitterController_Roo_Controller_Json {
             }
             return new ResponseEntity<String>(twitter.toJson(), headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<String>TwitterController.listJson() {
+    public ResponseEntity<String> TwitterController.listJson() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         try {
             List<Twitter> result = Twitter.findAllTwitters();
             return new ResponseEntity<String>(Twitter.toJsonArray(result), headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String>TwitterController.createFromJson(
-            @RequestBody String json,
-            UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<String> TwitterController.createFromJson(@RequestBody String json, UriComponentsBuilder uriBuilder) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         try {
             Twitter twitter = Twitter.fromJsonToTwitter(json);
             twitter.persist();
             RequestMapping a = (RequestMapping) getClass().getAnnotation(RequestMapping.class);
-            headers.add("Location",
-                    uriBuilder.path(a.value()[0] + "/" + twitter.getId().toString()).build().toUriString());
+            headers.add("Location",uriBuilder.path(a.value()[0]+"/"+twitter.getId().toString()).build().toUriString());
             return new ResponseEntity<String>(headers, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String>TwitterController.createFromJsonArray(
-            @RequestBody String json) {
+    public ResponseEntity<String> TwitterController.createFromJsonArray(@RequestBody String json) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         try {
-            for (Twitter twitter : Twitter.fromJsonArrayToTwitters(json)) {
+            for (Twitter twitter: Twitter.fromJsonArrayToTwitters(json)) {
                 twitter.persist();
             }
             return new ResponseEntity<String>(headers, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String>TwitterController.updateFromJson(
-            @RequestBody String json,
-            @PathVariable("id") Long id) {
+    public ResponseEntity<String> TwitterController.updateFromJson(@RequestBody String json, @PathVariable("id") Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         try {
@@ -99,14 +88,12 @@ privileged aspect TwitterController_Roo_Controller_Json {
             }
             return new ResponseEntity<String>(headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<String>TwitterController.deleteFromJson(
-            @PathVariable("id") Long id) {
+    public ResponseEntity<String> TwitterController.deleteFromJson(@PathVariable("id") Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         try {
@@ -117,9 +104,8 @@ privileged aspect TwitterController_Roo_Controller_Json {
             twitter.remove();
             return new ResponseEntity<String>(headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
 }

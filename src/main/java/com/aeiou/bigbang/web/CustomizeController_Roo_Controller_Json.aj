@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 privileged aspect CustomizeController_Roo_Controller_Json {
-
+    
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<String>CustomizeController.showJson(
-            @PathVariable("id") Long id) {
+    public ResponseEntity<String> CustomizeController.showJson(@PathVariable("id") Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         try {
@@ -31,64 +30,54 @@ privileged aspect CustomizeController_Roo_Controller_Json {
             }
             return new ResponseEntity<String>(customize.toJson(), headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<String>CustomizeController.listJson() {
+    public ResponseEntity<String> CustomizeController.listJson() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         try {
             List<Customize> result = Customize.findAllCustomizes();
             return new ResponseEntity<String>(Customize.toJsonArray(result), headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String>CustomizeController.createFromJson(
-            @RequestBody String json,
-            UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<String> CustomizeController.createFromJson(@RequestBody String json, UriComponentsBuilder uriBuilder) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         try {
             Customize customize = Customize.fromJsonToCustomize(json);
             customize.persist();
             RequestMapping a = (RequestMapping) getClass().getAnnotation(RequestMapping.class);
-            headers.add("Location",
-                    uriBuilder.path(a.value()[0] + "/" + customize.getId().toString()).build().toUriString());
+            headers.add("Location",uriBuilder.path(a.value()[0]+"/"+customize.getId().toString()).build().toUriString());
             return new ResponseEntity<String>(headers, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String>CustomizeController.createFromJsonArray(
-            @RequestBody String json) {
+    public ResponseEntity<String> CustomizeController.createFromJsonArray(@RequestBody String json) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         try {
-            for (Customize customize : Customize.fromJsonArrayToCustomizes(json)) {
+            for (Customize customize: Customize.fromJsonArrayToCustomizes(json)) {
                 customize.persist();
             }
             return new ResponseEntity<String>(headers, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String>CustomizeController.updateFromJson(
-            @RequestBody String json,
-            @PathVariable("id") Long id) {
+    public ResponseEntity<String> CustomizeController.updateFromJson(@RequestBody String json, @PathVariable("id") Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         try {
@@ -99,14 +88,12 @@ privileged aspect CustomizeController_Roo_Controller_Json {
             }
             return new ResponseEntity<String>(headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<String>CustomizeController.deleteFromJson(
-            @PathVariable("id") Long id) {
+    public ResponseEntity<String> CustomizeController.deleteFromJson(@PathVariable("id") Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         try {
@@ -117,9 +104,8 @@ privileged aspect CustomizeController_Roo_Controller_Json {
             customize.remove();
             return new ResponseEntity<String>(headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"ERROR\":"+e.getMessage()+"\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
 }

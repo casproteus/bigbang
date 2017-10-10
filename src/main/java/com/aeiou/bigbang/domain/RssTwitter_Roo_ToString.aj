@@ -7,8 +7,10 @@ import com.aeiou.bigbang.domain.RssTwitter;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect RssTwitter_Roo_ToString{
-
-public String RssTwitter.toString(){return ReflectionToStringBuilder.toString(this,ToStringStyle.SHORT_PREFIX_STYLE);}
-
+privileged aspect RssTwitter_Roo_ToString {
+    
+    public String RssTwitter.toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+    
 }

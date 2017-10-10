@@ -11,35 +11,35 @@ import java.util.Collection;
 import java.util.List;
 
 privileged aspect Content_Roo_Json {
-
+    
     public String Content.toJson() {
-        return new JSONSerializer().exclude("*.class").serialize(this);
+        return new JSONSerializer()
+        .exclude("*.class").serialize(this);
     }
-
-    public String Content.toJson(
-            String[] fields) {
-        return new JSONSerializer().include(fields).exclude("*.class").serialize(this);
+    
+    public String Content.toJson(String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(this);
     }
-
-    public static Content Content.fromJsonToContent(
-            String json) {
-        return new JSONDeserializer<Content>().use(null, Content.class).deserialize(json);
+    
+    public static Content Content.fromJsonToContent(String json) {
+        return new JSONDeserializer<Content>()
+        .use(null, Content.class).deserialize(json);
     }
-
-    public static String Content.toJsonArray(
-            Collection<Content> collection) {
-        return new JSONSerializer().exclude("*.class").serialize(collection);
+    
+    public static String Content.toJsonArray(Collection<Content> collection) {
+        return new JSONSerializer()
+        .exclude("*.class").serialize(collection);
     }
-
-    public static String Content.toJsonArray(
-            Collection<Content> collection,
-            String[] fields) {
-        return new JSONSerializer().include(fields).exclude("*.class").serialize(collection);
+    
+    public static String Content.toJsonArray(Collection<Content> collection, String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(collection);
     }
-
-    public static Collection<Content>Content.fromJsonArrayToContents(
-            String json) {
-        return new JSONDeserializer<List<Content>>().use("values", Content.class).deserialize(json);
+    
+    public static Collection<Content> Content.fromJsonArrayToContents(String json) {
+        return new JSONDeserializer<List<Content>>()
+        .use("values", Content.class).deserialize(json);
     }
-
+    
 }

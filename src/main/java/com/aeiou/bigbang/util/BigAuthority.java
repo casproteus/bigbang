@@ -27,6 +27,7 @@ public class BigAuthority {
     }
 
     // TODO: change to support customization.
+    @Override
     public String toString() {
         if (id == SHOW_TO_EVERY_ONE) {
             return messageSource.getMessage("SHOW_TO_EVERY_ONE", null, locale);

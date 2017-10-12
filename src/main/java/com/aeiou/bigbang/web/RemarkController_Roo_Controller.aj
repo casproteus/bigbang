@@ -43,13 +43,7 @@ privileged aspect RemarkController_Roo_Controller {
         uiModel.addAttribute("remark_remarktime_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
     
-    void RemarkController.populateEditForm(Model uiModel, Remark remark) {
-        uiModel.addAttribute("remark", remark);
-        addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("twitters", Twitter.findAllTwitters());
-        uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
-    }
-    
+        
     String RemarkController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
         String enc = httpServletRequest.getCharacterEncoding();
         if (enc == null) {

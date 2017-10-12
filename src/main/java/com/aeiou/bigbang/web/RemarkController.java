@@ -59,12 +59,21 @@ public class RemarkController {
 
     void populateEditForm(
             Model uiModel,
+            Remark remark) {
+        uiModel.addAttribute("remark", remark);
+        addDateTimeFormatPatterns(uiModel);
+        // uiModel.addAttribute("twitters", Twitter.findAllTwitters());
+        // uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
+    }
+
+    void populateEditForm(
+            Model uiModel,
             Remark remark,
             HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("remark", remark);
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("twitters", Twitter.findAllTwitters());
-        uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
+        // uiModel.addAttribute("twitters", Twitter.findAllTwitters());
+        // uiModel.addAttribute("useraccounts", UserAccount.findAllUserAccounts());
         uiModel.addAttribute("authorities",
                 BigAuthority.getRemarkOptions(messageSource, httpServletRequest.getLocale()));
         uiModel.addAttribute("refresh_time", remark.getRefresh_time());
@@ -405,4 +414,5 @@ public class RemarkController {
                 PersonalController.class);
         tController.getImage(id, request, response);
     }
+
 }

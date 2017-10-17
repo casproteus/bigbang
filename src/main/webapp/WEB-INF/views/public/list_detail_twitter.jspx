@@ -47,7 +47,6 @@
 		</page:list>
 		<br />
 	</c:if>
-
 	<c:choose>
 		<!-- if logged in -->
 		<c:when test="${pageContext['request'].userPrincipal != null}">
@@ -169,7 +168,7 @@
 		    if (ofrm1==undefined){		//for ff and chrome.
 		        ofrm1 = document.getElementById("_content_id__iframe").contentWindow.document;
 		        var ff = ofrm1.getElementById("dijitEditorBody").textContent;
-		        if(ff.length == 0)
+		        if(ff == null || ff.length == 0)
 		        	return true;
 		        if(ff.length == 1)
 		        	return true;

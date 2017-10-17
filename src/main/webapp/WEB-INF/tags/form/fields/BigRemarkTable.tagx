@@ -69,7 +69,7 @@
 			value="${fn:split(columnDatePatterns, '&#9999;')}" scope="request" />
 
 		<spring:eval var="colCounter" expression="1" />
-
+		
 		<table class="tWireless">
 			<c:forEach items="${data}" var="item">
 				<tr>
@@ -89,16 +89,15 @@
 			</c:forEach>
 			<tr class="footer">
 				<td class="tWireless">
-					<!-- colspan="${3}"  --> <c:if
-						test="${not empty maxPages and maxPages gt 1}">
-						<util:contentPagination maxPages="${maxPages}"
-							twitterid="${twitterid}" page="${param.page}"
-							size="${param.size}" />
+					<!-- colspan="${3}"  --> 
+					<c:if test="${not empty maxPages and maxPages gt 1}">
+						<util:contentPagination maxPages="${maxPages}" twitterid="${twitterid}" page="${param.page}" size="${param.size}" />
 					</c:if>
 				</td>
 			</tr>
 		</table>
 
+	
 	</c:if>
 
 </jsp:root>

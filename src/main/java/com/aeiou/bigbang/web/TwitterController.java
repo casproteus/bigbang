@@ -189,9 +189,11 @@ public class TwitterController {
         }
         uiModel.asMap().clear();
         twitter.setLastupdate(new Date());
+        twitter.setTwitent(BigUtil.validateContent(twitter.getTwitent()));
         twitter.persist();
-        PersonalController tController = SpringApplicationContext.getApplicationContext().getBean("personalController",
-                PersonalController.class);
+        // PersonalController tController =
+        // SpringApplicationContext.getApplicationContext().getBean("personalController",
+        // PersonalController.class);
         // return tController.index(tUserAccount.getName(), -1, -1, uiModel);
         return showDetailTwitters(twitter.getId(), null, null, uiModel, httpServletRequest);
     }

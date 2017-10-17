@@ -550,49 +550,49 @@ public class BigUtil {
 
         int size = bigTagList.size(); // Separate tags and IDs into 2 columns and prepare the Layout String.
 
-        StringBuilder strB = new StringBuilder();
-        StringBuilder strB_Num = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sb_Num = new StringBuilder();
         List<BigTag> bigTagListLeft = new ArrayList<BigTag>();
         List<BigTag> bigTagListRight = new ArrayList<BigTag>();
         List<Long> tagIdListLeft = new ArrayList<Long>();
         List<Long> tagIdListRight = new ArrayList<Long>();
 
-        for (int j = 0; j < size / 2; j++) {
+        for (int j = 0; j < size; j++) {
             BigTag tTag = bigTagList.get(j);
             bigTagListLeft.add(bigTagList.get(j));
             tagIdListLeft.add(tagIdList.get(j));
 
-            strB.append(BigUtil.getLayoutFormatTagString(tTag));
-            strB_Num.append("8");
-
-            if (j + 1 < size / 2) {
-                strB.append(BigUtil.SEP_ITEM);
-                strB_Num.append(BigUtil.SEP_ITEM);
-            }
-        }
-
-        strB.append(BigUtil.SEP_LEFT_RIGHT);
-        strB_Num.append(BigUtil.SEP_LEFT_RIGHT);
-
-        for (int j = size / 2; j < size; j++) {
-            BigTag tTag = bigTagList.get(j);
-            bigTagListRight.add(bigTagList.get(j));
-            tagIdListRight.add(tagIdList.get(j));
-
-            strB.append(BigUtil.getLayoutFormatTagString(tTag));
-            strB_Num.append("8");
+            sb.append(BigUtil.getLayoutFormatTagString(tTag));
+            sb_Num.append("8");
 
             if (j + 1 < size) {
-                strB.append(BigUtil.SEP_ITEM);
-                strB_Num.append(BigUtil.SEP_ITEM);
+                sb.append(BigUtil.SEP_ITEM);
+                sb_Num.append(BigUtil.SEP_ITEM);
             }
         }
-        strB.append(SEP_TAG_NUMBER).append(strB_Num);
+
+        sb.append(BigUtil.SEP_LEFT_RIGHT);
+        sb_Num.append(BigUtil.SEP_LEFT_RIGHT);
+
+        // for (int j = size / 2; j < size; j++) {
+        // BigTag tTag = bigTagList.get(j);
+        // bigTagListRight.add(bigTagList.get(j));
+        // tagIdListRight.add(tagIdList.get(j));
+        //
+        // sb.append(BigUtil.getLayoutFormatTagString(tTag));
+        // sb_Num.append("8");
+        //
+        // if (j + 1 < size) {
+        // sb.append(BigUtil.SEP_ITEM);
+        // sb_Num.append(BigUtil.SEP_ITEM);
+        // }
+        // }
+        sb.append(SEP_TAG_NUMBER).append(sb_Num);
 
         if (type == 0)
-            owner.setLayout(strB.toString()); // save the correct layout string back to DB
+            owner.setLayout(sb.toString()); // save the correct layout string back to DB
         else
-            owner.setNoteLayout(strB.toString()); // save the correct layout2 string back to DB
+            owner.setNoteLayout(sb.toString()); // save the correct layout2 string back to DB
 
         owner.persist();
 
@@ -803,5 +803,15 @@ public class BigUtil {
             return null;
         }
         return emailString.substring(0, lastAt) + emailString.substring(lastAt).toLowerCase();
+    }
+
+    public static String validateContent(
+            String content) {
+        if (StringUtils.isBlank(content))
+            return content;
+
+        content.replace("<div>", "");
+        content.replace("</div>", "<br/>");
+        return content;
     }
 }

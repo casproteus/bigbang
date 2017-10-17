@@ -116,6 +116,7 @@ public class RemarkController {
             }
         }
         uiModel.asMap().clear();
+        remark.setContent(BigUtil.validateContent(remark.getContent()));
         remark.persist();
 
         BigUtil.refreshULastUpdateTimeOfTwitter(remark);

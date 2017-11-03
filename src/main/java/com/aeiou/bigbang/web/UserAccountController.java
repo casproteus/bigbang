@@ -362,7 +362,7 @@ public class UserAccountController extends BaseController {
         List<Twitter> twitters = Twitter.findTwitterByPublisher(userAccount, authSet, 0, 0, null);
         Twitter twitter = null;
         if (twitters != null && twitters.size() > 0) {
-            twitter = twitters.get(0);
+            twitter = twitters.get(twitters.size() - 1);
         } else {
             twitter = new Twitter();
             twitter.setLastupdate(new Date());
@@ -396,13 +396,22 @@ public class UserAccountController extends BaseController {
             Remark remark = new Remark();
             remark.setAuthority(0);
             String content = null;
+            String index = null;
             try {
                 content = URLDecoder.decode(json, "UTF-8");
+                int endIndex = content.indexOf('_');
+                index = content.substring(0, endIndex);
             } catch (Exception e) {
             }
             remark.setContent(content);
             remark.setPublisher(publisher);
             remark.setRemarkTime(new Date());
+            int refreshTime = 0;
+            try {
+                refreshTime = Integer.valueOf(index);
+            } catch (Exception e) {
+            }
+            remark.setRefresh_time(refreshTime);
             remark.setRemarkto(twitter);
             remark.persist();
 

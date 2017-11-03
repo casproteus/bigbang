@@ -50,14 +50,13 @@
 			<c:when test="${not empty object}">
 				<jsp:doBody />
 				<div class="quicklinks">
-					<span> <c:if test="${update}">
+					<span style="float: left;">
+						<c:if test="${update}">
 							<spring:url value="${path}/${object['id']}" var="update_form_url">
 								<spring:param name="form" />
 							</spring:url>
-							<spring:url value="/resources/images/modify.png"
-								var="update_image_url" />
-							<spring:message arguments="${typeName}" code="entity_update"
-								var="update_label" htmlEscape="false" />
+							<spring:url value="/resources/images/modify.png" var="update_image_url" />
+							<spring:message arguments="${typeName}" code="entity_update" var="update_label" htmlEscape="false" />
 							<a href="${update_form_url}" alt="${fn:escapeXml(update_label)}"
 								title="${fn:escapeXml(update_label)}"> <img
 								alt="${fn:escapeXml(update_label)}" class="image"

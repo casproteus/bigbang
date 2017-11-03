@@ -73,18 +73,15 @@
 		<table class="tWireless">
 			<c:forEach items="${data}" var="item">
 				<tr>
-					<td class="tWireless" valign="top" style="padding: 5px"><c:set
-							value="HH:mm dd/MM/yyyy" var="dateTimePattern" /> <fmt:formatDate
-							var="TimeStr" value="${item['remarkTime']}"
-							pattern="${fn:escapeXml(dateTimePattern)}" /> <c:set
-							value="${(fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(item['publisher']))}"
-							var="isPublisher" /> <page:BigRemarkShow
-							id="ps_com_aeiou_bigbang_domain_Remark" object="${item}"
-							update="${isPublisher}" path="/remarks"
-							z="uLnVWzeo9CFWqAOLKukuqndR2CE=">
-							<field:BigHTMLdisplay field="content" time="${TimeStr}"
-								object="${item}" z="user-managed" />
-						</page:BigRemarkShow></td>
+					<td class="tWireless" valign="top" style="padding: 5px">
+						<c:set value="HH:mm dd/MM/yyyy" var="dateTimePattern" /> 
+						<fmt:formatDate var="TimeStr" value="${item['remarkTime']}" pattern="${fn:escapeXml(dateTimePattern)}" /> 
+						<c:set value="${(fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(item['publisher']))}" var="isPublisher" /> 
+						<page:BigRemarkShow id="ps_com_aeiou_bigbang_domain_Remark" object="${item}"
+							update="${isPublisher}" path="/remarks" z="uLnVWzeo9CFWqAOLKukuqndR2CE=">
+							<field:BigHTMLdisplay field="content" time="${TimeStr}" object="${item}" z="user-managed" />
+						</page:BigRemarkShow>
+					</td>
 				</tr>
 			</c:forEach>
 			<tr class="footer">

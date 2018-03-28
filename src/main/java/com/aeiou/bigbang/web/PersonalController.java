@@ -365,13 +365,7 @@ public class PersonalController extends BaseController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
 
-        Customize customize = Customize.findCustomizeByKey(keyStr);
-        // for first time, put in how long it has run.
-        if (customize == null) {
-            customize = new Customize();
-            customize.setCusKey("stgo");
-            customize.setCusValue("s");
-        }
+        Customize customize =  new Customize();
         return new ResponseEntity<String>(customize.toJson(), headers, HttpStatus.OK);
     }
 

@@ -136,14 +136,10 @@ public class SynchnizationManager {
                     break;
                 }
             }
-
-            if (stackUAprocessed.contains(pUA.getName()) || stackUAprocessing.contains(pUA.getName()))// if a unserName
-                                                                                                      // is already in
-                                                                                                      // stack, means
-                                                                                                      // it's already
-                                                                                                      // precessed,
-                                                                                                      // ignore it.
+            // if a unserName  is already in stack, means it's already precessed, ignore it.
+            if (stackUAprocessed.contains(pUA.getName()) || stackUAprocessing.contains(pUA.getName())) {
                 continue;
+            }
             stackUAprocessing.add(pUA.getName());
 
             UserAccount tUA = UserAccount.findUserAccountByName(pUA.getName());

@@ -84,12 +84,9 @@ public class BigUtil {
         } else if (("1210_syncdb".equals(command) || "1210_syncdb_ua".equals(command)
                 || "1210_syncdb_tg".equals(command) || "1210_syncdb_ms".equals(command)
                 || "1210_syncdb_bg".equals(command) || "1210_syncdb_rm".equals(command)
-                || "1210_syncdb_bm".equals(command)) && curUser != null) { // Looks like first run will see exception of
-                                                                           // line 137,
-                                                                           // SynchizationManager(persistant rool
-                                                                           // back). will be OK
-                                                                           // when run it the second time or the third
-                                                                           // time.
+                || "1210_syncdb_bm".equals(command)) && curUser != null) { 
+        	// Looks like first run will see exception of in SynchizationManager(persistant rool back). 
+        	// will be OK when run it the second time or the third time.
             new ClientSyncTool().startToSynch(curUser, command);
             return true;
         } else if (command != null && command.startsWith("20130818_shufful") && curUser != null) {

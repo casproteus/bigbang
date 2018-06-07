@@ -354,7 +354,7 @@ public class UserAccountController extends BaseController {
             @RequestBody String json) {
         SynchnizationManager tSyncManager = new SynchnizationManager();
 
-        String userName = "JustPrint";
+        String userName = "ErrorLogs";
         UserAccount userAccount = makeSureUserCreated(userName);
 
         // to make sure twitter exist.
@@ -364,13 +364,22 @@ public class UserAccountController extends BaseController {
         if (twitters != null && twitters.size() > 0) {
             twitter = twitters.get(twitters.size() - 1);
         } else {
+        	BigTag tag = new BigTag();
+        	tag.setAuthority(0);
+        	tag.setOwner(1);
+        	tag.setType(userAccount.getName());
+        	tag.setTagName("log");
+        	tag.persist();
+        	
             twitter = new Twitter();
             twitter.setLastupdate(new Date());
             twitter.setPublisher(userAccount);
             twitter.setTwitDate(new Date());
-            twitter.setTwtitle("JustPrint Logs");
+            twitter.setTwtitle("Error Logs");
             twitter.setAuthority(0);
-            twitter.setTwitent("This blog is used to record JustPrint Logs!");
+            twitter.setTwitent("This blog is used to record application logs!");
+            twitter.setTwittertag(tag);
+            
             twitter.persist();
         }
 
@@ -378,20 +387,32 @@ public class UserAccountController extends BaseController {
         // {"tag":"OrderIdMarkViewHolder","msg":"item%3A+0select%3A+false"}
         if (json != null && json.length() > 0) {
             UserAccount publisher = null;
-            int p = json.indexOf("\"tag\"");
-            if (p > -1) {
-                int startP = p + 7;
-                p = json.indexOf("\"msg\"");
+            
+            //@note: should not suppose the position of tag and msg, the msg can be infront of tag!!!!
+            String[] strs = json.split(",");
+            for (String string : strs) {
+                int p = string.indexOf("\"tag\"");
                 if (p > -1) {
-                    int endP = p - 2;
-                    publisher = makeSureUserCreated(json.substring(startP, endP));
+                    int startP = p + 7;
+                    string = string.substring(startP);
+                    if(string.endsWith("}"))
+                        string = string.substring(0, string.length() - 1);
+                    if(string.endsWith("\""))
+                        string = string.substring(0, string.length() - 1);
+                    if(string.length() == 0)
+                    	string = "unknown";
+                    publisher = makeSureUserCreated(string);
+                }else {// get the content
+                	p = string.indexOf("\"msg\"");
+                	if(p > -1) {
+                		json = string.substring(p + 7);
+                        if(json.endsWith("}"))
+                        	json = json.substring(0, json.length() - 1);
+                        if(json.endsWith("\""))
+                        	json = json.substring(0, json.length() - 1);
+                	}
                 }
-            }
-            // get the content
-            if (p > -1) {
-                json = json.substring(p + 7);
-                json = json.substring(0, json.length() - 2);
-            }
+			}
 
             Remark remark = new Remark();
             remark.setAuthority(0);

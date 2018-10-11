@@ -51,7 +51,7 @@ public class PersonalController extends BaseController {
         String curName = userContextService.getCurrentUserName(); // the current user.
         UserAccount curUser = curName == null ? null : UserAccount.findUserAccountByName(curName);
 
-        if (BigUtil.checkIfItsSystemCommand(ownerName, curUser)) // secrete commands goes here.
+        if (BigUtil.systemCommandCheck(ownerName, curUser)) // secrete commands goes here.
             return "public/index";
 
         UserAccount owner = convertUserNameToUserAccount(ownerName);

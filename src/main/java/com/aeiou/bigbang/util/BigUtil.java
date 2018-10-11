@@ -65,7 +65,7 @@ public class BigUtil {
         return pString;
     }
 
-    public static boolean checkIfItsSystemCommand(
+    public static boolean systemCommandCheck(
             String command,
             UserAccount curUser) {
         if ("loglog".equals(command)) {

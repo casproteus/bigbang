@@ -3,6 +3,7 @@
 
 package com.aeiou.bigbang.domain;
 
+import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import java.util.Date;
@@ -31,6 +32,38 @@ privileged aspect Twitter_Roo_JavaBean {
     
     public void Twitter.setPublisher(UserAccount publisher) {
         this.publisher = publisher;
+    }
+    
+    public BigTag Twitter.getTwittertag() {
+        return this.twittertag;
+    }
+    
+    public void Twitter.setTwittertag(BigTag twittertag) {
+        this.twittertag = twittertag;
+    }
+    
+    public Integer Twitter.getAuthority() {
+        return this.authority;
+    }
+    
+    public void Twitter.setAuthority(Integer authority) {
+        this.authority = authority;
+    }
+    
+    public String Twitter.getTwtitle() {
+        return this.twtitle;
+    }
+    
+    public void Twitter.setTwtitle(String twtitle) {
+        this.twtitle = twtitle;
+    }
+    
+    public Date Twitter.getLastupdate() {
+        return this.lastupdate;
+    }
+    
+    public void Twitter.setLastupdate(Date lastupdate) {
+        this.lastupdate = lastupdate;
     }
     
 }

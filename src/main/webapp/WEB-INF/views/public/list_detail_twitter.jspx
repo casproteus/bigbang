@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:page="urn:jsptagdir:/WEB-INF/tags/form"
+	xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:form="urn:jsptagdir:/WEB-INF/tags/form"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:springform="http://www.springframework.org/tags/form"
+	version="2.0">
+
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<c:set
+		value="${not empty spaceOwner and (fn:toLowerCase(pageContext['request'].userPrincipal.name) eq fn:toLowerCase(twitter['publisher']))}"
+		var="isloggedInUser" />
+
+	<c:set value="HH:mm dd/MM/yyyy" var="dateTimePattern" />
+	<fmt:formatDate var="TimeStr" value="${twitter['twitDate']}"
+		pattern="${fn:escapeXml(dateTimePattern)}" />
+	<page:BigTwitterShow id="ps_com_aeiou_bigbang_domain_Twitter"
+		object="${twitter}" delete="${isloggedInUser}"
+		update="${isloggedInUser}" label="${twitter['twtitle']}"
+		path="/twitters" z="uLnVWzeo9CFWqAOLKukuqndR2CE=">
+		<field:BigHTMLdisplay field="twitent" time="${TimeStr}"
+			object="${twitter}" z="user-managed" />
+	</page:BigTwitterShow>
+	<br />
+
+	<c:if test="${not empty remarks}">
+		<page:list id="pl_com_aeiou_bigbang_domain_Remark" items="${remarks}"
+			z="KLqpUVNJsKiu4VOjx76+vDx7988=">
+			<table:BigRemarkTable data="${remarks}" twitterid="${twitter['id']}"
+				id="l_com_aeiou_bigbang_domain_Remark" path="/remarks"
+				z="adZ9QX5p0p5Qz2fIt8EVxJHpMH0=">
+				<table:column id="c_com_aeiou_bigbang_domain_Remark_content"
+					property="content" z="WsTKbTSNdVI9Ur/PID9to9j5Q+Q=" />
+				<table:column id="c_com_aeiou_bigbang_domain_Remark_publisher"
+					property="publisher" z="/MCkBnq2SAbaEYDclJ/Zh3aPyIs=" />
+				<table:column date="true"
+					id="c_com_aeiou_bigbang_domain_Remark_remarkTime"
+					property="remarkTime" z="JcnWePBsDBs4KzGQzxe1ZsM+1PU=" />
+			</table:BigRemarkTable>
+		</page:list>
+		<br />
+	</c:if>
+	<c:choose>
+		<!-- if logged in -->
+		<c:when test="${pageContext['request'].userPrincipal != null}">
+			<form:BigRemarkCreate twitterId="${twitter.id}"
+				id="fc_com_aeiou_bigbang_domain_Remark" modelAttribute="newremark"
+				path="/remarks" render="${empty dependencies}"
+				z="sWlU6AsGIe2//4XQNOSFZm9xQRQ=">
+				<field:editor field="content"
+					id="c_com_aeiou_bigbang_domain_Remark_content" required="true"
+					z="user-managed" />
+				<field:select field="authority"
+					id="c_com_aeiou_bigbang_domain_Remark_authority" itemValue="id"
+					items="${authorities}" path="/bigtags"
+					z="WKNnUnIysaWMajTikzigpbQOZYE=" />
+				<springform:hidden path="refresh_time" value="${refresh_time}" />
+			</form:BigRemarkCreate>
+
+			<!-- set automatically refresh! -->
+			<spring:url value="/remarks" var="RefreshTimeSettingForm_url">
+				<spring:param name="refreshTime" value="${refreshTime}" />
+				<spring:param name="refreshTwitterid" value="${twitter['id']}" />
+			</spring:url>
+			<form id="RefreshTimeSettingForm"
+				action="${RefreshTimeSettingForm_url}" method="POST"
+				style="text-align: left">
+
+				<!-- Rss function -->
+				<spring:url value="/remarks" var="rss_url">
+					<spring:param name="rss" value="${refresh_time}" />
+					<spring:param name="rsstwitterid" value="${twitter.id}" />
+				</spring:url>
+				<a href="${rss_url}"> <spring:message code="twitter_rss_link" />
+				</a>
+
+				<!-- form of refresh time -->
+				<c:out value=" || "></c:out>
+				<spring:message code="refresh_time" htmlEscape="false" />
+				<input type='text' id="refreshTime" name="refreshTime"
+					value="${refresh_time}" style="width: 20px; height: 12px" />
+				<spring:message code="second" htmlEscape="false" />
+				<spring:message code="relayout_submit" var="submit"
+					htmlEscape="false" />
+				<button id="proceed" type="submit" value="submit"
+					title="${fn:escapeXml(submit)}"
+					style="width: 22px; height: 16px; vertical-align: top; cursor: pointer; border: 0px;">
+					<spring:url value="/resources/images/submit.png"
+						var="direction_img_submit" />
+					<img alt="${fn:escapeXml(submit)}" src="${direction_img_submit}"
+						title="${fn:escapeXml(submit)}" />
+				</button>
+			</form>
+		</c:when>
+		<c:otherwise>
+			<!-- if not logged in -->
+			<util:BigLoginNotice id="fc_com_aeiou_bigbang_domain_Remark">
+				<!-- set automatically refresh! -->
+				<spring:url value="/public" var="RefreshTimeSettingForm_url">
+					<spring:param name="refreshTime" value="${refreshTime}" />
+					<spring:param name="refreshTwitterid" value="${twitter['id']}" />
+				</spring:url>
+				<form id="RefreshTimeSettingForm_Anonymous"
+					action="${RefreshTimeSettingForm_url}" method="POST"
+					style="text-align: left">
+
+					<!-- link to login -->
+					<spring:url value="/remarks" var="addRemark_url">
+						<spring:param name="owner" value="${spaceOwner}" />
+						<spring:param name="twitterid" value="${twitter.id}" />
+						<spring:param name="page" value="1" />
+						<spring:param name="size"
+							value="${empty param.size ? 100 : param.size}" />
+					</spring:url>
+					<a href="${addRemark_url}"> <spring:message
+							code="global_login_notice" />
+					</a>
+
+					<!-- form of refresh time -->
+					<c:out value=" || "></c:out>
+					<spring:message code="refresh_time" htmlEscape="false" />
+					<input type='text' id="refreshTime" name="refreshTime"
+						value="${refresh_time}" style="width: 20px; height: 12px" />
+					<spring:message code="second" htmlEscape="false" />
+					<spring:message code="relayout_submit" var="submit"
+						htmlEscape="false" />
+					<button id="proceed" type="submit" value="submit"
+						title="${fn:escapeXml(submit)}"
+						style="width: 22px; height: 16px; vertical-align: top; cursor: pointer; border: 0px;">
+						<spring:url value="/resources/images/submit.png"
+							var="direction_img_submit" />
+						<img alt="${fn:escapeXml(submit)}" src="${direction_img_submit}"
+							title="${fn:escapeXml(submit)}" />
+					</button>
+				</form>
+			</util:BigLoginNotice>
+		</c:otherwise>
+	</c:choose>
+
+
+	<script language="JavaScript"> 
+		function myrefresh(){
+		  if(document.getElementById("_authority_id") != null){//here I hard coded, used the element id found with ff.
+			if(hasNoValue()){
+				if(${refresh_time} > 0)
+					document.getElementById("RefreshTimeSettingForm").submit();//location.replace(location.href) 		//window.location.reload();  @NOTE:difference is that reload cause the notice dialog(data will be supply again.)
+					//omvc = window.open("http://localhost/bigbang/","boxDetail","width=550,height=350,resizable=1,scrollbars=0,status=no,toolbar=no,location=no,menu=no");
+					//omvc.focus();
+			}
+		  }else{
+				if(${refresh_time} > 0)
+					document.getElementById("RefreshTimeSettingForm_Anonymous").submit();//location.replace(location.href) 		//window.location.reload();  @NOTE:difference is that reload cause the notice dialog(data will be supply again.)
+
+		  }
+			  
+		} 
+		setTimeout('myrefresh()', ${refresh_time * 1000});
+
+		function hasNoValue(){
+			var ofrm1 = document.getElementById("_content_id__iframe").document;
+		    if (ofrm1==undefined){		//for ff and chrome.
+		        ofrm1 = document.getElementById("_content_id__iframe").contentWindow.document;
+		        var ff = ofrm1.getElementById("dijitEditorBody").textContent;
+		        if(ff == null || ff.length == 0)
+		        	return true;
+		        if(ff.length == 1)
+		        	return true;
+		        return false;
+		    }else{						//for ie.
+				return false;  //var ie = document.frames["_content_id__iframe"].document.getElementById("dijitEditorBody").??;
+		    } 
+		}
+		
+		
+		//to make the title bar shining if there's new messages coming.
+		var message={
+			time: 0,
+			title: document.title,
+			timer: null,
+			// to display new message.
+			show:function(){
+				var title = message.title.replace("[]", "").replace("[new mesage]", "");
+				// timer. set the frequency of witching the message which have the effect of shinning.
+				message.timer = setTimeout(
+					function() {
+						message.time++;
+						message.show();
+						if (message.time % 2 == 0) {
+							document.title = ${newMessageNumber} + " NEW! ";
+						}else{
+							document.title = title;
+						};
+					}, 600);
+				return [message.timer, message.title];
+			},
+			clear: function(){	// cancel the notification of new message.
+				clearTimeout(message.timer);
+				document.title = message.title;
+			}
+		};
+		if(${newMessageNumber} > 0){
+			message.show();		
+			document.onclick = function() {
+				message.clear();
+			};
+		}
+		
+		
+	</script>
+	<!--  script language="JavaScript"> 
+		function refreshRemarks() {
+		    $.getJSON("remarks/refreshRemarks", { twitterid: ${twitter['id']} }, function(remarks) {
+		        $("pl_com_aeiou_bigbang_domain_Remark").items=remarks;
+		    });
+		}
+	</script> -->
+
+	<!-- automatically sending out email content every  
+    <c:choose>
+	  <c:when test="${pageContext['request'].userPrincipal != null}">
+		<spring:url value="/remarks" var="RefreshTimeSettingForm_url">
+	        <spring:param name="RssTwitterid" value="${twitter['id']}"/>
+	    </spring:url>
+		<form id="RefreshTimeSettingForm" action="${RefreshTimeSettingForm_url}"  method="POST" style="text-align: left">
+		    <spring:message code="refresh_time" htmlEscape="false" />
+		    <input type='text' id="refreshTime" name="refreshTime" value="${refresh_time}" style="width:20px;height:12px" />
+		    <spring:message code="second" htmlEscape="false" />
+	    	<spring:message code="relayout_submit" var="submit" htmlEscape="false" />
+	    	<button id="proceed" type="submit" value="submit" title="${fn:escapeXml(submit)}" style="width:22px;height:16px;vertical-align: top; cursor:pointer; border: 0px; ">
+	    		<spring:url value="/resources/images/submit.png" var="direction_img_submit" />
+		        <img alt="${fn:escapeXml(submit)}" src="${direction_img_submit}" title="${fn:escapeXml(submit)}" />
+	    	</button>
+	    </form>
+	  </c:when>
+	  <c:otherwise>
+	  </c:otherwise>
+	</c:choose>
+	-->
+</div>

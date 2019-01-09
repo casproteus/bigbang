@@ -14,6 +14,8 @@ privileged aspect UserAccount_Roo_Jpa_ActiveRecord {
     @PersistenceContext
     transient EntityManager UserAccount.entityManager;
     
+    public static final List<String> UserAccount.fieldNames4OrderClauseFilter = java.util.Arrays.asList("name", "email", "password", "description", "price", "layout", "balance", "theme", "status", "newMessageAmount", "noteLayout", "listento");
+    
     public static final EntityManager UserAccount.entityManager() {
         EntityManager em = new UserAccount().entityManager;
         if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
@@ -28,13 +30,31 @@ privileged aspect UserAccount_Roo_Jpa_ActiveRecord {
         return entityManager().createQuery("SELECT o FROM UserAccount o", UserAccount.class).getResultList();
     }
     
+    public static List<UserAccount> UserAccount.findAllUserAccounts(String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM UserAccount o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, UserAccount.class).getResultList();
+    }
+    
     public static UserAccount UserAccount.findUserAccount(Long id) {
         if (id == null) return null;
         return entityManager().find(UserAccount.class, id);
     }
     
-    public static List<UserAccount> UserAccount.findUserAccountEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM UserAccount o", UserAccount.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    public static List<UserAccount> UserAccount.findUserAccountEntries(int firstResult, int maxResults, String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM UserAccount o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, UserAccount.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
     @Transactional

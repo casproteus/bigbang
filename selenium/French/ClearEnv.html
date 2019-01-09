@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://www.sharethegoodones.com/" />
+<title>ClearEnv</title>
+</head>
+<body>
+	<table cellpadding="1" cellspacing="1" border="1">
+		<thead>
+			<tr>
+				<td rowspan="1" colspan="3">ClearEnv</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>open</td>
+				<td>/</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=Logout</td>
+				<td></td>
+			</tr>
+			<!--login as administrator-->
+			<tr>
+				<td>sendKeys</td>
+				<td>id=j_username</td>
+				<td>abc 用户 01230</td>
+			</tr>
+			<tr>
+				<td>sendKeys</td>
+				<td>id=j_password</td>
+				<td>1234</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=Login</td>
+				<td></td>
+			</tr>
+			<!--delete all new BGs and RMs RM shoud be deleted automatically when BM is deleted.-->
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;Manage My Blogs&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_Twitter_id_pane']/table/tbody/tr/td[4]</td>
+				<td>Test Blog that will disppear after test</td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>css=input.image</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>assertConfirmation</td>
+				<td>Are you sure to delete this item?</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>Test Blog that will disppear after test</td>
+				<td></td>
+			</tr>
+			<!--delete all new BMs-->
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;Manage My Bookmarks&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_Content_id_pane']/table/tbody/tr/td[4]</td>
+				<td>test bookmark</td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_Content_id_pane']/table/tbody/tr/td[5]</td>
+				<td>OTHER</td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>css=input.image</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>assertConfirmation</td>
+				<td>Are you sure to delete this item?</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>test bookmark</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;Manage My Bookmarks&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>test bookmark</td>
+				<td></td>
+			</tr>
+			<!--delete all new TGs-->
+			<!---start to remove the tag created for blog.-->
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=img[alt=&quot;Manage Tags&quot;]</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_BigTag_id_pane']/table/tbody/tr/td[4]</td>
+				<td>new created tag for blog, will be removed after test</td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>css=input.image</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>assertConfirmation</td>
+				<td>Are you sure to delete this item?</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>new created tag for blog, will be removed after test</td>
+				<td></td>
+			</tr>
+			<!---start to remove the tag created for bookmark.-->
+			<tr>
+				<td>verifyText</td>
+				<td>//div[@id='_title_pl_com_aeiou_bigbang_domain_BigTag_id_pane']/table/tbody/tr/td[4]</td>
+				<td>tag for test should disppear after test</td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>css=input.image</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>assertConfirmation</td>
+				<td>Are you sure to delete this item?</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyTextNotPresent</td>
+				<td>tag for test should disppear after test</td>
+				<td></td>
+			</tr>
+			<!--login as admin-->
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=Logout</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=j_username</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>sendKeys</td>
+				<td>id=j_username</td>
+				<td>admin</td>
+			</tr>
+			<tr>
+				<td>sendKeys</td>
+				<td>id=j_password</td>
+				<td>Ollwin_01</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>link=Public Controller View</td>
+				<td>Public Controller View</td>
+			</tr>
+			<!--delete all new UAs-->
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=List all User Accounts</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=15</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=input.image</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=Logout</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>click</td>
+				<td>id=j_username</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>sendKeys</td>
+				<td>id=j_username</td>
+				<td>abc 用户 01230</td>
+			</tr>
+			<tr>
+				<td>sendKeys</td>
+				<td>id=j_password</td>
+				<td>1234</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>id=proceed</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>css=p</td>
+				<td>Your Login Was Not Successful. Please Try Again. Reason:
+					The user dose not exist. Please check the input and try again. .</td>
+			</tr>
+			<tr>
+				<td>open</td>
+				<td>/</td>
+				<td></td>
+			</tr>
+			<!--delete all new MGs-->
+		</tbody>
+	</table>
+</body>
+</html>

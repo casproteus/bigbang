@@ -40,6 +40,62 @@ privileged aspect UserAccount_Roo_JavaBean {
         this.description = description;
     }
     
+    public int UserAccount.getPrice() {
+        return this.price;
+    }
+    
+    public void UserAccount.setPrice(int price) {
+        this.price = price;
+    }
+    
+    public String UserAccount.getLayout() {
+        return this.layout;
+    }
+    
+    public void UserAccount.setLayout(String layout) {
+        this.layout = layout;
+    }
+    
+    public int UserAccount.getBalance() {
+        return this.balance;
+    }
+    
+    public void UserAccount.setBalance(int balance) {
+        this.balance = balance;
+    }
+    
+    public int UserAccount.getTheme() {
+        return this.theme;
+    }
+    
+    public void UserAccount.setTheme(int theme) {
+        this.theme = theme;
+    }
+    
+    public int UserAccount.getStatus() {
+        return this.status;
+    }
+    
+    public void UserAccount.setStatus(int status) {
+        this.status = status;
+    }
+    
+    public int UserAccount.getNewMessageAmount() {
+        return this.newMessageAmount;
+    }
+    
+    public void UserAccount.setNewMessageAmount(int newMessageAmount) {
+        this.newMessageAmount = newMessageAmount;
+    }
+    
+    public String UserAccount.getNoteLayout() {
+        return this.noteLayout;
+    }
+    
+    public void UserAccount.setNoteLayout(String noteLayout) {
+        this.noteLayout = noteLayout;
+    }
+    
     public Set<UserAccount> UserAccount.getListento() {
         return this.listento;
     }

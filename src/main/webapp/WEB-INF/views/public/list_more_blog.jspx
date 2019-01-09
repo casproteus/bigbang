@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:page="urn:jsptagdir:/WEB-INF/tags/form"
+	xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<spring:message code="publicDescription" htmlEscape="false"
+		var="publicDescription" />
+	<c:choose>
+		<c:when test="${empty publisher or publisher eq 'admin'}">
+			<spring:message code="publicDescription" htmlEscape="false"
+				var="title" />
+		</c:when>
+		<c:otherwise>
+			<spring:message code="label_public_index"
+				arguments="${publisher},${empty description ? publicDescription : description}"
+				htmlEscape="false" var="title" />
+		</c:otherwise>
+	</c:choose>
+
+	<div style="background: #${background_title}; padding: 5px; margin-bottom: 3px">
+		<div style="text-align: center; padding-bottom: 5px">
+			<b>${title}</b>
+		</div>
+		<!-- To make the function easier, we don't display this function for now.
+  		<spring:message code="label_public_balance" arguments="${balance}" htmlEscape="false"/> -->
+		<c:choose>
+			<c:when test="${empty notfireable or empty nothireable}">
+				<spring:url value="/${publisher}" var="home" />
+				<a href="${home}"> <spring:message code="button_gotohome"
+						arguments="${publisher}" htmlEscape="false" /> <spring:url
+						value="/resources/images/home.png" var="home_img_url" /> <img
+					alt="go visit space" src="${home_img_url}"
+					title="click this button to visit the space." />
+				</a>
+			</c:when>
+			<c:otherwise>
+				<span> <spring:url value="/twitters" var="write_url">
+						<spring:param name="form" />
+					</spring:url> <a href="${write_url}"> <spring:message
+							code="contributeTwitter" htmlEscape="false" /> <spring:url
+							value="/resources/images/addnote.png" var="write_img_url" /> <spring:message
+							arguments="${typeName}" code="global_menu_newnote"
+							var="add_message" htmlEscape="false" /> <img
+						alt="${fn:escapeXml(add_message)}" src="${write_img_url}"
+						title="${fn:escapeXml(add_message)}" />
+				</a> <c:out value=" || " /> <spring:url value="/contents"
+						var="create_url">
+						<spring:param name="form" />
+					</spring:url> <a href="${create_url}"> <spring:message
+							code="contributeContent" htmlEscape="false" /> <spring:url
+							value="/resources/images/addcontent.png" var="create_img_url" />
+						<spring:message arguments="${typeName}"
+							code="global_menu_newbookmark" var="add_message"
+							htmlEscape="false" /> <img alt="${fn:escapeXml(add_message)}"
+						src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
+				</a>
+				</span>
+			</c:otherwise>
+		</c:choose>
+		<util:connectionUtils sharerName="${publisher}"
+			nothireable="${nothireable}" notfireable="${notfireable}" />
+	</div>
+	<br />
+
+	
+	<c:choose>
+		<c:when test="${empty tag}">
+			<spring:message code="label_com_aeiou_bigbang_domain_twitter" var="title" htmlEscape="false" />
+		</c:when>
+		<c:otherwise>
+			<spring:url value="${tag}" var="title"/>
+		</c:otherwise>
+	</c:choose>
+	<page:contentPane id="pl_com_aeiou_bigbang_domain_Twitter"
+		items="${blogs}" label="${title}" z="hnfyfk7YNdTBdBza4/mViLT4aos=">
+		<table:bloglist data="${blogs}" tag="${tag}"
+			id="l_com_aeiou_bigbang_domain_Twitter" path="/twitters"
+			dateTimePattern="${twitter_twitdate_date_format}" type="${type}"
+			spaceOwner="${spaceOwner}" publisher="${publisher}"
+			z="lLVLIzUb5uufSIaV72f5pNvyScI=">
+			<table:column id="c_com_aeiou_bigbang_domain_twitter_twtitle"
+				property="twtitle" z="Z6LmPaWuIzqPFouyBljbtjoIXaQ=" />
+			<c:if test="${empty tag}">
+				<table:column id="c_com_aeiou_bigbang_domain_twitter_twittertag"
+				property="twittertag" z="kDjPyZY8s59nSnA4ASrIOJGmeps=" />
+			</c:if>
+			<c:choose>
+				<c:when test="${fn:containsIgnoreCase(type, 'friend')}">
+					<table:column id="c_com_aeiou_bigbang_domain_twitter_publisher"
+						property="publisher" z="kDjPyZY8s59nSnA4ASrIOJGmeps=" />
+				</c:when>
+				<c:otherwise>
+					<table:column id="c_com_aeiou_bigbang_domain_twitter_lastupdate"
+						property="lastupdate" />
+				</c:otherwise>
+			</c:choose>
+			<table:column id="c_com_aeiou_bigbang_domain_Twitter_twitDate"
+				property="twitDate" z="kDjPyZY8s59nSnA4ASrIOJGmeps=" />
+		</table:bloglist>
+	</page:contentPane>
+</div>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<page:show id="ps_com_aeiou_bigbang_domain_Message" object="${message}"
+		path="/messages" z="EO03VBlUjZjVC0szK+8DQzE6wBU=">
+		<field:display field="receiver"
+			id="s_com_aeiou_bigbang_domain_Message_receiver" object="${message}"
+			z="hICGikT3IBp84k6tkceycOG0cxQ=" />
+		<field:display field="content"
+			id="s_com_aeiou_bigbang_domain_Message_content" object="${message}"
+			z="o6+vcW6sNAQzIHrMkOsWuf8+4A4=" />
+		<field:display date="true"
+			dateTimePattern="${message_posttime_date_format}" field="postTime"
+			id="s_com_aeiou_bigbang_domain_Message_postTime" object="${message}"
+			z="1D4CTK5YIYkmTyhR7B8QPjVw3MQ=" />
+		<field:display field="status"
+			id="s_com_aeiou_bigbang_domain_Message_status" object="${message}"
+			z="jUymNmjCtf0b+sHoBKUILnuWY3M=" />
+		<field:display field="publisher"
+			id="s_com_aeiou_bigbang_domain_Message_publisher" object="${message}"
+			z="wPgtoFyFAPg65Zq1GtAPf4V4V+4=" />
+	</page:show>
+</div>

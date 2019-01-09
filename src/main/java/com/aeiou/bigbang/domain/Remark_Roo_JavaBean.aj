@@ -3,8 +3,8 @@
 
 package com.aeiou.bigbang.domain;
 
-import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Remark;
+import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
 import java.util.Date;
 
@@ -18,22 +18,6 @@ privileged aspect Remark_Roo_JavaBean {
         this.content = content;
     }
     
-    public Date Remark.getRemartTime() {
-        return this.remartTime;
-    }
-    
-    public void Remark.setRemartTime(Date remartTime) {
-        this.remartTime = remartTime;
-    }
-    
-    public int Remark.getPrivilege() {
-        return this.privilege;
-    }
-    
-    public void Remark.setPrivilege(int privilege) {
-        this.privilege = privilege;
-    }
-    
     public UserAccount Remark.getPublisher() {
         return this.publisher;
     }
@@ -42,12 +26,28 @@ privileged aspect Remark_Roo_JavaBean {
         this.publisher = publisher;
     }
     
-    public Content Remark.getReplyTo() {
-        return this.replyTo;
+    public Date Remark.getRemarkTime() {
+        return this.remarkTime;
     }
     
-    public void Remark.setReplyTo(Content replyTo) {
-        this.replyTo = replyTo;
+    public void Remark.setRemarkTime(Date remarkTime) {
+        this.remarkTime = remarkTime;
+    }
+    
+    public Integer Remark.getAuthority() {
+        return this.authority;
+    }
+    
+    public void Remark.setAuthority(Integer authority) {
+        this.authority = authority;
+    }
+    
+    public Twitter Remark.getRemarkto() {
+        return this.remarkto;
+    }
+    
+    public void Remark.setRemarkto(Twitter remarkto) {
+        this.remarkto = remarkto;
     }
     
 }

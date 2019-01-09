@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.aeiou.bigbang</groupId>
 	<artifactId>bigbang</artifactId>
 	<packaging>war</packaging>
-	<version>0.1.0.BUILD-SNAPSHOT</version>
+	<version>0.1.1.BUILD-SNAPSHOT</version>
 	<name>bigbang</name>
 	<properties>
-		<aspectj.version>1.7.0.RC1</aspectj.version>
-		<java.version>1.6</java.version>
+		<aspectj.version>1.8.4</aspectj.version>
+		<java.version>8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<roo.version>1.2.2.RELEASE</roo.version>
-		<slf4j.version>1.6.4</slf4j.version>
-		<spring.version>3.1.1.RELEASE</spring.version>
-		<spring-security.version>3.1.0.RELEASE</spring-security.version>
+		<roo.version>1.3.1.RELEASE</roo.version>
+		<slf4j.version>1.7.2</slf4j.version>
+		<spring.version>4.3.9.RELEASE</spring.version>
+		<spring-security.version>4.2.3.RELEASE</spring-security.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -94,11 +93,11 @@
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>net.sf.flexjson</groupId>
-			<artifactId>flexjson</artifactId>
-			<version>2.1</version>
-		</dependency>
+        <dependency>
+            <groupId>net.sf.flexjson</groupId>
+            <artifactId>flexjson</artifactId>
+            <version>3.3</version>
+        </dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -150,6 +149,18 @@
 			<version>1.8.0.10</version>
 		</dependency>
 		<dependency>
+		    <groupId>org.postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <version>9.2-1004-jdbc4</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.18</version>
+        </dependency>
+        
+		<dependency>
 			<groupId>org.apache.openjpa</groupId>
 			<artifactId>openjpa</artifactId>
 			<version>2.1.1</version>
@@ -165,20 +176,10 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>4.2.0.Final</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.xml.bind</groupId>
-					<artifactId>jaxb-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.xml.bind</groupId>
-					<artifactId>jaxb-impl</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.3.2.Final</version>
+        </dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -210,20 +211,20 @@
 			<version>1.5.6</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.3</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>xml-apis</groupId>
-					<artifactId>xml-apis</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xml-apis</groupId>
+                    <artifactId>xml-apis</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -245,10 +246,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
+		<!-- file upload -->
+        <dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-			<version>1.2.2</version>
+			<version>1.3</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp.jstl</groupId>
@@ -340,7 +342,65 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
-	</dependencies>
+		<!-- @Quartz -->
+    	<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+		<!--@Jersey Rest -->
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-core</artifactId>
+			<version>1.16</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.16</version>
+		</dependency>
+		<!-- appliteye test -->
+		<dependency>
+		 <groupId>com.applitools</groupId>
+		 <artifactId>eyes-selenium-java</artifactId>
+		 <version>RELEASE</version>
+		</dependency>
+	<dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.1-901-1.jdbc4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>4.3.6.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.3.6.Final</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>cglib</groupId>
+                    <artifactId>cglib</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>dom4j</groupId>
+                    <artifactId>dom4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+    </dependencies>
 	<build>
 		<plugins>
 			<plugin>
@@ -363,10 +423,10 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>aspectj-maven-plugin</artifactId>
 				<version>1.2</version>
-				<!-- NB: do not use 1.3 or 1.3.x due to MASPECTJ-90 and do not use 1.4 
+				<!-- NB: do not use 1.3 or 1.3.x due to MASPECTJ-90 and do not use 1.4
 					due to declare parents issue -->
 				<dependencies>
-					<!-- NB: You must use Maven 2.0.9 or above or these are ignored (see 
+					<!-- NB: You must use Maven 2.0.9 or above or these are ignored (see
 						MNG-2972) -->
 					<dependency>
 						<groupId>org.aspectj</groupId>
@@ -407,10 +467,10 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.12</version>
+				<version>2.4.2</version>
 				<configuration>
 					<printSummary>false</printSummary>
 					<redirectTestOutputToFile>true</redirectTestOutputToFile>
@@ -418,7 +478,7 @@
 						<exclude>**/*_Roo_*</exclude>
 					</excludes>
 				</configuration>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -486,7 +546,7 @@
 					</webAppConfig>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>openjpa-maven-plugin</artifactId>
 				<version>1.2</version>
@@ -521,7 +581,7 @@
 						</exclusions>
 					</dependency>
 				</dependencies>
-			</plugin>
+			</plugin>-->
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -549,7 +609,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>

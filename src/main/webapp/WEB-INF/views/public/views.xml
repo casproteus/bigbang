@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
-    <definition extends="default" name="public/index">
-        <put-attribute name="body" value="/WEB-INF/views/public/index.jspx"/>
-    </definition>
+	<definition extends="default" name="public/index">
+		<put-attribute name="body" value="/WEB-INF/views/public/index.jspx" />
+	</definition>
+
+	<definition extends="default" name="public/list_publisher">
+		<put-attribute name="body"
+			value="/WEB-INF/views/public/list_publisher.jspx" />
+	</definition>
+	<definition extends="default" name="public/list_more">
+		<put-attribute name="body"
+			value="/WEB-INF/views/public/list_more.jspx" />
+	</definition>
+
+	<definition extends="default" name="public/list_more_blog">
+		<put-attribute name="body"
+			value="/WEB-INF/views/public/list_more_blog.jspx" />
+	</definition>
+	<definition extends="default" name="public/list_detail_twitter">
+		<put-attribute name="body"
+			value="/WEB-INF/views/public/list_detail_twitter.jspx" />
+	</definition>
 </tiles-definitions>

@@ -1,0 +1,53 @@
+<jsp:root xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:form="http://www.springframework.org/tags/form"
+	xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+	<jsp:output omit-xml-declaration="yes" />
+
+	<jsp:directive.attribute name="id" type="java.lang.String"
+		required="true" rtexprvalue="true"
+		description="The identifier for this tag (do not change!)" />
+	<jsp:directive.attribute name="path" type="java.lang.String"
+		required="true" rtexprvalue="true"
+		description="The relative path to the respource" />
+	<jsp:directive.attribute name="field" type="java.lang.String"
+		required="true" rtexprvalue="true"
+		description="The field exposed from the form backing object" />
+	<jsp:directive.attribute name="type" type="java.lang.String"
+		required="true" rtexprvalue="true"
+		description="when creating a new tag, know the defaut type base on this" />
+	<jsp:directive.attribute name="render" type="java.lang.Boolean"
+		required="false" rtexprvalue="true"
+		description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
+	<jsp:directive.attribute name="z" type="java.lang.String"
+		required="false"
+		description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
+
+	<c:if test="${empty render or render}">
+		<c:out value=" " />
+		<c:out value=" " />
+		<spring:url value="${path}" var="create_url">
+			<spring:param name="form" />
+			<spring:param name="type" value="${type}" />
+		</spring:url>
+		<a onclick="setValues('${create_url}')" href="#"> <spring:url
+				value="/resources/images/addtag.png" var="create_img_url" /> <spring:message
+				arguments="${field}" code="global_menu_new" var="add_message"
+				htmlEscape="false" /> <img alt="${fn:escapeXml(add_message)}"
+			src="${create_img_url}" title="${fn:escapeXml(add_message)}" />
+		</a>
+		<br />
+		<br />
+	</c:if>
+
+	<script type="text/javascript">
+	function setValues(create_url) {
+		document.getElementById('addingTagFlag').value=create_url;
+		var form = document.getElementById('content');
+		if(form == null)
+			form = document.getElementById('twitter');
+		form.submit();
+	}
+  </script>
+</jsp:root>

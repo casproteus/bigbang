@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
-    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-    <jsp:output omit-xml-declaration="yes"/>
-    <page:list id="pl_com_aeiou_bigbang_domain_Twitter" items="${twitters}" z="o5L4AOCJ18nHO4zgQketGUlXT5g=">
-        <table:table data="${twitters}" id="l_com_aeiou_bigbang_domain_Twitter" path="/twitters" z="cYCbdZX2dPibClNCvaX+Sv/y2a0=">
-            <table:column id="c_com_aeiou_bigbang_domain_Twitter_twitent" property="twitent" z="vO9zdqfnwHkQErllpK/b7ReFK+8="/>
-            <table:column date="true" dateTimePattern="${twitter_twitdate_date_format}" id="c_com_aeiou_bigbang_domain_Twitter_twitDate" property="twitDate" z="51nNWqCQ6B0k4VpumBUgJuaSny8="/>
-            <table:column id="c_com_aeiou_bigbang_domain_Twitter_publisher" property="publisher" z="srXidqv1vRac99ZHTFDWddi1FKY="/>
-        </table:table>
-    </page:list>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:page="urn:jsptagdir:/WEB-INF/tags/form"
+	xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<page:list id="pl_com_aeiou_bigbang_domain_Twitter" items="${twitters}"
+		z="o5L4AOCJ18nHO4zgQketGUlXT5g=">
+		<table:BigSortable data="${twitters}"
+			id="l_com_aeiou_bigbang_domain_Twitter" path="/twitters"
+			z="cYCbdZX2dPibClNCvaX+Sv/y2a0=">
+			<table:column id="c_com_aeiou_bigbang_domain_Twitter_twtitle"
+				property="twtitle" z="znDzR2exbTQ46ygK4oITCZTkf7A=" />
+			<table:column id="c_com_aeiou_bigbang_domain_Twitter_twittertag"
+				property="twittertag" z="rgD6X1OfH48ZJjgsSjMv3zjVoNI=" />
+			<table:column date="true"
+				dateTimePattern="${twitter_twitdate_date_format}"
+				id="c_com_aeiou_bigbang_domain_Twitter_twitDate" property="twitDate"
+				z="51nNWqCQ6B0k4VpumBUgJuaSny8=" />
+			<table:column id="c_com_aeiou_bigbang_domain_Twitter_authority"
+				property="authority" z="vs1BdhIv2CEPzGcOrbmCj7Qtnoc=" />
+			<c:if
+				test="${fn:toLowerCase(pageContext['request'].userPrincipal.name) eq 'admin'}">
+				<table:column id="c_com_aeiou_bigbang_domain_Twitter_publisher"
+					property="publisher" z="srXidqv1vRac99ZHTFDWddi1FKY=" />
+			</c:if>
+		</table:BigSortable>
+	</page:list>
 </div>

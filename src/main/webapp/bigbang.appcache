@@ -1,0 +1,18 @@
+CACHE MANIFEST
+# 2012-02-21 v1.0.0
+#version 1.3
+/theme.css
+/logo.gif
+/main.js
+http://localhost/bigbang/tao
+/bigbang/tao
+/tao
+http://localhost/bigbang/remarks?owner=tao&twitterid=2501&page=1&size=100
+/bigbang/remarks?owner=tao&twitterid=2501&page=1&size=100
+/remarks?owner=tao&twitterid=2501&page=1&size=100
+
+NETWORK:
+login.asp
+
+FALLBACK:
+/html5/ /404.html

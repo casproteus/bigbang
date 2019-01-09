@@ -7,6 +7,7 @@ import com.aeiou.bigbang.domain.BigTag;
 import com.aeiou.bigbang.domain.Circle;
 import com.aeiou.bigbang.domain.Content;
 import com.aeiou.bigbang.domain.Customize;
+import com.aeiou.bigbang.domain.Message;
 import com.aeiou.bigbang.domain.Remark;
 import com.aeiou.bigbang.domain.Twitter;
 import com.aeiou.bigbang.domain.UserAccount;
@@ -22,7 +23,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<BigTag, String> ApplicationConversionServiceFactoryBean.getBigTagToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.BigTag, java.lang.String>() {
             public String convert(BigTag bigTag) {
-                return new StringBuilder().append(bigTag.getTagName()).append(' ').append(bigTag.getType()).toString();
+                return new StringBuilder().append(bigTag.getContentID()).append(' ').append(bigTag.getContentTitle()).append(' ').append(bigTag.getContentURL()).append(' ').append(bigTag.getTwitterID()).toString();
             }
         };
     }
@@ -70,7 +71,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Content, String> ApplicationConversionServiceFactoryBean.getContentToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.Content, java.lang.String>() {
             public String convert(Content content) {
-                return new StringBuilder().append(content.getTitle()).append(' ').append(content.getSourceURL()).append(' ').append(content.getConentCache()).toString();
+                return new StringBuilder().append(content.getAddingTagFlag()).append(' ').append(content.getTitle()).append(' ').append(content.getSourceURL()).append(' ').append(content.getConentCache()).toString();
             }
         };
     }
@@ -115,10 +116,34 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         };
     }
     
+    public Converter<Message, String> ApplicationConversionServiceFactoryBean.getMessageToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.Message, java.lang.String>() {
+            public String convert(Message message) {
+                return new StringBuilder().append(message.getContent()).append(' ').append(message.getPostTime()).append(' ').append(message.getStatus()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, Message> ApplicationConversionServiceFactoryBean.getIdToMessageConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, com.aeiou.bigbang.domain.Message>() {
+            public com.aeiou.bigbang.domain.Message convert(java.lang.Long id) {
+                return Message.findMessage(id);
+            }
+        };
+    }
+    
+    public Converter<String, Message> ApplicationConversionServiceFactoryBean.getStringToMessageConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, com.aeiou.bigbang.domain.Message>() {
+            public com.aeiou.bigbang.domain.Message convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Message.class);
+            }
+        };
+    }
+    
     public Converter<Remark, String> ApplicationConversionServiceFactoryBean.getRemarkToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.Remark, java.lang.String>() {
             public String convert(Remark remark) {
-                return new StringBuilder().append(remark.getContent()).append(' ').append(remark.getRemartTime()).append(' ').append(remark.getPrivilege()).toString();
+                return new StringBuilder().append(remark.getRefresh_time()).append(' ').append(remark.getContent()).append(' ').append(remark.getRemarkTime()).append(' ').append(remark.getAuthority()).toString();
             }
         };
     }
@@ -142,7 +167,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Twitter, String> ApplicationConversionServiceFactoryBean.getTwitterToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.aeiou.bigbang.domain.Twitter, java.lang.String>() {
             public String convert(Twitter twitter) {
-                return new StringBuilder().append(twitter.getTwitent()).append(' ').append(twitter.getTwitDate()).toString();
+                return new StringBuilder().append(twitter.getAddingTagFlag()).append(' ').append(twitter.getTwitent()).append(' ').append(twitter.getTwitDate()).append(' ').append(twitter.getAuthority()).toString();
             }
         };
     }
@@ -187,30 +212,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         };
     }
     
-    public void ApplicationConversionServiceFactoryBean.installLabelConverters(FormatterRegistry registry) {
-        registry.addConverter(getBigTagToStringConverter());
-        registry.addConverter(getIdToBigTagConverter());
-        registry.addConverter(getStringToBigTagConverter());
-        registry.addConverter(getCircleToStringConverter());
-        registry.addConverter(getIdToCircleConverter());
-        registry.addConverter(getStringToCircleConverter());
-        registry.addConverter(getContentToStringConverter());
-        registry.addConverter(getIdToContentConverter());
-        registry.addConverter(getStringToContentConverter());
-        registry.addConverter(getCustomizeToStringConverter());
-        registry.addConverter(getIdToCustomizeConverter());
-        registry.addConverter(getStringToCustomizeConverter());
-        registry.addConverter(getRemarkToStringConverter());
-        registry.addConverter(getIdToRemarkConverter());
-        registry.addConverter(getStringToRemarkConverter());
-        registry.addConverter(getTwitterToStringConverter());
-        registry.addConverter(getIdToTwitterConverter());
-        registry.addConverter(getStringToTwitterConverter());
-        registry.addConverter(getUserAccountToStringConverter());
-        registry.addConverter(getIdToUserAccountConverter());
-        registry.addConverter(getStringToUserAccountConverter());
-    }
-    
+        
     public void ApplicationConversionServiceFactoryBean.afterPropertiesSet() {
         super.afterPropertiesSet();
         installLabelConverters(getObject());

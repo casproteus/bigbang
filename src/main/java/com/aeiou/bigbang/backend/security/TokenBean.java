@@ -1,4 +1,5 @@
 package com.aeiou.bigbang.backend.security;
+
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -7,9 +8,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * <p>Java class for TokenBean complex type.
+ * <p>
+ * Java class for TokenBean complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="TokenBean">
@@ -29,69 +32,64 @@ import javax.xml.bind.annotation.XmlType;
  */
 @SuppressWarnings("serial")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "TokenBean",
-		propOrder = {
-		"loginName",
-		"securityID",
-"geolocStatus"})
+@XmlType(name = "TokenBean", propOrder = { "loginName", "securityID", "geolocStatus" })
 public class TokenBean implements Serializable {
 
-	public static String SECURITYID_NOT_AVAILABLE = "N/A";
-	
-	/** User's login */
-	@XmlElement(required = true)
-	private String loginName;
-	/** Session id */
-	private String securityID;
+    public static String SECURITYID_NOT_AVAILABLE = "N/A";
 
-	public TokenBean(String loginName, String securityID) {
-		this.loginName = loginName;
-		this.securityID = securityID;
-	}
+    /** User's login */
+    @XmlElement(required = true)
+    private String loginName;
+    /** Session id */
+    private String securityID;
 
-	public TokenBean() {
-	}
+    public TokenBean(String loginName, String securityID) {
+        this.loginName = loginName;
+        this.securityID = securityID;
+    }
 
-	/**
-	 * Gets the value of the loginName property.
-	 * 
-	 * @return
-	 *     possible object is
-	 *     {@link String }
-	 * 
-	 */
-	public String getLoginName() {
-		return loginName;
-	}
+    public TokenBean() {
+    }
 
-	/**
-	 * Sets the value of the loginName property.
-	 * 
-	 * @param value
-	 *     allowed object is
-	 *     {@link String }
-	 * 
-	 */
-	public void setLoginName(String value) {
-		this.loginName = value;
-	}
+    /**
+     * Gets the value of the loginName property.
+     * 
+     * @return possible object is {@link String }
+     * 
+     */
+    public String getLoginName() {
+        return loginName;
+    }
 
-	/**
-	 * Gets the value of the securityID property.
-	 */
-	public String getSecurityID() {
-		return securityID;
-	}
+    /**
+     * Sets the value of the loginName property.
+     * 
+     * @param value
+     *            allowed object is {@link String }
+     * 
+     */
+    public void setLoginName(
+            String value) {
+        this.loginName = value;
+    }
 
-	/**
-	 * Sets the value of the securityID property.
-	 */
-	public void setSecurityID(String value) {
-		this.securityID = value;
-	}
+    /**
+     * Gets the value of the securityID property.
+     */
+    public String getSecurityID() {
+        return securityID;
+    }
 
-	@Override
-	public String toString() {
-		return "TokenBean [loginName=" + loginName + ", securityID=" + securityID + "]";
-	}
+    /**
+     * Sets the value of the securityID property.
+     */
+    public void setSecurityID(
+            String value) {
+        this.securityID = value;
+    }
+
+    @Override
+    public String toString() {
+        return "TokenBean [loginName=" + loginName + ", securityID=" + securityID + "]";
+    }
 }

@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
-    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-    <jsp:output omit-xml-declaration="yes"/>
-    <form:create id="fc_com_aeiou_bigbang_domain_Remark" modelAttribute="remark" path="/remarks" render="${empty dependencies}" z="sWlU6AsGIe2//4XQNOSFZm9xQRQ=">
-        <field:input field="content" id="c_com_aeiou_bigbang_domain_Remark_content" required="true" z="T3F6giLLpXJrNETuQerWplAqyFY="/>
-        <field:datetime dateTimePattern="${remark_remarttime_date_format}" field="remartTime" id="c_com_aeiou_bigbang_domain_Remark_remartTime" required="true" z="AnqJsow94D2ByAf19hm/i1ddR7o="/>
-        <field:input field="privilege" id="c_com_aeiou_bigbang_domain_Remark_privilege" required="true" z="baV3YO2WbVJH3roMl1cGb/i0JoY="/>
-        <field:select field="publisher" id="c_com_aeiou_bigbang_domain_Remark_publisher" itemValue="id" items="${useraccounts}" path="/useraccounts" required="true" z="0V2r7TDOZFQG5T9KX40gLZmk/t4="/>
-        <field:select field="replyTo" id="c_com_aeiou_bigbang_domain_Remark_replyTo" itemValue="id" items="${contents}" path="/contents" required="true" z="fYz+TIUxzU++LdZ3WA5VJBVds6Y="/>
-    </form:create>
-    <form:dependency dependencies="${dependencies}" id="d_com_aeiou_bigbang_domain_Remark" render="${not empty dependencies}" z="onX3xhhk9w0yYVSbLCd+qHFDBI0="/>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:form="urn:jsptagdir:/WEB-INF/tags/form"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:spring="http://www.springframework.org/tags" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<form:create id="fc_com_aeiou_bigbang_domain_Remark"
+		modelAttribute="remark" path="/remarks" render="${empty dependencies}"
+		z="sWlU6AsGIe2//4XQNOSFZm9xQRQ=">
+		<field:editor field="content"
+			id="c_com_aeiou_bigbang_domain_Remark_content" required="true"
+			z="user-managed" />
+		<field:input field="authority"
+			id="c_com_aeiou_bigbang_domain_Remark_authority"
+			validationMessageCode="field_invalid_integer"
+			z="B4LbmxFRJYLBE3k63GWtCGocJ9E=" />
+		<field:select field="remarkto"
+			id="c_com_aeiou_bigbang_domain_Remark_remarkto" itemValue="id"
+			items="${twitters}" path="/twitters" z="1fwYviEwBT209mmo9KsB8ptx/5M=" />
+	</form:create>
+	<form:dependency dependencies="${dependencies}"
+		id="d_com_aeiou_bigbang_domain_Remark"
+		render="${not empty dependencies}" z="onX3xhhk9w0yYVSbLCd+qHFDBI0=" />
 </div>

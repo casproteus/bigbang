@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://www.sharethegoodones.com/" />
+<title>LogIn</title>
+</head>
+<body>
+	<table cellpadding="1" cellspacing="1" border="1">
+		<thead>
+			<tr>
+				<td rowspan="1" colspan="3">LogIn</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>open</td>
+				<td>/</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>css=span.emptySpan</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>sendKeys</td>
+				<td>id=j_username</td>
+				<td>abc 用户 01230</td>
+			</tr>
+			<tr>
+				<td>sendKeys</td>
+				<td>id=j_password</td>
+				<td>1234</td>
+			</tr>
+			<tr>
+				<td>clickAndWait</td>
+				<td>link=Login</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>selectWindow</td>
+				<td>null</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>css=b</td>
+				<td>Welcome to the space of abc 用户 01230----I am a test user,
+					I'll disppear myself after test.</td>
+			</tr>
+			<tr>
+				<td>verifyText</td>
+				<td>//div[@id='_title_contentlistright2_id']/div/div/span[2]</td>
+				<td>Info For Team Members</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

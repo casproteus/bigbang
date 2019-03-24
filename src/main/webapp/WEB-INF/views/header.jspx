@@ -57,7 +57,7 @@
 				<script type="text/javascript">
 				  Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));
 				</script>
-				<a onclick="setValues()" href="#" style="height: 18px; vertical-align: top;"> 
+				<a onclick="setValues()" href="#" style="height: 18px;"> 
 					<spring:message code="button_submit" htmlEscape="false" />
 				</a>
 				<script type="text/javascript">

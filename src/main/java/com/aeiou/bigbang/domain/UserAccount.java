@@ -45,6 +45,8 @@ public class UserAccount {
     @Max(9L)
     private int price;
 
+    private String noteLayout;
+    
     private String layout;
 
     @NotNull
@@ -56,6 +58,9 @@ public class UserAccount {
 
     private int newMessageAmount;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<UserAccount> listento = new HashSet<UserAccount>();
+    
     public static com.aeiou.bigbang.domain.UserAccount findUserAccountByName(
             String pUserName) {
         TypedQuery<UserAccount> tQuery = entityManager()
@@ -120,10 +125,4 @@ public class UserAccount {
         return new JSONSerializer().include("listento").exclude("*.class").serialize(collection);
     }
 
-    /**
-     */
-    private String noteLayout;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<UserAccount> listento = new HashSet<UserAccount>();
 }

@@ -611,11 +611,22 @@ public class BigUtil {
         String suffix = "_" + (String) session.getAttribute("lang");
         for (Customize customize : list) {
             String key = customize.getCusKey();
-            if (key.startsWith("suggested_tag")
-                    && (("_en".equals(suffix) && key.charAt(key.length() - 3) != '_') || key.endsWith(suffix))) {
+            //contains suffix but the suffix is different with the one in session.
+            if (key.startsWith("suggested_tag") && (key.endsWith(suffix) || key.charAt(key.length() - 3) != '_')) {
                 list2.add(customize);
             }
         }
+        for(int i = list2.size() - 1; i >= 0 ; i--) {
+        	for(int j = i - 1; j >= 0 ; j--) {
+        		if(list2.get(i).getCusKey().contains(list2.get(j).getCusKey())) {
+        			list2.remove(j);
+        			i--;
+        		}else if(list2.get(j).getCusKey().contains(list2.get(i).getCusKey())) {
+        			list2.remove(i);
+        		}
+        	}
+        }
+        
         for (Customize customize : list2) {
             BigTag bigTag = BigTag.findTagByNameAndOwner(customize.getCusValue(), "admin");
             if (bigTag != null && bigTag.getOwner() == type) {

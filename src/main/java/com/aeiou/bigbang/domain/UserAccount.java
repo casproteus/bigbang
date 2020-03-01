@@ -67,7 +67,7 @@ public class UserAccount {
                 .createQuery("SELECT o FROM UserAccount AS o WHERE UPPER(o.name) = UPPER(:tname)", UserAccount.class);
         tQuery = tQuery.setParameter("tname", pUserName);
         List<UserAccount> tList = tQuery.getResultList();
-        if (tList != null && tList.size() == 1)
+        if (tList != null && tList.size() > 0)
             return tList.get(0);
         else
             return null;

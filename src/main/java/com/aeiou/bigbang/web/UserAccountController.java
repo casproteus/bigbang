@@ -447,7 +447,7 @@ public class UserAccountController extends BaseController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(tSyncManager.getRecentlyAddedContent("", "1210_syncdb_rm"), headers,
+        return new ResponseEntity<String>("error is logged.", headers,
                 HttpStatus.OK);
     }
 
